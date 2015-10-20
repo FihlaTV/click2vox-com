@@ -1,0 +1,137 @@
+extends layout
+
+block content
+  script.
+    var callTimer;
+    var username = 'webrtcventurestest';
+    var secret = 'T#st123!';
+    var number = '13072787231'; //16092975366
+
+    var eventHandlers = {
+        'progress':   function(e){
+        $("#status_message").innerHTML="<p>Calling " + $('#number').value+"</p>";
+        },
+        'failed':     function(e){
+        $("#status_message").innerHTML="<p>Failed to connect: "+ e.data.cause +"</p>";
+        },
+        'started':    function(e){
+        $("#status_message").innerHTML="<p>Call started</p>";
+        },
+        'ended':      function(e){
+        $("#status_message").innerHTML="<p>Call ended</p>";
+      }
+    }
+
+    function makeCall(){
+      window.clearTimeout(callTimer);
+      voxbone.WebRTC.call(number);
+      window.onbeforeunload=function(e){
+        voxbone.WebRTC.rtcSession.terminate();
+      }
+    }
+
+    function launch(){
+      voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
+      voxbone.WebRTC.customEventHandler = eventHandlers;
+
+      var voxrtc_config = createKey();
+      voxbone.WebRTC.init(voxrtc_config);
+
+      callTimer = window.setInterval(function(){makeCall()},1000);
+    }
+
+    $(document).ready(function() {
+      $("#launch_call").click(function(e) {
+        e.preventDefault();
+        launch();
+      });
+
+      $("#hangup_call").click(function(e) {
+        e.preventDefault();
+        voxbone.WebRTC.hangup();
+      });
+
+      $("#dark_theme").click(function(e) {
+        e.preventDefault();
+        $("#launch_call").addClass('btn-primary').removeClass('btn-success')
+      });
+
+      $("#light_theme").click(function(e) {
+        e.preventDefault();
+        $("#launch_call").removeClass('btn-primary').addClass('btn-success')
+      });
+
+    });
+
+  h1 Voxbone Demo - Widget Configurator Details
+  .row
+    .col-md-6.col-sm-6.col-xs-12
+      form.form-horizontal
+        .form-group
+          label.col-sm-2.control-label Select Style
+          div.col-sm-10
+            a.btn.btn-primary#dark_theme Dark
+            a.btn.btn-success#light_theme Light
+
+        .form-group
+          label.col-sm-2.control-label Button Text
+          div.col-sm-10
+            input.form-control(type="text", name="user", ng-model="buttonText" value="Call Sales" placeholder="i.e. Call Sales")
+
+        .form-group
+          label.col-sm-2.control-label Caller ID
+          div.col-sm-10
+            input.form-control(type="text", name="user", ng-model="callerId" value="voxrtc_demo" placeholder="i.e. voxrtc_demo")
+
+        .form-group
+          label.col-sm-2.control-label SIP URI
+          div.col-sm-10
+            input.form-control(type="text", name="user", ng-model="sipUri" value="SIP: echotest@voxout.voxbone.com" placeholder="i.e. SIP: echotest@voxout.voxbone.com")
+
+        .form-group
+          label.col-sm-2.control-label Context
+          div.col-sm-1
+            input.form-control(type="text", name="user", ng-model="context")
+
+        .form-group
+          label.col-sm-2.control-label DTMF dial pad
+          div.col-sm-1
+            input.form-control(type="checkbox", name="dtmf_dial_pad" checked)
+          div.col-sm-9
+            &nbsp;
+
+        h4 If the user's browser does not support WebRTC, then:
+
+        .form-group
+          label.col-sm-2.control-label Hide the widget
+          div.col-sm-1
+            input.form-control(type='checkbox', name='hide_widget')
+          div.col-sm-9
+            &nbsp;
+
+        .form-group
+          label.col-sm-2.control-label Link button to a page
+          div.col-sm-1
+            input.form-control(type='checkbox', name='link_button_to_a_page')
+          div.col-sm-9
+            input.form-control(type="text", name="link_button_to_a_value", placeholder="Enter url")
+
+        .form-group
+          label.col-sm-2.control-label Show text/HTML
+          div.col-sm-1
+            input.form-control(type='checkbox', name='show_text_html')
+          div.col-sm-9
+            input.form-control(type="text", name="show_text_html_value", placeholder="Enter text or HTML")
+
+    .col-md-6.col-sm-6.col-xs-12
+      h3 Widget Preview & Test
+      a.btn.btn-success.mdi-communication-call#launch_call {{buttonText}}
+      a.btn.btn-raised.btn-material-red.mdi-communication-call-end#hangup_call
+
+      p#status_message Initializing configuration
+
+      h3 Code (not working yet, just static code)
+
+      - var button_code = "<div class='voxButton' id='voxButton_e83be0ab55e2xgq06856de44b5f90ff2e ' href='https://webrtc.voxbone.com/widget/ e83be0ab55e2xgq06856de44b5f90ff2e'; onclick='initCall(voxButton_e83be0ab55e2xgq06856de44b5f90ff2e)' hidden='hidden'></div><script src='https://webrtc.voxbone.com/js/jssip-0.4.0.js'> </script><script src='https://webrtc.voxbone.com/js/voxbone-0.0.3.js'> </script>"
+      pre.prettyprint
+        | #{button_code}
