@@ -1,0 +1,126 @@
+<html>
+<head>
+<link href="https://cdn.jsdelivr.net/bootstrap.material-design/0.3.0/css/material.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/bootstrap.material-design/0.3.0/js/material.min.js"></script>
+<script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha1.js"></script>
+<script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
+<script src="https://webrtc.voxbone.com/js/voxbone-0.0.2.js" type="text/javascript"></script>
+<script src="https://webrtc.voxbone.com/js/jssip-0.3.0.js" type="text/javascript"></script>
+<script type="text/javascript">
+  function launch(){
+
+   /**
+    ** Initialize credentials, event handlers, and phone number:
+    **/
+
+   var callTimer;
+   var username = document.getElementById('username').value;
+   var secret = document.getElementById('secret').value;
+   var number = document.getElementById('number').value;
+   var eventHandlers = {
+      'progress':   function(e){
+        document.getElementById("status_message").innerHTML="<p>Calling " + document.getElementById('number').value+"</p>";
+        },
+      'failed':     function(e){
+        document.getElementById("status_message").innerHTML="<p>Failed to connect: "+ e.data.cause +"</p>";
+        },
+      'started':    function(e){
+        document.getElementById("status_message").innerHTML="<p>Call started</p>";
+        },
+      'ended':      function(e){
+        document.getElementById("status_message").innerHTML="<p>Call ended</p>";
+        }
+    };
+
+    /**
+     ** Instantiate functions used in init()
+     **/
+
+    // 1. Hashing
+      var cleanHmacDigest = function (hmac) {
+          while ((hmac.length % 4 != 0)) {
+              hmac += '=';
+          }
+          hmac = hmac.replace('/ /g', '+');
+          return hmac;
+      };
+
+      // 2. Create Key and hash
+      var createKey = function (user) {
+              self.username = username;
+              self.secret = secret;
+        var sha1 = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA1, self.secret);
+              self.expires = Math.round(Date.now()/1000) + 100;
+              var text = self.expires + ':' + self.username;
+        sha1.update(text);
+        hmac = sha1.finalize();
+        self.key = cleanHmacDigest( hmac.toString(CryptoJS.enc.Base64) );
+        var data = {};
+        data.key = self.key;
+        data.expires = self.expires;
+        data.username = self.username;
+        return data;
+      };
+
+      // 3. Place call with delay
+      function makeCall(){
+        window.clearTimeout(callTimer);
+        voxbone.WebRTC.call(number);
+        window.onbeforeunload=function(e){
+          voxbone.WebRTC.rtcSession.terminate();
+        }
+      }
+
+      /** This part is required as it handle Voxbone WebRTC initialization **/
+      function init(){
+        voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
+        voxbone.WebRTC.customEventHandler = eventHandlers;
+
+        var voxrtc_config = createKey();
+        voxbone.WebRTC.init( voxrtc_config );
+
+        callTimer = window.setInterval(function(){makeCall()},1000);
+      }
+
+      init();
+    }
+
+      /**
+       ** Detects browser compatibility
+       **/
+
+       function detectBrowser(){
+        var supported = voxbone.WebRTC.isWebRTCSupported();
+        if(supported == false){
+          document.getElementById('container').innerHTML = '<p>Your browser does not support WebRTC, please switch to Chrome, Opera, or Firefox.</p>'
+        }else{
+          console.log("WebRTC is supported, it's all goooood.");
+        }
+       }
+
+    </script>
+    </head>
+    <body onLoad="detectBrowser();" style="text-align: center;">
+      <div id="container">
+        <div class="jumbotron">
+          <h1>Widget Configurator Prototype 22</h1>
+              <div class="form-group">
+                <input type="text" class="form-control floating-label" id="username" placeholder="username" value="voxbonedev"/>
+                <input type="text" class="form-control floating-label" id="secret" placeholder="secret key" value="wow-RTC14"/>
+                  <input type="text" class="form-control floating-label" id="number" placeholder="phone number" value="883510080046"/>
+                  <br>
+                  <br>
+                  <input type="text" class="form-control floating-label" id="display_name" placeholder="Call Sales" style="width: 350px;">
+                  <br>
+                  <br>
+                 <!--  <input type="text" class="form-control floating-label" id="context" placeholder="Add context to be passed over the call!" style="width: 350px;"> -->
+              </div>
+          <button class="btn btn-raised btn-success" onclick="launch();" id="call">Call Sales<i class="mdi-communication-call"></i></button>
+          <div id="status_message">
+            <p>Initializing configuration</p>
+          </div>
+        </div>
+     </div>
+    </body>
+    </html>
