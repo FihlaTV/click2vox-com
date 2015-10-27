@@ -63,45 +63,57 @@ block content
 
     });
 
-  h1 Voxbone Demo - Widget Configurator Details
   .row
-    .col-md-6.col-sm-6.col-xs-12
+    .col-md-12
+      h1 Create a WebRTC Call Button
+  .row
+    .col-md-12
+      p #[b Note] this will create a code widget that can be embedded into any page that allows for JS code and will allow customers to video call without installing any software.
+  .row.panel-group
+    .col-md-6.col-sm-6.col-xs-12panel.panel-default
+      p Button Configuration
       form.form-horizontal
         .form-group
-          label.col-sm-2.control-label Select Style
+          label.col-sm-2.control-label Button Label:
+          div.col-sm-10
+            input.form-control(type="text", name="user", ng-model="buttonText" value="Call Sales" placeholder="i.e. Call Sales")
+
+        .form-group
+          label.col-sm-2.control-label Button Style:
           div.col-sm-10
             a.btn.btn-primary#dark_theme Dark
             a.btn.btn-success#light_theme Light
 
+      p Button Configuration
+      form.form-horizontal
         .form-group
-          label.col-sm-2.control-label Button Text
+          label.col-sm-2.control-label SIP URI
           div.col-sm-10
-            input.form-control(type="text", name="user", ng-model="buttonText" value="Call Sales" placeholder="i.e. Call Sales")
+            input.form-control(type="text", name="user", ng-model="sipUri" value="SIP: echotest@voxout.voxbone.com" placeholder="i.e. SIP: echotest@voxout.voxbone.com")
 
+      p.panel-heading
+        a(data-toggle="collapse",data-target="#collapseAdvancedCallConfiguration") Advanced Call Configuration
+      form.form-horizontal.panel-collapse.collapse.in#collapseAdvancedCallConfiguration
         .form-group
           label.col-sm-2.control-label Caller ID
           div.col-sm-10
             input.form-control(type="text", name="user", ng-model="callerId" value="voxrtc_demo" placeholder="i.e. voxrtc_demo")
 
         .form-group
-          label.col-sm-2.control-label SIP URI
-          div.col-sm-10
-            input.form-control(type="text", name="user", ng-model="sipUri" value="SIP: echotest@voxout.voxbone.com" placeholder="i.e. SIP: echotest@voxout.voxbone.com")
-
-        .form-group
           label.col-sm-2.control-label Context
-          div.col-sm-1
+          div.col-sm-10
             input.form-control(type="text", name="user", ng-model="context")
 
         .form-group
-          label.col-sm-2.control-label DTMF dial pad
+          label.col-sm-2.control-label DTMF Dial Pad
           div.col-sm-1
             input.form-control(type="checkbox", name="dtmf_dial_pad" checked)
           div.col-sm-9
             &nbsp;
 
-        h4 If the user's browser does not support WebRTC, then:
-
+      p.panel-heading
+        a(data-toggle="collapse",data-target="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
+      form.form-horizontal.panel-collapse.collapse.in#collapseIncompatileBrowserConfiguration
         .form-group
           label.col-sm-2.control-label Hide the widget
           div.col-sm-1
@@ -124,14 +136,15 @@ block content
             input.form-control(type="text", name="show_text_html_value", placeholder="Enter text or HTML")
 
     .col-md-6.col-sm-6.col-xs-12
-      h3 Widget Preview & Test
+      h3 Preview
       a.btn.btn-success.mdi-communication-call#launch_call {{buttonText}}
       a.btn.btn-raised.btn-material-red.mdi-communication-call-end#hangup_call
 
       p#status_message Initializing configuration
 
-      h3 Code (not working yet, just static code)
-
+      h3 Code Widget
+      p Paste the following HTML code into your website or give it a try using on #[a(href="#") JSFiddle]
       - var button_code = "<div class='voxButton' id='voxButton_e83be0ab55e2xgq06856de44b5f90ff2e ' href='https://webrtc.voxbone.com/widget/ e83be0ab55e2xgq06856de44b5f90ff2e'; onclick='initCall(voxButton_e83be0ab55e2xgq06856de44b5f90ff2e)' hidden='hidden'></div><script src='https://webrtc.voxbone.com/js/jssip-0.4.0.js'> </script><script src='https://webrtc.voxbone.com/js/voxbone-0.0.3.js'> </script>"
       pre.prettyprint
         | #{button_code}
+      p #[a(href="#") Copy] • #[a(href="#") Email Instructions] • #[a(href="#") Regenerate Code]
