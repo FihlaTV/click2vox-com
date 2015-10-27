@@ -14,3 +14,13 @@ a {
 .prettify {
   overflow: auto;
 }
+
+.panel-heading a:after {
+    font-family:'Glyphicons Halflings';
+    content:"\e114";
+    float: left;
+    color: grey;
+}
+.panel-heading a.collapsed:after {
+    content:"\e080";
+}

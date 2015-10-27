@@ -69,8 +69,8 @@ block content
   .row
     .col-md-12
       p #[b Note] this will create a code widget that can be embedded into any page that allows for JS code and will allow customers to video call without installing any software.
-  .row.panel-group
-    .col-md-6.col-sm-6.col-xs-12panel.panel-default
+  .row
+    .col-md-6.col-sm-6.col-xs-12.panel-group
       p Button Configuration
       form.form-horizontal
         .form-group
@@ -84,56 +84,62 @@ block content
             a.btn.btn-primary#dark_theme Dark
             a.btn.btn-success#light_theme Light
 
-      p Button Configuration
+      p Call Configuration
       form.form-horizontal
         .form-group
           label.col-sm-2.control-label SIP URI
           div.col-sm-10
             input.form-control(type="text", name="user", ng-model="sipUri" value="SIP: echotest@voxout.voxbone.com" placeholder="i.e. SIP: echotest@voxout.voxbone.com")
 
-      p.panel-heading
-        a(data-toggle="collapse",data-target="#collapseAdvancedCallConfiguration") Advanced Call Configuration
-      form.form-horizontal.panel-collapse.collapse.in#collapseAdvancedCallConfiguration
-        .form-group
-          label.col-sm-2.control-label Caller ID
-          div.col-sm-10
-            input.form-control(type="text", name="user", ng-model="callerId" value="voxrtc_demo" placeholder="i.e. voxrtc_demo")
+      .panel.panel-default
+        .panel-heading
+          p.panel-title
+            a.collapsed(data-toggle="collapse",data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
+        .panel-collapse.collapse#collapseAdvancedCallConfiguration
+          form.form-horizontal
+            .form-group
+              label.col-sm-2.control-label Caller ID
+              div.col-sm-10
+                input.form-control(type="text", name="user", ng-model="callerId" value="voxrtc_demo" placeholder="i.e. voxrtc_demo")
 
-        .form-group
-          label.col-sm-2.control-label Context
-          div.col-sm-10
-            input.form-control(type="text", name="user", ng-model="context")
+            .form-group
+              label.col-sm-2.control-label Context
+              div.col-sm-10
+                input.form-control(type="text", name="user", ng-model="context")
 
-        .form-group
-          label.col-sm-2.control-label DTMF Dial Pad
-          div.col-sm-1
-            input.form-control(type="checkbox", name="dtmf_dial_pad" checked)
-          div.col-sm-9
-            &nbsp;
+            .form-group
+              label.col-sm-2.control-label DTMF Dial Pad
+              div.col-sm-1
+                input.form-control(type="checkbox", name="dtmf_dial_pad" checked)
+              div.col-sm-9
+                &nbsp;
 
-      p.panel-heading
-        a(data-toggle="collapse",data-target="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
-      form.form-horizontal.panel-collapse.collapse.in#collapseIncompatileBrowserConfiguration
-        .form-group
-          label.col-sm-2.control-label Hide the widget
-          div.col-sm-1
-            input.form-control(type='checkbox', name='hide_widget')
-          div.col-sm-9
-            &nbsp;
+      .panel.panel-default
+        .panel-heading
+          p.panel-title
+            a.collapsed(data-toggle="collapse",data-target="#collapseIncompatileBrowserConfiguration",href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
+        .panel-collapse.collapse#collapseIncompatileBrowserConfiguration
+          form.form-horizontal.panel-body
+            .form-group
+              label.col-sm-2.control-label Hide the widget
+              div.col-sm-1
+                input.form-control(type='checkbox', name='hide_widget')
+              div.col-sm-9
+                &nbsp;
 
-        .form-group
-          label.col-sm-2.control-label Link button to a page
-          div.col-sm-1
-            input.form-control(type='checkbox', name='link_button_to_a_page')
-          div.col-sm-9
-            input.form-control(type="text", name="link_button_to_a_value", placeholder="Enter url")
+            .form-group
+              label.col-sm-2.control-label Link button to a page
+              div.col-sm-1
+                input.form-control(type='checkbox', name='link_button_to_a_page')
+              div.col-sm-9
+                input.form-control(type="text", name="link_button_to_a_value", placeholder="Enter url")
 
-        .form-group
-          label.col-sm-2.control-label Show text/HTML
-          div.col-sm-1
-            input.form-control(type='checkbox', name='show_text_html')
-          div.col-sm-9
-            input.form-control(type="text", name="show_text_html_value", placeholder="Enter text or HTML")
+            .form-group
+              label.col-sm-2.control-label Show text/HTML
+              div.col-sm-1
+                input.form-control(type='checkbox', name='show_text_html')
+              div.col-sm-9
+                input.form-control(type="text", name="show_text_html_value", placeholder="Enter text or HTML")
 
     .col-md-6.col-sm-6.col-xs-12
       h3 Preview
