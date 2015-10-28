@@ -39,7 +39,10 @@ block content
     function formController($scope, $http){
       $scope.account = {};
       $scope.processForm = function(){
-        
+        $http.post('/signup', $scope.account)
+            .success(function(data) {
+              console.log(data);
+            });
       };
     }
 
