@@ -4,7 +4,7 @@ block content
   script.
     var formApp = 
       angular.module('voxboneApp', [])
-      .controller('formController', ['$scope', '$http', function($scope, $http){
+      .controller('formController', ['$scope', '$http', '$window', function($scope, $http, $window){
         $scope.master = {};
 
         $scope.update = function(account){
@@ -40,6 +40,7 @@ block content
             .then(function successCallback(response){
               console.log("entered success callback");
               console.log(response);
+              $window.location.href = response.data.redirect + '?email=' + response.data.email;
             }, function errorCallback(){
               console.log("entered error callback");
             });

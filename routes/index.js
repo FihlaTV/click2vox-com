@@ -45,9 +45,9 @@ router.post('/signup', function(req, res, next){
   var formData = req.body;
   console.log(formData);
   console.log("email: "+formData.email);
-  var result = { message: "this is a test", errors: null }
+  var result = { message: "this is a test", errors: null, redirect: '/login', email: formData.email }
 
-  res.status(200).json(result);	
+  res.status(200).json(result);
 });
 
 router.get('/', function(req, res, next) {
