@@ -30,13 +30,10 @@ block content
           .form-group
             label.col-sm-2.control-label Email
             input.form-control(type="text" id="uemail" name="uemail" ng-model="login.uemail", required, value= email)
-            div(ng-show="login_form.$submitted || login_form.uemail.$touched")
-              div(ng-show="login_form.uemail.$error.required") Email is required
-              div(ng-show="login_form.uemail.$error.email") Email is invalid
           .form-group
             label.col-sm-2.control-label Password
             input.form-control(type="password", id="upassword", name="upassword", ng-model="login.upassword", required)
-            div(ng-show="login_form.$submitted || login_form.upassword.$touched")
-              div(ng-show="login_form.upassword.$error.required") Password is required
 
           a.btn.btn-primary#login Login
+          br
+          a Forgot your password?

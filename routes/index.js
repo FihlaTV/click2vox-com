@@ -8,7 +8,6 @@ router.get('/login', function(req, res, next){
 
 router.get('/signup', function(req, res, next){
   if(req.query.email){
-    console.log("email present");
     Account.findOne({ email: req.query.email }, function(err, the_account){
       if(the_account){
         if(the_account.temporary == true){
