@@ -2,6 +2,7 @@ extends layout
 
 block content
   script.
+    var app = angular.module('voxboneApp', []);
     var callTimer;
     var username = 'webrtcventurestest';
     var secret = 'T#st123!';
@@ -90,7 +91,7 @@ block content
       form.form-horizontal
         .form-group
           .col-sm-3
-            label.control-label SIP URI
+            label.control-label SIP URI #[span.badge ?]
           .col-sm-9
             input.form-control(type="text", name="user", ng-model="sipUri" value="SIP: echotest@voxout.voxbone.com" placeholder="i.e. SIP: echotest@voxout.voxbone.com")
 
@@ -102,19 +103,19 @@ block content
           form.form-horizontal.panel-body
             .form-group
               .col-sm-3
-                label.control-label Caller ID
+                label.control-label Caller ID #[span.badge ?]
               .col-sm-9
                 input.form-control(type="text", name="user", ng-model="callerId" value="voxrtc_demo" placeholder="i.e. voxrtc_demo")
 
             .form-group
               .col-sm-3
-                label.control-label Context
+                label.control-label Context #[span.badge ?]
               .col-sm-9
                 input.form-control(type="text", name="user", ng-model="context")
 
             .form-group
               .col-sm-3
-                label.control-label DTMF Dial Pad
+                label.control-label DTMF Dial Pad #[span.badge ?]
               .col-sm-1
                 input.form-control(type="checkbox", name="dtmf_dial_pad" checked)
               .col-sm-8
@@ -128,7 +129,7 @@ block content
           form.form-horizontal.panel-body
             .form-group
               .col-sm-3
-                label.control-label Hide the widget
+                label.control-label Hide the widget #[span.badge ?]
               .col-sm-1
                 input.form-control(type='checkbox', name='hide_widget')
               .col-sm-8
@@ -136,7 +137,7 @@ block content
 
             .form-group
               .col-sm-3
-                label.control-label Link button to a page
+                label.control-label Link button to a page #[span.badge ?]
               .col-sm-1
                 input.form-control(type='checkbox', name='link_button_to_a_page')
               .col-sm-8
@@ -144,7 +145,7 @@ block content
 
             .form-group
               .col-sm-3
-                label.control-label Show text/HTML
+                label.control-label Show text/HTML #[span.badge ?]
               .col-sm-1
                 input.form-control(type='checkbox', name='show_text_html')
               .col-sm-8
@@ -152,14 +153,15 @@ block content
 
     .col-md-6.col-sm-6.col-xs-12
       h3 Preview
-      a.btn.btn-success.mdi-communication-call#launch_call {{buttonText}}
-      a.btn.btn-raised.btn-material-red.mdi-communication-call-end#hangup_call
+      .sample.shadow-z-2.text-center
+        a.btn.btn-success.mdi-communication-call#launch_call {{buttonText}}
+        a.btn.btn-raised.btn-material-red.mdi-communication-call-end#hangup_call
 
       p#status_message Initializing configuration
 
       h3 Code Widget
       p Paste the following HTML code into your website or give it a try using on #[a(href="#") JSFiddle]
       - var button_code = "<div class='voxButton' id='voxButton_e83be0ab55e2xgq06856de44b5f90ff2e ' href='https://webrtc.voxbone.com/widget/ e83be0ab55e2xgq06856de44b5f90ff2e'; onclick='initCall(voxButton_e83be0ab55e2xgq06856de44b5f90ff2e)' hidden='hidden'></div><script src='https://webrtc.voxbone.com/js/jssip-0.4.0.js'> </script><script src='https://webrtc.voxbone.com/js/voxbone-0.0.3.js'> </script>"
-      pre.prettyprint
+      pre.sample.shadow-z-2.prettyprint#widget_code
         | #{button_code}
       p #[a(href="#") Copy] • #[a(href="#") Email Instructions] • #[a(href="#") Regenerate Code]
