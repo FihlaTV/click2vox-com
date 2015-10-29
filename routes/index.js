@@ -44,9 +44,10 @@ router.post('/signup', function(req, res, next){
   console.log("entered post.....");
   var formData = req.body;
   console.log(formData);
-  var result = {message: "this is a test", errors: {name: 'error test'}, success: false}
+  console.log("email: "+formData.email);
+  var result = { message: "this is a test", errors: null }
 
-  res.json(result, 200);	
+  res.status(200).json(result);	
 });
 
 router.get('/', function(req, res, next) {

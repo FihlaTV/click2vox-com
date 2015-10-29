@@ -2,24 +2,49 @@ extends layout
 
 block content
   script.
-    var formApp = angular.module('voxboneApp', [])
-                  .controller('formController', ['$scope', function($scope){
-                    $scope.master = {};
+    var formApp = 
+      angular.module('voxboneApp', [])
+      .controller('formController', ['$scope', '$http', function($scope, $http){
+        $scope.master = {};
 
-                    $scope.update = function(account){
-                      $scope.master = angular.copy(account);
-                    };
+        $scope.update = function(account){
+          $scope.master = angular.copy(account);
+        };
 
-                    $scope.reset = function(form){
-                      if(form){
-                        form.$setPristine();
-                        form.$setUntouched();
-                      }
-                      $scope.account = angular.copy($scope.master);
-                    };
+        $scope.reset = function(form){
+          if(form){
+            form.$setPristine();
+            form.$setUntouched();
+          }
+          $scope.account = angular.copy($scope.master);
+        };
 
-                    $scope.reset();
-                  }]);
+        $scope.reset();
+
+        $scope.account.processForm = function(){
+          console.log("--> Submitting...");
+          var req = {
+            method: 'POST',
+            url: '/signup',
+            headers: {
+              'Content-Type': 'application/json; charset=utf-8'
+            },
+            data: {
+              email: "#{email}",
+              temp_password: $scope.account.temp_password,
+              password: $scope.account.upassword,
+              confirmation: $scope.account.confirmation
+            }
+          };
+          $http(req)
+            .then(function successCallback(response){
+              console.log("entered success callback");
+              console.log(response);
+            }, function errorCallback(){
+              console.log("entered error callback");
+            });
+        }
+      }]);
 
     formApp.directive('pwCheck', [function () {
       return {
@@ -36,39 +61,25 @@ block content
       }
     }]);
 
-    function formController($scope, $http){
-      $scope.account = {};
-      $scope.processForm = function(){
-        $http.post('/signup', $scope.account)
-            .success(function(data) {
-              console.log(data);
-            });
-      };
-    }
-
     $(document).ready(function(){
       $("#create").click(function(e){
         e.preventDefault();
         //$('.submit'), $(event.target.form)).click();
-        $("#create_account").submit();
+        //$("#create_account").submit();
         //disable create account button
       });
     });
 
   h1 Create an Account
-  div.col-sm-9
-   &nbsp; 
 
   #form_container
     p.
       Note the Voxbone WebRTC Widget Generator Free Trial will not be linked<br/> to your existing Voxbone
       account.  To use your Voxbone account and an existing DID, please see <a> view instructions</a>
-    div.col-sm-9
-      &nbsp;
 
     .row
       .col-md-6.col-sm-6.col-xs-12
-        form#create_account(name="create_account" ng-submit="processForm()", novalidate, ng-controller="formController")
+        form#create_account(name="create_account", novalidate, ng-controller="formController")
           .form-group
             label.col-sm-2.control-label Email
             input.form-control(type="text" id="uemail" name="uemail" ng-model="account.uemail", disabled, value= email, placeHolder= email)
@@ -89,5 +100,5 @@ block content
               div(ng-show="create_account.$submitted || create_account.confirmation.$touched")
                 div(ng-show="create_account.confirmation.$error.required") Confirmation is required
                 div(ng-show="create_account.confirmation.$error.pwmatch") Password confirmation does not match
-          a.btn.btn-primary#create Create Account
+          a.btn.btn-primary#create(ng-click="account.processForm()") Create Account
 
