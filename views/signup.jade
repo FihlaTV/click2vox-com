@@ -62,15 +62,6 @@ block content
       }
     }]);
 
-    $(document).ready(function(){
-      $("#create").click(function(e){
-        e.preventDefault();
-        //$('.submit'), $(event.target.form)).click();
-        //$("#create_account").submit();
-        //disable create account button
-      });
-    });
-
   h1 Create an Account
 
   #form_container
@@ -87,6 +78,8 @@ block content
           .form-group
             label.col-sm-2.control-label Temporary Password
             input.form-control(type="password", id="temp_password", name="temp_password", ng-model="account.temp_password", required)
+            div(ng-show="create_account.$submitted || create_account.temp_password.$touched")
+              div(ng-show="create_account.temp_password.$error.required") Temporary password is required
           hr(style="border-top-color:green")
           h3 Create a new Password
           .form-group
