@@ -1,0 +1,282 @@
+/* ================================================
+Google Web Fonts
+================================================ */
+/* Istok Web */
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,400italic);
+/* === Icons === */
+/* Font Awesome */
+/* ================================================
+Main Css
+================================================ */
+/* Bootstrap Main Css File (unedited) */
+/* Shortcuts Css Codes */
+/** Shortcuts **/
+/*** Float ***/
+@import url('plugin/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css');
+@import url('plugin/bootstrap-select/bootstrap-select.css');
+@import url('plugin/bootstrap-toggle/bootstrap-toggle.min.css');
+.float-l {
+  float: left;
+}
+.float-r {
+  float: right;
+}
+.float-none {
+  float: none;
+}
+/** Text Align **/
+.text-l {
+  text-align: left;
+}
+.text-r {
+  text-align: right;
+}
+.text-c {
+  text-align: center;
+}
+/** Border None **/
+.border-b-none {
+  border-bottom: none;
+}
+.border-t-none {
+  border-top: none;
+}
+.border-l-none {
+  border-left: none;
+}
+.border-r-none {
+  border-right: none;
+}
+.border-none {
+  border: none;
+}
+/** Display **/
+.display-block {
+  display: block;
+}
+.hidden {
+  display: none;
+}
+/** Font Size **/
+/** Text Ellipsis **/
+/** http:// lesselements .com **/
+.boxShadow {
+  -webkit-box-shadow: inset 0px 0px 5px 0px #ffffff, 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: inset 0px 0px 5px 0px #ffffff, 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0px 0px 5px 0px #ffffff, 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+}
+/* Main Css Codes */
+/* ===== Color Setup ===== */
+.form-control {
+  height: 40px;
+  border-color: #a1aeb7;
+}
+a {
+  color: #781e75;
+  transition: all 0.3s ease 0s;
+}
+a:hover,
+a:focus {
+  color: #641961;
+  text-decoration: underline;
+}
+.btn {
+  padding-top: 9px;
+  padding-bottom: 9px;
+  font-weight: bold;
+}
+.btn-default {
+  background: #781e75;
+  border-color: #781e75;
+  color: #ffffff;
+}
+.btn-default:hover {
+  background: #641961;
+  border-color: #641961;
+  color: #fff;
+  font-weight: bold;
+}
+/* Fonts */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4 {
+  font-family: 'Open Sans', sans-serif;
+  color: #343c3e;
+  font-weight: normal;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4 {
+  font-weight: 700;
+}
+html,
+body {
+  height: 100%;
+  min-height: 100%;
+}
+body {
+  background: #f0f4f7;
+  margin: 0;
+  outline: 0;
+}
+/*Fix Classes*/
+::-moz-selection {
+  background: #D5EAFF;
+}
+::selection {
+  background: #D5EAFF;
+}
+b,
+strong {
+  font-weight: 700;
+}
+.navbar.navbar,
+.navbar-default.navbar {
+  background-color: transparent;
+  color: #92a5a5;
+  border-bottom: 1px solid #d7dfe1;
+  min-height: 0;
+}
+.navbar.navbar .navbar-header,
+.navbar-default.navbar .navbar-header {
+  float: left;
+}
+.navbar.navbar .navbar-brand,
+.navbar-default.navbar .navbar-brand {
+  display: inline-block;
+  width: 110px;
+  height: 50px;
+  padding: 0;
+  margin: 0;
+  float: left;
+  background-image: url('../../images/navbar-brand.png');
+  background-size: 110px;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.navbar.navbar span.subBrand,
+.navbar-default.navbar span.subBrand {
+  float: left;
+  color: #781e75;
+  padding: 0 8px;
+  font-size: 18px;
+  line-height: 20px;
+  font-weight: 300;
+  margin: 17px 10px 0;
+  border-left: 1px solid #dadfdf;
+}
+.navbar.navbar a.login,
+.navbar-default.navbar a.login {
+  display: block;
+  height: 28px;
+  padding: 0 15px;
+  margin-top: 10px;
+  color: inherit;
+  line-height: 25px;
+  font-size: 14px;
+  font-weight: 300;
+  border: 1px solid #92a5a5;
+  -webkit-border-radius: 14px;
+  -moz-border-radius: 14px;
+  border-radius: 14px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.navbar.navbar a.login:hover,
+.navbar-default.navbar a.login:hover {
+  border-color: #781e75;
+  background: #781e75;
+  color: #ffffff;
+  text-decoration: none;
+}
+/* App Sections */
+.registerPage {
+  text-align: center;
+}
+.registerPage p {
+  font-size: 13px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.registerPage .formWrap {
+  display: inline-block;
+  width: 520px;
+  margin-top: 40px;
+  padding: 65px 90px;
+  background: #fbfcfc;
+  text-align: left;
+  color: #54606b;
+  border: 1px solid #c8cccf;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-box-shadow: inset 0px 0px 5px 0px #ffffff, 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: inset 0px 0px 5px 0px #ffffff, 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0px 0px 5px 0px #ffffff, 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+}
+.registerPage .formWrap button {
+  display: block;
+  width: 100%;
+}
+.registerPage .formWrap p {
+  padding-top: 5px;
+}
+/* Responsive Style */
+/* =================================================================================
+smaller than 1280 
+================================================================================= */
+/* =================================================================================
+smaller than 1024 
+================================================================================= */
+/* =================================================================================
+smaller than 760 
+================================================================================= */
+/* =================================================================================
+smaller than 620 
+================================================================================= */
+@media screen and (max-width: 620px) {
+  .navbar.navbar span.subBrand {
+    vertical-align: super;
+    font-size: smaller;
+    border: none;
+    margin: 10px 0 0;
+  }
+  .registerPage .formWrap {
+    display: block;
+    width: auto;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 30px;
+  }
+}
+/* =================================================================================
+smaller than 428 
+================================================================================= */
+@media screen and (max-width: 428px) {
+  .registerPage .formWrap {
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 15px;
+  }
+}
+/* ================================================
+Plugin Css
+================================================ */
+/* Awesome Bootstrap Checkbox */
+/* Bootstrap Select */
+/* Bootstrap Toggle */
