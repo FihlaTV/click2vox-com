@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Voxbone | WebRtc Beta</title>
+
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../stylesheets/root.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+      <div class="container">
+        <nav class="navbar">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#"></a>
+            <span class="subBrand"> WebRtc Beta</span>
+          </div>
+          <div class="pull-right">
+            <a class="login withripple" href="#">Login</a>
+          </div>
+        </nav>
+      </div>        
+
+      <div class="main createButton">
+        <div class="header">
+          <div class="container">
+            <div class="row">
+              <div class="col-xs-12">
+                <h1>Create a WebRTC Call Button</h1>
+                <p><strong>Note:</strong> this will create a code widget that can be embedded into any page that allows for JS code and will allow customers to video call without installing any software.</p>  
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="body">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6 left-col">
+                
+                <section>
+                  
+                  <span class="title">Button Configuration</span>
+                  <div class="boxPanel">
+                    <div class="form-group">
+                      <label for="buttonLabel">Button Label:</label>
+                      <input type="text" class="form-control" id="buttonLabel" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                      <label>Button Sytle:</label>
+                      <button class="btn-style-a"><span>Call Sales</span></button>
+                      <button class="btn-style-b"><span>Call Sales</span></button>
+                    </div>
+
+                  </div>
+                  
+                </section>
+
+
+                <section>
+                  
+                  <span class="title">Call Configuration</span>
+                  <div class="boxPanel">
+                    <div class="form-group">
+                      <label for="sip-uri">SIP URI</label>
+                      <input type="text" class="form-control" id="sip-uri" autocomplete="off">
+                    </div>
+                    
+                    <div class="sub-config active">
+                      <a href="javascript:void(0)" class="title-toggle">Call Configuration</a>
+                      <div class="options-wrap active">
+                        <div class="form-group">
+                          <label for="caller-id">Caller ID:</label>
+                          <input type="text" class="form-control" id="caller-id" autocomplete="off" placeholder="voxrtc_demo">
+                        </div>
+                        <div class="form-group">
+                          <label for="btn-context">Context:</label>
+                          <input type="text" class="form-control" id="btn-context" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                          <label for="btn-context">Dial Pad:</label>
+                          <div class="checkbox">
+                            <input id="checkbox1" type="checkbox">
+                            <label for="checkbox1">Enable</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="sub-config">
+                      <a href="javascript:void(0)" class="title-toggle">Incompatible Browser configuration</a>
+                      <div class="options-wrap">
+                        Incompatible Browser configuration options
+                      </div>
+                    </div>
+                  </div>
+                  
+                </section>
+                
+              </div>
+              <div class="col-sm-6 right-col">
+                <section>
+                  <span class="title">Preview</span>
+                  <div class="boxPanel preview">
+                    <div class="prev-view light">
+                      <div class="widget-box style-b">
+                        <button class="btn-style"><span>Call Sales</span></button>
+                        <div class="widget-footer">
+                          <a href="#">powered by:</a>
+                        </div>
+                      </div>
+                      <div class="togle-bg">
+                        <a href="javascript:void(0)" class="dark"></a>
+                        <a href="javascript:void(0)" class="grey"></a>
+                        <a href="javascript:void(0)" class="light"></a>
+                      </div>
+                    </div>
+                    <div class="prev-code">
+                      <div class="title">
+                        <span>Code Widget</span>
+                        <p>Paste the following HTML code into your websiteor give it a try using on <a href="#">JSFiddle</a></p>
+                      </div>
+                      <div class="widget-code-wrap">
+                        code here
+                        <div class="codebox-actions">
+                          <a href="#">Copy</a>
+                          <a href="#">Email Instructions</a>
+                          <a href="#">Regenerate Code</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+
+    <!-- Frond End -->
+    <script src="../../javascripts/main.js"></script>
+
+
+  </body>
+</html>
+

@@ -64,7 +64,7 @@
 }
 
 /** http:// lesselements .com **/
-.gradient(@color: #F5F5F5, @start: #EEE, @stop: #FFF) {
+.gradient(@color: #F5F5F5, @start: #EEE, @stop: #f0f4f7) {
   background: @color;
   background: -webkit-gradient(linear,
                                left bottom,
@@ -163,10 +163,10 @@
   -o-transition: all @duration @ease;
   transition: all @duration @ease;
 }
-.boxShadow{
-  -webkit-box-shadow: inset 0px 0px 5px 0px rgba(255,255,255,1), 0px 0px 8px 0px rgba(0,0,0,0.1);
-  -moz-box-shadow: inset 0px 0px 5px 0px rgba(255,255,255,1), 0px 0px 8px 0px rgba(0,0,0,0.1);
-  box-shadow: inset 0px 0px 5px 0px rgba(255,255,255,1), 0px 0px 8px 0px rgba(0,0,0,0.1);
+.boxShadow(@insetAlpha:1, @dropAlpha:0.1){
+  -webkit-box-shadow: inset 0px 0px 5px 0px rgba(255,255,255,@insetAlpha), 0px 0px 8px 0px rgba(0,0,0,@dropAlpha);
+  -moz-box-shadow: inset 0px 0px 5px 0px rgba(255,255,255,@insetAlpha), 0px 0px 8px 0px rgba(0,0,0,@dropAlpha);
+  box-shadow: inset 0px 0px 5px 0px rgba(255,255,255,@insetAlpha), 0px 0px 8px 0px rgba(0,0,0,@dropAlpha);
 }
 .inner-shadow(@horizontal:0, @vertical:1px, @blur:2px, @alpha: 0.4) {
   -webkit-box-shadow: inset @horizontal @vertical @blur rgba(0, 0, 0, @alpha);
@@ -217,4 +217,29 @@
   -moz-background-clip: @argument;
   -webkit-background-clip: @argument;
   background-clip: @argument;
+}
+
+.halfColorBg{
+  background-color: #f8fafb;
+  background-image: -webkit-linear-gradient(0,#f0f4f7,#f0f4f7);
+  background-image: -moz-linear-gradient(0,#f0f4f7,#f0f4f7);
+  background-image: -o-linear-gradient(0,#f0f4f7,#f0f4f7);
+  background-image: -ms-linear-gradient(0,#f0f4f7,#f0f4f7);
+  background-image: linear-gradient(90deg,#f0f4f7,#f0f4f7);
+  -webkit-background-size: 50% 100%;
+  -moz-background-size: 50% 100%;
+  background-size: 50% 100%;
+  background-repeat: no-repeat;
+  position: relative;
+  &:before{
+    content: '';
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: @border-grey;
+  }
+  
 }
