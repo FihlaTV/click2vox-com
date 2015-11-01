@@ -1,0 +1,105 @@
+/*Btn Widget Stuff*/
+.btn-widget(@btn-color){
+  display: inline-block;
+  
+  border: 1px solid darken(@btn-color,0.5%);
+  padding: 0;
+  margin-right: 10px;
+  
+  text-decoration: none;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.4;
+  font-weight: 700;
+  color: #ffffff;
+  
+  white-space: nowrap;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  
+  background: @btn-color;
+  background: -webkit-linear-gradient(@btn-color,darken(@btn-color,10%));
+  background: -moz-linear-gradient(@btn-color,darken(@btn-color,0.10%));
+  background: -ms-linear-gradient(@btn-color,darken(@btn-color,0.10%));
+  background: -o-linear-gradient(@btn-color,darken(@btn-color,0.10%));
+  background: linear-gradient(@btn-color,darken(@btn-color,10%));
+
+  .rounded(4px);  
+  
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.16);
+  -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.16);
+  -ms-box-shadow: 0 1px 1px rgba(0,0,0,0.16);
+  -o-box-shadow: 0 1px 1px rgba(0,0,0,0.16);
+  box-shadow: 0 1px 1px rgba(0,0,0,0.16);
+  span{
+    display: block;
+    min-width: 120px;
+    padding: 10px 12px 12px;
+    border-top:1px solid rgba(255, 255, 255, 0.10); 
+    text-shadow: 0px -1px #07619E;
+    .rounded(4px);  
+  }
+  &:hover{
+  background: -webkit-linear-gradient(darken(@btn-color,10%),@btn-color);
+  background: -moz-linear-gradient(darken(@btn-color,10%),@btn-color);
+  background: -ms-linear-gradient(darken(@btn-color,10%),@btn-color);
+  background: -o-linear-gradient(darken(@btn-color,10%),@btn-color);
+  background: linear-gradient(darken(@btn-color,10%),@btn-color);
+  }
+}
+.btn-style-a{
+  .btn-widget(#19a1f3);
+}
+.btn-style-b{
+  .btn-widget(#92168e);
+}
+
+
+.widget-box{
+  position: relative;
+  padding: 70px;
+  text-align: center;
+  .rounded(6px);
+  .widget-footer{
+    position: absolute;
+    font-size: 9px;
+    bottom: 8px;
+    right: 8px;
+    a{
+      padding-right: 62px;
+      background-image: url('../../images/widget-brand.png');
+      background-size: 60px 12.5px;
+      background-position: right center;
+      background-repeat: no-repeat;
+    }
+  }
+  .btn-style{
+    width: 100%;
+  }
+  &.style-a{
+    .boxShadow(1,0.2);
+    background: #f5f5f7;
+    .btn-style{
+      .btn-widget(#19a1f3);
+    }
+    .widget-footer{
+      a{
+        color: #8b8b8b;      
+      }
+    }
+  }
+  &.style-b{
+    .boxShadow(0.5,0.2);
+    background: #2a2929;
+    .btn-style{
+      .btn-widget(#92168e);
+    }
+    .widget-footer{
+      a{
+        color: #d8d8d8;        
+      }
+    }
+  }
+}

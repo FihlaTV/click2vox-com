@@ -2,3 +2,19 @@
   height: 40px;
   border-color:#a1aeb7; 
 }
+
+
+/*Checkbox*/
+.checkbox{
+  label{
+    padding-left: 2px;
+  }
+  label::before{
+    background: #dbe1e5;
+    border-color:#8a9399;
+    
+  }
+  input[type="checkbox"]:checked + label::after{
+    color: @vx-purple;
+  }
+}
