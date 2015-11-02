@@ -4,7 +4,6 @@ $(document).ready(function () {
   });
 });
 
-
 $(document).ready(function () {
   $( ".btn-style-a" ).click(function() {
     $( ".widget-box" ).removeClass( "style-b" ).addClass( "style-a" );
@@ -23,5 +22,11 @@ $(document).ready(function () {
   });
   $( ".togle-bg a.light" ).click(function() {
     $( ".prev-view" ).removeClass("black").removeClass("grey").addClass( "light" );
+  });
+});
+
+$(document).ready(function () {
+  $(".dialpad-toggle").click(function(){
+      alert("The paragraph was clicked.");
   });
 });
