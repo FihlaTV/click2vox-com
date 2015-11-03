@@ -6,6 +6,10 @@ router.get('/login', function(req, res, next){
   res.render('login', { title: 'Voxbone Demo v0.1', email: req.query.email });
 });
 
+router.post('/login', function(req, res, next){
+  console.log("entered post for login");
+});
+
 router.get('/signup', function(req, res, next){
   if(req.query.email){
     Account.findOne({ email: req.query.email }, function(err, the_account){
@@ -18,7 +22,7 @@ router.get('/signup', function(req, res, next){
       }else{
         var an_account = new Account({
           email: req.query.email,
-          password: req.query.password,
+          voxbone_password: req.query.password,
           temporary: true 
         });
 
@@ -37,7 +41,7 @@ router.get('/signup', function(req, res, next){
 router.post('/signup', function(req, res, next){
   var formData = req.body;
   var result = { message: "", errors: null, redirect: '/login', email: formData.email }
-  //TODO check if temp_password is the same as the account's password, else return error
+  //TODO validate fields
   Account.findOne({ email: formData.email }, function(err, the_account){
     the_account.password = formData.password;
     the_account.temporary = false;

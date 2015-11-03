@@ -31,7 +31,6 @@ block content
             },
             data: {
               email: "#{email}",
-              temp_password: $scope.account.temp_password,
               password: $scope.account.upassword,
               confirmation: $scope.account.confirmation
             }
@@ -75,11 +74,6 @@ block content
           .form-group
             label.col-sm-2.control-label Email
             input.form-control(type="text" id="uemail" name="uemail" ng-model="account.uemail", disabled, value= email, placeHolder= email)
-          .form-group
-            label.col-sm-2.control-label Temporary Password
-            input.form-control(type="password", id="temp_password", name="temp_password", ng-model="account.temp_password", required)
-            div(ng-show="create_account.$submitted || create_account.temp_password.$touched")
-              div(ng-show="create_account.temp_password.$error.required") Temporary password is required
           hr(style="border-top-color:green")
           h3 Create a new Password
           .form-group
