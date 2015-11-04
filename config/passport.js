@@ -9,29 +9,22 @@ module.exports = function(passport) {
     passReqToCallback : true
   },
   function(req, email, password, done) {
-    console.log("entered use.....");
     Account.findOne({ 'email' :  email }, function(err, account) {
       if (err){
-        console.log("FOUND error: ");
-        console.log(err);
         return done(err);
       }
       if (!account){
-        console.log("NO ACCOUNT found.");
-        return done(null, false, req.flash('loginMessage', 'No user found.'));
+        return done(null, false, req.flash('loginMessage', 'No account found.'));
       }
       if (!account.validPassword(password)){
-        console.log("ACCOUNT found, but password is incorrect");
-        return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+        return done(null, false, req.flash('loginMessage', 'Wrong password. Try again'));
       }
-      console.log("FOUND the account, all good!");
       return done(null, account);
     });
 
   }));
 
   passport.serializeUser(function(account, done) {
-    console.log("entered serialize");
     done(null, account.id);
   });
 

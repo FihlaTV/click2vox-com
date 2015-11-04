@@ -14,6 +14,7 @@ var accountSchema = new Schema({
   resetPasswordExpires: Date
 });
 
+//TODO add encryption to passwords
 //accountSchema.methods.generateHash = function(password) {
 //    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 //};
