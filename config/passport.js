@@ -9,7 +9,7 @@ module.exports = function(passport) {
     passReqToCallback : true
   },
   function(req, email, password, done) {
-    Account.findOne({ 'email' :  email }, function(err, account) {
+    Account.findOne({ 'email' :  email, 'temporary': false }, function(err, account) {
       if (err){
         return done(err);
       }

@@ -59,12 +59,11 @@ module.exports = function(passport){
     var result = { message: "", errors: null, redirect: '/widget', email: formData.email }
     //TODO validate fields
     Account.findOne({ email: formData.email }, function(err, the_account){
-      the_account.password = formData.password;
+      the_account.password = the_account.generateHash(formData.password);
       the_account.temporary = false;
       the_account.save(function(err){
         if(err) throw err;
         req.logIn(the_account, function(err) {
-          console.log("saved the account with new info");
           res.status(200).json(result);
         });
       });
