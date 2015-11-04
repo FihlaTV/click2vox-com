@@ -30,7 +30,7 @@ block content
               'Content-Type': 'application/json; charset=utf-8'
             },
             data: {
-              email: $scope.login.email,
+              email: $scope.login.uemail,
               password: $scope.login.upassword
             }
           };
@@ -39,8 +39,9 @@ block content
               console.log("entered success callback");
               console.log(response);
               //$window.location.href = response.data.redirect + '?email=' + response.data.email;
-            }, function errorCallback(){
+            }, function errorCallback(response){
               console.log("entered error callback");
+              console.log(response);
             });
         }
       }]);
@@ -54,10 +55,16 @@ block content
           .form-group
             label.col-sm-2.control-label Email
             input.form-control(type="text" id="uemail" name="uemail" ng-model="login.uemail", required, value= email)
+            div(ng-show="login_form.$submitted || login_form.uemail.$touched")
+              div(ng-show="login_form.uemail.$error.required") Email is required
+            div(ng-show="login_form.uemail.$dirty && login_form.uemail.$invalid")
+              div(ng-show="login_form.uemail.$error.email") Email is invalid
           .form-group
             label.col-sm-2.control-label Password
             input.form-control(type="password", id="upassword", name="upassword", ng-model="login.upassword", required)
+            div(ng-show="login_form.$submitted || login_form.upassword.$touched")
+              div(ng-show="login_form.upassword.$error.required") Password is required
 
-          a.btn.btn-primary#login Login
+          a.btn.btn-primary#login(ng-click="login.processForm()") Login
           br
           a Forgot your password?
