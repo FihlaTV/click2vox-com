@@ -33,6 +33,10 @@ html(lang='en', ng-app="voxboneApp")
           a.navbar-brand(href='#') Voxbone WebRTC Beta
         div.collapse.navbar-collapse#bs-example-navbar-collapse-1
           ul.nav.navbar-nav.navbar-right
-            li
-              a(href="#") Login
+            if account
+              li
+                a(href="/logout") Logout
+            else
+              li
+                a(href="/login") Login
     block content

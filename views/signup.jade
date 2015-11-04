@@ -1,0 +1,93 @@
+extends layout
+
+block content
+  script.
+    var formApp = 
+      angular.module('voxboneApp', [])
+      .controller('formController', ['$scope', '$http', '$window', function($scope, $http, $window){
+        $scope.master = {};
+
+        $scope.update = function(account){
+          $scope.master = angular.copy(account);
+        };
+
+        $scope.reset = function(form){
+          if(form){
+            form.$setPristine();
+            form.$setUntouched();
+          }
+          $scope.account = angular.copy($scope.master);
+        };
+
+        $scope.reset();
+
+        $scope.account.processForm = function(){
+          console.log("--> Submitting...");
+          var req = {
+            method: 'POST',
+            url: '/signup',
+            headers: {
+              'Content-Type': 'application/json; charset=utf-8'
+            },
+            data: {
+              email: "#{email}",
+              password: $scope.account.upassword,
+              confirmation: $scope.account.confirmation
+            }
+          };
+          $http(req)
+            .then(function successCallback(response){
+              $window.location.href = response.data.redirect + '?email=' + response.data.email;
+            }, function errorCallback(){
+              console.log("entered error callback");
+            });
+        }
+      }]);
+
+    formApp.directive('pwCheck', [function () {
+      return {
+        require: 'ngModel',
+        link: function (scope, elem, attrs, ctrl) {
+          var firstPassword = '#' + attrs.pwCheck;
+          elem.on('input', function () {
+            scope.$apply(function () {
+              var v = elem.val() === $(firstPassword).val();
+              ctrl.$setValidity('pwmatch', v);
+            });
+          });
+        }
+      }
+    }]);
+
+  h1 Create an Account
+
+  #form_container
+    p.
+      Note the Voxbone WebRTC Widget Generator Free Trial will not be linked<br/> to your existing Voxbone
+      account.  To use your Voxbone account and an existing DID, please see <a> view instructions</a>
+
+    .row
+      .col-md-6.col-sm-6.col-xs-12
+        form#create_account(name="create_account", novalidate, ng-controller="formController")
+          .form-group
+            label.col-sm-2.control-label Email
+            input.form-control(type="text" id="uemail" name="uemail" ng-model="account.uemail", disabled, value= email, placeHolder= email)
+          hr(style="border-top-color:green")
+          h3 Create a new Password
+          .form-group
+            label.col-sm-2.control-label Password
+            input.form-control(type="password", id="upassword", name="upassword", ng-model="account.upassword", required, ng-minlength="8")
+            div(ng-show="create_account.$submitted || create_account.upassword.$touched")
+              div(ng-show="create_account.upassword.$error.required") Password is required
+              div(ng-show="create_account.upassword.$error.minlength") Password must be at least 8 characters in length
+            .form-group
+              label.col-sm-2.control-label Confirm Password
+              input.form-control(type="password" id="confirmation", name="confirmation" ng-model="account.confirmation", required, pw-check="upassword" )
+              div(ng-show="create_account.$submitted || create_account.confirmation.$touched")
+                div(ng-show="create_account.confirmation.$error.required") Confirmation is required
+                div(ng-show="create_account.confirmation.$error.pwmatch") Password confirmation does not match
+          a.btn.btn-primary#create(ng-click="account.processForm()") Create Account
+          br
+          p Already have an account? 
+          a(href="/login") Login here
+
