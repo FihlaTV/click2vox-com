@@ -6,7 +6,7 @@ var async = require('async');
 module.exports = function(passport){
 
   router.get('/login', function(req, res, next){
-    res.render('login', { title: 'Voxbone Demo v0.1', email: req.query.email, account: accountLoggedIn(req) });
+    res.render('login', { title: 'Voxbone Demo v0.1', email: req.query.email, account: accountLoggedIn(req), message: req.flash('loginMessage') });
   });
 
   router.post('/login',
@@ -14,7 +14,7 @@ module.exports = function(passport){
     function(req, res, next){
       console.log("entered post for login");
       var formData = req.body;
-      var result = { message: "", errors: null, redirect: '/', email: formData.email }
+      var result = { message: "", errors: null, redirect: '/widget', email: formData.email }
       res.status(200).json(result);
   });
 
@@ -78,7 +78,7 @@ module.exports = function(passport){
   });
 
   router.get('/widget', isLoggedIn, function(req, res, next) {
-    res.render('widget', { title: 'Voxbone Demo v0.1', account: req.account });
+    res.render('widget', { title: 'Voxbone Demo v0.1', account: accountLoggedIn(req) });
   });
 
   router.get('/', function(req, res, next) {
