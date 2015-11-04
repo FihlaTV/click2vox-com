@@ -27,10 +27,10 @@ module.exports = function(passport){
       Account.findOne({ email: req.query.email }, function(err, the_account){
         if(the_account){
           if(the_account.temporary == true){
-            res.render('signup', { title: 'Voxbone Demo v0.1', email: req.query.email });
+            res.render('signup', { title: 'Voxbone Demo v0.1', email: req.query.email, account: accountLoggedIn(req) });
           }else {
             if (accountLoggedIn(req)){
-              res.render('/widget');
+              res.render('/widget', {title: 'Voxbone Demo v0.1', account: accountLoggedIn(req) });
             }else{
               res.render('login', { title: 'Voxbone Demo v0.1', email: req.query.email, account: accountLoggedIn(req) });
             }
@@ -44,7 +44,7 @@ module.exports = function(passport){
 
           an_account.save(function(err) {
             if (err) throw err;
-            res.render('signup', { title: 'Voxbone Demo v0.1', email: req.query.email });
+            res.render('signup', { title: 'Voxbone Demo v0.1', email: req.query.email, account: accountLoggedIn(req) });
           });
         }
       });
@@ -81,7 +81,7 @@ module.exports = function(passport){
   });
 
   router.get('/', function(req, res, next) {
-    res.render('login', { title: 'Voxbone Demo v0.1' });
+    res.render('login', { title: 'Voxbone Demo v0.1', account: accountLoggedIn(req) });
   });
 
   function isLoggedIn(req, res, next) {
