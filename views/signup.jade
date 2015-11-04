@@ -37,8 +37,6 @@ block content
           };
           $http(req)
             .then(function successCallback(response){
-              console.log("entered success callback");
-              console.log(response);
               $window.location.href = response.data.redirect + '?email=' + response.data.email;
             }, function errorCallback(){
               console.log("entered error callback");
