@@ -54,7 +54,7 @@ block content
         form#login_form(name="login_form", novalidate, ng-controller="loginController")
           .form-group
             label.col-sm-2.control-label Email
-            input.form-control(type="text" id="uemail" name="uemail" ng-model="login.uemail", required, value= email)
+            input.form-control(type="email" id="uemail" name="uemail" ng-model="login.uemail", required, value= email)
             div(ng-show="login_form.$submitted || login_form.uemail.$touched")
               div(ng-show="login_form.uemail.$error.required") Email is required
             div(ng-show="login_form.uemail.$dirty && login_form.uemail.$invalid")
