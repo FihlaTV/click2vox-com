@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Account = require('../models/account');
 var async = require('async');
-var title = 'Voxbone Demo v0.1';
+var title = 'Voxbone Demo v0.2';
 
 module.exports = function(passport){
 
