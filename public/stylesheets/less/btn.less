@@ -1,0 +1,25 @@
+a{
+  color: @vx-purple;
+  transition: all 0.3s ease 0s;
+  &:hover,
+  &:focus{
+    color: darken(@vx-purple, 5%);
+    text-decoration: underline;
+  }
+}
+.btn{
+  padding-top: 9px;
+  padding-bottom: 9px;
+  font-weight: bold;
+}
+.btn-default{
+  background: @vx-purple;
+  border-color: @vx-purple;
+  color: #ffffff;
+  &:hover{
+    background: darken(@vx-purple, 5%);
+    border-color: darken(@vx-purple, 5%);
+    color: #fff;
+    font-weight: bold;
+  }
+}

@@ -2,11 +2,12 @@ var express = require('express');
 var router = express.Router();
 var Account = require('../models/account');
 var async = require('async');
+var title = 'Voxbone Demo v0.2';
 
 module.exports = function(passport){
 
   router.get('/login', function(req, res, next){
-    res.render('login', { title: 'Voxbone Demo v0.1', email: req.query.email, account: accountLoggedIn(req), message: req.flash('loginMessage') });
+    res.render('login', { title: title, email: req.query.email, account: accountLoggedIn(req), message: req.flash('loginMessage') });
   });
 
   router.post('/login',
@@ -27,29 +28,29 @@ module.exports = function(passport){
       Account.findOne({ email: req.query.email }, function(err, the_account){
         if(the_account){
           if(the_account.temporary == true){
-            res.render('signup', { title: 'Voxbone Demo v0.1', email: req.query.email, account: accountLoggedIn(req) });
+            res.render('signup', { title: title, email: req.query.email, account: accountLoggedIn(req) });
           }else {
             if (accountLoggedIn(req)){
-              res.render('/widget', {title: 'Voxbone Demo v0.1', account: accountLoggedIn(req) });
+              res.render('/widget', {title: title, account: accountLoggedIn(req) });
             }else{
-              res.render('login', { title: 'Voxbone Demo v0.1', email: req.query.email, account: accountLoggedIn(req) });
+              res.render('login', { title: title, email: req.query.email, account: accountLoggedIn(req) });
             }
           }
         }else{
           var an_account = new Account({
             email: req.query.email,
             voxbone_password: req.query.password,
-            temporary: true 
+            temporary: true
           });
 
           an_account.save(function(err) {
             if (err) throw err;
-            res.render('signup', { title: 'Voxbone Demo v0.1', email: req.query.email, account: accountLoggedIn(req) });
+            res.render('signup', { title: title, email: req.query.email, account: accountLoggedIn(req) });
           });
         }
       });
     } else{
-      res.render('login', { title: 'Voxbone Demo v0.1', account: accountLoggedIn(req) });
+      res.render('login', { title: title, account: accountLoggedIn(req) });
     }
   });
 
@@ -77,15 +78,15 @@ module.exports = function(passport){
   });
 
   router.get('/widget', isLoggedIn, function(req, res, next) {
-    res.render('widget', { title: 'Voxbone Demo v0.1', account: accountLoggedIn(req) });
+    res.render('widget', { title: title, account: accountLoggedIn(req) });
   });
 
   router.get('/', function(req, res, next) {
-    res.render('login', { title: 'Voxbone Demo v0.1', account: accountLoggedIn(req) });
+    res.render('login', { title: title, account: accountLoggedIn(req) });
   });
 
   function isLoggedIn(req, res, next) {
-    // if user is authenticated in the session, carry on 
+    // if user is authenticated in the session, carry on
     if (req.isAuthenticated())
         return next();
     // if they aren't redirect them to the home page

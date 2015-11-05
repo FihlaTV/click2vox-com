@@ -41,127 +41,95 @@ block content
       callTimer = window.setInterval(function(){makeCall()},1000);
     }
 
-    $(document).ready(function() {
-      $("#launch_call").click(function(e) {
-        e.preventDefault();
-        launch();
-      });
+  .main.createButton
+    .header
+      .container
+        .row
+          .col-xs-12
+            h1 Create a WebRTC Call Button
+            p #[b Note:] this will create a code widget that can be embedded into any page that allows for JS code and will allow customers to video call without installing any software.
+    .body
+      .container
+        .row
+          .col-sm-6.left-col
+            section
+              span.title Button Configuration
+              form
+                .boxPanel
+                  .form-group
+                    label Button Label:
+                    input.form-control(type="text", name="user", ng-model="buttonText" value="Call Sales" placeholder="i.e. Call Sales")
+                  .form-group
+                    label Button Style:
+                    button.btn-style-a #[span {{buttonText || 'Call Sales'}}]
+                    button.btn-style-b #[span {{buttonText || 'Call Sales'}}]
 
-      $("#hangup_call").click(function(e) {
-        e.preventDefault();
-        voxbone.WebRTC.hangup();
-      });
+            section
+              span.title Call Configuration
+              form
+                .boxPanel
+                  .form-group
+                    label.control-label SIP URI #[span.badge ?]
+                    input.form-control(type="text", name="user", ng-model="sipUri" value="SIP: echotest@voxout.voxbone.com" placeholder="i.e. SIP: echotest@voxout.voxbone.com")
+                  .panel.panel-default
+                    .panel-heading
+                      a.title-toggle(data-toggle="collapse",data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
+                    .panel-collapse.collapse#collapseAdvancedCallConfiguration
+                      .options-wrap.active
+                        .form-group
+                          label(for="btn-context") Caller ID #[span.badge ?]
+                          input.form-control(type="text", name="user", ng-model="callerId" value="voxrtc_demo" placeholder="i.e. voxrtc_demo")
+                        .form-group
+                          label(for="btn-context") Context #[span.badge ?]
+                          input.form-control(type="text", name="user", ng-model="context")
+                        .form-group
+                          label(for="btn-context") DTMF Dial Pad #[span.badge ?]
+                          input(type="checkbox", name="dtmf_dial_pad" checked)
+                          label(for="checkbox1") Enable
+                  .panel.panel-default
+                    .panel-heading
+                      a.title-toggle(data-toggle="collapse",data-target="#collapseIncompatileBrowserConfiguration",href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
+                    .panel-collapse.collapse#collapseIncompatileBrowserConfiguration
+                      .options-wrap.active
+                        .form-group
+                          label.control-label Hide the widget #[span.badge ?]
+                          input.form-control(type='checkbox', name='hide_widget')
+                        .form-group
+                          label.control-label Link button to a page #[span.badge ?]
+                          input.form-control(type='checkbox', name='link_button_to_a_page')
+                          input.form-control(type="text", name="link_button_to_a_value", placeholder="Enter url")
+                        .form-group
+                          label.control-label Show text/HTML #[span.badge ?]
+                          input.form-control(type='checkbox', name='show_text_html')
+                          input.form-control(type="text", name="show_text_html_value", placeholder="Enter text or HTML")
 
-      $("#dark_theme").click(function(e) {
-        e.preventDefault();
-        $("#launch_call").addClass('btn-primary').removeClass('btn-success')
-      });
+          .col-sm-6.right-col
+            .section
+              span.title Preview
+              .boxPanel.preview
+                .prev-view.light
+                  .widget-box.style-b
+                    button.btn-style.mdi-communication-call#launch_call #[span {{buttonText || 'Call Sales'}}]
+                    //- button.btn.btn-raised.btn-material-red.mdi-communication-call-end#hangup_call
+                    .widget-footer
+                      a(href="#") powered by:
+                  .togle-bg
+                    a.dark(href="javascript:void(0)")
+                    a.grey(href="javascript:void(0)")
+                    a.light(href="javascript:void(0)")
 
-      $("#light_theme").click(function(e) {
-        e.preventDefault();
-        $("#launch_call").removeClass('btn-primary').addClass('btn-success')
-      });
+                  //- p#status_message Initializing configuration
 
-    });
-
-  .row
-    .col-md-12
-      h1 Create a WebRTC Call Button
-  .row
-    .col-md-12
-      p #[b Note] this will create a code widget that can be embedded into any page that allows for JS code and will allow customers to video call without installing any software.
-  .row
-    .col-md-6.col-sm-6.col-xs-12.panel-group
-      p Button Configuration
-      form.form-horizontal
-        .form-group
-          .col-sm-3
-            label.control-label Button Label:
-          .col-sm-9
-            input.form-control(type="text", name="user", ng-model="buttonText" value="Call Sales" placeholder="i.e. Call Sales")
-
-        .form-group
-          .col-sm-3
-            label.control-label Button Style:
-          .col-sm-9
-            a.btn.btn-primary#dark_theme Dark
-            a.btn.btn-success#light_theme Light
-
-      p Call Configuration
-      form.form-horizontal
-        .form-group
-          .col-sm-3
-            label.control-label SIP URI #[span.badge ?]
-          .col-sm-9
-            input.form-control(type="text", name="user", ng-model="sipUri" value="SIP: echotest@voxout.voxbone.com" placeholder="i.e. SIP: echotest@voxout.voxbone.com")
-
-      .panel.panel-default
-        .panel-heading
-          p.panel-title
-            a.collapsed(data-toggle="collapse",data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
-        .panel-collapse.collapse#collapseAdvancedCallConfiguration
-          form.form-horizontal.panel-body
-            .form-group
-              .col-sm-3
-                label.control-label Caller ID #[span.badge ?]
-              .col-sm-9
-                input.form-control(type="text", name="user", ng-model="callerId" value="voxrtc_demo" placeholder="i.e. voxrtc_demo")
-
-            .form-group
-              .col-sm-3
-                label.control-label Context #[span.badge ?]
-              .col-sm-9
-                input.form-control(type="text", name="user", ng-model="context")
-
-            .form-group
-              .col-sm-3
-                label.control-label DTMF Dial Pad #[span.badge ?]
-              .col-sm-1
-                input.form-control(type="checkbox", name="dtmf_dial_pad" checked)
-              .col-sm-8
-                &nbsp;
-
-      .panel.panel-default
-        .panel-heading
-          p.panel-title
-            a.collapsed(data-toggle="collapse",data-target="#collapseIncompatileBrowserConfiguration",href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
-        .panel-collapse.collapse#collapseIncompatileBrowserConfiguration
-          form.form-horizontal.panel-body
-            .form-group
-              .col-sm-3
-                label.control-label Hide the widget #[span.badge ?]
-              .col-sm-1
-                input.form-control(type='checkbox', name='hide_widget')
-              .col-sm-8
-                &nbsp;
-
-            .form-group
-              .col-sm-3
-                label.control-label Link button to a page #[span.badge ?]
-              .col-sm-1
-                input.form-control(type='checkbox', name='link_button_to_a_page')
-              .col-sm-8
-                input.form-control(type="text", name="link_button_to_a_value", placeholder="Enter url")
-
-            .form-group
-              .col-sm-3
-                label.control-label Show text/HTML #[span.badge ?]
-              .col-sm-1
-                input.form-control(type='checkbox', name='show_text_html')
-              .col-sm-8
-                input.form-control(type="text", name="show_text_html_value", placeholder="Enter text or HTML")
-
-    .col-md-6.col-sm-6.col-xs-12
-      h3 Preview
-      .sample.shadow-z-2.text-center
-        a.btn.btn-success.mdi-communication-call#launch_call {{buttonText}}
-        a.btn.btn-raised.btn-material-red.mdi-communication-call-end#hangup_call
-
-      p#status_message Initializing configuration
-
-      h3 Code Widget
-      p Paste the following HTML code into your website or give it a try using on #[a(href="#") JSFiddle]
-      - var button_code = "<div class='voxButton' id='voxButton_e83be0ab55e2xgq06856de44b5f90ff2e ' href='https://webrtc.voxbone.com/widget/ e83be0ab55e2xgq06856de44b5f90ff2e'; onclick='initCall(voxButton_e83be0ab55e2xgq06856de44b5f90ff2e)' hidden='hidden'></div><script src='https://webrtc.voxbone.com/js/jssip-0.4.0.js'> </script><script src='https://webrtc.voxbone.com/js/voxbone-0.0.3.js'> </script>"
-      pre.sample.shadow-z-2.prettyprint#widget_code
-        | #{button_code}
-      p #[a(href="#") Copy] • #[a(href="#") Email Instructions] • #[a(href="#") Regenerate Code]
+                .prev-code
+                  .title
+                    span Code Widget
+                    p Paste the following HTML code into your website or give it a try using on #[a(href="#") JSFiddle]
+                  .widget-code-wrap
+                    - var button_code = "<div class='voxButton' id='voxButton_e83be0ab55e2xgq06856de44b5f90ff2e ' href='https://webrtc.voxbone.com/widget/ e83be0ab55e2xgq06856de44b5f90ff2e'; onclick='initCall(voxButton_e83be0ab55e2xgq06856de44b5f90ff2e)' hidden='hidden'></div><script src='https://webrtc.voxbone.com/js/jssip-0.4.0.js'> </script><script src='https://webrtc.voxbone.com/js/voxbone-0.0.3.js'> </script>"
+                    pre.sample.shadow-z-2.prettyprint#widget_code
+                      | #{button_code}
+                    .codebox-actions
+                      #[a(href="#") Copy]
+                      #[a(href="#") Email Instructions]
+                      #[a(href="#") Regenerate Code]
+  script(src="javascripts/main.js",type="application/javascript")

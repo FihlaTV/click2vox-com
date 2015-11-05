@@ -1,0 +1,309 @@
+body.test {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  width: 100%;
+  height: 100%;
+  
+}
+body.test iframe{
+  border: none;
+  position: absolute;
+  top:0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+a {
+  color: #781e75;
+  text-decoration: none;
+}
+
+.vox-widget-wrapper{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  box-sizing: border-box;
+}
+.vox-widget-wrapper *, .vox-widget-wrapper *:before, .vox-widget-wrapper *:after {
+  box-sizing: inherit;
+}
+.vox-widget-wrapper .vw-main{
+  margin-right: 50px;
+  
+  -webkit-box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.35);
+  -moz-box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.35);
+  box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.35);
+
+  -webkit-border-top-left-radius: 6px;
+  -webkit-border-top-right-radius: 6px;
+  -moz-border-radius-topleft: 6px;
+  -moz-border-radius-topright: 6px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  
+}
+.vox-widget-wrapper .vw-main .vw-header{
+  width: 365px;
+  height: 46px;
+  background: #eeeef0;
+  border-bottom: 1px solid #d3d3d4;
+  -webkit-border-top-left-radius: 6px;
+  -webkit-border-top-right-radius: 6px;
+  -moz-border-radius-topleft: 6px;
+  -moz-border-radius-topright: 6px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+.vox-widget-wrapper .vw-main .vw-header .vw-title{
+  color: #1671ad;
+  line-height: 46px;
+  padding: 0 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
+.vox-widget-wrapper .vw-main .vw-header .vw-actions{
+  float: right;
+  text-align: right;
+  padding: 0 2.5px;
+}
+.vox-widget-wrapper .vw-main .vw-header .vw-actions a{
+  display: inline-block;
+  height: 46px;
+  width: 46px;
+  margin: 0 -2.5px;
+  text-align: center;
+  color: #9b9b9b;
+  border-left: 1px solid #d3d3d4; 
+}
+.vox-widget-wrapper .vw-main .vw-header .vw-actions a:last-child{
+  -webkit-border-top-right-radius: 6px;
+  -moz-border-radius-topright: 6px;
+  border-top-right-radius: 6px;
+}
+
+
+.vox-widget-wrapper .vw-main .vw-header .vw-actions a:hover{
+  background: #e2e2e5;
+}
+
+
+.vox-widget-wrapper .vw-main .vw-body{
+  position: relative;
+  width: 365px;
+  min-height: 105px;
+  background: #f5f5f7;
+  border-top: 1px solid #ffffff;
+  padding: 30px;
+  text-align: center;
+}
+
+.vox-widget-wrapper .vw-main .vw-body .vw-footer{
+  position: absolute;
+  font-size: 9px;
+  bottom: 8px;
+  right: 8px;
+}
+.vox-widget-wrapper .vw-main .vw-body .vw-footer a{
+  padding-right: 62px;
+  background-image: url('../../images/widget-brand.png');
+  background-size: 60px 12.5px;
+  background-position: right center;
+  background-repeat: no-repeat;
+  color: #8b8b8b;
+}
+.vox-widget-wrapper .vw-body .vw-btn-group{
+  float: left;
+  height: 40px;
+}
+.vox-widget-wrapper .vw-body .vw-btn-group a{
+  position: relative;
+  background: #9b9b9b;
+  float: left;
+  border-left:1px solid #bcbcbc;
+  padding: 0 5px;
+}
+.vox-widget-wrapper .vw-body .vw-btn-group a:hover{
+  background: #8f8f8f;
+}
+.vox-widget-wrapper .vw-body .vw-btn-group a:first-child{
+  -webkit-border-top-left-radius: 4px;
+  -webkit-border-bottom-left-radius: 4px;
+  -moz-border-radius-topleft: 4px;
+  -moz-border-radius-bottomleft: 4px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.vox-widget-wrapper .vw-body .vw-btn-group a:last-child{
+  -webkit-border-top-right-radius: 4px;
+  -webkit-border-bottom-right-radius: 4px;
+  -moz-border-radius-topright: 4px;
+  -moz-border-radius-bottomright: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+.vox-widget-wrapper .vw-body .vw-btn-group a.active:after{
+  position: absolute;
+  content: "";
+  bottom:-8px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  margin-left: -8px;
+  border-style: solid;
+  border-width: 8px 8px 0 8px;
+  border-color: #9b9b9b transparent transparent transparent;
+}
+.vox-widget-wrapper .int-sensor{
+  display: inline-block;
+  min-width: 12px;
+  height: 40px;
+  padding: 11px 4px 0 2px;
+}
+.vox-widget-wrapper .int-sensor em{
+  display: block;
+  width: 6px;
+  height: 6px;
+  margin: 0 0 2px 0;
+  background: #ffffff;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.vox-widget-wrapper .int-sensor em.on{
+  background: #00ff2a;
+}
+.vox-widget-wrapper .vw-body .vw-end-call{
+  float: left;
+  width: 140px;
+  height: 43px;
+  color: #fff;
+  font-weight: bold;
+  background: #e20a1f;
+  margin-left: 20px;
+  text-align: center;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.vox-widget-wrapper .vw-body .vw-end-call:hover{
+  background: #d0071b;
+}
+.vox-widget-wrapper .vw-body .vw-end-call i{
+  vertical-align: middle;
+  margin-top: 2px;
+}
+.vox-widget-wrapper .vw-body .vw-dialpad{
+  display: none;
+  width: 275px;
+  margin: 20px 0 0;
+  background: #f9f9fa;
+  border-top: 1px solid #cececf;
+  border-left: 1px solid #cececf;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+.vox-widget-wrapper .vw-body .vw-dialpad.active{
+  display: inline-block;
+}
+.vox-widget-wrapper .vw-body .vw-dialpad ul{
+  display: block;
+  padding: 0;
+  margin: 0;
+}
+.vox-widget-wrapper .vw-body .vw-dialpad ul li{
+  float: left;
+  padding: 0;
+  margin: 0;
+  width: 33.333%;
+  height: 45px;
+  list-style: none;
+  line-height: 45px;
+  border-bottom: 1px solid #cececf;
+  border-right: 1px solid #cececf;
+  font-weight: bold;
+  cursor: pointer;
+}
+.vox-widget-wrapper .vw-body .vw-dialpad ul li:hover{
+  background: #f1f1f1;
+}
+.vox-widget-wrapper .vw-body .vw-dialpad ul li.vw-tl{
+  -webkit-border-top-left-radius: 6px;
+  -moz-border-radius-topleft: 6px;
+  border-top-left-radius: 6px;
+}
+.vox-widget-wrapper .vw-body .vw-dialpad ul li.vw-tr{
+  -webkit-border-top-right-radius: 6px;
+  -moz-border-radius-topright: 6px;
+  border-top-right-radius: 6px;
+}
+.vox-widget-wrapper .vw-body .vw-dialpad ul li.vw-bl{
+  -webkit-border-bottom-left-radius: 6px;
+  -moz-border-radius-bottomleft: 6px;
+  border-bottom-left-radius: 6px;
+}
+.vox-widget-wrapper .vw-body .vw-dialpad ul li.vw-br{
+  -webkit-border-bottom-right-radius: 6px;
+  -moz-border-radius-bottomright: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+
+
+.vw-icon{
+  display: inline-block;
+  background-image: url('../../images/icon-sprite.png');
+  background-size: 46px 322px;
+  background-position: right center;
+  background-repeat: no-repeat;
+}
+.vw-icon.vox-full-sreen-on{
+  width: 46px;
+  height: 46px;
+  background-position: 0 0;
+}
+.vw-icon.vx-icon-full-sreen-on{
+  width: 46px;
+  height: 46px;
+  background-position: 0 -46px;
+}
+.vw-icon.vx-icon-full-sreen-off{
+  width: 46px;
+  height: 46px;
+  background-position: 0 -46px;
+}
+.vw-icon.vx-icon-close{
+  width: 46px;
+  height: 46px;
+  background-position: 0 -92px;
+}
+.vw-icon.vx-icon-mic{
+  width: 24px;
+  height: 40px;
+  background-position: -8px -138px;
+}
+.vw-icon.vx-icon-vol{
+  width: 24px;
+  height: 40px;
+  background-position: -8px -184px;
+}
+.vw-icon.vx-icon-pad{
+  width: 30px;
+  height: 40px;
+  background-position: -8px -230px;
+}
+.vw-icon.vx-icon-phone{
+  width: 30px;
+  height: 44px;
+  background-position: -8px -280px;
+}
+
+
+
+
+
+
+

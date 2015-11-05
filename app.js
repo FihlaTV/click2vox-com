@@ -25,7 +25,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(session({ secret: process.env.SECRET_KEY, resave: true, saveUninitialized: true }));
+var secret_key = process.env.SECRET_KEY ? process.env.SECRET_KEY : 'xXxXxXxXxX';
+app.use(session({
+  secret: secret_key,
+  name: 'voxbone-generator',
+  resave: true,
+  saveUninitialized: true
+}))
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -66,6 +73,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;
