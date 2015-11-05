@@ -2,7 +2,10 @@ extends layout
 
 block content
   script.
-    var app = angular.module('voxboneApp', []);
+    var app = angular.module('voxboneApp', [])
+      .controller('WidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
+    }]);
+
     var callTimer;
     var username = 'webrtcventurestest';
     var secret = 'T#st123!';
@@ -48,7 +51,7 @@ block content
           .col-xs-12
             h1 Create a WebRTC Call Button
             p #[b Note:] this will create a code widget that can be embedded into any page that allows for JS code and will allow customers to video call without installing any software.
-    .body
+    .body(ng-controller="WidgetController")
       .container
         .row
           .col-sm-6.left-col
@@ -78,14 +81,16 @@ block content
                       .options-wrap.active
                         .form-group
                           label(for="btn-context") Caller ID #[span.badge ?]
-                          input.form-control(type="text", name="user", ng-model="callerId" value="voxrtc_demo" placeholder="i.e. voxrtc_demo")
+                          input.form-control(type="text", name="callerId", ng-model="callerId" value="voxrtc_demo" placeholder="i.e. voxrtc_demo")
                         .form-group
                           label(for="btn-context") Context #[span.badge ?]
-                          input.form-control(type="text", name="user", ng-model="context")
+                          input.form-control(type="text", name="context", ng-model="context")
                         .form-group
                           label(for="btn-context") DTMF Dial Pad #[span.badge ?]
                           input(type="checkbox", name="dtmf_dial_pad" checked)
-                          label(for="checkbox1") Enable
+                        .form-group
+                          label(for="btn-context") Send Digits #[span.badge ?]
+                          input.form-control(type="text", name="digits", ng-model="digits")
                   .panel.panel-default
                     .panel-heading
                       a.title-toggle(data-toggle="collapse",data-target="#collapseIncompatileBrowserConfiguration",href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
@@ -96,12 +101,13 @@ block content
                           input.form-control(type='checkbox', name='hide_widget')
                         .form-group
                           label.control-label Link button to a page #[span.badge ?]
-                          input.form-control(type='checkbox', name='link_button_to_a_page')
-                          input.form-control(type="text", name="link_button_to_a_value", placeholder="Enter url")
+                          input.form-control(type='checkbox', name='chk_link_button_to_a_page', ng-model="linkButtonToAPage")
+                          input.form-control(type="text", name="link_button_to_a_page_value", placeholder="Enter url",
+                          ng-show="linkButtonToAPage")
                         .form-group
                           label.control-label Show text/HTML #[span.badge ?]
-                          input.form-control(type='checkbox', name='show_text_html')
-                          input.form-control(type="text", name="show_text_html_value", placeholder="Enter text or HTML")
+                          input.form-control(type='checkbox', name='chk_show_text_html', ng-model="showTextHtml")
+                          input.form-control(type="text", name="show_text_html_value", placeholder="Enter text or HTML", ng-show="showTextHtml")
 
           .col-sm-6.right-col
             .section
