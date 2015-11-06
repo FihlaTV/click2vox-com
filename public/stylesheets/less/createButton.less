@@ -1,9 +1,21 @@
 .createButton{
+  .panel-heading a:after {
+    font-family:'Glyphicons Halflings';
+    content:"\e114";
+    float: right;
+    color: grey;
+  }
+  .panel-heading a.collapsed:after {
+      content:"\e080";
+  }
+  .options-wrap {
+    padding: 10px !important;
+  }
   .header{
     h1{
     }
     p{
-      font-size: 13px; 
+      font-size: 13px;
     }
   }
   .body{
@@ -18,7 +30,7 @@
     .right-col{
       padding-left: 50px;
     }
-    
+
   }
   .title{
     display: block;
@@ -32,7 +44,7 @@
     margin-bottom: 20px;
     border: 1px solid @border-grey;
     .rounded(6px);
-    
+
     label{
       display: block;
       color: @subText;
@@ -48,8 +60,8 @@
       font-weight: normal;
       color: @subText;
       margin-bottom: 10px;
-      
-      
+
+
       &:before{
         content: "\f054";
         font:normal normal normal 12px/1 FontAwesome;
@@ -65,7 +77,7 @@
       display: none;
       padding: 10px 10px 0;
       border: 1px solid @border-grey;
-      .rounded(6px);      
+      .rounded(6px);
       margin-bottom: 10px;
       .checkbox{
         margin: 0;
@@ -125,16 +137,16 @@
             background: #fbfcfc;
           }
         }
-        
+
       }
-    } 
-    .prev-code{ 
+    }
+    .prev-code{
       padding: 20px;
       .title{
         p{
           font-size: 12px;
           font-weight: normal;
-        } 
+        }
       }
       .widget-code-wrap{
         position: relative;
@@ -167,6 +179,6 @@
           }
         }
       }
-    } 
+    }
   }
-} 
+}
