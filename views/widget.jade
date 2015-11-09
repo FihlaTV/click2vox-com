@@ -2,6 +2,21 @@ extends layout
 
 block content
   script.
+
+    //Copy to Clipboard
+    var clipboard = new Clipboard('#clipboard_copy');
+    clipboard.on('success', function(e) {
+      console.info('Action:', e.action);
+      console.info('Text:', e.text);
+      console.info('Trigger:', e.trigger);
+      e.clearSelection();
+    });
+
+    clipboard.on('error', function(e) {
+      console.error('Action:', e.action);
+      console.error('Trigger:', e.trigger);
+    });
+
     var app = angular.module('voxboneApp', [])
       .controller('WidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
     }]);
@@ -76,7 +91,7 @@ block content
                     input.form-control(type="text", name="user", ng-model="sipUri" value="SIP: echotest@voxout.voxbone.com" placeholder="i.e. SIP: echotest@voxout.voxbone.com")
                   .panel.panel-default
                     .panel-heading
-                      a.title-toggle(data-toggle="collapse",data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
+                      a.collapsed.title-toggle(data-toggle="collapse",data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
                     .panel-collapse.collapse#collapseAdvancedCallConfiguration
                       .options-wrap.active
                         .form-group
@@ -93,7 +108,7 @@ block content
                           input.form-control(type="text", name="digits", ng-model="digits")
                   .panel.panel-default
                     .panel-heading
-                      a.title-toggle(data-toggle="collapse",data-target="#collapseIncompatileBrowserConfiguration",href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
+                      a.collapsed.title-toggle(data-toggle="collapse",data-target="#collapseIncompatileBrowserConfiguration",href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
                     .panel-collapse.collapse#collapseIncompatileBrowserConfiguration
                       .options-wrap.active
                         .form-group
@@ -116,7 +131,7 @@ block content
                 .prev-view.light
                   .widget-box.style-b
                     button.btn-style.mdi-communication-call#launch_call #[span {{buttonText || 'Call Sales'}}]
-                    //- button.btn.btn-raised.btn-material-red.mdi-communication-call-end#hangup_call
+                    //- button.btn.btn-raised.btn-material-red.mdi-communication-call-end#hangup_call #[span 'End Call']
                     .widget-footer
                       a(href="#") powered by:
                   .togle-bg
@@ -135,7 +150,7 @@ block content
                     pre.sample.shadow-z-2.prettyprint#widget_code
                       | #{button_code}
                     .codebox-actions
-                      #[a(href="#") Copy]
+                      #[a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy]
                       #[a(href="#") Email Instructions]
                       #[a(href="#") Regenerate Code]
   script(src="javascripts/main.js",type="application/javascript")
