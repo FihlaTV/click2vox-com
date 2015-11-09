@@ -1,0 +1,76 @@
+extends layout
+
+block content
+  script.
+    var forgotApp =
+      angular.module('voxboneApp', [])
+      .controller('ForgotController', ['$scope', '$http', '$window', function($scope, $http, $window){
+        $scope.master = {};
+
+        $scope.update = function(forgot){
+          $scope.master = angular.copy(forgot);
+        };
+
+        $scope.reset = function(form){
+          if(form){
+            form.$setPristine();
+            form.$setUntouched();
+          }
+          $scope.forgot = angular.copy($scope.master);
+        };
+
+        $scope.reset();
+
+        $scope.forgot.processForm = function(){
+          console.log("--> Submitting...");
+          var req = {
+            method: 'POST',
+            url: '/forgot',
+            headers: {
+              'Content-Type': 'application/json; charset=utf-8'
+            },
+            data: {
+              email: $scope.forgot.uemail
+            }
+          };
+          $http(req)
+            .then(function successCallback(response){
+              document.getElementById("successmsg").innerHTML = "An email has been sent with a link to reset your password.";
+              document.getElementById("successmsg").style.display = "block";
+              document.getElementById("errormsg").style.display = "none";
+              document.getElementById("tokenError").style.display = "none";
+            }, function errorCallback(response){
+              document.getElementById("errormsg").innerHTML = "No account found associated to that email address.";
+              document.getElementById("errormsg").style.display = "block";
+              document.getElementById("sucessmsg").style.display = "none";
+              document.getElementById("tokenError").style.display = "none";
+            });
+        }
+      }]);
+
+  .main.registerPage
+    .row
+      .col-xs-12
+
+        h1 Forgot Password
+
+        if message 
+          #tokenError.alert.alert-danger
+            div= message
+        #errormsg.alert.alert-danger(style="display: none;")
+        #successmsg.alert.alert-success(style="display: none;")
+
+        #form_container
+          .formWrap
+            form#forgot_form(name="forgot_form", novalidate, ng-controller="ForgotController")
+              .form-group
+                label.control-label Email
+                input.form-control(type="email" id="uemail" name="uemail" ng-model="forgot.uemail", required, value= "#{email}")
+                div(ng-show="forgot_form.$submitted || forgot_form.uemail.$touched")
+                  div(ng-show="forgot_form.uemail.$error.required") Email is required
+                div(ng-show="forgot_form.uemail.$dirty && forgot_form.uemail.$invalid")
+                  div(ng-show="forgot_form.uemail.$error.email") Email is invalid
+
+              button.btn.btn-default#forgot(ng-click="forgot.processForm()") Reset Password
+              br
+              a(href="/")

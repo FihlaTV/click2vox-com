@@ -36,10 +36,9 @@ block content
           };
           $http(req)
             .then(function successCallback(response){
-              console.log(response);
               $window.location.href = response.data.redirect;
             }, function errorCallback(response){
-              document.getElementById("alert").innerHTML = "Incorrect Password, try again.";
+              document.getElementById("alert").innerHTML = "Incorrect Email or Password, try again.";
               document.getElementById("alert").style.display = "block";
             });
         }
@@ -71,4 +70,4 @@ block content
 
               button.btn.btn-default#login(ng-click="login.processForm()") Login
               br
-              a Forgot your password?
+              a(href="/forgot") Forgot your password?
