@@ -179,13 +179,13 @@ module.exports = function(passport){
         var smtpTransport = nodemailer.createTransport('SMTP', {
           service: 'SendGrid',
           auth: {
-            user: process.env.USER,
-            pass: process.env.PASSWORD
+            user: process.env.SENDGRID_USER,
+            pass: process.env.SENDGRID_PASSWORD
           }
         });
         var mailOptions = {
           to: account.email,
-          from: process.env.FROM,
+          from: process.env.SENDGRID_FROM,
           subject: 'Your password has been changed',
           text: 'Hello,\n\n' +
             'This is a confirmation that the password for your account ' + account.email + ' has just been changed.\n',
