@@ -2,6 +2,21 @@ extends layout
 
 block content
   script.
+
+    //Copy to Clipboard
+    var clipboard = new Clipboard('#clipboard_copy');
+    clipboard.on('success', function(e) {
+      console.info('Action:', e.action);
+      console.info('Text:', e.text);
+      console.info('Trigger:', e.trigger);
+      e.clearSelection();
+    });
+
+    clipboard.on('error', function(e) {
+      console.error('Action:', e.action);
+      console.error('Trigger:', e.trigger);
+    });
+
     var app = angular.module('voxboneApp', [])
       .controller('WidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
     }]);
@@ -135,7 +150,7 @@ block content
                     pre.sample.shadow-z-2.prettyprint#widget_code
                       | #{button_code}
                     .codebox-actions
-                      #[a(href="#") Copy]
+                      #[a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy]
                       #[a(href="#") Email Instructions]
                       #[a(href="#") Regenerate Code]
   script(src="javascripts/main.js",type="application/javascript")
