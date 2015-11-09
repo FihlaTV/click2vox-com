@@ -33,4 +33,8 @@ $(document).ready(function () {
     e.preventDefault();
     voxbone.WebRTC.hangup();
   });
+
+  $('.codebox-actions a').click(function(e) {
+    e.preventDefault();
+  });
 });
