@@ -27,7 +27,7 @@ module.exports = function(passport, voxbone){
         var result = { message: "", errors: null, redirect: '/widget', email: formData.email }
         return res.status(200).json(result);
       }
-    });
+    })(req, res, next);
   });
 
   router.get('/signup', function(req, res, next){
