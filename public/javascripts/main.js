@@ -26,7 +26,7 @@ $(document).ready(function () {
 
   $("#launch_call").click(function(e) {
     e.preventDefault();
-    launch();
+    makeCall();
   });
 
   $("#hangup_call").click(function(e) {

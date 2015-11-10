@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var bcrypt   = require('bcrypt-nodejs');
+var bcrypt = require('bcrypt-nodejs');
 
 var accountSchema = new Schema({
   email: { type: String, required: true, index: { unique: true } },
@@ -14,13 +14,12 @@ var accountSchema = new Schema({
   resetPasswordExpires: Date
 });
 
-
 accountSchema.methods.generateHash = function(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
 accountSchema.methods.validPassword = function(password) {
-    return bcrypt.compareSync(password, this.password);
+  return bcrypt.compareSync(password, this.password);
 };
 
 var Account = mongoose.model('Account', accountSchema);

@@ -19,12 +19,68 @@ block content
 
     var app = angular.module('voxboneApp', [])
       .controller('WidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
-    }]);
 
-    var callTimer;
-    var username = 'webrtcventurestest';
-    var secret = 'T#st123!';
-    var number = '13072787231'; //16092975366
+        $scope.master = {
+          dial_pad: true,
+          widget_code: 'Click on Regenerate Code!'
+        };
+
+        $scope.reset = function(form){
+          if(form){
+            form.$setPristine();
+            form.$setUntouched();
+          }
+
+          $scope.widget = angular.copy($scope.master);
+        };
+
+        $scope.init = function () {
+          voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
+
+          //- voxbone.WebRTC.customEventHandler = eventHandlers;
+          //- voxbone.WebRTC.configuration.uri = #{sipUri};
+          //- voxbone.WebRTC.configuration.display_name = #{callerId};
+          //- voxbone.WebRTC.context = #{context};
+          //- voxbone.WebRTC.sendDTMF(#{digits});
+
+          voxbone.WebRTC.init(#{voxrtc_config});
+        };
+
+        $scope.reset();
+        $scope.init();
+
+        $scope.widget.generateOutputCode = function(){
+          console.log("--> Generating Output Code...");
+          var req = {
+            method: 'POST',
+            url: '/voxbone_widget',
+            headers: {
+              'Content-Type': 'application/json; charset=utf-8'
+            },
+            data: {
+              caller_id: $scope.widget.caller_id,
+              sip_uri: $scope.widget.sip_uri,
+              button_label: $scope.widget.button_label,
+              button_style: $scope.widget.button_style,
+              context: $scope.widget.context,
+              dial_pad: $scope.widget.dial_pad,
+              send_digits: $scope.widget.send_digits,
+              hide_widget: $scope.widget.hide_widget,
+              link_button_to_a_page: $scope.widget.link_button_to_a_page_value,
+              show_text_html: $scope.widget.show_text_html_value
+            }
+          };
+          $http(req)
+            .then(function successCallback(response){
+              console.log(response.data);
+              $scope.widget.widget_code = response.data.widget_code;
+
+            }, function errorCallback(){
+              console.log("entered error callback");
+            });
+        }
+
+    }]);
 
     var eventHandlers = {
         'progress':   function(e){
@@ -42,21 +98,11 @@ block content
     }
 
     function makeCall(){
-      window.clearTimeout(callTimer);
+      var number = '13072787231'; //16092975366
       voxbone.WebRTC.call(number);
       window.onbeforeunload=function(e){
         voxbone.WebRTC.rtcSession.terminate();
       }
-    }
-
-    function launch(){
-      voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
-      voxbone.WebRTC.customEventHandler = eventHandlers;
-
-      var voxrtc_config = createKey();
-      voxbone.WebRTC.init(voxrtc_config);
-
-      callTimer = window.setInterval(function(){makeCall()},1000);
     }
 
   .main.createButton
@@ -76,11 +122,11 @@ block content
                 .boxPanel
                   .form-group
                     label Button Label:
-                    input.form-control(type="text", name="user", ng-model="buttonText" value="Call Sales" placeholder="i.e. Call Sales")
+                    input.form-control(type="text", name="button_label", ng-model="widget.button_label" value="Call Sales" placeholder="i.e. Call Sales")
                   .form-group
                     label Button Style:
-                    button.btn-style-a #[span {{buttonText || 'Call Sales'}}]
-                    button.btn-style-b #[span {{buttonText || 'Call Sales'}}]
+                    button.btn-style-a #[span {{ widget.button_label || 'Call Sales' }}]
+                    button.btn-style-b #[span {{ widget.button_label || 'Call Sales' }}]
 
             section
               span.title Call Configuration
@@ -88,7 +134,8 @@ block content
                 .boxPanel
                   .form-group
                     label.control-label SIP URI #[span.badge ?]
-                    input.form-control(type="text", name="user", ng-model="sipUri" value="SIP: echotest@voxout.voxbone.com" placeholder="i.e. SIP: echotest@voxout.voxbone.com")
+                    input.form-control(required type="text", name="sip_uri", ng-model="widget.sip_uri" data-value="SIP: echotest@voxout.voxbone.com" placeholder="i.e. SIP: echotest@voxout.voxbone.com")
+                    div(ng-show="widget.sip_uri.$error.required") SIP URI is required
                   .panel.panel-default
                     .panel-heading
                       a.collapsed.title-toggle(data-toggle="collapse",data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
@@ -96,16 +143,16 @@ block content
                       .options-wrap.active
                         .form-group
                           label(for="btn-context") Caller ID #[span.badge ?]
-                          input.form-control(type="text", name="callerId", ng-model="callerId" value="voxrtc_demo" placeholder="i.e. voxrtc_demo")
+                          input.form-control(type="text" name="caller_id" ng-model="widget.caller_id" value="voxrtc_demo" placeholder="i.e. voxrtc_demo")
                         .form-group
                           label(for="btn-context") Context #[span.badge ?]
-                          input.form-control(type="text", name="context", ng-model="context")
+                          input.form-control(type="text" name="context" ng-model="widget.context")
                         .form-group
                           label(for="btn-context") DTMF Dial Pad #[span.badge ?]
-                          input(type="checkbox", name="dtmf_dial_pad" checked)
+                          input(type="checkbox" name="dial_pad" ng-model="widget.dial_pad")
                         .form-group
                           label(for="btn-context") Send Digits #[span.badge ?]
-                          input.form-control(type="text", name="digits", ng-model="digits")
+                          input.form-control(type="text" name="send_digits" ng-model="widget.send_digits")
                   .panel.panel-default
                     .panel-heading
                       a.collapsed.title-toggle(data-toggle="collapse",data-target="#collapseIncompatileBrowserConfiguration",href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
@@ -113,16 +160,16 @@ block content
                       .options-wrap.active
                         .form-group
                           label.control-label Hide the widget #[span.badge ?]
-                          input.form-control(type='checkbox', name='hide_widget')
+                          input.form-control(type='checkbox' name='hide_widget' ng-model='widget.hide_widget')
                         .form-group
                           label.control-label Link button to a page #[span.badge ?]
-                          input.form-control(type='checkbox', name='chk_link_button_to_a_page', ng-model="linkButtonToAPage")
-                          input.form-control(type="text", name="link_button_to_a_page_value", placeholder="Enter url",
-                          ng-show="linkButtonToAPage")
+                          input.form-control(type='checkbox' name='link_button_to_a_page', ng-model="widget.link_button_to_a_page")
+                          input.form-control(type="text" name="link_button_to_a_page_value", placeholder="Enter url"
+                          ng-model="widget.link_button_to_a_page_value" ng-show="widget.link_button_to_a_page")
                         .form-group
                           label.control-label Show text/HTML #[span.badge ?]
-                          input.form-control(type='checkbox', name='chk_show_text_html', ng-model="showTextHtml")
-                          input.form-control(type="text", name="show_text_html_value", placeholder="Enter text or HTML", ng-show="showTextHtml")
+                          input.form-control(type='checkbox' name='show_text_html', ng-model="widget.show_text_html")
+                          input.form-control(type="text" name="show_text_html_value", placeholder="Enter text or HTML" ng-show="widget.show_text_html" ng-model="widget.show_text_html_value")
 
           .col-sm-6.right-col
             .section
@@ -130,7 +177,7 @@ block content
               .boxPanel.preview
                 .prev-view.light
                   .widget-box.style-b
-                    button.btn-style.mdi-communication-call#launch_call #[span {{buttonText || 'Call Sales'}}]
+                    button.btn-style.mdi-communication-call#launch_call #[span {{widget.button_label || 'Call Sales'}}]
                     //- button.btn.btn-raised.btn-material-red.mdi-communication-call-end#hangup_call #[span 'End Call']
                     .widget-footer
                       a(href="#") powered by:
@@ -144,13 +191,12 @@ block content
                 .prev-code
                   .title
                     span Code Widget
-                    p Paste the following HTML code into your website or give it a try using on #[a(href="#") JSFiddle]
+                    p Paste the following HTML code into your website or give it a try using on #[a(href="https://jsfiddle.net/" target="_blank") JSFiddle]
                   .widget-code-wrap
-                    - var button_code = "<div class='voxButton' id='voxButton_e83be0ab55e2xgq06856de44b5f90ff2e ' href='https://webrtc.voxbone.com/widget/ e83be0ab55e2xgq06856de44b5f90ff2e'; onclick='initCall(voxButton_e83be0ab55e2xgq06856de44b5f90ff2e)' hidden='hidden'></div><script src='https://webrtc.voxbone.com/js/jssip-0.4.0.js'> </script><script src='https://webrtc.voxbone.com/js/voxbone-0.0.3.js'> </script>"
-                    pre.sample.shadow-z-2.prettyprint#widget_code
-                      | #{button_code}
+                    .sample.shadow-z-2.prettyprint#widget_code
+                      | {{ widget.widget_code }}
                     .codebox-actions
                       #[a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy]
                       #[a(href="#") Email Instructions]
-                      #[a(href="#") Regenerate Code]
-  script(src="javascripts/main.js",type="application/javascript")
+                      #[a(href="#", id="generate-output-code", ng-click='widget.generateOutputCode()') Regenerate Code]
+  script(src="/javascripts/main.js",type="application/javascript")
