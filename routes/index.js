@@ -89,7 +89,7 @@ module.exports = function(passport, voxbone){
 
   router.get('/widget', isLoggedIn, function(req, res, next) {
     console.log("entered widget... trying to generate voxrtc config");
-    voxrtc_config = voxbone.generate();
+    //voxrtc_config = voxbone.generate();
     console.log("got the config");
     res.render('widget', { title: title, account: accountLoggedIn(req) });
   });
