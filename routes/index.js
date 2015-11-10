@@ -115,13 +115,13 @@ module.exports = function(passport){
         var smtpTransport = nodemailer.createTransport('SMTP', {
           service: 'SendGrid',
           auth: {
-            user: process.env.USER,
-            pass: process.env.PASSWORD
+            user: process.env.SENDGRID_USERNAME,
+            pass: process.env.SENDGRID_PASSWORD
           }
         });
         var mailOptions = {
           to: account.email,
-          from: process.env.FROM,
+          from: process.env.SENDGRID_FROM,
           subject: 'Voxbone Widget Generator - Password Reset',
           text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
             'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
