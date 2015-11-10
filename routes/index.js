@@ -1,12 +1,14 @@
 var express = require('express');
 var router = express.Router();
 var Account = require('../models/account');
+var Widget = require('../models/widget');
 var async = require('async');
-var title = 'Voxbone Demo v0.2';
+var title = 'Voxbone Demo v0.3';
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
+var ObjectId = require('mongoose').Types.ObjectId;
 
-module.exports = function(passport){
+module.exports = function(passport, voxbone){
 
   router.get('/login', function(req, res, next){
     res.render('login', { title: title, email: req.query.email, account: accountLoggedIn(req), message: req.flash('loginMessage') });
@@ -68,7 +70,6 @@ module.exports = function(passport){
         });
       });
     });
-
   });
 
   router.get('/logout', function(req, res){
@@ -77,6 +78,7 @@ module.exports = function(passport){
   });
 
   router.get('/widget', isLoggedIn, function(req, res, next) {
+    voxrtc_config = voxbone.generate();
     res.render('widget', { title: title, account: accountLoggedIn(req) });
   });
 
@@ -207,19 +209,60 @@ module.exports = function(passport){
     });
   });
 
+  router.get('/voxbone_widget/:token', function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+
+    var html = "<link href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css' rel='stylesheet'>";
+    html += "<link href='" + process.env.APP_URL + "/stylesheets/root.css' rel='stylesheet'>";
+    var searchFor = { _id: new ObjectId(req.params.token) };
+
+    Widget.findOne(searchFor, function(error, the_widget) {
+      if (!error) {
+        html += the_widget.generateButtonCode();
+
+        res.send(html);
+      } else {
+        console.log(error, response.statusCode, body);
+      }
+      res.end("");
+    });
+  });
+
+  router.post('/voxbone_widget', function(req, res, next){
+    var formData = req.body;
+    var result = { message: "", errors: null, redirect: '/voxbone_widget' }
+
+    var a_widget = new Widget({
+      button_label: req.body.button_label,
+      button_style: req.body.button_style,
+      sip_uri: req.body.sip_uri,
+      caller_id: req.body.caller_id,
+      context: req.body.context,
+      dial_pad: req.body.dial_pad,
+      send_digits: req.body.send_digits,
+      hide_widget: req.body.hide_widget,
+      link_button_to_a_page: req.body.link_button_to_a_page,
+      show_text_html: req.body.show_text_html
+    });
+
+    a_widget.save(function(err) {
+      if (err) throw err;
+      result.widget_code = a_widget.generateHtmlCode();
+      result.widget_id = a_widget.id;
+      res.status(200).json(result);
+    });
+  });
+
   function isLoggedIn(req, res, next) {
     // if user is authenticated in the session, carry on
     if (req.isAuthenticated())
-        return next();
+      return next();
     // if they aren't redirect them to the home page
     res.redirect('/');
   }
 
   function accountLoggedIn(req) {
-    if (req.isAuthenticated())
-      return true;
-    else
-      return false;
+    return req.isAuthenticated();
   }
 
   return router;

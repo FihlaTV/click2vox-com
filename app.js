@@ -12,6 +12,13 @@ var flash = require('connect-flash');
 require('./db/configuration');
 require('./config/passport')(passport);
 
+//New Voxbone Object used for authentication
+var Voxbone = require('voxbone-webrtc');
+var voxbone = new Voxbone({
+  voxrtcUsername: process.env.VOXBONE_USERNAME,
+  voxrtcSecret: process.env.VOXBONE_SECRET
+});
+
 var app = express();
 
 // view engine setup
@@ -41,7 +48,7 @@ var routes = require('./routes/index');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes(passport));
+app.use('/', routes(passport, voxbone));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
