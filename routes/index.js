@@ -38,7 +38,6 @@ module.exports = function(passport, voxbone){
         }else{
           var an_account = new Account({
             email: req.query.email,
-            voxbone_password: req.query.password,
             temporary: true
           });
 
@@ -166,7 +165,7 @@ module.exports = function(passport, voxbone){
           }
 
           //TODO validate password and confirmation
-          account.password = req.body.password;
+          account.password = account.generateHash(req.body.password);
           account.resetPasswordToken = undefined;
           account.resetPasswordExpires = undefined;
 
