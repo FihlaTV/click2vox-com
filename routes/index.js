@@ -19,11 +19,13 @@ module.exports = function(passport, voxbone){
     passport.authenticate('local-login', function(err, account, info) {
       if(account === false){
         var result = { message: "Email or password incorrect", errors: err, email: formData.email }
-        res.status(401).json(result);
+        console.log("Entered incorrect authentication, response should be: 401");
+        console.log(result);
+        return res.status(401).json(result);
       }
       else{
         var result = { message: "", errors: null, redirect: '/widget', email: formData.email }
-        res.status(200).json(result);
+        return res.status(200).json(result);
       }
     });
   });
