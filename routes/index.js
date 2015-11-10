@@ -14,12 +14,18 @@ module.exports = function(passport, voxbone){
     res.render('login', { title: title, email: req.query.email, account: accountLoggedIn(req), message: req.flash('loginMessage') });
   });
 
-  router.post('/login',
-    passport.authenticate('local-login'),//returns 401 unauthorized if not logged in
-    function(req, res, next){
-      var formData = req.body;
-      var result = { message: "", errors: null, redirect: '/widget', email: formData.email }
-      res.status(200).json(result);
+  router.post('/login', function(req, res, next){
+    var formData = req.body;
+    passport.authenticate('local-login', function(err, account, info) {
+      if(account === false){
+        var result = { message: "Email or password incorrect", errors: err, email: formData.email }
+        res.status(401).json(result);
+      }
+      else{
+        var result = { message: "", errors: null, redirect: '/widget', email: formData.email }
+        res.status(200).json(result);
+      }
+    });
   });
 
   router.get('/signup', function(req, res, next){
