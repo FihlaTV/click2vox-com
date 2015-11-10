@@ -25,7 +25,10 @@ module.exports = function(passport, voxbone){
       }
       else{
         var result = { message: "", errors: null, redirect: '/widget', email: formData.email }
-        return res.status(200).json(result);
+        
+        req.logIn(account, function(err) {
+          return res.status(200).json(result);
+        });
       }
     })(req, res, next);
   });
