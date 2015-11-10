@@ -19,7 +19,7 @@ module.exports = function(passport, voxbone){
     function(req, res, next){
       var formData = req.body;
       var result = { message: "", errors: null, redirect: '/widget', email: formData.email }
-      res.status(200).json(result);
+      res.json(result);
   });
 
   router.get('/signup', function(req, res, next){
