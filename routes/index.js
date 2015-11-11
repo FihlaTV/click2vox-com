@@ -25,7 +25,7 @@ module.exports = function(passport, voxbone){
       }
       else{
         var result = { message: "", errors: null, redirect: '/widget', email: formData.email }
-        
+
         req.logIn(account, function(err) {
           return res.status(200).json(result);
         });
@@ -220,22 +220,21 @@ module.exports = function(passport, voxbone){
   });
 
   router.get('/voxbone_widget/:token', function (req, res) {
-    res.header("Access-Control-Allow-Origin", "*");
+    voxrtc_config = voxbone.generate();
 
-    var html = "<link href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css' rel='stylesheet'>";
-    html += "<link href='" + process.env.APP_URL + "/stylesheets/root.css' rel='stylesheet'>";
     var searchFor = { _id: new ObjectId(req.params.token) };
 
-    Widget.findOne(searchFor, function(error, the_widget) {
-      if (!error) {
-        html += the_widget.generateButtonCode();
+    // Widget.findOne(searchFor, function(error, the_widget) {
+    //   if (!error) {
+    //     html += the_widget.generateButtonCode();
+    //     res.send(html);
+    //   } else {
+    //     console.log(error, response.statusCode, body);
+    //   }
+    //   res.end("");
+    // });
 
-        res.send(html);
-      } else {
-        console.log(error, response.statusCode, body);
-      }
-      res.end("");
-    });
+    res.render('voxbone_widget', { layout: false, title: title });
   });
 
   router.post('/voxbone_widget', function(req, res, next){
