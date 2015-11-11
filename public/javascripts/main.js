@@ -20,10 +20,6 @@ $(document).ready(function () {
     $( ".prev-view" ).removeClass("black").removeClass("grey").addClass( "light" );
   });
 
-  $(".dialpad-toggle").click(function(){
-      alert("The paragraph was clicked.");
-  });
-
   $("#launch_call").click(function(e) {
     e.preventDefault();
     makeCall();

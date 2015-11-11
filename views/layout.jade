@@ -7,19 +7,16 @@ html(lang='en', ng-app="voxboneApp")
     link(href="/stylesheets/root.css", rel="stylesheet")
 
     script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js",type="application/javascript")
-    script( src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js' )
+    script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js' )
 
-    script(src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha1.js",type="application/javascript")
-    script(src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js",type="application/javascript")
-
-    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js",type="application/javascript")
+    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js",type="application/javascript")
     script(src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js",type="application/javascript")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.3/clipboard.min.js",type="application/javascript")
 
     script(src="//webrtc.voxbone.com/js/jssip-0.7.9-vox.js",type="application/javascript")
     script(src="//webrtc.voxbone.com/js/voxbone-0.0.3.js",type="application/javascript")
 
-    script(src="javascripts/webrtc_voxbone_tools.js",type="application/javascript")
+    script(src="/javascripts/webrtc_voxbone_tools.js",type="application/javascript")
 
   body(onload='detectBrowser()')
     .container

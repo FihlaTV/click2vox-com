@@ -18,33 +18,23 @@ var widgetSchema = new Schema({
 });
 
 widgetSchema.methods.generateHtmlCode = function() {
-
   var app_url = process.env.APP_URL ? process.env.APP_URL : 'http://widget.voxbone.com';
-  var html = '<div class="voxButton" ';
-  html += 'id="voxButton_' + this.id + '" ';
-  html += 'href="' + app_url + '/voxbone_widget/' + this.id + '" ';
-  html += 'onclick="initCall(voxButton_' + this.id + ')" ';
-  html += 'hidden="hidden">';
-  html += '</div>';
-
-  html += '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"><\/script>';
-  html += '<script src="//webrtc.voxbone.com/js/jssip-0.7.9-vox.js"><\/script>';
-  html += '<script src="//webrtc.voxbone.com/js/voxbone-0.0.3.js"><\/script>';
-  html += '<script src="' +  app_url + '/javascripts/widget.js"><\/script>';
-
-  return html;
-};
-
-widgetSchema.methods.generateButtonCode = function() {
 
   var html = '';
-  html += '<div id="voxbone-widget">';
-  html += ' <div class="widget-box style-b">';
-  html += '   <button id="launch_call" class="btn-style mdi-communication-call">';
-  html += '     <span class="ng-binding">' + this.button_label + '</span>';
-  html += '   </button>';
-  html += '   <div class="widget-footer"><a href="#">powered by:</a></div>';
-  html += ' </div>';
+  html += '<div class="voxButton" id="voxButton_' + this.id + '">';
+
+  html += '<link rel="stylesheet" href="' + app_url + '/stylesheets/root.css">';
+  html += '<link rel="stylesheet" href="' + app_url + '/stylesheets/widget.css">';
+  html += '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="application/javascript"></script>';
+  html += '<script src="' + app_url + '/javascripts/widget.js" type="application/javascript"></script>';
+  html += '<script src="' + app_url + '/javascripts/webrtc_voxbone_tools.js" type="application/javascript"></script>';
+
+  var iframe_styles = 'width="300" height="300" frameBorder="0" scrolling="no"';
+  html += '<iframe id="call_button_frame" ' + iframe_styles + ' src="' + app_url + '/voxbone_widget/' + this.id + '">';
+  html += '</iframe>';
+
+  html += '<div id="control"></div>';
+
   html += '</div>';
 
   return html;

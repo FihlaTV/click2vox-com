@@ -36,13 +36,6 @@ block content
 
         $scope.init = function () {
           voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
-
-          //- voxbone.WebRTC.customEventHandler = eventHandlers;
-          //- voxbone.WebRTC.configuration.uri = #{sipUri};
-          //- voxbone.WebRTC.configuration.display_name = #{callerId};
-          //- voxbone.WebRTC.context = #{context};
-          //- voxbone.WebRTC.sendDTMF(#{digits});
-
           voxbone.WebRTC.init(#{voxrtc_config});
         };
 
@@ -82,21 +75,6 @@ block content
 
     }]);
 
-    var eventHandlers = {
-        'progress':   function(e){
-        $("#status_message").innerHTML="<p>Calling " + $('#number').value+"</p>";
-        },
-        'failed':     function(e){
-        $("#status_message").innerHTML="<p>Failed to connect: "+ e.data.cause +"</p>";
-        },
-        'started':    function(e){
-        $("#status_message").innerHTML="<p>Call started</p>";
-        },
-        'ended':      function(e){
-        $("#status_message").innerHTML="<p>Call ended</p>";
-      }
-    }
-
     function makeCall(){
       var number = '13072787231'; //16092975366
       voxbone.WebRTC.call(number);
@@ -104,6 +82,43 @@ block content
         voxbone.WebRTC.rtcSession.terminate();
       }
     }
+
+    $(document).ready(function () {
+      $( ".title-toggle" ).click(function() {
+        $( this ).parent().toggleClass( "active" );
+      });
+
+      $( ".btn-style-a" ).click(function() {
+        $( ".widget-box" ).removeClass( "style-b" ).addClass( "style-a" );
+      });
+      $( ".btn-style-b" ).click(function() {
+        $( ".widget-box" ).removeClass( "style-a" ).addClass( "style-b" );
+      });
+
+      $( ".togle-bg a.dark" ).click(function() {
+        $( ".prev-view" ).removeClass("light").removeClass("grey").addClass( "dark" );
+      });
+      $( ".togle-bg a.grey" ).click(function() {
+        $( ".prev-view" ).removeClass("light").removeClass("black").addClass( "grey" );
+      });
+      $( ".togle-bg a.light" ).click(function() {
+        $( ".prev-view" ).removeClass("black").removeClass("grey").addClass( "light" );
+      });
+
+      $("#launch_call").click(function(e) {
+        e.preventDefault();
+        makeCall();
+      });
+
+      $("#hangup_call").click(function(e) {
+        e.preventDefault();
+        voxbone.WebRTC.hangup();
+      });
+
+      $('.codebox-actions a').click(function(e) {
+        e.preventDefault();
+      });
+    });
 
   .main.createButton
     .header
@@ -199,4 +214,3 @@ block content
                       #[a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy]
                       #[a(href="#") Email Instructions]
                       #[a(href="#", id="generate-output-code", ng-click='widget.generateOutputCode()') Regenerate Code]
-  script(src="/javascripts/main.js",type="application/javascript")
