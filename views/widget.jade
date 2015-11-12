@@ -46,6 +46,10 @@ block content
           widget_code: 'Click on Regenerate Code!'
         };
 
+        $scope.prepareHtmlForCodepen = function(data){
+          return data.replace(/"/g, "'");
+        };
+
         $scope.reset = function(form){
           if(form){
             form.$setPristine();
@@ -86,6 +90,7 @@ block content
               show_text_html: $scope.widget.show_text_html_value
             }
           };
+
           $http(req)
             .then(function successCallback(response){
               console.log(response.data);
@@ -95,7 +100,6 @@ block content
               console.log("entered error callback");
             });
         }
-
     }]);
 
     $(document).ready(function () {
@@ -224,8 +228,10 @@ block content
 
                 .prev-code
                   .title
-                    span Code Widget
-                    p Paste the following HTML code into your website or give it a try using on #[a(href="https://jsfiddle.net/" target="_blank") JSFiddle]
+                    form#code_debug(action="http://codepen.io/pen/define" method="POST" target="_blank")
+                      span Code Widget
+                      p Paste the following HTML code into your website or give it a try using on #[a(href="https://jsfiddle.net/" target="_blank") JSFiddle ] or #[a(href="#" onclick="$('#code_debug').submit();") CodePen]
+                      input(type="hidden" name="data" value='{"title": "New Pen!", "html": "{{ prepareHtmlForCodepen(widget.widget_code) }}"}')
                   .widget-code-wrap
                     .sample.shadow-z-2.prettyprint#widget_code
                       | {{ widget.widget_code }}
