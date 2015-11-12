@@ -86,12 +86,10 @@ html(lang='en', ng-app="voxboneApp")
           $scope.init();
         }]);
 
-
-
   body(onload='detectBrowser()')
     .main
       .body(ng-controller="VoxboneWidgetController")
-        .widget-box.style-b
-          button.btn-style.mdi-communication-call#launch_call #[span #{ the_widget.button_label }]
+        .widget-box
+          button.mdi-communication-call#launch_call(class="#{ the_widget.button_style || 'btn-style-b' }") #[span #{ the_widget.button_label }]
           .widget-footer
             a(href="https://voxbone.com" target="_blank") powered by:

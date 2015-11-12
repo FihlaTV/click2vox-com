@@ -5,6 +5,7 @@ var bcrypt = require('bcrypt-nodejs');
 var widgetSchema = new Schema({
   button_label: String,
   button_style: String,
+  background_style: String,
   sip_uri: String,
   caller_id: String,
   context: String,

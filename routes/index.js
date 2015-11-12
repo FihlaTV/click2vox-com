@@ -3,7 +3,7 @@ var router = express.Router();
 var Account = require('../models/account');
 var Widget = require('../models/widget');
 var async = require('async');
-var title = 'Voxbone Demo v0.3';
+var title = 'Voxbone Demo v0.4';
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 var ObjectId = require('mongoose').Types.ObjectId;
@@ -244,6 +244,7 @@ module.exports = function(passport, voxbone){
     var a_widget = new Widget({
       button_label: req.body.button_label,
       button_style: req.body.button_style,
+      background_style: req.body.background_style,
       sip_uri: req.body.sip_uri,
       caller_id: req.body.caller_id,
       context: req.body.context,

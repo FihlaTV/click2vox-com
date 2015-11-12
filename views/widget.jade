@@ -2,8 +2,8 @@ extends layout
 
 block content
   link(href="/stylesheets/widget.css", rel="stylesheet")
-  script.
 
+  script.
     //Copy to Clipboard
     var clipboard = new Clipboard('#clipboard_copy');
     clipboard.on('success', function(e) {
@@ -41,6 +41,8 @@ block content
 
         $scope.master = {
           dial_pad: true,
+          button_style: 'style-b',
+          background_style: 'dark',
           widget_code: 'Click on Regenerate Code!'
         };
 
@@ -75,6 +77,7 @@ block content
               sip_uri: $scope.widget.sip_uri,
               button_label: $scope.widget.button_label,
               button_style: $scope.widget.button_style,
+              background_style: $scope.widget.background_style,
               context: $scope.widget.context,
               dial_pad: $scope.widget.dial_pad,
               send_digits: $scope.widget.send_digits,
@@ -96,25 +99,28 @@ block content
     }]);
 
     $(document).ready(function () {
-      $( ".title-toggle" ).click(function() {
-        $( this ).parent().toggleClass( "active" );
+      $(".title-toggle").click(function() {
+        $(this).parent().toggleClass("active");
       });
 
-      $( ".btn-style-a" ).click(function() {
-        $( ".widget-box" ).removeClass( "style-b" ).addClass( "style-a" );
-      });
-      $( ".btn-style-b" ).click(function() {
-        $( ".widget-box" ).removeClass( "style-a" ).addClass( "style-b" );
+      $(".btn-style-a").click(function() {
+        $(".widget-box").removeClass("style-b").addClass("style-a");
       });
 
-      $( ".togle-bg a.dark" ).click(function() {
-        $( ".prev-view" ).removeClass("light").removeClass("grey").addClass( "dark" );
+      $(".btn-style-b").click(function() {
+        $(".widget-box").removeClass("style-a").addClass("style-b");
       });
-      $( ".togle-bg a.grey" ).click(function() {
-        $( ".prev-view" ).removeClass("light").removeClass("black").addClass( "grey" );
+
+      $(".togle-bg a.dark").click(function() {
+        $(".prev-view").removeClass("light").removeClass("grey").addClass("dark");
       });
-      $( ".togle-bg a.light" ).click(function() {
-        $( ".prev-view" ).removeClass("black").removeClass("grey").addClass( "light" );
+
+      $(".togle-bg a.grey").click(function() {
+        $(".prev-view").removeClass("light").removeClass("black").addClass("grey");
+      });
+
+      $(".togle-bg a.light").click(function() {
+        $(".prev-view").removeClass("black").removeClass("grey").addClass("light");
       });
 
       $("#launch_call").click(function(e) {
@@ -158,10 +164,8 @@ block content
                     input.form-control(type="text", name="button_label", ng-model="widget.button_label" value="Call Sales" placeholder="i.e. Call Sales")
                   .form-group
                     label Button Style:
-                    button.btn-style-a #[span {{ widget.button_label || 'Call Sales' }}]
-                    button.btn-style-b #[span {{ widget.button_label || 'Call Sales' }}]
-
-            section
+                    button.btn-style-a(ng-click="widget.button_style = 'style-a'") #[span {{ widget.button_label || 'Call Sales' }}]
+                    button.btn-style-b(ng-click="widget.button_style = 'style-b'") #[span {{ widget.button_label || 'Call Sales' }}]
               span.title Call Configuration
               form
                 .boxPanel
@@ -215,9 +219,9 @@ block content
                     .widget-footer
                       a(href="https://voxbone.com" target="_blank") powered by:
                   .togle-bg
-                    a.dark(href="javascript:void(0)")
-                    a.grey(href="javascript:void(0)")
-                    a.light(href="javascript:void(0)")
+                    a.dark(href="javascript:void(0)" ng-click="widget.background_style = 'dark'")
+                    a.grey(href="javascript:void(0)" ng-click="widget.background_style = 'grey'")
+                    a.light(href="javascript:void(0)" ng-click="widget.background_style = 'light'")
 
                   //- p#status_message Initializing configuration
 
