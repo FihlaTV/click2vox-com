@@ -5,7 +5,7 @@ body.test {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   width: 100%;
   height: 100%;
-  
+
 }
 body.test iframe{
   border: none;
@@ -32,7 +32,7 @@ a {
 }
 .vox-widget-wrapper .vw-main{
   margin-right: 50px;
-  
+
   -webkit-box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.35);
   -moz-box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.35);
   box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.35);
@@ -43,7 +43,7 @@ a {
   -moz-border-radius-topright: 6px;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
-  
+
 }
 .vox-widget-wrapper .vw-main .vw-header{
   width: 365px;
@@ -76,7 +76,7 @@ a {
   margin: 0 -2.5px;
   text-align: center;
   color: #9b9b9b;
-  border-left: 1px solid #d3d3d4; 
+  border-left: 1px solid #d3d3d4;
 }
 .vox-widget-wrapper .vw-main .vw-header .vw-actions a:last-child{
   -webkit-border-top-right-radius: 6px;
@@ -175,6 +175,11 @@ a {
 .vox-widget-wrapper .int-sensor em.on{
   background: #00ff2a;
 }
+
+.vox-widget-wrapper .int-sensor em.off{
+  background: #ff002a;
+}
+
 .vox-widget-wrapper .vw-body .vw-end-call{
   float: left;
   width: 140px;
@@ -251,8 +256,6 @@ a {
   border-bottom-right-radius: 6px;
 }
 
-
-
 .vw-icon{
   display: inline-block;
   background-image: url('../../images/icon-sprite.png');
@@ -260,17 +263,17 @@ a {
   background-position: right center;
   background-repeat: no-repeat;
 }
-.vw-icon.vox-full-sreen-on{
+.vw-icon.vox-full-screen-on{
   width: 46px;
   height: 46px;
   background-position: 0 0;
 }
-.vw-icon.vx-icon-full-sreen-on{
+.vw-icon.vx-icon-full-screen-on{
   width: 46px;
   height: 46px;
-  background-position: 0 -46px;
+  background-position: 0 0px;
 }
-.vw-icon.vx-icon-full-sreen-off{
+.vw-icon.vx-icon-full-screen-off{
   width: 46px;
   height: 46px;
   background-position: 0 -46px;

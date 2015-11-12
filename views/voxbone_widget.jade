@@ -22,9 +22,12 @@ html(lang='en', ng-app="voxboneApp")
       $(document).ready(function () {
         $("#launch_call").click(function(e) {
           e.preventDefault();
+
+          parent.postMessage("openWidget","*");
+
           var number = '13072787231'; //16092975366
           voxbone.WebRTC.call(number);
-          window.onbeforeunload=function(e){
+          window.onbeforeunload = function(e){
             voxbone.WebRTC.rtcSession.terminate();
           }
         });
@@ -35,6 +38,20 @@ html(lang='en', ng-app="voxboneApp")
           switch(event.data) {
             case 'hang_up':
               voxbone.WebRTC.hangup();
+              break;
+            case 'volume-mute':
+              if (voxbone.WebRTC.isMuted) {
+                voxbone.WebRTC.unmute();
+              } else {
+                voxbone.WebRTC.mute();
+              }
+              break;
+            case 'microphone-mute':
+              if (voxbone.WebRTC.isMuted) {
+                voxbone.WebRTC.unmute();
+              } else {
+                voxbone.WebRTC.mute();
+              }
               break;
             case '1':
             case '2':
@@ -72,7 +89,6 @@ html(lang='en', ng-app="voxboneApp")
           };
 
           $scope.init();
-
         }]);
 
         var eventHandlers = {
