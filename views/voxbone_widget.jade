@@ -80,9 +80,8 @@ html(lang='en', ng-app="voxboneApp")
             if('#{the_widget.context}')
               voxbone.WebRTC.context = '#{the_widget.context}';
 
-            //TODO: Check, not working!
-            //- if('#{the_widget.send_digits}')
-            //-   voxbone.WebRTC.sendPreConfiguredDtmf('#{the_widget.send_digits}');
+            if('#{the_widget.send_digits}')
+              voxbone.WebRTC.configuration.dialer_string = '#{the_widget.send_digits}';
 
             voxbone.WebRTC.init(#{voxrtc_config});
           };
