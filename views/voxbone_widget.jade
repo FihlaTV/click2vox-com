@@ -94,6 +94,6 @@ html(lang='en', ng-app="voxboneApp")
     .main
       .body(ng-controller="VoxboneWidgetController")
         .widget-box
-          button.mdi-communication-call#launch_call(class="#{ the_widget.button_style || 'btn-style-b' }") #[span #{ the_widget.button_label }]
+          button.mdi-communication-call#launch_call(class="#{ the_widget.button_style || 'btn-style-b' }") #[span #{ the_widget.button_label || 'Call Now!' }]
           .widget-footer
             a(href="https://voxbone.com" target="_blank") powered by:
