@@ -25,7 +25,11 @@ html(lang='en', ng-app="voxboneApp")
         $("#launch_call").click(function(e) {
           e.preventDefault();
 
-          parent.postMessage("openWidget","*");
+          if(#{the_widget.dial_pad}) {
+            parent.postMessage("openWidget","*");
+          } else {
+            parent.postMessage("openWidgetWithoutDialPad","*");
+          }
 
           voxbone.WebRTC.call(number);
           window.onbeforeunload = function(e){

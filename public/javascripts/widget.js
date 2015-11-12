@@ -57,7 +57,11 @@ $(document).ready(function () {
   ');
 
   window.addEventListener('message', function(event) {
-    console.log(event.data);
+    // console.log(event.data);
+    if(event.data == 'openWidgetWithoutDialPad') {
+      $("#dialpad").addClass('hidden');
+      $(".vox-widget-wrapper").removeClass('hidden');
+    };
     if(event.data == 'openWidget') {
       $(".vox-widget-wrapper").removeClass('hidden');
     };
