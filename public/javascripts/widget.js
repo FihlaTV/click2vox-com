@@ -21,7 +21,7 @@ $(document).ready(function () {
                 <em class="on"></em> \
               </div> \
             </a> \
-            <a href="#"> \
+            <a href="#" class="hidden"> \
               <i class="vw-icon vx-icon-vol"></i> \
               <div id="volume" class="int-sensor"> \
                 <em class="on"></em> \
@@ -76,6 +76,7 @@ $(document).ready(function () {
   $("#close-screen i").click(function(e) {
     e.preventDefault();
     $(".vox-widget-wrapper").addClass('hidden');
+    $('#call_button_frame')[0].contentWindow.postMessage('hang_up','*');
   });
 
   $("#full-screen i").click(function(e) {

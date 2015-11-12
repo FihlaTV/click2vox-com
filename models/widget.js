@@ -29,7 +29,7 @@ widgetSchema.methods.generateHtmlCode = function() {
   html += '<script src="' + app_url + '/javascripts/widget.js" type="application/javascript"></script>';
   html += '<script src="' + app_url + '/javascripts/webrtc_voxbone_tools.js" type="application/javascript"></script>';
 
-  var iframe_styles = 'width="300" height="300" frameBorder="0" scrolling="no"';
+  var iframe_styles = 'width="300" height="183" frameBorder="0" scrolling="no"';
   html += '<iframe id="call_button_frame" ' + iframe_styles + ' src="' + app_url + '/voxbone_widget/' + this.id + '">';
   html += '</iframe>';
 
