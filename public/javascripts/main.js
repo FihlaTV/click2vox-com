@@ -1,3 +1,5 @@
+//Used only for mocks - remove this!
+
 $(document).ready(function () {
   $( ".title-toggle" ).click(function() {
     $( this ).parent().toggleClass( "active" );

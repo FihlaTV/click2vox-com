@@ -19,13 +19,14 @@ html(lang='en', ng-app="voxboneApp")
 
     script.
 
+      var number = '13072787231'; //16092975366
+
       $(document).ready(function () {
         $("#launch_call").click(function(e) {
           e.preventDefault();
 
           parent.postMessage("openWidget","*");
 
-          var number = '13072787231'; //16092975366
           voxbone.WebRTC.call(number);
           window.onbeforeunload = function(e){
             voxbone.WebRTC.rtcSession.terminate();
@@ -34,42 +35,27 @@ html(lang='en', ng-app="voxboneApp")
 
         window.addEventListener('message', function(event) {
           console.log(event.data);
-
-          switch(event.data) {
-            case 'hang_up':
-              voxbone.WebRTC.hangup();
-              break;
-            case 'volume-mute':
-              if (voxbone.WebRTC.isMuted) {
-                voxbone.WebRTC.unmute();
-              } else {
-                voxbone.WebRTC.mute();
-              }
-              break;
-            case 'microphone-mute':
-              if (voxbone.WebRTC.isMuted) {
-                voxbone.WebRTC.unmute();
-              } else {
-                voxbone.WebRTC.mute();
-              }
-              break;
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case '0':
-            case '*':
-            case '#':
-              voxbone.WebRTC.sendDTMF(event.data);
-              break;
-          }
+          send_voxbone_interaction(event.data);
         });
       });
+
+      var eventHandlers = {
+        'localMediaVolume': function (e) {
+          console.log('localMediaVolume ' + e.localVolume);
+        },
+        'progress': function (e) {
+          console.log('Calling ' + number);
+        },
+        'failed': function (e){
+          console.log('Failed to connect: ' + e.data.cause);
+        },
+        'accepted': function (e){
+          console.log('Call started');
+        },
+        'ended': function (e){
+          console.log('Call ended');
+        }
+      };
 
       var app = angular.module('voxboneApp', [])
         .controller('VoxboneWidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
@@ -79,11 +65,13 @@ html(lang='en', ng-app="voxboneApp")
           $scope.init = function () {
             voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
 
-            //- voxbone.WebRTC.customEventHandler = eventHandlers;
-            //- voxbone.WebRTC.configuration.uri = #{sipUri};
-            //- voxbone.WebRTC.configuration.display_name = #{callerId};
-            //- voxbone.WebRTC.context = #{context};
-            //- voxbone.WebRTC.sendDTMF(#{digits});
+            voxbone.WebRTC.customEventHandler = eventHandlers;
+            voxbone.WebRTC.configuration.uri = '#{the_widget.sip_uri}';
+            voxbone.WebRTC.configuration.display_name = '#{the_widget.caller_id}';
+            voxbone.WebRTC.context = '#{the_widget.context}';
+
+            //TODO: Check, not working!
+            //- voxbone.WebRTC.sendPreConfiguredDtmf('#{the_widget.send_digits}');
 
             voxbone.WebRTC.init(#{voxrtc_config});
           };
@@ -91,26 +79,12 @@ html(lang='en', ng-app="voxboneApp")
           $scope.init();
         }]);
 
-        var eventHandlers = {
-            'progress':   function(e){
-            $("#status_message").innerHTML="<p>Calling " + $('#number').value+"</p>";
-            },
-            'failed':     function(e){
-            $("#status_message").innerHTML="<p>Failed to connect: "+ e.data.cause +"</p>";
-            },
-            'started':    function(e){
-            $("#status_message").innerHTML="<p>Call started</p>";
-            },
-            'ended':      function(e){
-            $("#status_message").innerHTML="<p>Call ended</p>";
-          }
-        }
+
 
   body(onload='detectBrowser()')
     .main
       .body(ng-controller="VoxboneWidgetController")
         .widget-box.style-b
-          button.btn-style.mdi-communication-call#launch_call #[span {{widget.button_label || 'Call Sales'}}]
+          button.btn-style.mdi-communication-call#launch_call #[span #{ the_widget.button_label }]
           .widget-footer
-            a(href="#") powered by:
-
+            a(href="https://voxbone.com" target="_blank") powered by:

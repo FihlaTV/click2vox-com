@@ -224,17 +224,17 @@ module.exports = function(passport, voxbone){
 
     var searchFor = { _id: new ObjectId(req.params.token) };
 
-    // Widget.findOne(searchFor, function(error, the_widget) {
-    //   if (!error) {
-    //     html += the_widget.generateButtonCode();
-    //     res.send(html);
-    //   } else {
-    //     console.log(error, response.statusCode, body);
-    //   }
-    //   res.end("");
-    // });
+    Widget.findOne(searchFor, function(err, the_widget) {
 
-    res.render('voxbone_widget', { layout: false, title: title });
+      if (!the_widget || err) {
+        var result = { message: "Widget not found", errors: null }
+        return res.status(404).json(result);
+      } else if (the_widget) {
+          res.render('voxbone_widget', { layout: false, title: title, the_widget: the_widget });
+      };
+
+      res.end("");
+    });
   });
 
   router.post('/voxbone_widget', function(req, res, next){

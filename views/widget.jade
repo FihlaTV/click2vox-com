@@ -1,6 +1,7 @@
 extends layout
 
 block content
+  link(href="/stylesheets/widget.css", rel="stylesheet")
   script.
 
     //Copy to Clipboard
@@ -16,6 +17,24 @@ block content
       console.error('Action:', e.action);
       console.error('Trigger:', e.trigger);
     });
+
+    var eventHandlers = {
+      'localMediaVolume': function (e) {
+        console.log('localMediaVolume ' + e.localVolume);
+      },
+      'progress': function (e) {
+        console.log('Calling ' + number);
+      },
+      'failed': function (e){
+        console.log('Failed to connect: ' + e.data.cause);
+      },
+      'accepted': function (e){
+        console.log('Call started');
+      },
+      'ended': function (e){
+        console.log('Call ended');
+      }
+    };
 
     var app = angular.module('voxboneApp', [])
       .controller('WidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
@@ -36,6 +55,7 @@ block content
 
         $scope.init = function () {
           voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
+          voxbone.WebRTC.customEventHandler = eventHandlers;
           voxbone.WebRTC.init(#{voxrtc_config});
         };
 
@@ -75,14 +95,6 @@ block content
 
     }]);
 
-    function makeCall(){
-      var number = '13072787231'; //16092975366
-      voxbone.WebRTC.call(number);
-      window.onbeforeunload=function(e){
-        voxbone.WebRTC.rtcSession.terminate();
-      }
-    }
-
     $(document).ready(function () {
       $( ".title-toggle" ).click(function() {
         $( this ).parent().toggleClass( "active" );
@@ -107,7 +119,12 @@ block content
 
       $("#launch_call").click(function(e) {
         e.preventDefault();
-        makeCall();
+        $(".vox-widget-wrapper").removeClass('hidden');
+          var number = '13072787231'; //16092975366
+          voxbone.WebRTC.call(number);
+          window.onbeforeunload=function(e){
+            voxbone.WebRTC.rtcSession.terminate();
+          }
       });
 
       $("#hangup_call").click(function(e) {
@@ -119,6 +136,7 @@ block content
         e.preventDefault();
       });
     });
+  .div#control
 
   .main.createButton
     .header
@@ -195,7 +213,7 @@ block content
                     button.btn-style.mdi-communication-call#launch_call #[span {{widget.button_label || 'Call Sales'}}]
                     //- button.btn.btn-raised.btn-material-red.mdi-communication-call-end#hangup_call #[span 'End Call']
                     .widget-footer
-                      a(href="#") powered by:
+                      a(href="https://voxbone.com" target="_blank") powered by:
                   .togle-bg
                     a.dark(href="javascript:void(0)")
                     a.grey(href="javascript:void(0)")
@@ -214,3 +232,5 @@ block content
                       #[a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy]
                       #[a(href="#") Email Instructions]
                       #[a(href="#", id="generate-output-code", ng-click='widget.generateOutputCode()') Regenerate Code]
+  script(src="/javascripts/widget.js",type="application/javascript")
+
