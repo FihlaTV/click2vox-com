@@ -3,7 +3,7 @@ var router = express.Router();
 var Account = require('../models/account');
 var Widget = require('../models/widget');
 var async = require('async');
-var title = 'Voxbone Demo v0.3';
+var title = 'Voxbone Demo v0.4';
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 var ObjectId = require('mongoose').Types.ObjectId;
@@ -25,7 +25,6 @@ module.exports = function(passport, voxbone){
       }
       else{
         var result = { message: "", errors: null, redirect: '/widget', email: formData.email }
-        
         req.logIn(account, function(err) {
           return res.status(200).json(result);
         });
@@ -220,20 +219,19 @@ module.exports = function(passport, voxbone){
   });
 
   router.get('/voxbone_widget/:token', function (req, res) {
-    res.header("Access-Control-Allow-Origin", "*");
+    voxrtc_config = voxbone.generate();
 
-    var html = "<link href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css' rel='stylesheet'>";
-    html += "<link href='" + process.env.APP_URL + "/stylesheets/root.css' rel='stylesheet'>";
     var searchFor = { _id: new ObjectId(req.params.token) };
 
-    Widget.findOne(searchFor, function(error, the_widget) {
-      if (!error) {
-        html += the_widget.generateButtonCode();
+    Widget.findOne(searchFor, function(err, the_widget) {
 
-        res.send(html);
-      } else {
-        console.log(error, response.statusCode, body);
-      }
+      if (!the_widget || err) {
+        var result = { message: "Widget not found", errors: null }
+        return res.status(404).json(result);
+      } else if (the_widget) {
+          res.render('voxbone_widget', { layout: false, title: title, the_widget: the_widget });
+      };
+
       res.end("");
     });
   });
@@ -245,6 +243,7 @@ module.exports = function(passport, voxbone){
     var a_widget = new Widget({
       button_label: req.body.button_label,
       button_style: req.body.button_style,
+      background_style: req.body.background_style,
       sip_uri: req.body.sip_uri,
       caller_id: req.body.caller_id,
       context: req.body.context,

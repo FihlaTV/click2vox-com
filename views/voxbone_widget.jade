@@ -1,0 +1,99 @@
+doctype html
+
+html(lang='en', ng-app="voxboneApp")
+  head
+    title= title
+
+    link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css", rel="stylesheet")
+    link(href="/stylesheets/root.css", rel="stylesheet")
+    link(href="/stylesheets/widget.css", rel="stylesheet")
+
+    script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js",type="application/javascript")
+    script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js' )
+    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js",type="application/javascript")
+
+    script(src="//webrtc.voxbone.com/js/jssip-0.7.9-vox.js",type="application/javascript")
+    script(src="//webrtc.voxbone.com/js/voxbone-0.0.3.js",type="application/javascript")
+
+    script(src="/javascripts/webrtc_voxbone_tools.js",type="application/javascript")
+
+    script.
+
+      var number = '13072787231'; //16092975366
+
+      $(document).ready(function () {
+        $("#launch_call").click(function(e) {
+          e.preventDefault();
+
+          if(#{the_widget.dial_pad}) {
+            parent.postMessage("openWidget","*");
+          } else {
+            parent.postMessage("openWidgetWithoutDialPad","*");
+          }
+
+          voxbone.WebRTC.call(number);
+          window.onbeforeunload = function(e){
+            voxbone.WebRTC.rtcSession.terminate();
+          }
+        });
+
+        window.addEventListener('message', function(event) {
+          console.log(event.data);
+          send_voxbone_interaction(event.data);
+        });
+      });
+
+      var eventHandlers = {
+        'localMediaVolume': function (e) {
+          console.log('localMediaVolume ' + e.localVolume);
+        },
+        'progress': function (e) {
+          console.log('Calling ' + number);
+        },
+        'failed': function (e){
+          console.log('Failed to connect: ' + e.data.cause);
+        },
+        'accepted': function (e){
+          console.log('Call started');
+        },
+        'ended': function (e){
+          console.log('Call ended');
+        }
+      };
+
+      var app = angular.module('voxboneApp', [])
+        .controller('VoxboneWidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
+
+          $scope.master = { };
+
+          $scope.init = function () {
+            voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
+
+            voxbone.WebRTC.customEventHandler = eventHandlers;
+
+            if('#{the_widget.sip_uri}')
+              voxbone.WebRTC.configuration.uri = '#{the_widget.sip_uri}';
+
+            if('#{the_widget.caller_id}')
+              voxbone.WebRTC.configuration.display_name = '#{the_widget.caller_id}';
+
+            if('#{the_widget.context}')
+              voxbone.WebRTC.context = '#{the_widget.context}';
+
+            //TODO: Check, not working!
+            //- if('#{the_widget.send_digits}')
+            //-   voxbone.WebRTC.sendPreConfiguredDtmf('#{the_widget.send_digits}');
+
+            voxbone.WebRTC.init(#{voxrtc_config});
+          };
+
+          $scope.init();
+        }]);
+
+  body(onload='detectBrowser()')
+    .main
+      .body(ng-controller="VoxboneWidgetController")
+        .widget-box
+          button.mdi-communication-call#launch_call(class="#{ the_widget.button_style || 'btn-style-b' }") #[span #{ the_widget.button_label || 'Call Now!' }]
+          .widget-footer
+            a(href="https://voxbone.com" target="_blank") powered by:
