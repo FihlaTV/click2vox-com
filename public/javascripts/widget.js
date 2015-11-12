@@ -63,20 +63,33 @@ $(document).ready(function () {
     };
   });
 
+  function is_iframe() {
+    return $('#call_button_frame').length > 0;
+  };
+
+  function call_action(message) {
+    // console.log(message);
+    if (is_iframe()) {
+      $('#call_button_frame')[0].contentWindow.postMessage(message, '*');
+    } else {
+      send_voxbone_interaction(message);
+    };
+  };
+
   $('.vw-dialpad li').click(function(e) {
     e.preventDefault();
-    $('#call_button_frame')[0].contentWindow.postMessage(this.textContent,'*');
+    call_action(this.textContent);
   });
 
   $(".vw-end-call").click(function(e) {
     e.preventDefault();
-    $('#call_button_frame')[0].contentWindow.postMessage('hang_up','*');
+    call_action('hang_up');
   });
 
   $("#close-screen i").click(function(e) {
     e.preventDefault();
     $(".vox-widget-wrapper").addClass('hidden');
-    $('#call_button_frame')[0].contentWindow.postMessage('hang_up','*');
+    call_action('hang_up');
   });
 
   $("#full-screen i").click(function(e) {
@@ -94,13 +107,12 @@ $(document).ready(function () {
   $(".vw-icon.vx-icon-mic").click(function(e) {
     e.preventDefault();
     $("#microphone em").toggleClass('on').toggleClass('off');
-    $('#call_button_frame')[0].contentWindow.postMessage('microphone-mute','*');
+    call_action('microphone-mute');
   });
 
   $(".vw-icon.vx-icon-vol").click(function(e) {
     e.preventDefault();
     $("#volume em").toggleClass('on').toggleClass('off');
-    $('#call_button_frame')[0].contentWindow.postMessage('volume-mute','*');
+    call_action('volume-mute');
   });
 });
-
