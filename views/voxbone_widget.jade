@@ -66,12 +66,19 @@ html(lang='en', ng-app="voxboneApp")
             voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
 
             voxbone.WebRTC.customEventHandler = eventHandlers;
-            voxbone.WebRTC.configuration.uri = '#{the_widget.sip_uri}';
-            voxbone.WebRTC.configuration.display_name = '#{the_widget.caller_id}';
-            voxbone.WebRTC.context = '#{the_widget.context}';
+
+            if('#{the_widget.sip_uri}')
+              voxbone.WebRTC.configuration.uri = '#{the_widget.sip_uri}';
+
+            if('#{the_widget.caller_id}')
+              voxbone.WebRTC.configuration.display_name = '#{the_widget.caller_id}';
+
+            if('#{the_widget.context}')
+              voxbone.WebRTC.context = '#{the_widget.context}';
 
             //TODO: Check, not working!
-            //- voxbone.WebRTC.sendPreConfiguredDtmf('#{the_widget.send_digits}');
+            //- if('#{the_widget.send_digits}')
+            //-   voxbone.WebRTC.sendPreConfiguredDtmf('#{the_widget.send_digits}');
 
             voxbone.WebRTC.init(#{voxrtc_config});
           };
@@ -79,12 +86,10 @@ html(lang='en', ng-app="voxboneApp")
           $scope.init();
         }]);
 
-
-
   body(onload='detectBrowser()')
     .main
       .body(ng-controller="VoxboneWidgetController")
-        .widget-box.style-b
-          button.btn-style.mdi-communication-call#launch_call #[span #{ the_widget.button_label }]
+        .widget-box
+          button.mdi-communication-call#launch_call(class="#{ the_widget.button_style || 'btn-style-b' }") #[span #{ the_widget.button_label }]
           .widget-footer
             a(href="https://voxbone.com" target="_blank") powered by:
