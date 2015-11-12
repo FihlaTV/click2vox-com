@@ -18,6 +18,24 @@ block content
       console.error('Trigger:', e.trigger);
     });
 
+    var eventHandlers = {
+      'localMediaVolume': function (e) {
+        console.log('localMediaVolume ' + e.localVolume);
+      },
+      'progress': function (e) {
+        console.log('Calling ' + number);
+      },
+      'failed': function (e){
+        console.log('Failed to connect: ' + e.data.cause);
+      },
+      'accepted': function (e){
+        console.log('Call started');
+      },
+      'ended': function (e){
+        console.log('Call ended');
+      }
+    };
+
     var app = angular.module('voxboneApp', [])
       .controller('WidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
 
@@ -37,6 +55,7 @@ block content
 
         $scope.init = function () {
           voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
+          voxbone.WebRTC.customEventHandler = eventHandlers;
           voxbone.WebRTC.init(#{voxrtc_config});
         };
 
