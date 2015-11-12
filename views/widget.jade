@@ -41,7 +41,7 @@ block content
 
         $scope.master = {
           dial_pad: true,
-          button_style: 'style-b',
+          button_style: 'btn-style-b',
           background_style: 'dark',
           widget_code: 'Click on Regenerate Code!'
         };
@@ -164,8 +164,8 @@ block content
                     input.form-control(type="text", name="button_label", ng-model="widget.button_label" value="Call Sales" placeholder="i.e. Call Sales")
                   .form-group
                     label Button Style:
-                    button.btn-style-a(ng-click="widget.button_style = 'style-a'") #[span {{ widget.button_label || 'Call Sales' }}]
-                    button.btn-style-b(ng-click="widget.button_style = 'style-b'") #[span {{ widget.button_label || 'Call Sales' }}]
+                    button.btn-style-a(ng-click="widget.button_style = 'btn-style-a'") #[span {{ widget.button_label || 'Call Sales' }}]
+                    button.btn-style-b(ng-click="widget.button_style = 'btn-style-b'") #[span {{ widget.button_label || 'Call Sales' }}]
               span.title Call Configuration
               form
                 .boxPanel
@@ -215,7 +215,6 @@ block content
                 .prev-view.light
                   .widget-box.style-b
                     button.btn-style.mdi-communication-call#launch_call #[span {{widget.button_label || 'Call Sales'}}]
-                    //- button.btn.btn-raised.btn-material-red.mdi-communication-call-end#hangup_call #[span 'End Call']
                     .widget-footer
                       a(href="https://voxbone.com" target="_blank") powered by:
                   .togle-bg
