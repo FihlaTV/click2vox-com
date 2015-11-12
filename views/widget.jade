@@ -228,9 +228,17 @@ block content
 
                 .prev-code
                   .title
-                    form#code_debug(action="http://codepen.io/pen/define" method="POST" target="_blank")
-                      span Code Widget
-                      p Paste the following HTML code into your website or give it a try using on #[a(href="https://jsfiddle.net/" target="_blank") JSFiddle ] or #[a(href="#" onclick="$('#code_debug').submit();") CodePen]
+                    span Code Widget
+                      p Paste the following HTML code into your website or give it a try using on
+
+                        form#code_debug_jsfiddle(action="http://jsfiddle.net/api/post/library/pure/" method="POST" target="_blank")
+                          input(type="hidden" name="html" value='{{ prepareHtmlForCodepen(widget.widget_code) }}')
+                          a(href="#" onclick="$('#code_debug_jsfiddle').submit();") JSFiddle
+
+                        form#code_debug_codepen(action="http://codepen.io/pen/define" method="POST" target="_blank")
+                          input(type="hidden" name="data" value='{"html": "{{ prepareHtmlForCodepen(widget.widget_code) }}"}')
+                          a(href="#" onclick="$('#code_debug_codepen').submit();") CodePen
+
                       input(type="hidden" name="data" value='{"title": "New Pen!", "html": "{{ prepareHtmlForCodepen(widget.widget_code) }}"}')
                   .widget-code-wrap
                     .sample.shadow-z-2.prettyprint#widget_code
