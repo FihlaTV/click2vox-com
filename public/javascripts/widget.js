@@ -11,8 +11,8 @@ $(document).ready(function () {
             <a href="#" id="close-screen"><i class="vw-icon vx-icon-close"></i></a> \
           </div> \
         </div> \
-        <div class="vw-body"> \
-          <div class="vw-btn-group"> \
+        <div id="vw-body" class="vw-body"> \
+          <div id="vw-btn-group" class="vw-btn-group"> \
             <a href="#"> \
               <i class="vw-icon vx-icon-mic"></i> \
               <div id="microphone" class="int-sensor"> \
@@ -32,7 +32,7 @@ $(document).ready(function () {
             <a href="#" id="dialpad"><i class="vw-icon vx-icon-pad"></i></a> \
           </div> \
           <a href="#" class="vw-end-call"><i class="vw-icon vx-icon-phone"></i>End Call</a> \
-          <div class="vw-dialpad"> \
+          <div id="vw-dialpad" class="vw-dialpad"> \
             <ul> \
               <li class="vw-tl">1</li> \
               <li>2</li> \
@@ -48,23 +48,33 @@ $(document).ready(function () {
               <li class="vw-br">#</li> \
             </ul> \
           </div> \
-          <div class="vw-footer"> \
+          <div id="vw-footer" class="vw-footer"> \
             <a href="https://voxbone.com" target="_blank">powered by:</a> \
           </div> \
         </div> \
+        <div id="vw-message" class="vw-body hidden">Message!</div> \
       </div> \
     </div> \
   ');
 
   window.addEventListener('message', function(event) {
     // console.log(event.data);
-    if(event.data == 'openWidgetWithoutDialPad') {
-      $("#dialpad").addClass('hidden');
-      $(".vox-widget-wrapper").removeClass('hidden');
-    };
-    if(event.data == 'openWidget') {
-      $(".vox-widget-wrapper").removeClass('hidden');
-    };
+    switch(event.data) {
+      case 'openWidgetWithoutDialPad':
+        $("#dialpad").addClass('hidden');
+        $(".vox-widget-wrapper").removeClass('hidden');
+        break;
+      case 'openWidget':
+        $(".vox-widget-wrapper").removeClass('hidden');
+        break;
+      case 'setMessage':
+        $(".vox-widget-wrapper .vw-body").addClass('hidden');
+        $("#full-screen").addClass('hidden');
+        $(".vox-widget-wrapper #vw-message").removeClass('hidden');
+        $(".vox-widget-wrapper #vw-message")[0].innerHTML = 'Browser does NOT support WebRTC!';
+        $(".vox-widget-wrapper").removeClass('hidden');
+        break;
+      };
   });
 
   function is_iframe() {
@@ -98,7 +108,7 @@ $(document).ready(function () {
 
   $("#full-screen i").click(function(e) {
     e.preventDefault();
-    $(".vw-body").toggleClass('hidden');
+    $("#vw-body").toggleClass('hidden');
     $(this).toggleClass('vx-icon-full-screen-on').toggleClass('vx-icon-full-screen-off');
   });
 
