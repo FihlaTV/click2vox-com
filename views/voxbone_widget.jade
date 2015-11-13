@@ -65,8 +65,10 @@ html(lang='en', ng-app="voxboneApp")
             if('#{the_widget.context}')
               voxbone.WebRTC.context = '#{the_widget.context}';
 
-            if('#{the_widget.send_digits}')
+            if('#{the_widget.send_digits}') {
+              console.log('Digits sent: #{the_widget.send_digits}')
               voxbone.WebRTC.configuration.dialer_string = '#{the_widget.send_digits}';
+            }
 
             voxbone.WebRTC.init(#{voxrtc_config});
           };
