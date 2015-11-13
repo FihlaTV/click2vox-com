@@ -22,21 +22,6 @@ html(lang='en', ng-app="voxboneApp")
       var number = '13072787231'; //16092975366
 
       $(document).ready(function () {
-        $("#launch_call").click(function(e) {
-          e.preventDefault();
-
-          if(#{the_widget.dial_pad}) {
-            parent.postMessage("openWidget","*");
-          } else {
-            parent.postMessage("openWidgetWithoutDialPad","*");
-          }
-
-          voxbone.WebRTC.call(number);
-          window.onbeforeunload = function(e){
-            voxbone.WebRTC.rtcSession.terminate();
-          }
-        });
-
         window.addEventListener('message', function(event) {
           console.log(event.data);
           send_voxbone_interaction(event.data);
@@ -86,13 +71,41 @@ html(lang='en', ng-app="voxboneApp")
             voxbone.WebRTC.init(#{voxrtc_config});
           };
 
+          $scope.makeCall = function () {
+            var supported = voxbone.WebRTC.isWebRTCSupported();
+
+            if(supported == false){
+              console.log("WebRTC is NOT supported!");
+
+              if(#{the_widget.hide_widget}) return;
+              else if('#{the_widget.link_button_to_a_page}')
+                $window.open('#{the_widget.link_button_to_a_page}','_blank')
+              else if('#{the_widget.show_text_html}') {
+                parent.postMessage("setMessage","*");
+              }
+            } else{
+
+                if(#{the_widget.dial_pad}) {
+                  parent.postMessage("openWidget","*");
+                } else {
+                  parent.postMessage("openWidgetWithoutDialPad","*");
+                }
+
+                var number = '13072787231'; //16092975366
+                voxbone.WebRTC.call(number);
+                window.onbeforeunload = function(e){
+                  voxbone.WebRTC.rtcSession.terminate();
+                }
+            }
+          };
+
           $scope.init();
         }]);
 
-  body(onload='detectBrowser()')
+  body
     .main
       .body(ng-controller="VoxboneWidgetController")
         .widget-box
-          button.mdi-communication-call#launch_call(class="#{ the_widget.button_style || 'btn-style-b' }") #[span #{ the_widget.button_label || 'Call Now!' }]
+          button.mdi-communication-call#launch_call(ng-click="makeCall()" class="#{ the_widget.button_style || 'btn-style-b' }") #[span #{ the_widget.button_label || 'Call Now!' }]
           .widget-footer
             a(href="https://voxbone.com" target="_blank") powered by:
