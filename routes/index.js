@@ -267,7 +267,7 @@ module.exports = function(passport, voxbone){
           "voiceUriId"       : null,
           "backupUriId"      : null,
           "voiceUriProtocol" : "SIP",
-          "uri"              : "echotest@voxout.voxbone.com",//use actual req.body.sip_uri
+          "uri"              : "echotest@voxout.voxbone.com",//use actual req.body.sip_uri or default to this
           "description"      : "First Test"
         }
       }
