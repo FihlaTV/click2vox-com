@@ -272,11 +272,11 @@ block content
 
                       .btn-code-playground
                         .btn-jsfiddle
-                          form#code_debug_jsfiddle(action="http://jsfiddle.net/api/post/library/pure/" method="POST" target="_blank")
+                          form#code_debug_jsfiddle(action="https://jsfiddle.net/api/post/library/pure/" method="POST" target="_blank")
                             input(type="hidden" name="html" value='{{ prepareHtmlForCodepen(widget.widget_code) }}')
                             a(href="#" onclick="$('#code_debug_jsfiddle').submit();") JSFiddle
                         .btn-jsfiddle
-                          form#code_debug_codepen(action="http://codepen.io/pen/define" method="POST" target="_blank")
+                          form#code_debug_codepen(action="https://codepen.io/pen/define" method="POST" target="_blank")
                             input(type="hidden" name="data" value='{"html": "{{ prepareHtmlForCodepen(widget.widget_code) }}"}')
                             a(href="#" onclick="$('#code_debug_codepen').submit();") CodePen
 
