@@ -11,7 +11,8 @@ var accountSchema = new Schema({
   created_at: Date,
   updated_at: Date,
   resetPasswordToken: String,
-  resetPasswordExpires: Date
+  resetPasswordExpires: Date,
+  didID: Number
 });
 
 accountSchema.methods.generateHash = function(password) {
