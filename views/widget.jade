@@ -36,8 +36,31 @@ block content
       }
     };
 
-    var app = angular.module('voxboneApp', [])
-      .controller('WidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
+    var app = angular.module('voxboneApp', []);
+
+    app.directive('httpPrefix', function() {
+      return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, element, attrs, controller) {
+          function ensureHttpPrefix(value) {
+              // Need to add prefix if we don't have http:// prefix already AND we don't have part of it
+              if(value && !/^(https?):\/\//i.test(value)
+                 && 'http://'.indexOf(value) !== 0 && 'https://'.indexOf(value) !== 0 ) {
+                controller.$setViewValue('http://' + value);
+                controller.$render();
+                return 'http://' + value;
+              }
+              else
+                return value;
+            }
+          controller.$formatters.push(ensureHttpPrefix);
+          controller.$parsers.splice(0, 0, ensureHttpPrefix);
+        }
+      };
+    });
+
+    app.controller('WidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
 
         $scope.master = {
           dial_pad: true,
@@ -63,6 +86,32 @@ block content
           voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
           voxbone.WebRTC.customEventHandler = eventHandlers;
           voxbone.WebRTC.init(#{voxrtc_config});
+        };
+
+        $scope.makeCall = function () {
+          var supported = voxbone.WebRTC.isWebRTCSupported();
+
+          if(supported == false){
+            console.log("WebRTC is NOT supported!");
+
+            if($scope.widget.hide_widget) return;
+            else if($scope.widget.link_button_to_a_page_value)
+              $window.open($scope.widget.link_button_to_a_page_value,'_blank')
+            else if($scope.widget.show_text_html_value) {
+              $(".vox-widget-wrapper .vw-body").addClass('hidden');
+              $(".vox-widget-wrapper #full-screen").addClass('hidden');
+              $(".vox-widget-wrapper #vw-message").removeClass('hidden');
+              $(".vox-widget-wrapper #vw-message")[0].innerHTML = $scope.widget.show_text_html_value;
+              $(".vox-widget-wrapper").removeClass('hidden');
+            }
+          } else{
+            $(".vox-widget-wrapper").removeClass('hidden');
+            var number = '13072787231'; //16092975366
+            voxbone.WebRTC.call(number);
+            window.onbeforeunload = function(e){
+              voxbone.WebRTC.rtcSession.terminate();
+            }
+          }
         };
 
         $scope.reset();
@@ -127,16 +176,6 @@ block content
         $(".prev-view").removeClass("black").removeClass("grey").addClass("light");
       });
 
-      $("#launch_call").click(function(e) {
-        e.preventDefault();
-        $(".vox-widget-wrapper").removeClass('hidden');
-          var number = '13072787231'; //16092975366
-          voxbone.WebRTC.call(number);
-          window.onbeforeunload=function(e){
-            voxbone.WebRTC.rtcSession.terminate();
-          }
-      });
-
       $("#hangup_call").click(function(e) {
         e.preventDefault();
         voxbone.WebRTC.hangup();
@@ -175,7 +214,7 @@ block content
                 .boxPanel
                   .form-group
                     label.control-label SIP URI #[span.badge ?]
-                    input.form-control(required type="text", name="sip_uri", ng-model="widget.sip_uri" data-value="SIP: echotest@voxout.voxbone.com" placeholder="i.e. SIP: echotest@voxout.voxbone.com")
+                    input.form-control(required type="email", name="sip_uri", ng-model="widget.sip_uri" data-value="SIP: echotest@voxout.voxbone.com" placeholder="i.e. SIP: echotest@voxout.voxbone.com")
                     div(ng-show="widget.sip_uri.$error.required") SIP URI is required
                   .panel.panel-default
                     .panel-heading
@@ -205,7 +244,7 @@ block content
                         .form-group
                           label.control-label Link button to a page #[span.badge ?]
                           input.form-control(type='checkbox' name='link_button_to_a_page', ng-model="widget.link_button_to_a_page")
-                          input.form-control(type="text" name="link_button_to_a_page_value", placeholder="Enter url"
+                          input.form-control(http-prefix type="url" name="link_button_to_a_page_value"
                           ng-model="widget.link_button_to_a_page_value" ng-show="widget.link_button_to_a_page")
                         .form-group
                           label.control-label Show text/HTML #[span.badge ?]
@@ -218,7 +257,7 @@ block content
               .boxPanel.preview
                 .prev-view.light
                   .widget-box.style-b
-                    button.btn-style.mdi-communication-call#launch_call #[span {{widget.button_label || 'Call Sales'}}]
+                    button.btn-style.mdi-communication-call#launch_call(ng-click="makeCall()") #[span {{widget.button_label || 'Call Sales'}}]
                     .widget-footer
                       a(href="https://voxbone.com" target="_blank") powered by:
                   .togle-bg
@@ -231,15 +270,16 @@ block content
                     span Code Widget
                       p Paste the following HTML code into your website or give it a try using on
 
-                        form#code_debug_jsfiddle(action="http://jsfiddle.net/api/post/library/pure/" method="POST" target="_blank")
-                          input(type="hidden" name="html" value='{{ prepareHtmlForCodepen(widget.widget_code) }}')
-                          a(href="#" onclick="$('#code_debug_jsfiddle').submit();") JSFiddle
+                      .btn-code-playground
+                        .btn-jsfiddle
+                          form#code_debug_jsfiddle(action="http://jsfiddle.net/api/post/library/pure/" method="POST" target="_blank")
+                            input(type="hidden" name="html" value='{{ prepareHtmlForCodepen(widget.widget_code) }}')
+                            a(href="#" onclick="$('#code_debug_jsfiddle').submit();") JSFiddle
+                        .btn-jsfiddle
+                          form#code_debug_codepen(action="http://codepen.io/pen/define" method="POST" target="_blank")
+                            input(type="hidden" name="data" value='{"html": "{{ prepareHtmlForCodepen(widget.widget_code) }}"}')
+                            a(href="#" onclick="$('#code_debug_codepen').submit();") CodePen
 
-                        form#code_debug_codepen(action="http://codepen.io/pen/define" method="POST" target="_blank")
-                          input(type="hidden" name="data" value='{"html": "{{ prepareHtmlForCodepen(widget.widget_code) }}"}')
-                          a(href="#" onclick="$('#code_debug_codepen').submit();") CodePen
-
-                      input(type="hidden" name="data" value='{"title": "New Pen!", "html": "{{ prepareHtmlForCodepen(widget.widget_code) }}"}')
                   .widget-code-wrap
                     .sample.shadow-z-2.prettyprint#widget_code
                       | {{ widget.widget_code }}
