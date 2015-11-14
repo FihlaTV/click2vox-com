@@ -20,7 +20,15 @@ block content
 
     var eventHandlers = {
       'localMediaVolume': function (e) {
-        console.log('localMediaVolume ' + e.localVolume);
+        //- console.log('Microphone Volume ->' + e.localVolume);
+        if(voxbone.WebRTC.isMuted) return;
+
+        $("#microphone em").removeClass();
+        if (e.localVolume > 0.01) $("#mic1").addClass('on');
+        if (e.localVolume > 0.05) $("#mic2").addClass('on');
+        if (e.localVolume > 0.10) $("#mic3").addClass('on');
+        if (e.localVolume > 0.20) $("#mic4").addClass('on');
+        if (e.localVolume > 0.30) $("#mic5").addClass('peak');
       },
       'progress': function (e) {
         console.log('Calling ' + number);

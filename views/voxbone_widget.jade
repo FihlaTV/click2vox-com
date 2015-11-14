@@ -23,14 +23,22 @@ html(lang='en', ng-app="voxboneApp")
 
       $(document).ready(function () {
         window.addEventListener('message', function(event) {
-          console.log(event.data);
+          //- console.log(event.data);
           send_voxbone_interaction(event.data);
         });
       });
 
       var eventHandlers = {
         'localMediaVolume': function (e) {
-          console.log('localMediaVolume ' + e.localVolume);
+          //- console.log('Microphone Volume -> ' + e.localVolume);
+          if(voxbone.WebRTC.isMuted) return;
+
+          if (e.localVolume > 0.30) parent.postMessage("setMicVolume5","*")
+          else if (e.localVolume > 0.20) parent.postMessage("setMicVolume4","*")
+          else if (e.localVolume > 0.10) parent.postMessage("setMicVolume3","*")
+          else if (e.localVolume > 0.05) parent.postMessage("setMicVolume2","*")
+          else if (e.localVolume > 0.01) parent.postMessage("setMicVolume1","*")
+          else if (e.localVolume <= 0.01) parent.postMessage("setMicVolume0","*")
         },
         'progress': function (e) {
           console.log('Calling ' + number);
