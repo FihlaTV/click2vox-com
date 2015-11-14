@@ -64,7 +64,7 @@ block content
 
         $scope.master = {
           dial_pad: true,
-          button_style: 'btn-style-b',
+          button_style: 'style-b',
           background_style: 'dark',
           widget_code: 'Click on Regenerate Code!'
         };
@@ -207,14 +207,14 @@ block content
                     input.form-control(type="text", name="button_label", ng-model="widget.button_label" value="Call Sales" placeholder="i.e. Call Sales")
                   .form-group
                     label Button Style:
-                    button.btn-style-a(ng-click="widget.button_style = 'btn-style-a'") #[span {{ widget.button_label || 'Call Sales' }}]
-                    button.btn-style-b(ng-click="widget.button_style = 'btn-style-b'") #[span {{ widget.button_label || 'Call Sales' }}]
+                    button.btn-style-a(ng-click="widget.button_style = 'style-a'") #[span {{ widget.button_label || 'Call Sales' }}]
+                    button.btn-style-b(ng-click="widget.button_style = 'style-b'") #[span {{ widget.button_label || 'Call Sales' }}]
               span.title Call Configuration
               form
                 .boxPanel
                   .form-group
                     label.control-label SIP URI #[span.badge ?]
-                    input.form-control(required type="email", name="sip_uri", ng-model="widget.sip_uri" data-value="SIP: echotest@voxout.voxbone.com" placeholder="i.e. SIP: echotest@voxout.voxbone.com")
+                    input.form-control(required type="email", name="sip_uri", ng-model="widget.sip_uri" data-value="SIP: echotest@voxout.voxbone.com" placeholder="i.e. SIP: echo@ivrs")
                     div(ng-show="widget.sip_uri.$error.required") SIP URI is required
                   .panel.panel-default
                     .panel-heading
