@@ -16,17 +16,21 @@ $(document).ready(function () {
             <a href="#"> \
               <i class="vw-icon vx-icon-mic"></i> \
               <div id="microphone" class="int-sensor"> \
-                <em class="on"></em> \
-                <em class="on"></em> \
-                <em class="on"></em> \
+                <em id="mic5"></em> \
+                <em id="mic4"></em> \
+                <em id="mic3"></em> \
+                <em id="mic2"></em> \
+                <em id="mic1"></em> \
               </div> \
             </a> \
             <a href="#" class="hidden"> \
               <i class="vw-icon vx-icon-vol"></i> \
               <div id="volume" class="int-sensor"> \
-                <em class="on"></em> \
-                <em class="on"></em> \
-                <em class="on"></em> \
+                <em id="vol5"></em> \
+                <em id="vol4"></em> \
+                <em id="vol3"></em> \
+                <em id="vol2"></em> \
+                <em id="vol1"></em> \
               </div> \
             </a> \
             <a href="#" id="dialpad"><i class="vw-icon vx-icon-pad"></i></a> \
@@ -59,7 +63,23 @@ $(document).ready(function () {
 
   window.addEventListener('message', function(event) {
     // console.log(event.data);
-    switch(event.data) {
+
+    var message = event.data;
+
+    if (typeof message === 'string' && message.substring(0,12) == 'setMicVolume') {
+      // console.log("Vol -> " + message.substring(12,13));
+      var vol = parseInt(message.substring(12,13));
+
+      $("#microphone em").removeClass();
+      if (vol > 0) $("#mic1").addClass('on');
+      if (vol > 1) $("#mic2").addClass('on');
+      if (vol > 2) $("#mic3").addClass('on');
+      if (vol > 3) $("#mic4").addClass('on');
+      if (vol > 4) $("#mic5").addClass('peak');
+      return;
+    };
+
+    switch(message) {
       case 'openWidgetWithoutDialPad':
         $("#dialpad").addClass('hidden');
         $(".vox-widget-wrapper").removeClass('hidden');
@@ -74,7 +94,7 @@ $(document).ready(function () {
         $(".vox-widget-wrapper #vw-message")[0].innerHTML = 'Browser does NOT support WebRTC!';
         $(".vox-widget-wrapper").removeClass('hidden');
         break;
-      };
+    };
   });
 
   function is_iframe() {

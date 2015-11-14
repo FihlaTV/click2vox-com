@@ -163,8 +163,8 @@ a {
 }
 .vox-widget-wrapper .int-sensor em{
   display: block;
-  width: 6px;
-  height: 6px;
+  width: 3px;
+  height: 3px;
   margin: 0 0 2px 0;
   background: #ffffff;
   -webkit-border-radius: 3px;
@@ -175,7 +175,7 @@ a {
   background: #00ff2a;
 }
 
-.vox-widget-wrapper .int-sensor em.off{
+.vox-widget-wrapper .int-sensor em.off, .vox-widget-wrapper .int-sensor em.peak {
   background: #ff002a;
 }
 
