@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var bcrypt = require('bcrypt-nodejs');
 
 var widgetSchema = new Schema({
   button_label: String,
@@ -18,6 +17,13 @@ var widgetSchema = new Schema({
   updated_at: Date
 });
 
+widgetSchema.pre('save', function(next){
+  now = new Date();
+  this.updated_at = now;
+  if (!this.created_at) this.created_at = now;
+  next();
+});
+
 widgetSchema.methods.generateHtmlCode = function() {
   var app_url = process.env.APP_URL ? process.env.APP_URL : 'http://widget.voxbone.com';
 
@@ -26,7 +32,9 @@ widgetSchema.methods.generateHtmlCode = function() {
 
   html += '<link rel="stylesheet" href="' + app_url + '/stylesheets/root.css">';
   html += '<link rel="stylesheet" href="' + app_url + '/stylesheets/widget.css">';
+  html += '<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/raty/2.7.0/jquery.raty.css">';
   html += '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" type="application/javascript"></script>';
+  html += '<script src="//cdnjs.cloudflare.com/ajax/libs/raty/2.7.0/jquery.raty.js" type="application/javascript"></script>';
   html += '<script src="' + app_url + '/javascripts/widget.js" type="application/javascript"></script>';
   html += '<script src="' + app_url + '/javascripts/webrtc_voxbone_tools.js" type="application/javascript"></script>';
 

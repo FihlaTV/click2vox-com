@@ -21,16 +21,29 @@ html(lang='en', ng-app="voxboneApp")
 
       var number = '13072787231'; //16092975366
 
-      $(document).ready(function () {
-        window.addEventListener('message', function(event) {
-          console.log(event.data);
-          send_voxbone_interaction(event.data);
-        });
-      });
+      //- $(document).ready(function () {
+      //-   window.addEventListener('message', function(event) {
+      //-     //- console.log(event.data);
+      //-     var message = event.data;
+
+      //-     if (message.action &&  message.action == 'rate')
+      //-       alert('rate !')
+      //-     else
+      //-       send_voxbone_interaction(event.data);
+      //-   });
+      //- });
 
       var eventHandlers = {
         'localMediaVolume': function (e) {
-          console.log('localMediaVolume ' + e.localVolume);
+          //- console.log('Microphone Volume -> ' + e.localVolume);
+          if(voxbone.WebRTC.isMuted) return;
+
+          if (e.localVolume > 0.30) parent.postMessage("setMicVolume5","*")
+          else if (e.localVolume > 0.20) parent.postMessage("setMicVolume4","*")
+          else if (e.localVolume > 0.10) parent.postMessage("setMicVolume3","*")
+          else if (e.localVolume > 0.05) parent.postMessage("setMicVolume2","*")
+          else if (e.localVolume > 0.01) parent.postMessage("setMicVolume1","*")
+          else if (e.localVolume <= 0.01) parent.postMessage("setMicVolume0","*")
         },
         'progress': function (e) {
           console.log('Calling ' + number);
@@ -73,6 +86,38 @@ html(lang='en', ng-app="voxboneApp")
             voxbone.WebRTC.init(#{voxrtc_config});
           };
 
+
+          $window.addEventListener('message', function(event) {
+            //- console.log(event.data);
+            var message = event.data;
+
+            if (message.action &&  message.action == 'rate')
+              $scope.sendRate(message.data.rate, message.data.comment);
+            else
+              send_voxbone_interaction(event.data);
+          });
+
+          $scope.sendRate = function (rate, comment) {
+            var req = {
+              method: 'POST',
+              url: '/rating',
+              headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+              },
+              data: {
+                rate: rate,
+                comment: comment
+              }
+            };
+
+            $http(req)
+              .then(function successCallback(response) {
+                console.log("rating sent!");
+              }, function errorCallback() {
+                console.log("rating sending error callback");
+              });
+          };
+
           $scope.makeCall = function () {
             var supported = voxbone.WebRTC.isWebRTCSupported();
 
@@ -107,7 +152,9 @@ html(lang='en', ng-app="voxboneApp")
   body
     .main
       .body(ng-controller="VoxboneWidgetController")
-        .widget-box
-          button.mdi-communication-call#launch_call(ng-click="makeCall()" class="#{ the_widget.button_style || 'btn-style-b' }") #[span #{ the_widget.button_label || 'Call Now!' }]
-          .widget-footer
+        .widget-box(class="#{ the_widget.button_style || 'style-b' }")
+          button.btn-style.mdi-communication-call#launch_call(ng-click="makeCall()") #[span #{ the_widget.button_label || 'Call Now!' }]
+          .widget-footer-left
+            a(href="https://test.webrtc.org/" target="_blank") Test your setup
+          .widget-footer-right
             a(href="https://voxbone.com" target="_blank") powered by:

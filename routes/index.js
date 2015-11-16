@@ -1,15 +1,28 @@
+var title = 'Voxbone Demo v0.7';
+
 var express = require('express');
 var router = express.Router();
+
+// - Require Models
 var Account = require('../models/account');
 var Widget = require('../models/widget');
+var Rating = require('../models/rating');
+var ObjectId = require('mongoose').Types.ObjectId;
+
 var async = require('async');
-var title = 'Voxbone Demo v0.6';
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
-var ObjectId = require('mongoose').Types.ObjectId;
 var request = require('request');
 
 module.exports = function(passport, voxbone){
+
+  // Redirects if not HTTPS
+  router.get('*',function(req,res,next){
+    if(process.env.FORCE_HTTPS == 'true' && process.env.APP_URL && req.headers['x-forwarded-proto'] != 'https')
+      res.redirect(process.env.APP_URL + req.url);
+    else
+      next();
+  })
 
   router.get('/login', function(req, res, next){
     res.render('login', { title: title, email: req.query.email, account: accountLoggedIn(req), message: req.flash('loginMessage') });
@@ -237,7 +250,65 @@ module.exports = function(passport, voxbone){
     });
   });
 
+  router.post('/voxbone_widget', function(req, res, next){
+    var formData = req.body;
+    var result = { message: "", errors: null, redirect: '/voxbone_widget' }
+
+    var a_widget = new Widget({
+      button_label: req.body.button_label,
+      button_style: req.body.button_style,
+      background_style: req.body.background_style,
+      sip_uri: req.body.sip_uri,
+      caller_id: req.body.caller_id,
+      context: req.body.context,
+      dial_pad: req.body.dial_pad,
+      send_digits: req.body.send_digits,
+      hide_widget: req.body.hide_widget,
+      link_button_to_a_page: req.body.link_button_to_a_page,
+      show_text_html: req.body.show_text_html
+    });
+
+    a_widget.save(function(err) {
+      if (err) throw err;
+      result.widget_code = a_widget.generateHtmlCode();
+      result.widget_id = a_widget.id;
+      res.status(200).json(result);
+    });
+  });
+
+  router.post('/rating', function(req, res, next){
+    var formData = req.body;
+    var result = { message: "", errors: null }
+
+    var a_rating = new Rating({
+      rate: req.body.rate,
+      comment: req.body.comment
+    });
+
+    a_rating.save(function(err) {
+      if (err) {
+        result.errors = err;
+        res.status(500).json(result);
+      } else {
+        res.status(200).json(result);
+      }
+    });
+  });
+
+  function isLoggedIn(req, res, next) {
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated())
+      return next();
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+  }
+
+  function accountLoggedIn(req) {
+    return req.isAuthenticated();
+  }
+
   router.post('/sip_provisioning', function(req, res, next){
+    var voice_uri_id;
     async.waterfall([
       function(done) {
         //step 1 Find the user and their voice uri id
@@ -246,7 +317,7 @@ module.exports = function(passport, voxbone){
         });
       },
       function(account, done){
-        var voice_uri_id = account.voice_uri_id;
+        voice_uri_id = account.voiceUriID;
         //step 1a Create the voice uri or just link the SIP URI provided with the existing voice_uri_id
         var put_data = {
           "voiceUri" : {
@@ -272,7 +343,7 @@ module.exports = function(passport, voxbone){
           function(err, response, body){
             var response_body = JSON.parse(body);
             if(response_body['httpStatusCode']){
-              console.log("Could not create the voice uri for user: "+req.user.email+" using SIP URI: "+ req.body.sip_uri + " and voice URI id: " + voice_uri_id);
+              console.log("Something went wrong creating or updating the voice uri for user: "+req.user.email+" using SIP URI: "+ req.body.sip_uri + " and voice URI id: " + voice_uri_id);
               console.log(body);
               done({ message: "could not create the voice uri or link the SIP URI to existing voice uri: " + voice_uri_id + "." });
             }else{
@@ -281,7 +352,7 @@ module.exports = function(passport, voxbone){
                 var post_data = { "didIds" : [ account.didID ], "voiceUriId" : voice_uri_id };
                 return done(err, post_data, account.didID);
               }
-              voice_uri_id = response_body['voiceUri']['voiceUriId'];
+              voice_uri_id = voice_uri_id || response_body['voiceUri']['voiceUriId'];
               var post_data = { "didIds" : [ account.didID ], "voiceUriId" : voice_uri_id };
               account.voiceUriID = voice_uri_id;
               account.save(function(err){
