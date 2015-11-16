@@ -17,6 +17,13 @@ var widgetSchema = new Schema({
   updated_at: Date
 });
 
+widgetSchema.pre('save', function(next){
+  now = new Date();
+  this.updated_at = now;
+  if (!this.created_at) this.created_at = now;
+  next();
+});
+
 widgetSchema.methods.generateHtmlCode = function() {
   var app_url = process.env.APP_URL ? process.env.APP_URL : 'http://widget.voxbone.com';
 
