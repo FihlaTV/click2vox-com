@@ -1,10 +1,10 @@
 function send_voxbone_interaction(message){
+  if (!voxbone.WebRTC.rtcSession.isEstablished())
+    return;
+
   switch(message) {
     case 'hang_up':
       voxbone.WebRTC.hangup();
-      break;
-    case 'volume-mute':
-      // TODO: implement
       break;
     case 'microphone-mute':
       if (voxbone.WebRTC.isMuted) {
