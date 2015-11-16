@@ -154,5 +154,7 @@ html(lang='en', ng-app="voxboneApp")
       .body(ng-controller="VoxboneWidgetController")
         .widget-box(class="#{ the_widget.button_style || 'style-b' }")
           button.btn-style.mdi-communication-call#launch_call(ng-click="makeCall()") #[span #{ the_widget.button_label || 'Call Now!' }]
-          .widget-footer
+          .widget-footer-left
+            a(href="https://test.webrtc.org/" target="_blank") Test your setup
+          .widget-footer-right
             a(href="https://voxbone.com" target="_blank") powered by:
