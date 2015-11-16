@@ -1,4 +1,4 @@
-var title = 'Voxbone Demo v0.7';
+var title = 'Voxbone Demo v0.8';
 
 var express = require('express');
 var router = express.Router();
