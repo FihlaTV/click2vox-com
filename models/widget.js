@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var widgetSchema = new Schema({
+  _account : { type: Schema.Types.ObjectId, ref: 'Account' },
   button_label: String,
   button_style: String,
   background_style: String,

@@ -232,10 +232,10 @@ module.exports = function(passport, voxbone){
     });
   });
 
-  router.get('/voxbone_widget/:token', function (req, res) {
+  router.get('/voxbone_widget/:id', function (req, res) {
     voxrtc_config = voxbone.generate();
 
-    var searchFor = { _id: new ObjectId(req.params.token) };
+    var searchFor = { _id: new ObjectId(req.params.id) };
 
     Widget.findOne(searchFor, function(err, the_widget) {
 
@@ -255,6 +255,7 @@ module.exports = function(passport, voxbone){
     var result = { message: "", errors: null, redirect: '/voxbone_widget' }
 
     var a_widget = new Widget({
+      _account: req.user._id,
       button_label: req.body.button_label,
       button_style: req.body.button_style,
       background_style: req.body.background_style,
@@ -282,18 +283,24 @@ module.exports = function(passport, voxbone){
     var formData = req.body;
     var result = { message: "", errors: null }
 
-    var a_rating = new Rating({
-      rate: req.body.rate,
-      comment: req.body.comment
-    });
+    var searchFor = { _id: new ObjectId(req.body.token) };
 
-    a_rating.save(function(err) {
-      if (err) {
-        result.errors = err;
-        res.status(500).json(result);
-      } else {
-        res.status(200).json(result);
-      }
+    Widget.findOne(searchFor, function(err, the_widget) {
+
+      var a_rating = new Rating({
+        rate: req.body.rate,
+        comment: req.body.comment,
+        _widget: the_widget._id
+      });
+
+      a_rating.save(function(err) {
+        if (err) {
+          result.errors = err;
+          res.status(500).json(result);
+        } else {
+          res.status(200).json(result);
+        }
+      });
     });
   });
 
