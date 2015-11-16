@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var ratingSchema = new Schema({
+  _widget : { type: Schema.Types.ObjectId, ref: 'Widget' },
   rate: { type: Number, required: true, min: 1, max: 5 },
   comment: String,
   created_at: Date,
