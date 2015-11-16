@@ -250,8 +250,9 @@ block content
                   .form-group
                     label.control-label SIP URI #[span.badge ?]
                     input.form-control(required type="email", id="sip_uri", name="sip_uri", ng-model="widget.sip_uri", ng-pattern="/^[^@]+@[^@]+$/", ng-blur="sip_provisioning(widget_form)", placeholder="i.e. SIP: echo@ivrs")
-                    div(ng-show="widget_form.sip_uri.$error.required") SIP URI is required
-                    div(ng-show="widget_form.sip_uri.$error.pattern") SIP URI must be valid
+                    div(ng-show="widget_form.sip_uri.$touched")
+                      div(ng-show="widget_form.sip_uri.$error.required") SIP URI is required
+                      div(ng-show="widget_form.sip_uri.$error.pattern") SIP URI must be valid
                   .panel.panel-default
                     .panel-heading
                       a.collapsed.title-toggle(data-toggle="collapse",data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
