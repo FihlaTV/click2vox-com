@@ -117,6 +117,19 @@ a {
   float: left;
   height: 40px;
 }
+
+.vox-widget-wrapper .vw-body .vw-rating .vw-question{
+  padding-bottom: 20px;
+}
+.vox-widget-wrapper .vw-body .vw-rating .vw-message{
+  padding-bottom: 20px;
+}
+.vox-widget-wrapper .vw-body .vw-rating .vw-stars{
+  padding-bottom: 20px;
+}
+.vox-widget-wrapper .vw-body .vw-rating .vw-button{
+}
+
 .vox-widget-wrapper .vw-body .vw-btn-group a{
   position: relative;
   background: #9b9b9b;

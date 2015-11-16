@@ -21,12 +21,17 @@ html(lang='en', ng-app="voxboneApp")
 
       var number = '13072787231'; //16092975366
 
-      $(document).ready(function () {
-        window.addEventListener('message', function(event) {
-          //- console.log(event.data);
-          send_voxbone_interaction(event.data);
-        });
-      });
+      //- $(document).ready(function () {
+      //-   window.addEventListener('message', function(event) {
+      //-     //- console.log(event.data);
+      //-     var message = event.data;
+
+      //-     if (message.action &&  message.action == 'rate')
+      //-       alert('rate !')
+      //-     else
+      //-       send_voxbone_interaction(event.data);
+      //-   });
+      //- });
 
       var eventHandlers = {
         'localMediaVolume': function (e) {
@@ -79,6 +84,38 @@ html(lang='en', ng-app="voxboneApp")
             }
 
             voxbone.WebRTC.init(#{voxrtc_config});
+          };
+
+
+          $window.addEventListener('message', function(event) {
+            //- console.log(event.data);
+            var message = event.data;
+
+            if (message.action &&  message.action == 'rate')
+              $scope.sendRate(message.data.rate, message.data.comment);
+            else
+              send_voxbone_interaction(event.data);
+          });
+
+          $scope.sendRate = function (rate, comment) {
+            var req = {
+              method: 'POST',
+              url: '/rating',
+              headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+              },
+              data: {
+                rate: rate,
+                comment: comment
+              }
+            };
+
+            $http(req)
+              .then(function successCallback(response) {
+                console.log("rating sent!");
+              }, function errorCallback() {
+                console.log("rating sending error callback");
+              });
           };
 
           $scope.makeCall = function () {

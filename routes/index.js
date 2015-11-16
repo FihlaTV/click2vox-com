@@ -1,12 +1,17 @@
+var title = 'Voxbone Demo v0.7';
+
 var express = require('express');
 var router = express.Router();
+
+// - Require Models
 var Account = require('../models/account');
 var Widget = require('../models/widget');
+var Rating = require('../models/rating');
+var ObjectId = require('mongoose').Types.ObjectId;
+
 var async = require('async');
-var title = 'Voxbone Demo v0.6';
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
-var ObjectId = require('mongoose').Types.ObjectId;
 var request = require('request');
 
 module.exports = function(passport, voxbone){
@@ -262,6 +267,25 @@ module.exports = function(passport, voxbone){
       res.status(200).json(result);
 
       setdidID(req);
+    });
+  });
+
+  router.post('/rating', function(req, res, next){
+    var formData = req.body;
+    var result = { message: "", errors: null }
+
+    var a_rating = new Rating({
+      rate: req.body.rate,
+      comment: req.body.comment
+    });
+
+    a_rating.save(function(err) {
+      if (err) {
+        result.errors = err;
+        res.status(500).json(result);
+      } else {
+        res.status(200).json(result);
+      }
     });
   });
 
