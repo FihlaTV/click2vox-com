@@ -237,6 +237,96 @@ module.exports = function(passport, voxbone){
     });
   });
 
+  router.post('/sip_provisioning', function(req, res, next){
+    async.waterfall([
+      function(done) {
+        //step 1 Find the user and their voice uri id
+        Account.findOne({ email: req.user.email }, function(err, the_account){
+          done(err, the_account);
+        });
+      },
+      function(account, done){
+        var voice_uri_id = account.voice_uri_id;
+        //step 1a Create the voice uri or just link the SIP URI provided with the existing voice_uri_id
+        var put_data = {
+          "voiceUri" : {
+            "voiceUriId"       : voice_uri_id,
+            "backupUriId"      : null,
+            "voiceUriProtocol" : "SIP",
+            "uri"              : req.body.sip_uri || "echo@ivrs",
+            "description"      : "Voice URI for: " + req.user.email + " from promotional widget generator."
+          }
+        };
+
+        request.put("https://api.voxbone.com/ws-voxbone/services/rest/configuration/voiceuri",
+          { 'auth': {
+              'user' : process.env.VOXBONE_MARKETING_USERNAME,
+              'pass' : process.env.VOXBONE_MARKETING_PASSWORD
+            },
+            headers: {
+              'Content-type' : 'application/json',
+              'Accept'       : 'application/json'
+            },
+            body: JSON.stringify(put_data)
+          },
+          function(err, response, body){
+            var response_body = JSON.parse(body);
+            if(response_body['httpStatusCode']){
+              console.log("Could not create the voice uri for user: "+req.user.email+" using SIP URI: "+ req.body.sip_uri + " and voice URI id: " + voice_uri_id);
+              console.log(body);
+              done({ message: "could not create the voice uri or link the SIP URI to existing voice uri: " + voice_uri_id + "." });
+            }else{
+              //success, save the voice uri id in the account
+              if (voice_uri_id){
+                var post_data = { "didIds" : [ account.didID ], "voiceUriId" : voice_uri_id };
+                return done(err, post_data, account.didID);
+              }
+              voice_uri_id = response_body['voiceUri']['voiceUriId'];
+              var post_data = { "didIds" : [ account.didID ], "voiceUriId" : voice_uri_id };
+              account.voiceUriID = voice_uri_id;
+              account.save(function(err){
+                done(err, post_data, account.didID);
+              });
+            }
+          }
+        );
+      },
+      function(post_data, didID, done){
+        //step 2 link the voice uri id
+        request.post("https://api.voxbone.com/ws-voxbone/services/rest/configuration/configuration",
+            { 'auth': {
+                'user' : process.env.VOXBONE_MARKETING_USERNAME,
+                'pass' : process.env.VOXBONE_MARKETING_PASSWORD
+              },
+              headers: {
+                'Content-type' : 'application/json',
+                'Accept'       : 'application/json'
+              },
+              body: JSON.stringify(post_data)
+            },
+            function(err, response, body){
+              console.log(body);
+              done(err, didID);
+            }
+          );
+      }
+      ],
+      function(err, result){
+        var result = {message: "", errors: null};
+        if(err){
+          console.log("An error ocurred: ");
+          console.log(err);
+          result.errors = err;
+          return res.status(500).json(result);
+        }else{
+          console.log(result);
+          result.message = "Success";
+          return res.status(200).json(result);
+        }
+      }
+    );
+  });
+
   router.post('/voxbone_widget', function(req, res, next){
     var formData = req.body;
     var result = { message: "", errors: null, redirect: '/voxbone_widget' }
@@ -260,8 +350,6 @@ module.exports = function(passport, voxbone){
       result.widget_code = a_widget.generateHtmlCode();
       result.widget_id = a_widget.id;
       res.status(200).json(result);
-
-      setdidID(req);
     });
   });
 
@@ -275,90 +363,6 @@ module.exports = function(passport, voxbone){
 
   function accountLoggedIn(req) {
     return req.isAuthenticated();
-  }
-
-  function setdidID(req){
-    var put_data = {
-      "voiceUri" : {
-        "voiceUriId"       : null,
-        "backupUriId"      : null,
-        "voiceUriProtocol" : "SIP",
-        "uri"              : req.body.sip_uri || "echotest@voxout.voxbone.com",
-        "description"      : "First Test"
-      }
-    };
-    async.waterfall([
-      function(done) {
-        //step 1 Create the voice uri
-        request.put("https://api.voxbone.com/ws-voxbone/services/rest/configuration/voiceuri",
-          { 'auth': {
-              'user' : process.env.VOXBONE_MARKETING_USERNAME,
-              'pass' : process.env.VOXBONE_MARKETING_PASSWORD
-            },
-            headers: {
-              'Content-type' : 'application/json',
-              'Accept'       : 'application/json'
-            },
-            body: JSON.stringify(put_data)
-          },
-          function(err, response, body){
-            var response_body = JSON.parse(body);
-            if(response_body['httpStatusCode']){
-              console.log("Could not create the voice uri for user: "+req.user.email+" using SIP URI: "+ req.body.sip_uri);
-              console.log(body);
-              done({ message: 'could not create the voice uri.' });
-            }else{
-              //success, call next step
-              var voice_uri_id = response_body['voiceUri']['voiceUriId'];//199083
-              var didID = 5020354;//example from the list, may need to get it from the user's email?
-              var post_data = { "didIds" : [ didID ], "voiceUriId" : voice_uri_id };
-              done(err, post_data, didID);
-            }
-          }
-        );
-      },
-      function(post_data, didID, done){
-        //step 2 link the voice uri id
-        request.post("https://api.voxbone.com/ws-voxbone/services/rest/configuration/configuration",
-            { 'auth': {
-                'user' : process.env.VOXBONE_MARKETING_USERNAME,
-                'pass' : process.env.VOXBONE_MARKETING_PASSWORD
-              },
-              headers: {
-                'Content-type' : 'application/json',
-                'Accept'       : 'application/json'
-              },
-              body: JSON.stringify(post_data)
-            },
-            function(err, response, body){
-              console.log(body);
-              done(err, didID);
-            }
-          );
-      },
-      function(didID, done){
-        //step 3 link email with didID, first find the account
-        Account.findOne({ email: req.user.email }, function(err, the_account){
-          the_account.didID = didID;
-          done(err, the_account);
-        });
-      },
-      function(the_account, done){
-        the_account.save(function(err){
-          if(err) throw err;
-          done(null, "success");
-        });
-      }
-      ],
-      function(err, result){
-        if(err){
-          console.log("An error ocurred: ");
-          console.log(err);
-        }else{
-          console.log(result);
-        }
-      }
-    );
   }
 
   return router;

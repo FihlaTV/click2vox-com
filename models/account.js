@@ -6,13 +6,13 @@ var accountSchema = new Schema({
   email: { type: String, required: true, index: { unique: true } },
   password: String,
   temporary: { type: Boolean, default: true },
-  voxbone_password: String,
+  temporary_password: String,
   forgotten_pasword: String,
-  created_at: Date,
-  updated_at: Date,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
-  didID: Number
+  didID: Number,
+  did: Number,
+  voiceUriID: Number
 });
 
 accountSchema.methods.generateHash = function(password) {
