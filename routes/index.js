@@ -355,15 +355,16 @@ module.exports = function(passport, voxbone){
               done({ message: "could not create the voice uri or link the SIP URI to existing voice uri: " + voice_uri_id + "." });
             }else{
               //success, save the voice uri id in the account
+              var didID = account.didID || 5020391;
               if (voice_uri_id){
-                var post_data = { "didIds" : [ account.didID ], "voiceUriId" : voice_uri_id };
-                return done(err, post_data, account.didID);
+                var post_data = { "didIds" : [ didID ], "voiceUriId" : voice_uri_id };
+                return done(err, post_data, didID);
               }
               voice_uri_id = voice_uri_id || response_body['voiceUri']['voiceUriId'];
-              var post_data = { "didIds" : [ account.didID ], "voiceUriId" : voice_uri_id };
+              var post_data = { "didIds" : [ didID ], "voiceUriId" : voice_uri_id };
               account.voiceUriID = voice_uri_id;
               account.save(function(err){
-                done(err, post_data, account.didID);
+                done(err, post_data, didID);
               });
             }
           }
