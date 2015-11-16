@@ -266,7 +266,9 @@ block content
                 .prev-view.light
                   .widget-box.style-b
                     button.btn-style.mdi-communication-call#launch_call(ng-click="makeCall()") #[span {{widget.button_label || 'Call Sales'}}]
-                    .widget-footer
+                    .widget-footer-left
+                      a(href="https://test.webrtc.org/" target="_blank") Test your setup
+                    .widget-footer-right
                       a(href="https://voxbone.com" target="_blank") powered by:
                   .togle-bg
                     a.dark(href="javascript:void(0)" ng-click="widget.background_style = 'dark'")
