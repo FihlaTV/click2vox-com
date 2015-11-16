@@ -274,8 +274,6 @@ module.exports = function(passport, voxbone){
       result.widget_code = a_widget.generateHtmlCode();
       result.widget_id = a_widget.id;
       res.status(200).json(result);
-
-      setdidID(req);
     });
   });
 
@@ -316,19 +314,28 @@ module.exports = function(passport, voxbone){
     return req.isAuthenticated();
   }
 
-  function setdidID(req){
-    var put_data = {
-      "voiceUri" : {
-        "voiceUriId"       : null,
-        "backupUriId"      : null,
-        "voiceUriProtocol" : "SIP",
-        "uri"              : req.body.sip_uri || "echotest@voxout.voxbone.com",
-        "description"      : "First Test"
-      }
-    };
+  router.post('/sip_provisioning', function(req, res, next){
+    var voice_uri_id;
     async.waterfall([
       function(done) {
-        //step 1 Create the voice uri
+        //step 1 Find the user and their voice uri id
+        Account.findOne({ email: req.user.email }, function(err, the_account){
+          done(err, the_account);
+        });
+      },
+      function(account, done){
+        voice_uri_id = account.voiceUriID;
+        //step 1a Create the voice uri or just link the SIP URI provided with the existing voice_uri_id
+        var put_data = {
+          "voiceUri" : {
+            "voiceUriId"       : voice_uri_id,
+            "backupUriId"      : null,
+            "voiceUriProtocol" : "SIP",
+            "uri"              : req.body.sip_uri || "echo@ivrs",
+            "description"      : "Voice URI for: " + req.user.email + " from promotional widget generator."
+          }
+        };
+
         request.put("https://api.voxbone.com/ws-voxbone/services/rest/configuration/voiceuri",
           { 'auth': {
               'user' : process.env.VOXBONE_MARKETING_USERNAME,
@@ -343,15 +350,21 @@ module.exports = function(passport, voxbone){
           function(err, response, body){
             var response_body = JSON.parse(body);
             if(response_body['httpStatusCode']){
-              console.log("Could not create the voice uri for user: "+req.user.email+" using SIP URI: "+ req.body.sip_uri);
+              console.log("Something went wrong creating or updating the voice uri for user: "+req.user.email+" using SIP URI: "+ req.body.sip_uri + " and voice URI id: " + voice_uri_id);
               console.log(body);
-              done({ message: 'could not create the voice uri.' });
+              done({ message: "could not create the voice uri or link the SIP URI to existing voice uri: " + voice_uri_id + "." });
             }else{
-              //success, call next step
-              var voice_uri_id = response_body['voiceUri']['voiceUriId'];//199083
-              var didID = 5020354;//example from the list, may need to get it from the user's email?
-              var post_data = { "didIds" : [ didID ], "voiceUriId" : voice_uri_id };
-              done(err, post_data, didID);
+              //success, save the voice uri id in the account
+              if (voice_uri_id){
+                var post_data = { "didIds" : [ account.didID ], "voiceUriId" : voice_uri_id };
+                return done(err, post_data, account.didID);
+              }
+              voice_uri_id = voice_uri_id || response_body['voiceUri']['voiceUriId'];
+              var post_data = { "didIds" : [ account.didID ], "voiceUriId" : voice_uri_id };
+              account.voiceUriID = voice_uri_id;
+              account.save(function(err){
+                done(err, post_data, account.didID);
+              });
             }
           }
         );
@@ -374,30 +387,60 @@ module.exports = function(passport, voxbone){
               done(err, didID);
             }
           );
-      },
-      function(didID, done){
-        //step 3 link email with didID, first find the account
-        Account.findOne({ email: req.user.email }, function(err, the_account){
-          the_account.didID = didID;
-          done(err, the_account);
-        });
-      },
-      function(the_account, done){
-        the_account.save(function(err){
-          if(err) throw err;
-          done(null, "success");
-        });
       }
       ],
       function(err, result){
+        var result = {message: "", errors: null};
         if(err){
           console.log("An error ocurred: ");
           console.log(err);
+          result.errors = err;
+          return res.status(500).json(result);
         }else{
           console.log(result);
+          result.message = "Success";
+          return res.status(200).json(result);
         }
       }
     );
+  });
+
+  router.post('/voxbone_widget', function(req, res, next){
+    var formData = req.body;
+    var result = { message: "", errors: null, redirect: '/voxbone_widget' }
+
+    var a_widget = new Widget({
+      button_label: req.body.button_label,
+      button_style: req.body.button_style,
+      background_style: req.body.background_style,
+      sip_uri: req.body.sip_uri,
+      caller_id: req.body.caller_id,
+      context: req.body.context,
+      dial_pad: req.body.dial_pad,
+      send_digits: req.body.send_digits,
+      hide_widget: req.body.hide_widget,
+      link_button_to_a_page: req.body.link_button_to_a_page,
+      show_text_html: req.body.show_text_html
+    });
+
+    a_widget.save(function(err) {
+      if (err) throw err;
+      result.widget_code = a_widget.generateHtmlCode();
+      result.widget_id = a_widget.id;
+      res.status(200).json(result);
+    });
+  });
+
+  function isLoggedIn(req, res, next) {
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated())
+      return next();
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+  }
+
+  function accountLoggedIn(req) {
+    return req.isAuthenticated();
   }
 
   return router;

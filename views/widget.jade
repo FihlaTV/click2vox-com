@@ -70,65 +70,65 @@ block content
 
     app.controller('WidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
 
-        $scope.master = {
-          dial_pad: true,
-          button_style: 'style-b',
-          background_style: 'dark',
-          widget_code: 'Click on Generate Code!'
-        };
+      $scope.master = {
+        dial_pad: true,
+        button_style: 'style-b',
+        background_style: 'dark',
+        widget_code: 'Click on Generate Code!'
+      };
 
-        $scope.prepareHtmlForCodepen = function(data){
-          return data.replace(/"/g, "'");
-        };
+      $scope.prepareHtmlForCodepen = function(data){
+        return data.replace(/"/g, "'");
+      };
 
-        $scope.reset = function(form){
-          if(form){
-            form.$setPristine();
-            form.$setUntouched();
-          }
+      $scope.reset = function(form){
+        if(form){
+          form.$setPristine();
+          form.$setUntouched();
+        }
 
-          $scope.widget = angular.copy($scope.master);
-        };
+        $scope.widget = angular.copy($scope.master);
+      };
 
-        $scope.init = function () {
-          voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
-          voxbone.WebRTC.customEventHandler = eventHandlers;
-          voxbone.WebRTC.init(#{voxrtc_config});
-        };
+      $scope.init = function () {
+        voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
+        voxbone.WebRTC.customEventHandler = eventHandlers;
+        voxbone.WebRTC.init(#{voxrtc_config});
+      };
 
-        $scope.makeCall = function () {
-          var supported = voxbone.WebRTC.isWebRTCSupported();
+      $scope.makeCall = function () {
+        var supported = voxbone.WebRTC.isWebRTCSupported();
 
-          if(supported == false){
-            console.log("WebRTC is NOT supported!");
+        if(supported == false){
+          console.log("WebRTC is NOT supported!");
 
-            if($scope.widget.hide_widget) return;
-            else if($scope.widget.link_button_to_a_page_value)
-              $window.open($scope.widget.link_button_to_a_page_value,'_blank')
-            else if($scope.widget.show_text_html_value) {
-              $(".vox-widget-wrapper .vw-body").addClass('hidden');
-              $(".vox-widget-wrapper #full-screen").addClass('hidden');
-              $(".vox-widget-wrapper #vw-message").removeClass('hidden');
-              $(".vox-widget-wrapper #vw-message")[0].innerHTML = $scope.widget.show_text_html_value;
-              $(".vox-widget-wrapper").removeClass('hidden');
-            }
-          } else{
+          if($scope.widget.hide_widget) return;
+          else if($scope.widget.link_button_to_a_page_value)
+            $window.open($scope.widget.link_button_to_a_page_value,'_blank')
+          else if($scope.widget.show_text_html_value) {
+            $(".vox-widget-wrapper .vw-body").addClass('hidden');
+            $(".vox-widget-wrapper #full-screen").addClass('hidden');
+            $(".vox-widget-wrapper #vw-message").removeClass('hidden');
+            $(".vox-widget-wrapper #vw-message")[0].innerHTML = $scope.widget.show_text_html_value;
             $(".vox-widget-wrapper").removeClass('hidden');
-            var number = '13072787231'; //16092975366
-            voxbone.WebRTC.call(number);
-            window.onbeforeunload = function(e){
-              voxbone.WebRTC.rtcSession.terminate();
-            }
           }
-        };
+        } else{
+          $(".vox-widget-wrapper").removeClass('hidden');
+          var number = '13072787231'; //16092975366
+          voxbone.WebRTC.call(number);
+          window.onbeforeunload = function(e){
+            voxbone.WebRTC.rtcSession.terminate();
+          }
+        }
+      };
 
-        $scope.reset();
-        $scope.init();
+      $scope.reset();
+      $scope.init();
 
-        $scope.widget.generateOutputCode = function(){
-          console.log("--> Generating Output Code...");
-          var req = {
-            method: 'POST',
+      $scope.widget.generateOutputCode = function(){
+        console.log("--> Generating Output Code...");
+        var req = {
+          method: 'POST',
             url: '/voxbone_widget',
             headers: {
               'Content-Type': 'application/json; charset=utf-8'
@@ -153,11 +153,37 @@ block content
               //- console.log(response.data);
               $('#generate-output-code')[0].text = "Regenerate Code";
               $scope.widget.widget_code = response.data.widget_code;
+          }, function errorCallback(){
+            console.log("entered error callback");
+          });
+      }
+      
+      $scope.sip_provisioning = function(form) {
+        if (form.$valid) {
+          var req = {
+          method: 'POST',
+          url: '/sip_provisioning',
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+          },
+          data: {
+            sip_uri: $scope.widget.sip_uri
+          }
+        };
 
-            }, function errorCallback(){
-              console.log("entered error callback");
-            });
+        $http(req)
+          .then(function successCallback(response){
+            console.log(response.data);
+            console.log("success!");
+            //enable buttons
+          }, function errorCallback(response){
+            console.log("Something went wrong: ");
+            console.log(response.data);
+          });
+        }else{
+          console.log("SIP URI not valid");
         }
+      }
     }]);
 
     $(document).ready(function () {
@@ -219,12 +245,14 @@ block content
                     button.btn-style-a(ng-click="widget.button_style = 'style-a'") #[span {{ widget.button_label || 'Call Sales' }}]
                     button.btn-style-b(ng-click="widget.button_style = 'style-b'") #[span {{ widget.button_label || 'Call Sales' }}]
               span.title Call Configuration
-              form
+              form#widget_form(name="widget_form", novalidate)
                 .boxPanel
                   .form-group
                     label.control-label SIP URI #[span.badge ?]
-                    input.form-control(required type="email", name="sip_uri", ng-model="widget.sip_uri" data-value="SIP: echotest@voxout.voxbone.com" placeholder="i.e. SIP: echo@ivrs")
-                    div(ng-show="widget.sip_uri.$error.required") SIP URI is required
+                    input.form-control(required type="email", id="sip_uri", name="sip_uri", ng-model="widget.sip_uri", ng-pattern="/^[^@]+@[^@]+$/", ng-blur="sip_provisioning(widget_form)", placeholder="i.e. SIP: echo@ivrs")
+                    div(ng-show="widget_form.sip_uri.$touched")
+                      div(ng-show="widget_form.sip_uri.$error.required") SIP URI is required
+                      div(ng-show="widget_form.sip_uri.$error.pattern") SIP URI must be valid
                   .panel.panel-default
                     .panel-heading
                       a.collapsed.title-toggle(data-toggle="collapse",data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
