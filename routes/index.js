@@ -16,6 +16,14 @@ var request = require('request');
 
 module.exports = function(passport, voxbone){
 
+  // Redirects if not HTTPS
+  router.get('*',function(req,res,next){
+    if(process.env.FORCE_HTTPS == 'true' && process.env.APP_URL && req.headers['x-forwarded-proto'] != 'https')
+      res.redirect(process.env.APP_URL + req.url);
+    else
+      next();
+  })
+
   router.get('/login', function(req, res, next){
     res.render('login', { title: title, email: req.query.email, account: accountLoggedIn(req), message: req.flash('loginMessage') });
   });

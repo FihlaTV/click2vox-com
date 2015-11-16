@@ -13,6 +13,7 @@
 ### Environment Variables
 
 * APP_URL
+* FORCE_HTTPS
 * SECRET_KEY (Defaults to 'xXxXxXxXxX')
 * MONGOLAB_URI (Defaults to 'mongodb://localhost/voxboneDB')
 * VOXBONE_USERNAME
