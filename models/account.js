@@ -15,6 +15,13 @@ var accountSchema = new Schema({
   didID: Number
 });
 
+accountSchema.pre('save', function(next){
+  now = new Date();
+  this.updated_at = now;
+  if (!this.created_at) this.created_at = now;
+  next();
+});
+
 accountSchema.methods.generateHash = function(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
