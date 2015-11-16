@@ -74,7 +74,7 @@ block content
           dial_pad: true,
           button_style: 'style-b',
           background_style: 'dark',
-          widget_code: 'Click on Regenerate Code!'
+          widget_code: 'Click on Generate Code!'
         };
 
         $scope.prepareHtmlForCodepen = function(data){
@@ -151,6 +151,7 @@ block content
           $http(req)
             .then(function successCallback(response){
               //- console.log(response.data);
+              $('#generate-output-code')[0].text = "Regenerate Code";
               $scope.widget.widget_code = response.data.widget_code;
 
             }, function errorCallback(){
@@ -295,6 +296,6 @@ block content
                       | {{ widget.widget_code }}
                     .codebox-actions
                       #[a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy]
-                      #[a(href="#", id="generate-output-code", ng-click='widget.generateOutputCode()') Regenerate Code]
+                      #[a(href="#", id="generate-output-code", ng-click='widget.generateOutputCode()') Generate Code]
   script(src="/javascripts/widget.js",type="application/javascript")
 
