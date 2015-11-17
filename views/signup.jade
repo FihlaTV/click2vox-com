@@ -31,6 +31,7 @@ block content
             },
             data: {
               email: "#{email}",
+              temporary_password: $scope.account.temppassword,
               password: $scope.account.upassword,
               confirmation: $scope.account.confirmation
             }
@@ -38,8 +39,9 @@ block content
           $http(req)
             .then(function successCallback(response){
               $window.location.href = response.data.redirect + '?email=' + response.data.email;
-            }, function errorCallback(){
-              console.log("entered error callback");
+            }, function errorCallback(response){
+              document.getElementById("alert").innerHTML = response.data.message;
+              document.getElementById("alert").style.display = "block";
             });
         }
       }]);
@@ -64,6 +66,8 @@ block content
       .col-xs-12
         h1 Create Account
 
+        #alert.alert.alert-danger(style="display: none;")
+
         #form_container
           p.
             #[b Note:] the Voxbone WebRTC Free Trial will not be linked to your existing Voxbone account. To use your Voxbone account and an existing DID, please see #[a(href="#") view instructions]
@@ -73,6 +77,12 @@ block content
               .form-group
                 label.control-label Email address
                 input.form-control(type="text" id="uemail" name="uemail" ng-model="account.uemail", disabled, value= email, placeHolder= email)
+              .form-group
+                label.control-label Temporary Password
+                input.form-control(type="password", id="temppassword", name="temppassword", ng-model="account.temppassword", required)
+                div(ng-show="create_account.$submitted || create_account.temppassword.$touched")
+                  div(ng-show="create_account.temppassword.$error.required") Temporary password is required
+              hr
               .form-group
                 label.control-label Password
                 input.form-control(type="password", id="upassword", name="upassword", ng-model="account.upassword", required, ng-minlength="8")
