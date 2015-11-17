@@ -80,10 +80,20 @@ module.exports = function(passport, voxbone){
   router.post('/signup', function(req, res, next){
     var formData = req.body;
     var result = { message: "", errors: null, redirect: '/widget', email: formData.email }
-    //TODO validate fields
-    //email regex
-    //same password and confirmation
+
     Account.findOne({ email: formData.email }, function(err, the_account){
+      if(the_account.temporary_password && (the_account.temporary_password != formData.temporary_password)){
+        result.message = "Validation failed. Wrong password";
+        result.errors = true;
+        result.redirect = "";
+        return res.status(400).json(result);
+      }
+      if(formData.password !== formData.confirmation){
+        result.message = "Validation failed. Password and Confirmation do not match";
+        result.errors = true;
+        result.redirect = "";
+        return res.status(400).json(result);
+      }
       the_account.password = the_account.generateHash(formData.password);
       the_account.temporary = false;
       the_account.save(function(err){
