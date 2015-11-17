@@ -51,7 +51,7 @@ module.exports = function(passport, voxbone){
       Account.findOne({ email: req.query.email }, function(err, the_account){
         if(the_account){
           if(the_account.temporary == true){
-            res.render('signup', { title: title, email: req.query.email, account: accountLoggedIn(req) });
+            res.render('signup', { title: title, email: req.query.email, temp_password: req.query.temp_password, account: accountLoggedIn(req) });
           }else {
             if (accountLoggedIn(req)){
               res.render('/widget', {title: title, account: accountLoggedIn(req) });
@@ -67,7 +67,7 @@ module.exports = function(passport, voxbone){
 
           an_account.save(function(err) {
             if (err) throw err;
-            res.render('signup', { title: title, email: req.query.email, account: accountLoggedIn(req) });
+            res.render('signup', { title: title, email: req.query.email, temp_password: req.query.temp_password, account: accountLoggedIn(req) });
           });
         }
       });
