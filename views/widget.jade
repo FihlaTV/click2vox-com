@@ -157,7 +157,7 @@ block content
             console.log("entered error callback");
           });
       }
-      
+
       $scope.sip_provisioning = function(form) {
         if (form.$valid) {
           var req = {
@@ -187,6 +187,9 @@ block content
     }]);
 
     $(document).ready(function () {
+
+      $('[data-toggle="tooltip"]').tooltip();
+
       $(".title-toggle").click(function() {
         $(this).parent().toggleClass("active");
       });
@@ -248,8 +251,8 @@ block content
               form#widget_form(name="widget_form", novalidate)
                 .boxPanel
                   .form-group
-                    label.control-label SIP URI #[span.badge ?]
-                    input.form-control(required type="email", id="sip_uri", name="sip_uri", ng-model="widget.sip_uri", ng-pattern="/^[^@]+@[^@]+$/", ng-blur="sip_provisioning(widget_form)", placeholder="i.e. SIP: echo@ivrs")
+                    label.control-label SIP URI #[span.badge(data-toggle='tooltip' data-placement="right" title="This is where inbound traffic from your Click2Vox button will be directed. Enter any valid URI or use one of our diagnostic URIs - sip@ivrs or digits@ivrs") ?]
+                    input.form-control(required type="email", id="sip_uri", name="sip_uri", ng-model="widget.sip_uri", ng-pattern="/^[^@]+@[^@]+$/", ng-blur="sip_provisioning(widget_form)", placeholder="i.e. SIP: sip@ivrs")
                     div(ng-show="widget_form.sip_uri.$touched")
                       div(ng-show="widget_form.sip_uri.$error.required") SIP URI is required
                       div(ng-show="widget_form.sip_uri.$error.pattern") SIP URI must be valid
@@ -259,16 +262,16 @@ block content
                     .panel-collapse.collapse#collapseAdvancedCallConfiguration
                       .options-wrap.active
                         .form-group
-                          label(for="btn-context") Caller ID #[span.badge ?]
+                          label(for="btn-context") Caller ID #[span.badge(data-toggle='tooltip' data-placement="right" title="Enter the Caller ID that you would like sent with your Click2Vox widget calls") ?]
                           input.form-control(type="text" name="caller_id" ng-model="widget.caller_id" value="voxrtc_demo" placeholder="i.e. voxrtc_demo")
                         .form-group
-                          label(for="btn-context") Context #[span.badge ?]
+                          label(for="btn-context") Context #[span.badge(data-toggle='tooltip' data-placement="right" title="Send custom data to your SIP server using the X-Voxbone-Context header. Make sure to configure your SIP server to process this header.") ?]
                           input.form-control(type="text" name="context" ng-model="widget.context")
                         .form-group
-                          label(for="btn-context") DTMF Dial Pad #[span.badge ?]
+                          label(for="btn-context") DTMF Dial Pad #[span.badge(data-toggle='tooltip' data-placement="right" title="Display a dialpad to allow your users to enter DTMF digits during a call.") ?]
                           input(type="checkbox" name="dial_pad" ng-model="widget.dial_pad")
                         .form-group
-                          label(for="btn-context") Send Digits #[span.badge ?]
+                          label(for="btn-context") Send Digits #[span.badge(data-toggle='tooltip' data-placement="right" title="Automatically send DTMF digit(s) after a call is connected. This is useful for automatically navigating IVRs or entering access codes for a conference bridge. Digits should use the following format:'1,2,3,1200ms,4,5,900ms,6,#' - This string will  generate 1 2 3, wait 1200 milliseconds, enter 4, 5, wait 900 milliseconds then enter 6, #") ?]
                           input.form-control(type="text" name="send_digits" ng-model="widget.send_digits")
                   .panel.panel-default
                     .panel-heading
@@ -276,15 +279,15 @@ block content
                     .panel-collapse.collapse#collapseIncompatileBrowserConfiguration
                       .options-wrap.active
                         .form-group
-                          label.control-label Hide the widget #[span.badge ?]
+                          label.control-label Hide the widget #[span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, hide the widget") ?]
                           input.form-control(type='checkbox' name='hide_widget' ng-model='widget.hide_widget')
                         .form-group
-                          label.control-label Link button to a page #[span.badge ?]
+                          label.control-label Link button to a page #[span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, specify a URL to go to when the button is clicked") ?]
                           input.form-control(type='checkbox' name='link_button_to_a_page', ng-model="widget.link_button_to_a_page")
                           input.form-control(http-prefix type="url" name="link_button_to_a_page_value"
                           ng-model="widget.link_button_to_a_page_value" ng-show="widget.link_button_to_a_page")
                         .form-group
-                          label.control-label Show text/HTML #[span.badge ?]
+                          label.control-label Show text/HTML #[span.badge(data-toggle='tooltip' data-placement="right" title="Instead of showing the button, display the entered HTML ") ?]
                           input.form-control(type='checkbox' name='show_text_html', ng-model="widget.show_text_html")
                           input.form-control(type="text" name="show_text_html_value", placeholder="Enter text or HTML" ng-show="widget.show_text_html" ng-model="widget.show_text_html_value")
 
