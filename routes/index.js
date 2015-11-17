@@ -198,7 +198,10 @@ module.exports = function(passport, voxbone){
             return res.status(400).json(result);
           }
 
-          //TODO validate password and confirmation
+          if(req.body.password !== req.body.confirmation){
+            var result = { message: "Password and confirmation do not match.", errors: true }
+            return res.status(400).json(result);
+          }
           account.password = account.generateHash(req.body.password);
           account.resetPasswordToken = undefined;
           account.resetPasswordExpires = undefined;
@@ -325,20 +328,18 @@ module.exports = function(passport, voxbone){
   }
 
   router.post('/sip_provisioning', function(req, res, next){
-    var voice_uri_id;
     async.waterfall([
-      function(done) {
-        //step 1 Find the user and their voice uri id
+      function(done){
+        //step 1 Find the account
         Account.findOne({ email: req.user.email }, function(err, the_account){
           done(err, the_account);
         });
       },
       function(account, done){
-        voice_uri_id = account.voiceUriID;
-        //step 1a Create the voice uri or just link the SIP URI provided with the existing voice_uri_id
+        //step 1a Create the voice uri
         var put_data = {
           "voiceUri" : {
-            "voiceUriId"       : voice_uri_id,
+            "voiceUriId"       : null,
             "backupUriId"      : null,
             "voiceUriProtocol" : "SIP",
             "uri"              : req.body.sip_uri || "echo@ivrs",
@@ -360,22 +361,14 @@ module.exports = function(passport, voxbone){
           function(err, response, body){
             var response_body = JSON.parse(body);
             if(response_body['httpStatusCode']){
-              console.log("Something went wrong creating or updating the voice uri for user: "+req.user.email+" using SIP URI: "+ req.body.sip_uri + " and voice URI id: " + voice_uri_id);
               console.log(body);
-              done({ message: "could not create the voice uri or link the SIP URI to existing voice uri: " + voice_uri_id + "." });
+              done({ message: "Could not create the voice uri for SIP URI: " + req.body.sip_uri + " and user: " + req.user.email + " . Probably already exists. View previous logs for more details." });
             }else{
-              //success, save the voice uri id in the account
+              //success
               var didID = account.didID || 5020391;
-              if (voice_uri_id){
-                var post_data = { "didIds" : [ didID ], "voiceUriId" : voice_uri_id };
-                return done(err, post_data, didID);
-              }
-              voice_uri_id = voice_uri_id || response_body['voiceUri']['voiceUriId'];
+              var voice_uri_id = response_body['voiceUri']['voiceUriId'];
               var post_data = { "didIds" : [ didID ], "voiceUriId" : voice_uri_id };
-              account.voiceUriID = voice_uri_id;
-              account.save(function(err){
-                done(err, post_data, didID);
-              });
+              done(err, post_data, didID);
             }
           }
         );

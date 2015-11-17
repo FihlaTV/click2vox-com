@@ -11,8 +11,7 @@ var accountSchema = new Schema({
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   didID: Number,
-  did: Number,
-  voiceUriID: Number
+  did: Number
 });
 
 accountSchema.pre('save', function(next){
