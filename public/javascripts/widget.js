@@ -3,9 +3,10 @@ $(document).ready(function () {
     <div class="vox-widget-wrapper hidden"> \
       <div class="vw-main"> \
         <div class="vw-header"> \
-          <span class="vw-title"> \
-            In Call \
-          </span> \
+          <span class="vw-title" id="vw-title">Starting Call</span> \
+          <span class="vw-animated-dots">.</span> \
+          <span class="vw-animated-dots">.</span> \
+          <span class="vw-animated-dots">.</span> \
           <div class="vw-actions"> \
             <a href="#" id="full-screen"><i class="vw-icon vx-icon-full-screen-off"></i></a> \
             <a href="#" id="close-screen"><i class="vw-icon vx-icon-close"></i></a> \
@@ -54,7 +55,6 @@ $(document).ready(function () {
               </ul> \
             </div> \
           </div> \
-          <div id="vw-message" class="hidden">Message!</div> \
           <div id="vw-rating" class="vw-rating hidden"> \
             <div id="vw-rating-question" class="vw-question">How was the quality of your call?</div> \
             <div id="vw-rating-stars" class="vw-stars"></div> \
@@ -92,19 +92,31 @@ $(document).ready(function () {
       return;
     };
 
+    if (typeof message === 'object' && message.action == 'setMessage') {
+      $("body")[0].innerHTML = message.text;
+      return;
+    };
+
     switch(message) {
+      case 'setCallCalling':
+        $("#vw-title").text("Calling...");
+        break;
+      case 'setCallFailed':
+        $("#vw-title").text("Call Failed");
+        break;
+      case 'setInCall':
+        $("#vw-title").text("In Call");
+        $(".vw-animated-dots").removeClass('hidden');
+        break;
+      case 'setCallEnded':
+        $("#vw-title").text("Call Ended");
+        $(".vw-animated-dots").addClass('hidden');
+        break;
       case 'openWidgetWithoutDialPad':
         $("#dialpad").addClass('hidden');
         $(".vox-widget-wrapper").removeClass('hidden');
         break;
       case 'openWidget':
-        $(".vox-widget-wrapper").removeClass('hidden');
-        break;
-      case 'setMessage':
-        $(".vox-widget-wrapper .vw-body").addClass('hidden');
-        $("#full-screen").addClass('hidden');
-        $(".vox-widget-wrapper #vw-message").removeClass('hidden');
-        $(".vox-widget-wrapper #vw-message")[0].innerHTML = 'Browser does NOT support WebRTC!';
         $(".vox-widget-wrapper").removeClass('hidden');
         break;
     };
@@ -128,6 +140,38 @@ $(document).ready(function () {
 
   function is_iframe() {
     return $('#call_button_frame').length > 0;
+  };
+
+  function send_voxbone_interaction(message){
+    if (!voxbone.WebRTC.rtcSession.isEstablished())
+      return;
+
+    switch(message) {
+      case 'hang_up':
+        voxbone.WebRTC.hangup();
+        break;
+      case 'microphone-mute':
+        if (voxbone.WebRTC.isMuted) {
+          voxbone.WebRTC.unmute();
+        } else {
+          voxbone.WebRTC.mute();
+        }
+        break;
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+      case '0':
+      case '*':
+      case '#':
+        voxbone.WebRTC.sendDTMF(message);
+        break;
+    }
   };
 
   function call_action(message) {

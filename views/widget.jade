@@ -31,16 +31,22 @@ block content
         if (e.localVolume > 0.30) $("#mic5").addClass('peak');
       },
       'progress': function (e) {
-        console.log('Calling ' + number);
+        console.log('Calling...');
+        $("#vw-title").text("Calling");
       },
       'failed': function (e){
         console.log('Failed to connect: ' + e.data.cause);
+        $("#vw-title").text("Call Failed");
       },
       'accepted': function (e){
         console.log('Call started');
+        $("#vw-title").text("In Call");
+        $(".vw-animated-dots").removeClass('hidden');
       },
       'ended': function (e){
         console.log('Call ended');
+        $("#vw-title").text("Call Ended");
+        $(".vw-animated-dots").addClass('hidden');
       }
     };
 
@@ -127,25 +133,33 @@ block content
 
       $scope.widget.generateOutputCode = function(){
         console.log("--> Generating Output Code...");
+
+        var data = {
+          caller_id: $scope.widget.caller_id,
+          sip_uri: $scope.widget.sip_uri,
+          button_label: $scope.widget.button_label,
+          button_style: $scope.widget.button_style,
+          background_style: $scope.widget.background_style,
+          context: $scope.widget.context,
+          dial_pad: $scope.widget.dial_pad,
+          send_digits: $scope.widget.send_digits
+        }
+
+        var ibc= $scope.widget.incompatible_browser_configuration;
+        if (ibc == 'hide_widget')
+          data['hide_widget'] = true;
+        else if (ibc == 'link_button_to_a_page')
+          data['link_button_to_a_page'] = $scope.widget.link_button_to_a_page_value;
+        else if (ibc == 'show_text_html')
+          data['show_text_html'] =  $scope.widget.show_text_html_value;
+
         var req = {
           method: 'POST',
             url: '/voxbone_widget',
             headers: {
               'Content-Type': 'application/json; charset=utf-8'
             },
-            data: {
-              caller_id: $scope.widget.caller_id,
-              sip_uri: $scope.widget.sip_uri,
-              button_label: $scope.widget.button_label,
-              button_style: $scope.widget.button_style,
-              background_style: $scope.widget.background_style,
-              context: $scope.widget.context,
-              dial_pad: $scope.widget.dial_pad,
-              send_digits: $scope.widget.send_digits,
-              hide_widget: $scope.widget.hide_widget,
-              link_button_to_a_page: $scope.widget.link_button_to_a_page_value,
-              show_text_html: $scope.widget.show_text_html_value
-            }
+            data: data
           };
 
           $http(req)
@@ -251,8 +265,8 @@ block content
               form#widget_form(name="widget_form", novalidate)
                 .boxPanel
                   .form-group
-                    label.control-label SIP URI #[span.badge(data-toggle='tooltip' data-placement="right" title="This is where inbound traffic from your Click2Vox button will be directed. Enter any valid URI or use one of our diagnostic URIs - sip@ivrs or digits@ivrs") ?]
-                    input.form-control(required type="email", id="sip_uri", name="sip_uri", ng-model="widget.sip_uri", ng-pattern="/^[^@]+@[^@]+$/", ng-blur="sip_provisioning(widget_form)", placeholder="i.e. SIP: sip@ivrs")
+                    label.control-label SIP URI #[span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?]
+                    input.form-control(required type="email", id="sip_uri", name="sip_uri", ng-model="widget.sip_uri", ng-pattern="/^[^@]+@[^@]+$/", ng-blur="sip_provisioning(widget_form)", placeholder="i.e. SIP: echo@ivrs")
                     div(ng-show="widget_form.sip_uri.$touched")
                       div(ng-show="widget_form.sip_uri.$error.required") SIP URI is required
                       div(ng-show="widget_form.sip_uri.$error.pattern") SIP URI must be valid
@@ -280,16 +294,16 @@ block content
                       .options-wrap.active
                         .form-group
                           label.control-label Hide the widget #[span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, hide the widget") ?]
-                          input.form-control(type='checkbox' name='hide_widget' ng-model='widget.hide_widget')
+                          input.form-control(type='radio' name='incompatible_browser_configuration' ng-model='widget.incompatible_browser_configuration' value="hide_widget")
                         .form-group
                           label.control-label Link button to a page #[span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, specify a URL to go to when the button is clicked") ?]
-                          input.form-control(type='checkbox' name='link_button_to_a_page', ng-model="widget.link_button_to_a_page")
+                          input.form-control(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="link_button_to_a_page")
                           input.form-control(http-prefix type="url" name="link_button_to_a_page_value"
-                          ng-model="widget.link_button_to_a_page_value" ng-show="widget.link_button_to_a_page")
+                          ng-model="widget.link_button_to_a_page_value" ng-show="widget.incompatible_browser_configuration == 'link_button_to_a_page'" placeholder="i.e. https://mysite.com")
                         .form-group
                           label.control-label Show text/HTML #[span.badge(data-toggle='tooltip' data-placement="right" title="Instead of showing the button, display the entered HTML ") ?]
-                          input.form-control(type='checkbox' name='show_text_html', ng-model="widget.show_text_html")
-                          input.form-control(type="text" name="show_text_html_value", placeholder="Enter text or HTML" ng-show="widget.show_text_html" ng-model="widget.show_text_html_value")
+                          input.form-control(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="show_text_html")
+                          textarea.form-control(type="text" name="show_text_html_value", placeholder="Enter text or HTML" ng-show="widget.incompatible_browser_configuration == 'show_text_html'" ng-model="widget.show_text_html_value")
 
           .col-sm-6.right-col
             .section

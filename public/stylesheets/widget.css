@@ -1,3 +1,5 @@
+@import url(//cdnjs.cloudflare.com/ajax/libs/raty/2.7.0/jquery.raty.css);
+
 body.test {
   position: absolute;
   padding: 0;
@@ -61,7 +63,14 @@ a {
 .vox-widget-wrapper .vw-main .vw-header .vw-title{
   color: #1671ad;
   line-height: 46px;
-  padding: 0 10px;
+  padding-left: 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
+.vox-widget-wrapper .vw-main .vw-header .vw-animated-dots{
+  color: #1671ad;
+  line-height: 46px;
+  padding: 0px;
   font-size: 16px;
   font-weight: bold;
 }
@@ -314,4 +323,38 @@ a {
   width: 30px;
   height: 44px;
   background-position: -8px -280px;
+}
+
+@-webkit-keyframes opacity {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@-moz-keyframes opacity {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+span.vw-animated-dots  {
+  -webkit-animation-name: opacity;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+
+  -moz-animation-name: opacity;
+  -moz-animation-duration: 1s;
+  -moz-animation-iteration-count: infinite;
+}
+
+span:nth-child(1).vw-animated-dots  {
+  -webkit-animation-delay: 100ms;
+  -moz-animation-delay: 100ms;
+}
+
+span:nth-child(2).vw-animated-dots  {
+  -webkit-animation-delay: 300ms;
+  -moz-animation-delay: 300ms;
+}
+
+span:nth-child(3).vw-animated-dots  {
+  -webkit-animation-delay: 500ms;
+  -moz-animation-delay: 500ms;
 }

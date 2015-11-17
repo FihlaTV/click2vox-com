@@ -6,7 +6,6 @@ html(lang='en', ng-app="voxboneApp")
 
     link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css", rel="stylesheet")
     link(href="/stylesheets/root.css", rel="stylesheet")
-    link(href="/stylesheets/widget.css", rel="stylesheet")
 
     script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js",type="application/javascript")
     script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js' )
@@ -14,8 +13,6 @@ html(lang='en', ng-app="voxboneApp")
 
     script(src="//webrtc.voxbone.com/js/jssip-0.7.9-vox.js",type="application/javascript")
     script(src="//webrtc.voxbone.com/js/voxbone-0.0.3.js",type="application/javascript")
-
-    script(src="/javascripts/webrtc_voxbone_tools.js",type="application/javascript")
 
     script.
 
@@ -34,16 +31,20 @@ html(lang='en', ng-app="voxboneApp")
           else if (e.localVolume <= 0.01) parent.postMessage("setMicVolume0","*")
         },
         'progress': function (e) {
-          console.log('Calling ' + number);
+          console.log('Calling...');
+          parent.postMessage("setCallCalling","*");
         },
         'failed': function (e){
           console.log('Failed to connect: ' + e.data.cause);
+          parent.postMessage("setCallFailed","*");
         },
         'accepted': function (e){
           console.log('Call started');
+          parent.postMessage("setInCall","*");
         },
         'ended': function (e){
           console.log('Call ended');
+          parent.postMessage("setCallEnded","*");
         }
       };
 
@@ -75,6 +76,38 @@ html(lang='en', ng-app="voxboneApp")
           };
 
 
+          $scope.send_voxbone_interaction = function (message){
+            if (!voxbone.WebRTC.rtcSession.isEstablished())
+              return;
+
+            switch(message) {
+              case 'hang_up':
+                voxbone.WebRTC.hangup();
+                break;
+              case 'microphone-mute':
+                if (voxbone.WebRTC.isMuted) {
+                  voxbone.WebRTC.unmute();
+                } else {
+                  voxbone.WebRTC.mute();
+                }
+                break;
+              case '1':
+              case '2':
+              case '3':
+              case '4':
+              case '5':
+              case '6':
+              case '7':
+              case '8':
+              case '9':
+              case '0':
+              case '*':
+              case '#':
+                voxbone.WebRTC.sendDTMF(message);
+                break;
+            }
+          };
+
           $window.addEventListener('message', function(event) {
             //- console.log(event.data);
             var message = event.data;
@@ -82,7 +115,7 @@ html(lang='en', ng-app="voxboneApp")
             if (message.action &&  message.action == 'rate')
               $scope.sendRate(message.data.rate, message.data.comment);
             else
-              send_voxbone_interaction(event.data);
+              $scope.send_voxbone_interaction(event.data);
           });
 
           $scope.sendRate = function (rate, comment) {
@@ -117,7 +150,8 @@ html(lang='en', ng-app="voxboneApp")
               else if('#{the_widget.link_button_to_a_page}')
                 $window.open('#{the_widget.link_button_to_a_page}','_blank')
               else if('#{the_widget.show_text_html}') {
-                parent.postMessage("setMessage","*");
+                var message = { action: 'setMessage', text: '#{the_widget.show_text_html}' }
+                parent.postMessage(message,"*");
               }
             } else{
 
