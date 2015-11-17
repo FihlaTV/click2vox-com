@@ -54,7 +54,6 @@ $(document).ready(function () {
               </ul> \
             </div> \
           </div> \
-          <div id="vw-message" class="hidden">Message!</div> \
           <div id="vw-rating" class="vw-rating hidden"> \
             <div id="vw-rating-question" class="vw-question">How was the quality of your call?</div> \
             <div id="vw-rating-stars" class="vw-stars"></div> \
@@ -92,19 +91,17 @@ $(document).ready(function () {
       return;
     };
 
+    if (typeof message === 'object' && message.action == 'setMessage') {
+      $("body")[0].innerHTML = message.text;
+      return;
+    };
+
     switch(message) {
       case 'openWidgetWithoutDialPad':
         $("#dialpad").addClass('hidden');
         $(".vox-widget-wrapper").removeClass('hidden');
         break;
       case 'openWidget':
-        $(".vox-widget-wrapper").removeClass('hidden');
-        break;
-      case 'setMessage':
-        $(".vox-widget-wrapper .vw-body").addClass('hidden');
-        $("#full-screen").addClass('hidden');
-        $(".vox-widget-wrapper #vw-message").removeClass('hidden');
-        $(".vox-widget-wrapper #vw-message")[0].innerHTML = 'Browser does NOT support WebRTC!';
         $(".vox-widget-wrapper").removeClass('hidden');
         break;
     };

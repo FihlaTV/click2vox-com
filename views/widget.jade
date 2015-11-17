@@ -297,7 +297,7 @@ block content
                         .form-group
                           label.control-label Show text/HTML #[span.badge(data-toggle='tooltip' data-placement="right" title="Instead of showing the button, display the entered HTML ") ?]
                           input.form-control(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="show_text_html")
-                          input.form-control(type="text" name="show_text_html_value", placeholder="Enter text or HTML" ng-show="widget.incompatible_browser_configuration == 'show_text_html'" ng-model="widget.show_text_html_value")
+                          textarea.form-control(type="text" name="show_text_html_value", placeholder="Enter text or HTML" ng-show="widget.incompatible_browser_configuration == 'show_text_html'" ng-model="widget.show_text_html_value")
 
           .col-sm-6.right-col
             .section

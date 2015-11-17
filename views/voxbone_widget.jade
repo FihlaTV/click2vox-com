@@ -117,7 +117,8 @@ html(lang='en', ng-app="voxboneApp")
               else if('#{the_widget.link_button_to_a_page}')
                 $window.open('#{the_widget.link_button_to_a_page}','_blank')
               else if('#{the_widget.show_text_html}') {
-                parent.postMessage("setMessage","*");
+                var message = { action: 'setMessage', text: '#{the_widget.show_text_html}' }
+                parent.postMessage(message,"*");
               }
             } else{
 
