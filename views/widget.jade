@@ -265,8 +265,8 @@ block content
               form#widget_form(name="widget_form", novalidate)
                 .boxPanel
                   .form-group
-                    label.control-label SIP URI #[span.badge(data-toggle='tooltip' data-placement="right" title="This is where inbound traffic from your Click2Vox button will be directed. Enter any valid URI or use one of our diagnostic URIs - sip@ivrs or digits@ivrs") ?]
-                    input.form-control(required type="email", id="sip_uri", name="sip_uri", ng-model="widget.sip_uri", ng-pattern="/^[^@]+@[^@]+$/", ng-blur="sip_provisioning(widget_form)", placeholder="i.e. SIP: sip@ivrs")
+                    label.control-label SIP URI #[span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?]
+                    input.form-control(required type="email", id="sip_uri", name="sip_uri", ng-model="widget.sip_uri", ng-pattern="/^[^@]+@[^@]+$/", ng-blur="sip_provisioning(widget_form)", placeholder="i.e. SIP: echo@ivrs")
                     div(ng-show="widget_form.sip_uri.$touched")
                       div(ng-show="widget_form.sip_uri.$error.required") SIP URI is required
                       div(ng-show="widget_form.sip_uri.$error.pattern") SIP URI must be valid
