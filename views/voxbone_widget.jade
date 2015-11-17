@@ -34,16 +34,20 @@ html(lang='en', ng-app="voxboneApp")
           else if (e.localVolume <= 0.01) parent.postMessage("setMicVolume0","*")
         },
         'progress': function (e) {
-          console.log('Calling ' + number);
+          console.log('Calling...');
+          parent.postMessage("setCallCalling","*");
         },
         'failed': function (e){
           console.log('Failed to connect: ' + e.data.cause);
+          parent.postMessage("setCallFailed","*");
         },
         'accepted': function (e){
           console.log('Call started');
+          parent.postMessage("setInCall","*");
         },
         'ended': function (e){
           console.log('Call ended');
+          parent.postMessage("setCallEnded","*");
         }
       };
 
