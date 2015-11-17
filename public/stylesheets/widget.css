@@ -1,3 +1,5 @@
+@import url(//cdnjs.cloudflare.com/ajax/libs/raty/2.7.0/jquery.raty.css);
+
 body.test {
   position: absolute;
   padding: 0;
