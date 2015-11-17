@@ -31,16 +31,22 @@ block content
         if (e.localVolume > 0.30) $("#mic5").addClass('peak');
       },
       'progress': function (e) {
-        console.log('Calling ' + number);
+        console.log('Calling...');
+        $("#vw-title").text("Calling");
       },
       'failed': function (e){
         console.log('Failed to connect: ' + e.data.cause);
+        $("#vw-title").text("Call Failed");
       },
       'accepted': function (e){
         console.log('Call started');
+        $("#vw-title").text("In Call");
+        $(".vw-animated-dots").removeClass('hidden');
       },
       'ended': function (e){
         console.log('Call ended');
+        $("#vw-title").text("Call Ended");
+        $(".vw-animated-dots").addClass('hidden');
       }
     };
 

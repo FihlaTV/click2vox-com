@@ -3,9 +3,10 @@ $(document).ready(function () {
     <div class="vox-widget-wrapper hidden"> \
       <div class="vw-main"> \
         <div class="vw-header"> \
-          <span class="vw-title"> \
-            In Call \
-          </span> \
+          <span class="vw-title" id="vw-title">Starting Call</span> \
+          <span class="vw-animated-dots">.</span> \
+          <span class="vw-animated-dots">.</span> \
+          <span class="vw-animated-dots">.</span> \
           <div class="vw-actions"> \
             <a href="#" id="full-screen"><i class="vw-icon vx-icon-full-screen-off"></i></a> \
             <a href="#" id="close-screen"><i class="vw-icon vx-icon-close"></i></a> \
@@ -97,6 +98,20 @@ $(document).ready(function () {
     };
 
     switch(message) {
+      case 'setCallCalling':
+        $("#vw-title").text("Calling...");
+        break;
+      case 'setCallFailed':
+        $("#vw-title").text("Call Failed");
+        break;
+      case 'setInCall':
+        $("#vw-title").text("In Call");
+        $(".vw-animated-dots").removeClass('hidden');
+        break;
+      case 'setCallEnded':
+        $("#vw-title").text("Call Ended");
+        $(".vw-animated-dots").addClass('hidden');
+        break;
       case 'openWidgetWithoutDialPad':
         $("#dialpad").addClass('hidden');
         $(".vox-widget-wrapper").removeClass('hidden');
