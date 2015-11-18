@@ -76,6 +76,8 @@ block content
 
     app.controller('WidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
 
+      $scope.showWidgetCode = false;
+
       $scope.master = {
         dial_pad: true,
         button_style: 'style-b',
@@ -167,7 +169,7 @@ block content
           }, function errorCallback(){
             console.log("entered error callback");
           });
-      }
+      };
 
       $scope.sip_provisioning = function(form) {
         if (form.$valid) {
@@ -186,7 +188,8 @@ block content
           .then(function successCallback(response){
             console.log(response.data);
             console.log("success!");
-            //enable buttons
+            $scope.showWidgetCode = true;
+            $scope.widget.generateOutputCode();
           }, function errorCallback(response){
             console.log("Something went wrong: ");
             console.log(response.data);
@@ -242,7 +245,7 @@ block content
         .row
           .col-xs-12
             h1 Create a WebRTC Call Button
-            p #[b Note:] this will create a code widget that can be embedded into any page that allows for JS code and will allow customers to video call without installing any software.
+            p #[b Note:] this will create a code snippet for a click-to-call widget. The widget allows calls to be made without installing any software on browsers that support WebRTC. This snippet code can be embedded into any webpage or Content Management System that supports loading external JavaScript.
     .body(ng-controller="WidgetController")
       .container
         .row
@@ -328,9 +331,9 @@ block content
                     a.grey(href="javascript:void(0)" ng-click="widget.background_style = 'grey'")
                     a.light(href="javascript:void(0)" ng-click="widget.background_style = 'light'")
 
-                .prev-code
+                .prev-code(ng-show='showWidgetCode')
                   .title
-                    span Code Widget
+                    span Widget Code Snippet
                       p Paste the following HTML code into your website or give it a try using on
 
                       .btn-code-playground
@@ -348,6 +351,6 @@ block content
                       | {{ widget.widget_code }}
                     .codebox-actions
                       #[a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy]
-                      #[a(href="#", id="generate-output-code", ng-click='widget.generateOutputCode()') Generate Code]
+                      #[a(href="#" id="generate-output-code" ng-click='widget.generateOutputCode()') Generate Code]
   script(src="/javascripts/widget.js",type="application/javascript")
 

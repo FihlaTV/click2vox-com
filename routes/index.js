@@ -1,4 +1,4 @@
-var title = 'Voxbone Demo v0.9';
+var title = 'Voxbone Demo v0.10';
 
 var express = require('express');
 var router = express.Router();
@@ -47,53 +47,45 @@ module.exports = function(passport, voxbone){
   });
 
   router.get('/signup', function(req, res, next){
-    if(req.query.email){
-      Account.findOne({ email: req.query.email }, function(err, the_account){
-        if(the_account){
-          if(the_account.temporary == true){
-            res.render('signup', { title: title, email: req.query.email, temp_password: req.query.temp_password, account: accountLoggedIn(req) });
-          }else {
-            if (accountLoggedIn(req)){
-              res.render('/widget', {title: title, account: accountLoggedIn(req) });
-            }else{
-              res.render('login', { title: title, email: req.query.email, account: accountLoggedIn(req) });
-            }
-          }
-        }else{
-          var an_account = new Account({
-            email: req.query.email,
-            temporary: true
-          });
-
-          an_account.save(function(err) {
-            if (err) throw err;
-            res.render('signup', { title: title, email: req.query.email, temp_password: req.query.temp_password, account: accountLoggedIn(req) });
-          });
-        }
-      });
+    req.logout();
+    if (req.query.email && req.query.password){
+      res.render('signup', { title: title, email: req.query.email, temp_password: req.query.password, account: accountLoggedIn(req) });
     } else{
       res.render('login', { title: title, account: accountLoggedIn(req) });
-    }
+    };
   });
 
   //POST /signup fetch the account with that email, set the new password and temporary to false.
   router.post('/signup', function(req, res, next){
     var formData = req.body;
-    var result = { message: "", errors: null, redirect: '/widget', email: formData.email }
+    var result = { message: "", errors: true, redirect: "", email: formData.email }
 
     Account.findOne({ email: formData.email }, function(err, the_account){
-      if(the_account.temporary_password && (the_account.temporary_password != formData.temporary_password)){
-        result.message = "Validation failed. Wrong password";
-        result.errors = true;
-        result.redirect = "";
+      console.log('sssss');
+      if(!the_account){
+        result.message = "Account not allowed to register";
         return res.status(400).json(result);
-      }
+      };
+      if(the_account.temporary_password != formData.temporary_password){
+        result.message = "Account not allowed to register";
+        return res.status(400).json(result);
+      };
+      if(the_account.password){
+        result.message = "Account already registered";
+        return res.status(400).json(result);
+      };
       if(formData.password !== formData.confirmation){
         result.message = "Validation failed. Password and Confirmation do not match";
-        result.errors = true;
-        result.redirect = "";
         return res.status(400).json(result);
-      }
+      };
+      if(formData.password && formData.password.trim() < 8){
+        result.message = "Validation failed. Password policies are not satisfied";
+        return res.status(400).json(result);
+      };
+
+      result.errors = false;
+      result.redirect = "/widget";
+
       the_account.password = the_account.generateHash(formData.password);
       the_account.temporary = false;
       the_account.save(function(err){
