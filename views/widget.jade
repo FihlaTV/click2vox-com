@@ -102,22 +102,19 @@ block content
         voxbone.WebRTC.init(#{voxrtc_config});
       };
 
-      $scope.makeCall = function () {
-        var supported = voxbone.WebRTC.isWebRTCSupported();
+      $scope.isWebRTCSupported = function () {
+        return voxbone.WebRTC.isWebRTCSupported();
+      };
 
-        if(supported == false){
+      $scope.makeCall = function () {
+        if(!$scope.isWebRTCSupported()){
           console.log("WebRTC is NOT supported!");
 
-          if($scope.widget.hide_widget) return;
+          if($scope.widget.hide_widget)
+            return;
           else if($scope.widget.link_button_to_a_page_value)
             $window.open($scope.widget.link_button_to_a_page_value,'_blank')
-          else if($scope.widget.show_text_html_value) {
-            $(".vox-widget-wrapper .vw-body").addClass('hidden');
-            $(".vox-widget-wrapper #full-screen").addClass('hidden');
-            $(".vox-widget-wrapper #vw-message").removeClass('hidden');
-            $(".vox-widget-wrapper #vw-message")[0].innerHTML = $scope.widget.show_text_html_value;
-            $(".vox-widget-wrapper").removeClass('hidden');
-          }
+
         } else{
           $(".vox-widget-wrapper").removeClass('hidden');
           var number = '13072787231'; //16092975366
@@ -311,7 +308,9 @@ block content
               .boxPanel.preview
                 .prev-view.light
                   .widget-box.style-b
-                    button.btn-style.mdi-communication-call#launch_call(ng-click="makeCall()") #[span {{widget.button_label || 'Call Sales'}}]
+                    button.btn-style.mdi-communication-call#launch_call(ng-show="isWebRTCSupported()" ng-click="makeCall()") #[span {{widget.button_label || 'Call Sales'}}]
+                    .not-supported#not-supported-message(ng-show="!isWebRTCSupported()")
+                      !{the_widget.show_text_html}
                     .widget-footer-left
                       a(href="https://test.webrtc.org/" target="_blank") Test your setup
                     .widget-footer-right

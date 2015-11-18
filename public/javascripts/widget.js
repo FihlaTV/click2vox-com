@@ -92,11 +92,6 @@ $(document).ready(function () {
       return;
     };
 
-    if (typeof message === 'object' && message.action == 'setMessage') {
-      $("body")[0].innerHTML = message.text;
-      return;
-    };
-
     switch(message) {
       case 'setCallCalling':
         $("#vw-title").text("Calling...");

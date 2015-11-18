@@ -15,9 +15,6 @@ html(lang='en', ng-app="voxboneApp")
     script(src="//webrtc.voxbone.com/js/voxbone-0.0.3.js",type="application/javascript")
 
     script.
-
-      var number = '13072787231'; //16092975366
-
       var eventHandlers = {
         'localMediaVolume': function (e) {
           //- console.log('Microphone Volume -> ' + e.localVolume);
@@ -140,19 +137,19 @@ html(lang='en', ng-app="voxboneApp")
               });
           };
 
-          $scope.makeCall = function () {
-            var supported = voxbone.WebRTC.isWebRTCSupported();
+          $scope.isWebRTCSupported = function () {
+            return voxbone.WebRTC.isWebRTCSupported();
+          }
 
-            if(supported == false){
+          $scope.makeCall = function () {
+            if(!$scope.isWebRTCSupported()){
               console.log("WebRTC is NOT supported!");
 
-              if(#{the_widget.hide_widget}) return;
+              if(#{the_widget.hide_widget})
+                return;
               else if('#{the_widget.link_button_to_a_page}')
-                $window.open('#{the_widget.link_button_to_a_page}','_blank')
-              else if('#{the_widget.show_text_html}') {
-                var message = { action: 'setMessage', text: '#{the_widget.show_text_html}' }
-                parent.postMessage(message,"*");
-              }
+                $window.open('#{the_widget.link_button_to_a_page}','_blank');
+
             } else{
 
                 if(#{the_widget.dial_pad}) {
@@ -185,7 +182,9 @@ html(lang='en', ng-app="voxboneApp")
     .main
       .body(ng-controller="VoxboneWidgetController")
         .widget-box(class="#{ the_widget.button_style || 'style-b' }")
-          button.btn-style.mdi-communication-call#launch_call(ng-click="makeCall()") #[span #{ the_widget.button_label || 'Call Now!' }]
+          button.btn-style.mdi-communication-call#launch_call(ng-show="isWebRTCSupported()" ng-click="makeCall()") #[span #{ the_widget.button_label || 'Call Now!' }]
+          .not-supported#not-supported-message(ng-show="!isWebRTCSupported()")
+            !{the_widget.show_text_html}
           .widget-footer-left
             a(href="https://test.webrtc.org/" target="_blank") Test your setup
           .widget-footer-right
