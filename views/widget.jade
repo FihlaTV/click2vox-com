@@ -262,7 +262,8 @@ block content
               form#widget_form(name="widget_form", novalidate)
                 .boxPanel
                   .form-group
-                    label.control-label SIP URI #[span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?]
+                    label.control-label SIP URI
+                      span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?
                     input.form-control(required type="email", id="sip_uri", name="sip_uri", ng-model="widget.sip_uri", ng-pattern="/^[^@]+@[^@]+$/", ng-blur="sip_provisioning(widget_form)", placeholder="i.e. SIP: echo@ivrs")
                     div(ng-show="widget_form.sip_uri.$touched")
                       div(ng-show="widget_form.sip_uri.$error.required") SIP URI is required
@@ -273,14 +274,17 @@ block content
                     .panel-collapse.collapse#collapseAdvancedCallConfiguration
                       .options-wrap.active
                         .form-group
-                          label(for="btn-context") Caller ID #[span.badge(data-toggle='tooltip' data-placement="right" title="Enter the Caller ID that you would like sent with your Click2Vox widget calls") ?]
+                          label(for="btn-context") Caller ID
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Enter the Caller ID that you would like sent with your Click2Vox widget calls") ?
                           input.form-control(type="text" name="caller_id" ng-model="widget.caller_id" value="voxrtc_demo" placeholder="i.e. voxrtc_demo")
                         .form-group
-                          label(for="btn-context") Context #[span.badge(data-toggle='tooltip' data-placement="right" title="Send custom data to your SIP server using the X-Voxbone-Context header. Make sure to configure your SIP server to process this header.") ?]
+                          label(for="btn-context") Context
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Send custom data to your SIP server using the X-Voxbone-Context header. Make sure to configure your SIP server to process this header.") ?
                           input.form-control(type="text" name="context" ng-model="widget.context")
                         .form-group
-                          label(for="btn-context") DTMF Dial Pad #[span.badge(data-toggle='tooltip' data-placement="right" title="Display a dialpad to allow your users to enter DTMF digits during a call.") ?]
+                          label(for="btn-context") DTMF Dial Pad
                             input(type="checkbox" name="dial_pad" ng-model="widget.dial_pad")
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Display a dialpad to allow your users to enter DTMF digits during a call.") ?
                         .form-group
                           label(for="btn-context") Send Digits #[span.badge(data-toggle='tooltip' data-placement="right" title="Automatically send DTMF digit(s) after a call is connected. This is useful for automatically navigating IVRs or entering access codes for a conference bridge. Digits should use the following format:'1,2,3,1200ms,4,5,900ms,6,#' - This string will  generate 1 2 3, wait 1200 milliseconds, enter 4, 5, wait 900 milliseconds then enter 6, #") ?]
                           input.form-control(type="text" name="send_digits" ng-model="widget.send_digits")
@@ -290,16 +294,19 @@ block content
                     .panel-collapse.collapse#collapseIncompatileBrowserConfiguration
                       .options-wrap.active
                         .form-group
-                          label Hide the widget #[span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, hide the widget") ?]
+                          label Hide the widget
                             input(type='radio' name='incompatible_browser_configuration' ng-model='widget.incompatible_browser_configuration' value="hide_widget")
+                            span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, hide the widget") ?
                         .form-group
-                          label Link button to a page #[span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, specify a URL to go to when the button is clicked") ?]
+                          label Link button to a page
                             input(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="link_button_to_a_page")
-                          input(http-prefix type="url" name="link_button_to_a_page_value" ng-model="widget.link_button_to_a_page_value" ng-show="widget.incompatible_browser_configuration == 'link_button_to_a_page'" placeholder="i.e. https://mysite.com")
+                            span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, specify a URL to go to when the button is clicked") ?
+                          input.form-control(http-prefix type="url" name="link_button_to_a_page_value" ng-model="widget.link_button_to_a_page_value" ng-show="widget.incompatible_browser_configuration == 'link_button_to_a_page'" placeholder="i.e. https://mysite.com")
                         .form-group
-                          label Show text/HTML #[span.badge(data-toggle='tooltip' data-placement="right" title="Instead of showing the button, display the entered HTML ") ?]
+                          label Show text/HTML
                             input(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="show_text_html")
-                          textarea(type="text" name="show_text_html_value", placeholder="Enter text or HTML" ng-show="widget.incompatible_browser_configuration == 'show_text_html'" ng-model="widget.show_text_html_value")
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Instead of showing the button, display the entered HTML ") ?
+                            textarea.form-control(type="text" name="show_text_html_value", placeholder="Enter text or HTML" ng-show="widget.incompatible_browser_configuration == 'show_text_html'" ng-model="widget.show_text_html_value")
 
           .col-sm-6.right-col
             .section
