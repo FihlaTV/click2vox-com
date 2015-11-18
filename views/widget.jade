@@ -301,7 +301,7 @@ block content
                           label Link button to a page
                             input(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="link_button_to_a_page")
                             span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, specify a URL to go to when the button is clicked") ?
-                          input.form-control(http-prefix type="url" name="link_button_to_a_page_value" ng-model="widget.link_button_to_a_page_value" ng-show="widget.incompatible_browser_configuration == 'link_button_to_a_page'" placeholder="i.e. https://mysite.com")
+                            input.form-control(http-prefix type="url" name="link_button_to_a_page_value" ng-model="widget.link_button_to_a_page_value" ng-show="widget.incompatible_browser_configuration == 'link_button_to_a_page'" placeholder="i.e. https://mysite.com")
                         .form-group
                           label Show text/HTML
                             input(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="show_text_html")
