@@ -294,17 +294,20 @@ block content
                     .panel-collapse.collapse#collapseIncompatileBrowserConfiguration
                       .options-wrap.active
                         .form-group
-                          label Hide the widget
+                          label
                             input(type='radio' name='incompatible_browser_configuration' ng-model='widget.incompatible_browser_configuration' value="hide_widget")
+                            Hide the widget
                             span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, hide the widget") ?
                         .form-group
-                          label Link button to a page
+                          label
                             input(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="link_button_to_a_page")
+                            Link button to a page
                             span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, specify a URL to go to when the button is clicked") ?
                             input.form-control(http-prefix type="url" name="link_button_to_a_page_value" ng-model="widget.link_button_to_a_page_value" ng-show="widget.incompatible_browser_configuration == 'link_button_to_a_page'" placeholder="i.e. https://mysite.com")
                         .form-group
-                          label Show text/HTML
+                          label
                             input(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="show_text_html")
+                            Show text/HTML
                             span.badge(data-toggle='tooltip' data-placement="right" title="Instead of showing the button, display the entered HTML ") ?
                             textarea.form-control(type="text" name="show_text_html_value", placeholder="Enter text or HTML" ng-show="widget.incompatible_browser_configuration == 'show_text_html'" ng-model="widget.show_text_html_value")
 
