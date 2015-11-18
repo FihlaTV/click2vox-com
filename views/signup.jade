@@ -91,9 +91,8 @@ block content
                 label.control-label Confirm Password
                 input.form-control(type="password" id="confirmation" name="confirmation" ng-model="account.confirmation" required pw-check="upassword" )
                 div(ng-show="create_account.$submitted || create_account.confirmation.$touched")
-                  div(ng-show="create_account.confirmation.$error.required") Confirmation is required
                   div(ng-show="create_account.confirmation.$error.pwmatch") Password confirmation does not match
-              button.btn.btn-default#create(ng-click="account.processForm()") Create Account
+              button.btn.btn-default#create(ng-disabled="create_account.$invalid" ng-click="account.processForm()") Create Account
               br
               p Already have an account? #[a(href="login") Login here]
 
