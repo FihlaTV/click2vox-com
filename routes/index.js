@@ -48,8 +48,8 @@ module.exports = function(passport, voxbone){
 
   router.get('/signup', function(req, res, next){
     req.logout();
-    if (req.query.email && req.query.temp_password){
-      res.render('signup', { title: title, email: req.query.email, temp_password: req.query.temp_password, account: accountLoggedIn(req) });
+    if (req.query.email && req.query.password){
+      res.render('signup', { title: title, email: req.query.email, temp_password: req.query.password, account: accountLoggedIn(req) });
     } else{
       res.render('login', { title: title, account: accountLoggedIn(req) });
     };
