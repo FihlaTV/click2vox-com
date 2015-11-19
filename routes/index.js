@@ -147,7 +147,7 @@ module.exports = function(passport, voxbone){
         Account.findOne({ email: req.body.email }, function(err, account) {
           if (!account) {
             var result = { message: "No account with that email address exists.", errors: err }
-            return res.status(400).json(result);
+            return res.status(404).json(result);
           }
 
           account.resetPasswordToken = token;
@@ -166,21 +166,24 @@ module.exports = function(passport, voxbone){
             pass: process.env.SENDGRID_PASSWORD
           }
         });
+
         var mailOptions = {
           to: account.email,
           from: process.env.SENDGRID_FROM,
           subject: 'Voxbone Widget Generator - Password Reset',
           text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
             'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-            'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+            'https://' + req.headers.host + '/reset/' + token + '\n\n' +
             'If you did not request this, please ignore this email and your password will remain unchanged.\n',
           html: "<h2> Password Reset </h2> <p>You are receiving this because you (or someone else) have requested the reset of the password for your account.<br/> Please click on the following link, or paste this into your browser to complete the process: <br/> http://"+ req.headers.host + "/reset/" + token +"<br/> If you did not request this, please ignore this email and your password will remain unchanged. </p>"
         };
+
         smtpTransport.sendMail(mailOptions, function(err) {
           if(err){
+            console.log(err);
             done(err, 'done');
           }else{
-            var result = { message: "An e-mail has been sent to " + account.email + " with further instructions.", errors: null }
+            var result = { message: "An e-mail has been sent to " + account.email + " with further instructions. Please check your inbox.", errors: null }
             res.status(200).json(result);
           }
         });
@@ -188,7 +191,7 @@ module.exports = function(passport, voxbone){
     ], function(err) {
       if (err) return next(err);
       var result = { message: "There was an error", errors: err }
-      res.status(400).json(result);
+      res.status(500).json(result);
     });
   });
 
