@@ -68,6 +68,6 @@ block content
                 div(ng-show="login_form.$submitted || login_form.upassword.$touched")
                   div(ng-show="login_form.upassword.$error.required") Password is required
 
-              button.btn.btn-default#login(ng-click="login.processForm()") Login
+              button.btn.btn-default#login(ng-disabled="login_form.$invalid" ng-click="login.processForm()") Login
               br
               a(href="/forgot") Forgot your password?
