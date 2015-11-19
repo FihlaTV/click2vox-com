@@ -72,7 +72,6 @@ html(lang='en', ng-app="voxboneApp")
             voxbone.WebRTC.init(#{voxrtc_config});
           };
 
-
           $scope.send_voxbone_interaction = function (message){
             if (!voxbone.WebRTC.rtcSession.isEstablished())
               return;
@@ -158,8 +157,9 @@ html(lang='en', ng-app="voxboneApp")
                   parent.postMessage("openWidgetWithoutDialPad","*");
                 }
 
-                var number = '13072787231'; //16092975366
-                voxbone.WebRTC.call(number);
+                //- var number = '13072787231'; //16092975366 // echo test
+                //- voxbone.WebRTC.call(number);
+                voxbone.WebRTC.call('#{did}');
                 window.onbeforeunload = function(e){
                   voxbone.WebRTC.rtcSession.terminate();
                 }

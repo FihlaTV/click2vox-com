@@ -59,10 +59,13 @@ module.exports = function(passport, voxbone){
   router.post('/signup', function(req, res, next){
     var formData = req.body;
     var result = { message: "", errors: true, redirect: "", email: formData.email }
+    var bypass_account_check = (process.env.BYPASS_PRE_EXISTING_ACCOUNTS_CHECK === "true");
 
     Account.findOne({ email: formData.email }, function(err, the_account){
 
-      if (!process.env.BYPASS_PRE_EXISTING_ACCOUNTS_CHECK) {
+      if (!bypass_account_check) {
+        console.log('-' +bypass_account_check+'-');
+        console.log('Checking existing account for ' + formData.email);
         if(!the_account){
           result.message = "Account not allowed to register";
           return res.status(400).json(result);
@@ -88,6 +91,7 @@ module.exports = function(passport, voxbone){
           return res.status(400).json(result);
         };
       } else {
+        console.log('Bypassing account check for ' + formData.email);
         the_account = new Account({
           email: formData.email
         });
@@ -114,7 +118,12 @@ module.exports = function(passport, voxbone){
 
   router.get('/widget', isLoggedIn, function(req, res, next) {
     voxrtc_config = voxbone.generate();
-    res.render('widget', { title: title, account: accountLoggedIn(req) });
+
+    Account
+      .findOne({_id: req.user._id})
+      .exec(function(err, the_account) {
+        res.render('widget', { title: title, did: the_account.did, account: accountLoggedIn(req) });
+      });
   });
 
   router.get('/', function(req, res, next) {
@@ -250,18 +259,23 @@ module.exports = function(passport, voxbone){
   router.get('/voxbone_widget/:id', function (req, res) {
     voxrtc_config = voxbone.generate();
 
-    var searchFor = { _id: new ObjectId(req.params.id) };
+    var searchForWidget = { _id: new ObjectId(req.params.id) };
 
-    Widget.findOne(searchFor, function(err, the_widget) {
+    Widget
+      .findOne(searchForWidget)
+      .populate('_account')
+      .exec(function(err, the_widget) {
 
-      if (!the_widget || err) {
-        var result = { message: "Widget not found", errors: null }
-        return res.status(404).json(result);
-      } else if (the_widget) {
-          res.render('voxbone_widget', { layout: false, title: title, the_widget: the_widget });
-      };
+        if (!the_widget || err) {
 
-      res.end("");
+          var result = { message: "Widget not found", errors: null }
+          return res.status(404).json(result);
+
+        } else if (the_widget && the_widget._account && the_widget._account.did) {
+          res.render('voxbone_widget', { layout: false, title: title, did: the_widget._account.did, the_widget: the_widget });
+        };
+
+        res.end("");
     });
   });
 
@@ -409,32 +423,6 @@ module.exports = function(passport, voxbone){
         }
       }
     );
-  });
-
-  router.post('/voxbone_widget', function(req, res, next){
-    var formData = req.body;
-    var result = { message: "", errors: null, redirect: '/voxbone_widget' }
-
-    var a_widget = new Widget({
-      button_label: req.body.button_label,
-      button_style: req.body.button_style,
-      background_style: req.body.background_style,
-      sip_uri: req.body.sip_uri,
-      caller_id: req.body.caller_id,
-      context: req.body.context,
-      dial_pad: req.body.dial_pad,
-      send_digits: req.body.send_digits,
-      hide_widget: req.body.hide_widget,
-      link_button_to_a_page: req.body.link_button_to_a_page,
-      show_text_html: req.body.show_text_html
-    });
-
-    a_widget.save(function(err) {
-      if (err) throw err;
-      result.widget_code = a_widget.generateHtmlCode();
-      result.widget_id = a_widget.id;
-      res.status(200).json(result);
-    });
   });
 
   function isLoggedIn(req, res, next) {

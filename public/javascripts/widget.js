@@ -109,10 +109,18 @@ $(document).ready(function () {
         break;
       case 'openWidgetWithoutDialPad':
         $("#dialpad").addClass('hidden');
+        $("#vw-title").text("Calling...");
+        $(".vw-animated-dots").removeClass('hidden');
         $(".vox-widget-wrapper").removeClass('hidden');
+        $("#vw-in-call").removeClass('hidden');
+        $("#vw-rating").addClass('hidden');
         break;
       case 'openWidget':
+        $("#vw-title").text("Calling...");
+        $(".vw-animated-dots").removeClass('hidden');
         $(".vox-widget-wrapper").removeClass('hidden');
+        $("#vw-in-call").removeClass('hidden');
+        $("#vw-rating").addClass('hidden');
         break;
     };
   });
@@ -173,7 +181,7 @@ $(document).ready(function () {
     if (is_iframe()) {
       $('#call_button_frame')[0].contentWindow.postMessage(message, '*');
     } else {
-      if (message.action &&  message.action == 'rate')
+      if (message.action && message.action == 'rate')
         console.log(message);
       else
         send_voxbone_interaction(message);
@@ -191,6 +199,8 @@ $(document).ready(function () {
     e.preventDefault();
     $("#vw-in-call").addClass('hidden');
     $("#vw-rating").removeClass('hidden');
+    $("#vw-title").text("Call Ended");
+    $(".vw-animated-dots").addClass('hidden');
     call_action('hang_up');
   });
 
