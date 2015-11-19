@@ -1,4 +1,5 @@
-var title = 'Voxbone Demo v0.10';
+var pjson = require('../package.json');
+var title = 'Voxbone Widget Generator v' + pjson.version;
 
 var express = require('express');
 var router = express.Router();
