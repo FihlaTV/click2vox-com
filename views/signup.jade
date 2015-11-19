@@ -54,9 +54,9 @@ block content
         require: 'ngModel',
         link: function (scope, elem, attrs, ctrl) {
           var firstPassword = '#' + attrs.pwCheck;
-          elem.on('input', function () {
+          elem.add(firstPassword).on('keyup', function () {
             scope.$apply(function () {
-              var v = elem.val() === $(firstPassword).val();
+              var v = elem.val()===$(firstPassword).val();
               ctrl.$setValidity('pwmatch', v);
             });
           });
@@ -89,7 +89,7 @@ block content
                   div(ng-show="create_account.upassword.$error.minlength") Password must be at least 8 characters in length
               .form-group
                 label.control-label Confirm Password
-                input.form-control(type="password" id="confirmation" name="confirmation" ng-model="account.confirmation" required pw-check="upassword" )
+                input.form-control(type="password" id="confirmation" name="confirmation" ng-model="account.confirmation" required pw-check="upassword")
                 div(ng-show="create_account.$submitted || create_account.confirmation.$touched")
                   div(ng-show="create_account.confirmation.$error.pwmatch") Password confirmation does not match
               button.btn.btn-default#create(ng-disabled="create_account.$invalid" ng-click="account.processForm()") Create Account
