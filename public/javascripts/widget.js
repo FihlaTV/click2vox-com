@@ -94,7 +94,7 @@ $(document).ready(function () {
 
     switch(message) {
       case 'setCallCalling':
-        $("#vw-title").text("Calling...");
+        $("#vw-title").text("Calling");
         break;
       case 'setCallFailed':
         $("#vw-title").text("Call Failed");
@@ -109,14 +109,14 @@ $(document).ready(function () {
         break;
       case 'openWidgetWithoutDialPad':
         $("#dialpad").addClass('hidden');
-        $("#vw-title").text("Calling...");
+        $("#vw-title").text("Calling");
         $(".vw-animated-dots").removeClass('hidden');
         $(".vox-widget-wrapper").removeClass('hidden');
         $("#vw-in-call").removeClass('hidden');
         $("#vw-rating").addClass('hidden');
         break;
       case 'openWidget':
-        $("#vw-title").text("Calling...");
+        $("#vw-title").text("Calling");
         $(".vw-animated-dots").removeClass('hidden');
         $(".vox-widget-wrapper").removeClass('hidden');
         $("#vw-in-call").removeClass('hidden');
