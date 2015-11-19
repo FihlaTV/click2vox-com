@@ -118,8 +118,24 @@ block content
             $window.open($scope.widget.link_button_to_a_page_value,'_blank')
 
         } else{
+          $("#vw-title").text("Calling...");
+          $(".vw-animated-dots").removeClass('hidden');
           $(".vox-widget-wrapper").removeClass('hidden');
-          var number = '13072787231'; //16092975366
+          $("#vw-in-call").removeClass('hidden');
+          $("#vw-rating").addClass('hidden');
+
+          if($scope.widget.dial_pad)
+            $("#dialpad").removeClass('hidden');
+          else
+            $("#dialpad").addClass('hidden');
+
+          var number;
+          if($scope.showWidgetCode)
+            number = '#{did}';
+          else
+            number = '13072787231'; //16092975366 // echo test
+
+          console.log('Calling ' + number);
           voxbone.WebRTC.call(number);
           window.onbeforeunload = function(e){
             voxbone.WebRTC.rtcSession.terminate();
@@ -271,6 +287,7 @@ block content
                     div(ng-show="widget_form.sip_uri.$touched")
                       div(ng-show="widget_form.sip_uri.$error.required") SIP URI is required
                       div(ng-show="widget_form.sip_uri.$error.pattern") SIP URI must be valid
+                      div(ng-show="widget_form.cannot_validate_sip_uri") SIP URI cannot be validated
                   .panel.panel-default
                     .panel-heading
                       a.collapsed.title-toggle(data-toggle="collapse",data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
