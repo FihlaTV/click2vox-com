@@ -140,6 +140,10 @@ html(lang='en', ng-app="voxboneApp")
             return voxbone.WebRTC.isWebRTCSupported();
           }
 
+          $scope.showCallButton = function () {
+            return $scope.isWebRTCSupported() || '#{the_widget.link_button_to_a_page}';
+          }
+
           $scope.makeCall = function () {
             if(!$scope.isWebRTCSupported()){
               console.log("WebRTC is NOT supported!");
@@ -182,8 +186,8 @@ html(lang='en', ng-app="voxboneApp")
     .main
       .body(ng-controller="VoxboneWidgetController")
         .widget-box(class="#{ the_widget.button_style || 'style-b' }")
-          button.btn-style.mdi-communication-call#launch_call(ng-show="isWebRTCSupported()" ng-click="makeCall()") #[span #{ the_widget.button_label || 'Call Now!' }]
-          .not-supported#not-supported-message(ng-show="!isWebRTCSupported()")
+          button.btn-style.mdi-communication-call#launch_call(ng-show="showCallButton()" ng-click="makeCall()") #[span #{ the_widget.button_label || 'Call Now!' }]
+          .not-supported#not-supported-message(ng-show="!showCallButton()")
             !{the_widget.show_text_html}
           .widget-footer-left
             a(href="https://test.webrtc.org/" target="_blank") Test your setup
