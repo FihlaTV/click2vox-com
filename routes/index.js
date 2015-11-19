@@ -59,10 +59,13 @@ module.exports = function(passport, voxbone){
   router.post('/signup', function(req, res, next){
     var formData = req.body;
     var result = { message: "", errors: true, redirect: "", email: formData.email }
+    var bypass_account_check = (process.env.BYPASS_PRE_EXISTING_ACCOUNTS_CHECK === "true");
 
     Account.findOne({ email: formData.email }, function(err, the_account){
 
-      if (!process.env.BYPASS_PRE_EXISTING_ACCOUNTS_CHECK) {
+      if (!bypass_account_check) {
+        console.log('-' +bypass_account_check+'-');
+        console.log('Checking existing account for ' + formData.email);
         if(!the_account){
           result.message = "Account not allowed to register";
           return res.status(400).json(result);
@@ -88,6 +91,7 @@ module.exports = function(passport, voxbone){
           return res.status(400).json(result);
         };
       } else {
+        console.log('Bypassing account check for ' + formData.email);
         the_account = new Account({
           email: formData.email
         });
