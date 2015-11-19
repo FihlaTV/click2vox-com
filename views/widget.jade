@@ -132,8 +132,10 @@ block content
           var number;
           if($scope.showWidgetCode)
             number = '#{did}';
-          else
-            number = '13072787231'; //16092975366 // echo test
+          else {
+            number = '13072787231'; // echo test
+            //- number = '16092975366'; // digits test
+          }
 
           console.log('Calling ' + number);
           voxbone.WebRTC.call(number);
@@ -206,9 +208,11 @@ block content
             console.log("success!");
             $scope.showWidgetCode = true;
             $scope.widget.generateOutputCode();
+            $scope.widget_form.cannot_validate_sip_uri = false;
           }, function errorCallback(response){
             console.log("Something went wrong: ");
             console.log(response.data);
+            $scope.widget_form.cannot_validate_sip_uri = true;
           });
         }else{
           console.log("SIP URI not valid");
@@ -283,11 +287,11 @@ block content
                   .form-group
                     label.control-label SIP URI
                       span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?
-                    input.form-control(required type="email", id="sip_uri", name="sip_uri", ng-model="widget.sip_uri", ng-pattern="/^[^@]+@[^@]+$/", ng-blur="sip_provisioning(widget_form)", placeholder="i.e. SIP: echo@ivrs")
-                    div(ng-show="widget_form.sip_uri.$touched")
+                    input.form-control(required type="email", id="sip_uri", name="sip_uri", ng-model="widget.sip_uri", ng-pattern="/^[^@]+@[^@]+$/", ng-blur="sip_provisioning(widget_form)", placeholder="i.e. echo@ivrs")
+                    div(style='color: red' sng-show="widget_form.sip_uri.$touched")
                       div(ng-show="widget_form.sip_uri.$error.required") SIP URI is required
                       div(ng-show="widget_form.sip_uri.$error.pattern") SIP URI must be valid
-                      div(ng-show="widget_form.cannot_validate_sip_uri") SIP URI cannot be validated
+                      div(ng-show="widget_form.cannot_validate_sip_uri") SIP URI cannot be validated. Please, try Again
                   .panel.panel-default
                     .panel-heading
                       a.collapsed.title-toggle(data-toggle="collapse",data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
