@@ -50,7 +50,7 @@ module.exports = function(passport, voxbone){
     req.logout();
     if (req.query.email && req.query.password){
       res.render('signup', { title: title, email: req.query.email, temp_password: req.query.password, account: accountLoggedIn(req) });
-    } else{
+    } else {
       res.render('login', { title: title, account: accountLoggedIn(req) });
     };
   });
@@ -61,26 +61,36 @@ module.exports = function(passport, voxbone){
     var result = { message: "", errors: true, redirect: "", email: formData.email }
 
     Account.findOne({ email: formData.email }, function(err, the_account){
-      console.log('sssss');
-      if(!the_account){
-        result.message = "Account not allowed to register";
-        return res.status(400).json(result);
-      };
-      if(the_account.temporary_password != formData.temporary_password){
-        result.message = "Account not allowed to register";
-        return res.status(400).json(result);
-      };
-      if(the_account.password){
-        result.message = "Account already registered";
-        return res.status(400).json(result);
-      };
-      if(formData.password !== formData.confirmation){
-        result.message = "Validation failed. Password and Confirmation do not match";
-        return res.status(400).json(result);
-      };
-      if(formData.password && formData.password.trim() < 8){
-        result.message = "Validation failed. Password policies are not satisfied";
-        return res.status(400).json(result);
+
+      if (!process.env.BYPASS_PRE_EXISTING_ACCOUNTS_CHECK) {
+        if(!the_account){
+          result.message = "Account not allowed to register";
+          return res.status(400).json(result);
+        };
+
+        if(the_account.temporary_password != formData.temporary_password){
+          result.message = "Account not allowed to register";
+          return res.status(400).json(result);
+        };
+
+        if(the_account.password){
+          result.message = "Account already registered";
+          return res.status(400).json(result);
+        };
+
+        if(formData.password !== formData.confirmation){
+          result.message = "Validation failed. Password and Confirmation do not match";
+          return res.status(400).json(result);
+        };
+
+        if(formData.password && formData.password.trim() < 8){
+          result.message = "Validation failed. Password policies are not satisfied";
+          return res.status(400).json(result);
+        };
+      } else {
+        the_account = new Account({
+          email: formData.email
+        });
       };
 
       result.errors = false;
