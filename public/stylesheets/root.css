@@ -559,7 +559,7 @@ strong {
   min-width: 120px;
   padding: 10px 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  text-shadow: 0px -1px #07619e;
+  text-shadow: 0px -1px #07619E;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -607,7 +607,7 @@ strong {
   min-width: 120px;
   padding: 10px 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  text-shadow: 0px -1px #07619e;
+  text-shadow: 0px -1px #07619E;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -627,13 +627,22 @@ strong {
   -moz-border-radius: 6px;
   border-radius: 6px;
 }
-.widget-box .widget-footer {
+.widget-box .widget-footer-left {
+  position: absolute;
+  font-size: 9px;
+  bottom: 8px;
+  left: 8px;
+}
+.widget-box .widget-footer-left a {
+  padding-right: 62px;
+}
+.widget-box .widget-footer-right {
   position: absolute;
   font-size: 9px;
   bottom: 8px;
   right: 8px;
 }
-.widget-box .widget-footer a {
+.widget-box .widget-footer-right a {
   padding-right: 62px;
   background-image: url('../../images/widget-brand.png');
   background-size: 60px 12.5px;
@@ -685,7 +694,7 @@ strong {
   min-width: 120px;
   padding: 10px 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  text-shadow: 0px -1px #07619e;
+  text-shadow: 0px -1px #07619E;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -742,7 +751,7 @@ strong {
   min-width: 120px;
   padding: 10px 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  text-shadow: 0px -1px #07619e;
+  text-shadow: 0px -1px #07619E;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
