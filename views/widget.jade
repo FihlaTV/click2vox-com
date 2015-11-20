@@ -387,8 +387,10 @@ block content
                             a(href="#" onclick="$('#code_debug_codepen').submit();") CodePen
 
                   .widget-code-wrap
-                    .sample.shadow-z-2.prettyprint#widget_code
-                      | {{ widget.widget_code }}
+                    .sample.shadow-z-2#widget_code
+                      pre.prettyprint.lang-html
+                        code.prettyprint.lang-html
+                          | {{ widget.widget_code }}
                     .codebox-actions
                       #[a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy]
                       #[a(href="#" id="generate-output-code" ng-click='widget.generateOutputCode()') Generate Code]
