@@ -17,6 +17,10 @@ var request = require('request');
 
 module.exports = function(passport, voxbone){
 
+  router.get('/ping', function(req, res, next){
+    res.json({ 'ping': Date.now(), 'version': pjson.version });
+  });
+
   // Redirects if not HTTPS
   router.get('*',function(req,res,next){
     if(process.env.FORCE_HTTPS == 'true' && process.env.APP_URL && req.headers['x-forwarded-proto'] != 'https')
