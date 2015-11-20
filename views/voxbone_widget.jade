@@ -187,10 +187,10 @@ html(lang='en', ng-app="voxboneApp")
   body
     .main
       .body(ng-controller="VoxboneWidgetController")
-        .widget-box(class="#{ the_widget.button_style || 'style-b' }")
-          button.btn-style.mdi-communication-call#launch_call(ng-show="showCallButton()" ng-click="makeCall()") #[span #{ the_widget.button_label || 'Call Now!' }]
-          .not-supported#not-supported-message(ng-show="!showCallButton()")
+        .not-supported#not-supported-message(ng-show="!showCallButton()")
             !{the_widget.show_text_html}
+        .widget-box(class="#{ the_widget.button_style || 'style-b' }" ng-show="showCallButton()")
+          button.btn-style.mdi-communication-call#launch_call(ng-click="makeCall()") #[span #{ the_widget.button_label || 'Call Now!' }]
           .widget-footer-left
             a(href="https://test.webrtc.org/" target="_blank") Test your setup
           .widget-footer-right

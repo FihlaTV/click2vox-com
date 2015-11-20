@@ -359,9 +359,9 @@ block content
               span.title Preview
               .boxPanel.preview
                 .prev-view.light
-                  .widget-box.style-b
-                    button.btn-style.mdi-communication-call#launch_call(ng-show="showCallButton()" ng-click="makeCall()") #[span {{widget.button_label || 'Call Sales'}}]
-                    .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="widget.show_text_html_value")
+                  .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="widget.show_text_html_value")
+                  .widget-box.style-b(ng-show="showCallButton()")
+                    button.btn-style.mdi-communication-call#launch_call( ng-click="makeCall()") #[span {{widget.button_label || 'Call Sales'}}]
                     .widget-footer-left
                       a(href="https://test.webrtc.org/" target="_blank") Test your setup
                     .widget-footer-right
