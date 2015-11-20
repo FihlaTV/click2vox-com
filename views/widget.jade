@@ -127,15 +127,12 @@ block content
       }
 
       $scope.makeCall = function () {
-        if(!$scope.isWebRTCSupported()){
-          console.log("WebRTC is NOT supported!");
+        if($scope.widget.incompatible_browser_configuration == 'link_button_to_a_page') {
+          $window.open($scope.widget.link_button_to_a_page_value,'_blank');
+          return;
+        }
 
-          if($scope.widget.hide_widget)
-            return;
-          else if($scope.widget.link_button_to_a_page_value)
-            $window.open($scope.widget.link_button_to_a_page_value,'_blank')
-
-        } else{
+        if($scope.isWebRTCSupported()){
           $("#vw-title").text("Calling");
           $(".vw-animated-dots").removeClass('hidden');
           $(".vox-widget-wrapper").removeClass('hidden');
