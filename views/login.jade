@@ -38,36 +38,37 @@ block content
             .then(function successCallback(response){
               $window.location.href = response.data.redirect;
             }, function errorCallback(response){
-              document.getElementById("alert").innerHTML = "Incorrect Email or Password, try again.";
-              document.getElementById("alert").style.display = "block";
+              $("#alert").removeClass('hidden');
             });
         }
       }]);
 
   .main.registerPage
-    .row
-      .col-xs-12
+    .body
+      .container
+        .row
+          .col-sm-12
 
-        h1 Login
+            h1 Login
 
-        #alert.alert.alert-danger(style="display: none;")
+            #alert.alert.alert-danger.hidden Incorrect Email or Password, try again.
 
-        #form_container
-          .formWrap
-            form#login_form(name="login_form", novalidate, ng-controller="LoginController")
-              .form-group
-                label.control-label Email
-                input.form-control(type="email" id="uemail" name="uemail" ng-model="login.uemail", required, value= "#{email}")
-                div(ng-show="login_form.$submitted || login_form.uemail.$touched")
-                  div(ng-show="login_form.uemail.$error.required") Email is required
-                div(ng-show="login_form.uemail.$dirty && login_form.uemail.$invalid")
-                  div(ng-show="login_form.uemail.$error.email") Email is invalid
-              .form-group
-                label.control-label Password
-                input.form-control(type="password", id="upassword", name="upassword", ng-model="login.upassword", required)
-                div(ng-show="login_form.$submitted || login_form.upassword.$touched")
-                  div(ng-show="login_form.upassword.$error.required") Password is required
+            #form_container
+              .formWrap
+                form#login_form(name="login_form", novalidate, ng-controller="LoginController")
+                  .form-group
+                    label.control-label Email
+                    input.form-control(type="email" id="uemail" name="uemail" ng-model="login.uemail", required, value= "#{email}")
+                    div(ng-show="login_form.$submitted || login_form.uemail.$touched")
+                      div(ng-show="login_form.uemail.$error.required") Email is required
+                    div(ng-show="login_form.uemail.$dirty && login_form.uemail.$invalid")
+                      div(ng-show="login_form.uemail.$error.email") Email is invalid
+                  .form-group
+                    label.control-label Password
+                    input.form-control(type="password", id="upassword", name="upassword", ng-model="login.upassword", required)
+                    div(ng-show="login_form.$submitted || login_form.upassword.$touched")
+                      div(ng-show="login_form.upassword.$error.required") Password is required
 
-              button.btn.btn-default#login(ng-disabled="login_form.$invalid" ng-click="login.processForm()") Login
-              br
-              a(href="/forgot") Forgot your password?
+                  button.btn.btn-default#login(ng-disabled="login_form.$invalid" ng-click="login.processForm()") Login
+                  br
+                  a(href="/forgot") Forgot your password?

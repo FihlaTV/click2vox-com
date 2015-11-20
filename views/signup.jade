@@ -65,35 +65,37 @@ block content
     }]);
 
   .main.registerPage
-    .row
-      .col-xs-12
-        h1 Create Account
+    .body
+      .container
+        .row
+          .col-sm-12
+            h1 Create Account
 
-        #alert.alert.alert-danger(style="display: none;")
+            #alert.alert.alert-danger(style="display: none;")
 
-        #form_container
-          p.
-            #[b Note:] the Voxbone WebRTC Free Trial will not be linked to your existing Voxbone account. To use your Voxbone account and an existing DID, please see #[a(href="#") view instructions]
+            #form_container
+              p.
+                #[b Note:] the Voxbone WebRTC Free Trial will not be linked to your existing Voxbone account. To use your Voxbone account and an existing DID, please see #[a(href="#") view instructions]
 
-          .formWrap
-            form#create_account(name="create_account" novalidate ng-controller="formController")
-              .form-group
-                input(type="hidden" name="temporary_password" ng-model="account.temporary_password")
-                label.control-label Email address
-                input.form-control(type="text" id="uemail" name="uemail" ng-model="account.uemail" disabled)
-              .form-group
-                label.control-label Password
-                input.form-control(type="password" id="upassword" name="upassword" ng-model="account.upassword" required ng-minlength="8")
-                div(ng-show="create_account.$submitted || create_account.upassword.$touched")
-                  div(ng-show="create_account.upassword.$error.required") Password is required
-                  div(ng-show="create_account.upassword.$error.minlength") Password must be at least 8 characters in length
-              .form-group
-                label.control-label Confirm Password
-                input.form-control(type="password" id="confirmation" name="confirmation" ng-model="account.confirmation" required pw-check="upassword")
-                div(ng-show="create_account.$submitted || create_account.confirmation.$touched")
-                  div(ng-show="create_account.confirmation.$error.pwmatch") Password confirmation does not match
-              button.btn.btn-default#create(ng-disabled="create_account.$invalid" ng-click="account.processForm()") Create Account
-              br
-              p Already have an account? #[a(href="login") Login here]
+              .formWrap
+                form#create_account(name="create_account" novalidate ng-controller="formController")
+                  .form-group
+                    input(type="hidden" name="temporary_password" ng-model="account.temporary_password")
+                    label.control-label Email address
+                    input.form-control(type="text" id="uemail" name="uemail" ng-model="account.uemail" disabled)
+                  .form-group
+                    label.control-label Password
+                    input.form-control(type="password" id="upassword" name="upassword" ng-model="account.upassword" required ng-minlength="8")
+                    div(ng-show="create_account.$submitted || create_account.upassword.$touched")
+                      div(ng-show="create_account.upassword.$error.required") Password is required
+                      div(ng-show="create_account.upassword.$error.minlength") Password must be at least 8 characters in length
+                  .form-group
+                    label.control-label Confirm Password
+                    input.form-control(type="password" id="confirmation" name="confirmation" ng-model="account.confirmation" required pw-check="upassword")
+                    div(ng-show="create_account.$submitted || create_account.confirmation.$touched")
+                      div(ng-show="create_account.confirmation.$error.pwmatch") Password confirmation does not match
+                  button.btn.btn-default#create(ng-disabled="create_account.$invalid" ng-click="account.processForm()") Create Account
+                  br
+                  p Already have an account? #[a(href="login") Login here]
 
 
