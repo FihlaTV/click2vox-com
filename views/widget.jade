@@ -77,6 +77,7 @@ block content
     app.controller('WidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
 
       $scope.showWidgetCode = false;
+      $scope.sipUriLinked = false;
 
       $scope.master = {
         dial_pad: true,
@@ -163,7 +164,16 @@ block content
       $scope.reset();
       $scope.init();
 
+      $scope.widget.setTheme = function (theme) {
+        if (!$scope.sipUriLinked) return;
+        if ($scope.widget.button_style != theme) {
+          $scope.widget.button_style = theme;
+          $scope.widget.generateOutputCode();
+        };
+      };
+
       $scope.widget.generateOutputCode = function(){
+        if (!$scope.sipUriLinked) return;
         console.log("--> Generating Output Code...");
 
         var data = {
@@ -198,13 +208,18 @@ block content
             .then(function successCallback(response){
               //- console.log(response.data);
               $('#generate-output-code')[0].text = "Regenerate Code";
+              $scope.showWidgetCode = true;
               $scope.widget.widget_code = response.data.widget_code;
-          }, function errorCallback(){
-            console.log("entered error callback");
-          });
+            },
+            function errorCallback(){
+              $scope.showWidgetCode = false;
+              console.log("entered error callback");
+            });
       };
 
       $scope.sip_provisioning = function(form) {
+        $scope.sipUriLinked = false;
+        $scope.showWidgetCode = false;
         $scope.widget.widget_code = 'Generating code snippet...';
         $scope.widget_form.sip_provisioning = true;
         $scope.widget_form.sip_provisioned = false;
@@ -227,6 +242,7 @@ block content
             //- console.log(response.data);
             //- console.log("Success!");
             $scope.showWidgetCode = true;
+            $scope.sipUriLinked = true;
             $scope.widget.generateOutputCode();
             $scope.widget_form.cannot_validate_sip_uri = '';
             $scope.widget_form.sip_provisioning = false;
@@ -234,7 +250,6 @@ block content
           }, function errorCallback(response){
             console.log("Error: ");
             console.log(response.data);
-            $scope.showWidgetCode = false;
             $scope.widget.widget_code = 'Error generating widget code snippet. Please check it.';
             $scope.widget_form.cannot_validate_sip_uri = response.data.errors.comeback_errors.apiErrorMessage;
             $scope.widget_form.sip_provisioning = false;
@@ -304,11 +319,11 @@ block content
                 .boxPanel
                   .form-group
                     label Button Label:
-                    input.form-control(type="text", name="button_label", ng-model="widget.button_label" value="Call Sales" placeholder="i.e. Call Sales")
+                    input.form-control(type="text", name="button_label", ng-model="widget.button_label" value="Call Sales" placeholder="i.e. Call Sales" ng-change='widget.generateOutputCode()' ng-model-options="{ updateOn: 'blur' }")
                   .form-group
                     label Button Style:
-                    button.btn-style-a(ng-click="widget.button_style = 'style-a'") #[span {{ widget.button_label || 'Call Sales' }}]
-                    button.btn-style-b(ng-click="widget.button_style = 'style-b'") #[span {{ widget.button_label || 'Call Sales' }}]
+                    button.btn-style-a(ng-click="widget.setTheme('style-a')") #[span {{ widget.button_label || 'Call Sales' }}]
+                    button.btn-style-b(ng-click="widget.setTheme('style-b')") #[span {{ widget.button_label || 'Call Sales' }}]
               span.title Call Configuration
               form#widget_form(name="widget_form", novalidate)
                 .boxPanel
@@ -316,7 +331,7 @@ block content
                     label.control-label SIP URI
                       span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?
                     input.form-control(required type="text" id="sip_uri" name="sip_uri" ng-model="widget.sip_uri" ng-pattern="/^[^@]+@[^@]+$/" ng-blur="sip_provisioning(widget_form)" placeholder="i.e. echo@ivrs")
-                    div(style='color: green' ng-show="widget_form.sip_provisioning || widget_form.sip_provisioned" )
+                    div(style='color: green' ng-show="widget_form.sip_provisioning || widget_form.sip_provisioned")
                       div(ng-show="widget_form.sip_provisioning") Provisioning SIP URI...
                       div(ng-show="widget_form.sip_provisioned") SIP URI Provisioned!
                     div(style='color: red' ng-show="widget_form.sip_uri.$touched" )
@@ -331,21 +346,21 @@ block content
                         .form-group
                           label(for="btn-context") Caller ID
                             span.badge(data-toggle='tooltip' data-placement="right" title="Enter the Caller ID that you would like sent with your Click2Vox widget calls") ?
-                          input.form-control(type="text" name="caller_id" ng-model="widget.caller_id" value="voxrtc_demo" placeholder="i.e. voxrtc_demo")
+                          input.form-control(type="text" name="caller_id" ng-model="widget.caller_id" value="voxrtc_demo" placeholder="i.e. voxrtc_demo" ng-change='widget.generateOutputCode()' ng-model-options="{ updateOn: 'blur' }")
                         .form-group
                           label(for="btn-context") Context
                             span.badge(data-toggle='tooltip' data-placement="right" title="Send custom data to your SIP server using the X-Voxbone-Context header. Make sure to configure your SIP server to process this header.") ?
-                          input.form-control(type="text" name="context" ng-model="widget.context")
+                          input.form-control(type="text" name="context" ng-model="widget.context" ng-change='widget.generateOutputCode()' ng-model-options="{ updateOn: 'blur' }")
                         .form-group
                           label(for="btn-context") DTMF Dial Pad
-                            input(type="checkbox" name="dial_pad" ng-model="widget.dial_pad")
+                            input(type="checkbox" name="dial_pad" ng-model="widget.dial_pad" ng-change='widget.generateOutputCode()' ng-model-options="{ updateOn: 'blur' }")
                             span.badge(data-toggle='tooltip' data-placement="right" title="Display a dialpad to allow your users to enter DTMF digits during a call.") ?
                         .form-group
-                          label(for="btn-context") Send Digits #[span.badge(data-toggle='tooltip' data-placement="right" title="Automatically send DTMF digit(s) after a call is connected. This is useful for automatically navigating IVRs or entering access codes for a conference bridge. Digits should use the following format:'1,2,3,1200ms,4,5,900ms,6,#' - This string will  generate 1 2 3, wait 1200 milliseconds, enter 4, 5, wait 900 milliseconds then enter 6, #") ?]
-                          input.form-control(type="text" name="send_digits" ng-model="widget.send_digits")
+                          label(for="btn-context") Send Digits #[span.badge(data-toggle='tooltip' data-placement="right" title="Automatically send DTMF digit(s) after a call is connected. This is useful for automatically navigating IVRs or entering access codes for a conference bridge. Digits should use the following format:'1,2,3,1200ms,4,5,900ms,6,#' - This string will generate 1 2 3, wait 1200 milliseconds, enter 4, 5, wait 900 milliseconds then enter 6, #") ?]
+                          input.form-control(type="text" name="send_digits" ng-model="widget.send_digits" ng-change='widget.generateOutputCode()' ng-model-options="{ updateOn: 'blur' }")
                   .panel.panel-default
                     .panel-heading
-                      a.collapsed.title-toggle(data-toggle="collapse",data-target="#collapseIncompatileBrowserConfiguration",href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
+                      a.collapsed.title-toggle(data-toggle="collapse" data-target="#collapseIncompatileBrowserConfiguration" href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
                     .panel-collapse.collapse#collapseIncompatileBrowserConfiguration
                       .options-wrap.active
                         .form-group
@@ -358,13 +373,13 @@ block content
                             input(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="link_button_to_a_page")
                             span.radio-name Link button to a page
                             span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, specify a URL to go to when the button is clicked") ?
-                            input.form-control(http-prefix type="url" name="link_button_to_a_page_value" ng-model="widget.link_button_to_a_page_value" ng-show="widget.incompatible_browser_configuration == 'link_button_to_a_page'" placeholder="i.e. https://mysite.com")
+                            input.form-control(http-prefix type="url" name="link_button_to_a_page_value" ng-model="widget.link_button_to_a_page_value" ng-show="widget.incompatible_browser_configuration == 'link_button_to_a_page'" placeholder="i.e. https://mysite.com" ng-change='widget.generateOutputCode()' ng-model-options="{ updateOn: 'blur' }")
                         .form-group
                           label
                             input(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="show_text_html")
                             span.radio-name Show text/HTML
                             span.badge(data-toggle='tooltip' data-placement="right" title="Instead of showing the button, display the entered HTML ") ?
-                            textarea.form-control(type="text" name="show_text_html_value", placeholder="Enter text or HTML" ng-show="widget.incompatible_browser_configuration == 'show_text_html'" ng-model="widget.show_text_html_value")
+                            textarea.form-control(type="text" name="show_text_html_value", placeholder="Enter text or HTML" ng-show="widget.incompatible_browser_configuration == 'show_text_html'" ng-model="widget.show_text_html_value" ng-change='widget.generateOutputCode()' ng-model-options="{ updateOn: 'blur' }")
 
           .col-sm-6.right-col
             .section
