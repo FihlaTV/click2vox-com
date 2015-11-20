@@ -83,7 +83,7 @@ block content
         button_style: 'style-b',
         background_style: 'dark',
         widget_code: 'Click on Generate Code!',
-        //- sip_uri: 'echo@ivrs',
+        sip_uri: 'echo@ivrs',
         show_text_html_value: '<h3>This is a placeholder for your message</h3>'
       };
 
@@ -198,7 +198,7 @@ block content
       $scope.sip_provisioning = function(form) {
         $scope.widget_form.sip_provisioning = true;
         $scope.widget_form.sip_provisioned = false;
-        $scope.widget_form.cannot_validate_sip_uri = false;
+        $scope.widget_form.cannot_validate_sip_uri = '';
 
         if (form.$valid) {
           var req = {
@@ -218,21 +218,20 @@ block content
             //- console.log("Success!");
             $scope.showWidgetCode = true;
             $scope.widget.generateOutputCode();
-            $scope.widget_form.cannot_validate_sip_uri = false;
+            $scope.widget_form.cannot_validate_sip_uri = '';
             $scope.widget_form.sip_provisioning = false;
             $scope.widget_form.sip_provisioned = true;
           }, function errorCallback(response){
             console.log("Error: ");
             console.log(response.data);
-            $scope.widget_form.cannot_validate_sip_uri = true;
+            $scope.widget_form.cannot_validate_sip_uri = response.data.errors.comeback_errors.apiErrorMessage;
             $scope.widget_form.sip_provisioning = false;
             $scope.widget_form.sip_provisioned = false;
           });
-        }else{
+        } else {
           $scope.widget_form.sip_provisioning = false;
           $scope.widget_form.sip_provisioned = false;
           $scope.widget_form.sip_uri.$error.pattern = true;
-          console.log("SIP URI not valid");
         }
       }
     }]);
@@ -304,14 +303,14 @@ block content
                   .form-group
                     label.control-label SIP URI
                       span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?
-                    input.form-control(required type="email" id="sip_uri" name="sip_uri" ng-model="widget.sip_uri" ng-pattern="/^[^@]+@[^@]+$/" ng-blur="sip_provisioning(widget_form)" placeholder="i.e. echo@ivrs")
+                    input.form-control(required type="text" id="sip_uri" name="sip_uri" ng-model="widget.sip_uri" ng-pattern="/^[^@]+@[^@]+$/" ng-blur="sip_provisioning(widget_form)" placeholder="i.e. echo@ivrs")
                     div(style='color: green' ng-show="widget_form.sip_provisioning || widget_form.sip_provisioned" )
                       div(ng-show="widget_form.sip_provisioning") Provisioning SIP URI...
                       div(ng-show="widget_form.sip_provisioned") SIP URI Provisioned!
                     div(style='color: red' ng-show="widget_form.sip_uri.$touched" )
                       div(ng-show="widget_form.sip_uri.$error.required") SIP URI is required
                       div(ng-show="widget_form.sip_uri.$error.pattern") SIP URI must be valid
-                      div(ng-show="widget_form.cannot_validate_sip_uri") SIP URI cannot be validated. Please, try again
+                      div(ng-show="widget_form.cannot_validate_sip_uri") {{ widget_form.cannot_validate_sip_uri || 'SIP URI cannot be validated. Please, try again'}}
                   .panel.panel-default
                     .panel-heading
                       a.collapsed.title-toggle(data-toggle="collapse",data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
