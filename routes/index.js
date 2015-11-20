@@ -409,14 +409,15 @@ module.exports = function(passport, voxbone){
             body: JSON.stringify(put_data)
           },
           function(err, response, body){
+
             var response_body = JSON.parse(body);
             if(response_body['httpStatusCode']){
-              console.log(body);
-              done({ message: "Could not create the voice uri for SIP URI: " + req.body.sip_uri + " and user: " + req.user.email + " . Probably already exists. View previous logs for more details." });
-            }else{
+              // console.log(body);
+              done({ httpStatusCode: response_body['httpStatusCode'], comeback_errors: response_body.errors[0], message: "Could not create the voice uri for SIP URI: " + req.body.sip_uri + " and user: " + req.user.email + " . Probably already exists. View previous logs for more details." });
+            } else {
               //success
-              var didID = account.didID;
               // var voice_uri_id = response_body['voiceUri']['voiceUriId'];
+              var didID = account.didID;
               var post_data = { "didIds" : [ didID ], "voiceUriId" : voice_uri_id };
               done(err, post_data, didID);
             }
@@ -445,14 +446,14 @@ module.exports = function(passport, voxbone){
       }
       ],
       function(err, result){
-        var result = {message: "", errors: null};
-        if(err){
+        result = { errors: null };
+        if (err) {
           console.log("An error ocurred: ");
           console.log(err);
           result.errors = err;
-          return res.status(500).json(result);
-        }else{
-          console.log(result);
+          return res.status(result.errors.httpStatusCode || 500).json(result);
+        } else {
+          // console.log(result);
           result.message = "Success";
           return res.status(200).json(result);
         }
