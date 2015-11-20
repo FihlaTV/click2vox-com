@@ -8,7 +8,7 @@
 
 ### Mailing
 
-* [SendGrid](sendgrid.com) TBD
+* [SendGrid](sendgrid.com)
 
 ### Environment Variables
 
@@ -25,6 +25,7 @@
 * VOXBONE_MARKETING_PASSWORD
 * GOOGLE_ANALYTICS_ID
 * BYPASS_PRE_EXISTING_ACCOUNTS_CHECK (WARNING: Use Carefully! )
+* NEW_RELIC_LICENSE_KEY
 
 ### To Run locally
 
