@@ -145,14 +145,7 @@ block content
           else
             $("#dialpad").addClass('hidden');
 
-          var number;
-          if($scope.showWidgetCode)
-            number = '#{did}';
-          else {
-            number = '13072787231'; // echo test
-            //- number = '16092975366'; // digits test
-          }
-
+          var number = '#{did}';
           console.log('Calling ' + number);
           voxbone.WebRTC.call(number);
           window.onbeforeunload = function(e){
@@ -388,7 +381,7 @@ block content
                 .prev-view.light
                   .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
                   .widget-box.style-b(ng-show="showCallButton()")
-                    button.btn-style.mdi-communication-call#launch_call(ng-click="makeCall()") #[span {{widget.button_label || 'Call Sales'}}]
+                    button.btn-style.mdi-communication-call#launch_call(ng-disabled="!showWidgetCode" ng-click="makeCall()") #[span {{widget.button_label || 'Call Sales'}}]
                     .widget-footer-left
                       a(href="https://test.webrtc.org/" target="_blank") Test your setup
                     .widget-footer-right

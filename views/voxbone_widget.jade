@@ -163,8 +163,6 @@ html(lang='en', ng-app="voxboneApp")
                   parent.postMessage("openWidgetWithoutDialPad","*");
                 }
 
-                //- var number = '13072787231'; //16092975366 // echo test
-                //- voxbone.WebRTC.call(number);
                 voxbone.WebRTC.call('#{did}');
                 window.onbeforeunload = function(e){
                   voxbone.WebRTC.rtcSession.terminate();
