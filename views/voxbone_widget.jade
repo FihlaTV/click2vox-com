@@ -34,7 +34,7 @@ html(lang='en', ng-app="voxboneApp")
           parent.postMessage("setCallCalling","*");
         },
         'failed': function (e){
-          console.log('Failed to connect: ' + e.data.cause);
+          console.log('Failed to connect: ' + e.cause);
           parent.postMessage("setCallFailed","*");
         },
         'accepted': function (e){
@@ -44,6 +44,10 @@ html(lang='en', ng-app="voxboneApp")
         'ended': function (e){
           console.log('Call ended');
           parent.postMessage("setCallEnded","*");
+        },
+        'getUserMediaFailed': function (e){
+          console.log('Cannot get User Media');
+          parent.postMessage("setCallFailedUserMedia","*");
         }
       };
 
