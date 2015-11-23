@@ -367,8 +367,8 @@ module.exports = function(passport, voxbone){
 
         request.get(url,
             { 'auth': {
-                'user' : process.env.VOXBONE_MARKETING_USERNAME,
-                'pass' : process.env.VOXBONE_MARKETING_PASSWORD
+                'user' : process.env.VOXBONE_API_USERNAME,
+                'pass' : process.env.VOXBONE_API_PASSWORD
               },
               headers: {
                 'Content-type' : 'application/json',
@@ -399,8 +399,8 @@ module.exports = function(passport, voxbone){
         var url = "https://api.voxbone.com/ws-voxbone/services/rest/configuration/voiceuri";
         request.put(url,
           { 'auth': {
-              'user' : process.env.VOXBONE_MARKETING_USERNAME,
-              'pass' : process.env.VOXBONE_MARKETING_PASSWORD
+              'user' : process.env.VOXBONE_API_USERNAME,
+              'pass' : process.env.VOXBONE_API_PASSWORD
             },
             headers: {
               'Content-type' : 'application/json',
@@ -430,8 +430,8 @@ module.exports = function(passport, voxbone){
         var url = "https://api.voxbone.com/ws-voxbone/services/rest/configuration/configuration";
         request.post(url,
             { 'auth': {
-                'user' : process.env.VOXBONE_MARKETING_USERNAME,
-                'pass' : process.env.VOXBONE_MARKETING_PASSWORD
+                'user' : process.env.VOXBONE_API_USERNAME,
+                'pass' : process.env.VOXBONE_API_PASSWORD
               },
               headers: {
                 'Content-type' : 'application/json',
