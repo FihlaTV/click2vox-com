@@ -61,17 +61,14 @@ html(lang='en', ng-app="voxboneApp")
 
             voxbone.WebRTC.customEventHandler = eventHandlers;
 
-            if('#{the_widget.sip_uri}')
-              voxbone.WebRTC.configuration.uri = '#{the_widget.sip_uri}';
-
             if('#{the_widget.caller_id}')
-              voxbone.WebRTC.configuration.display_name = '#{the_widget.caller_id}';
+              voxbone.WebRTC.configuration.uri = (new JsSIP.URI(scheme="sip", user='#{the_widget.caller_id}', "voxbone.com")).toString();
 
             if('#{the_widget.context}')
               voxbone.WebRTC.context = '#{the_widget.context}';
 
             if('#{the_widget.send_digits}') {
-              console.log('Digits sent: #{the_widget.send_digits}')
+              console.log('Digits sent: #{the_widget.send_digits}');
               voxbone.WebRTC.configuration.dialer_string = '#{the_widget.send_digits}';
             }
 

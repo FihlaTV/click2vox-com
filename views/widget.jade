@@ -162,6 +162,17 @@ block content
           else
             $("#dialpad").addClass('hidden');
 
+          if($scope.widget.caller_id)
+            voxbone.WebRTC.configuration.uri = (new JsSIP.URI(scheme="sip", user='' + $scope.widget.caller_id, "voxbone.com")).toString();
+
+          if($scope.widget.context)
+            voxbone.WebRTC.context = $scope.widget.context;
+
+          if($scope.widget.send_digits) {
+            console.log('Digits sent: ' + $scope.widget.send_digits);
+            voxbone.WebRTC.configuration.dialer_string = $scope.widget.send_digits;
+          }
+
           var number = '#{did}';
           console.log('Calling ' + number);
           voxbone.WebRTC.call(number);
