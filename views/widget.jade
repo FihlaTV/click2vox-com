@@ -127,7 +127,15 @@ block content
         };
       }
 
+      $scope.isInCall = function () {
+        return (typeof voxbone.WebRTC.rtcSession.isEstablished === "function") && voxbone.WebRTC.rtcSession.isEstablished();
+      }
+
       $scope.makeCall = function () {
+
+        if ($scope.isInCall())
+          return;
+
         if($scope.widget.incompatible_browser_configuration == 'link_button_to_a_page') {
           $window.open($scope.widget.link_button_to_a_page_value,'_blank');
           return;
