@@ -175,10 +175,10 @@ block content
       $scope.init();
 
       $scope.widget.setTheme = function (theme) {
-        if (!$scope.sipUriLinked) return;
         if ($scope.widget.button_style != theme) {
           $scope.widget.button_style = theme;
-          $scope.widget.generateOutputCode();
+          if ($scope.sipUriLinked)
+            $scope.widget.generateOutputCode();
         };
       };
 
