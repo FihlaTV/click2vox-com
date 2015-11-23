@@ -75,7 +75,7 @@ html(lang='en', ng-app="voxboneApp")
           };
 
           $scope.send_voxbone_interaction = function (message){
-            if (!voxbone.WebRTC.rtcSession.isEstablished())
+            if (!voxbone.WebRTC.rtcSession || !voxbone.WebRTC.rtcSession.isEstablished())
               return;
 
             switch(message) {
@@ -146,6 +146,10 @@ html(lang='en', ng-app="voxboneApp")
             return $scope.isWebRTCSupported() || '#{the_widget.link_button_to_a_page}';
           }
 
+          $scope.isInCall = function () {
+            return (typeof voxbone.WebRTC.rtcSession.isEstablished === "function") && voxbone.WebRTC.rtcSession.isEstablished();
+          }
+
           $scope.makeCall = function () {
             if(!$scope.isWebRTCSupported()){
               console.log("WebRTC is NOT supported!");
@@ -156,6 +160,9 @@ html(lang='en', ng-app="voxboneApp")
                 $window.open('#{the_widget.link_button_to_a_page}','_blank');
 
             } else{
+
+                if ($scope.isInCall())
+                  return;
 
                 if(#{the_widget.dial_pad}) {
                   parent.postMessage("openWidget","*");
