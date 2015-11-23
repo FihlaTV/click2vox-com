@@ -1,4 +1,23 @@
 @import url(//cdnjs.cloudflare.com/ajax/libs/raty/2.7.0/jquery.raty.css);
+@import url(//fonts.googleapis.com/css?family=Open+Sans:400,300,700,400italic);
+
+/* Fonts */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4 {
+  font-family: 'Open Sans', sans-serif;
+  color: #343c3e;
+  font-weight: normal;
+  font-weight: 700;
+}
 
 body.test {
   position: absolute;
@@ -178,7 +197,7 @@ a {
 }
 
 .vox-widget-wrapper .vw-body .vw-rating .vw-message  input[type="text"]{
-  margin-top:5px; 
+  margin-top:5px;
 }
 .vox-widget-wrapper .vw-body .vw-rating .vw-stars{
   padding-bottom: 10px;
@@ -421,5 +440,5 @@ span:nth-child(3).vw-animated-dots  {
   border: 1px solid #ccc;
   border-radius: 4px;
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);  
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
 }
