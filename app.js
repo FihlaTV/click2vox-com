@@ -18,8 +18,8 @@ require('./config/passport')(passport);
 //New Voxbone Object used for authentication
 var Voxbone = require('voxbone-webrtc');
 var voxbone = new Voxbone({
-  voxrtcUsername: process.env.VOXBONE_USERNAME,
-  voxrtcSecret: process.env.VOXBONE_SECRET
+  voxrtcUsername: process.env.VOXBONE_WEBRTC_USERNAME,
+  voxrtcSecret: process.env.VOXBONE_WEBRTC_PASSWORD
 });
 
 var app = express();
