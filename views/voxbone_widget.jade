@@ -79,7 +79,7 @@ html(lang='en', ng-app="voxboneApp")
           };
 
           $scope.send_voxbone_interaction = function (message){
-            if (!voxbone.WebRTC.rtcSession || !voxbone.WebRTC.rtcSession.isEstablished())
+            if (!(typeof voxbone.WebRTC.rtcSession.isEstablished === "function") || voxbone.WebRTC.rtcSession.isEnded())
               return;
 
             switch(message) {
@@ -151,7 +151,7 @@ html(lang='en', ng-app="voxboneApp")
           }
 
           $scope.isInCall = function () {
-            return (typeof voxbone.WebRTC.rtcSession.isEstablished === "function") && voxbone.WebRTC.rtcSession.isEstablished();
+            return (typeof voxbone.WebRTC.rtcSession.isEstablished === "function") && !voxbone.WebRTC.rtcSession.isEnded();
           }
 
           $scope.makeCall = function () {
