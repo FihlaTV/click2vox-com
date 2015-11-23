@@ -136,7 +136,7 @@ block content
       }
 
       $scope.isInCall = function () {
-        return (typeof voxbone.WebRTC.rtcSession.isEstablished === "function") && voxbone.WebRTC.rtcSession.isEstablished();
+        return (typeof voxbone.WebRTC.rtcSession.isEstablished === "function") && !voxbone.WebRTC.rtcSession.isEnded();
       }
 
       $scope.makeCall = function () {
