@@ -11,7 +11,7 @@ var accountSchema = new Schema({
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   first_name: String,
-  didID: Number,
+  didId: Number,
   did: Number
 });
 
