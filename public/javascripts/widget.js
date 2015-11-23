@@ -71,6 +71,9 @@ $(document).ready(function () {
               </button> \
             </div> \
           </div> \
+          <div id="vw-rating-after-message" class="vw-rating hidden"> \
+            <p>Thank you for rating our service</p> \
+          </div> \
           <div id="vw-footer" class="vw-footer"> \
             <a href="https://voxbone.com" target="_blank">powered by:</a> \
           </div> \
@@ -117,7 +120,7 @@ $(document).ready(function () {
         $(".vw-animated-dots").removeClass('hidden');
         $(".vox-widget-wrapper").removeClass('hidden');
         $("#vw-in-call").removeClass('hidden');
-        $("#vw-rating").addClass('hidden');
+        $(".vw-rating").addClass('hidden');
         $("#vw-unable-to-acces-mic").addClass('hidden');
         break;
       case 'openWidget':
@@ -125,7 +128,7 @@ $(document).ready(function () {
         $(".vw-animated-dots").removeClass('hidden');
         $(".vox-widget-wrapper").removeClass('hidden');
         $("#vw-in-call").removeClass('hidden');
-        $("#vw-rating").addClass('hidden');
+        $(".vw-rating").addClass('hidden');
         $("#vw-unable-to-acces-mic").addClass('hidden');
         break;
       case 'setCallFailedUserMedia':
@@ -148,9 +151,10 @@ $(document).ready(function () {
     var data =  { rate: rate, comment: comment };
     var message = { action: 'rate', data: data };
 
-    call_action(message);
+    callAction(message);
 
-    $("#vw-rating").hide('slow').html('Thank you for rating our service!').fadeIn(500);
+    $("#vw-rating").addClass('hidden');
+    $("#vw-rating-after-message").removeClass('hidden');
   });
 
   function is_iframe() {
@@ -189,7 +193,7 @@ $(document).ready(function () {
     }
   };
 
-  function call_action(message) {
+  function callAction(message) {
     if (is_iframe()) {
       $('#call_button_frame')[0].contentWindow.postMessage(message, '*');
     } else {
@@ -200,26 +204,34 @@ $(document).ready(function () {
     };
   };
 
+  function resetRating() {
+    $('#vw-rating-stars').raty('score', 0);
+    $('#rating-message').val('');
+  };
+
   $('#vw-rating-stars').raty({ starType : 'i' });
 
   $('.vw-dialpad li').click(function(e) {
     e.preventDefault();
-    call_action(this.textContent);
+    callAction(this.textContent);
   });
 
   $(".vw-end-call").click(function(e) {
     e.preventDefault();
+    resetRating();
+
     $("#vw-in-call").addClass('hidden');
     $("#vw-rating").removeClass('hidden');
+
     $("#vw-title").text("Call Ended");
     $(".vw-animated-dots").addClass('hidden');
-    call_action('hang_up');
+    callAction('hang_up');
   });
 
   $("#close-screen i").click(function(e) {
     e.preventDefault();
     $(".vox-widget-wrapper").addClass('hidden');
-    call_action('hang_up');
+    callAction('hang_up');
   });
 
   $("#full-screen i").click(function(e) {
@@ -237,12 +249,12 @@ $(document).ready(function () {
   $(".vw-icon.vx-icon-mic").click(function(e) {
     e.preventDefault();
     $("#microphone em").toggleClass('on').toggleClass('off');
-    call_action('microphone-mute');
+    callAction('microphone-mute');
   });
 
   $(".vw-icon.vx-icon-vol").click(function(e) {
     e.preventDefault();
     $("#volume em").toggleClass('on').toggleClass('off');
-    call_action('volume-mute');
+    callAction('volume-mute');
   });
 });
