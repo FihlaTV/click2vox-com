@@ -13,6 +13,10 @@ $(document).ready(function () {
           </div> \
         </div> \
         <div id="vw-body" class="vw-body"> \
+          <div id="vw-unable-to-acces-mic" class="vw-unable-to-acces-mic hidden"> \
+            <p style="color: red;">Oops. It looks like we are unable to use your microphone.</p> \
+            <p>Please enable microphone access in your browser to allow this call</p> \
+          </div> \
           <div id="vw-in-call"> \
             <div id="vw-btn-group" class="vw-btn-group"> \
               <a href="#"> \
@@ -114,6 +118,7 @@ $(document).ready(function () {
         $(".vox-widget-wrapper").removeClass('hidden');
         $("#vw-in-call").removeClass('hidden');
         $("#vw-rating").addClass('hidden');
+        $("#vw-unable-to-acces-mic").addClass('hidden');
         break;
       case 'openWidget':
         $("#vw-title").text("Calling");
@@ -121,6 +126,13 @@ $(document).ready(function () {
         $(".vox-widget-wrapper").removeClass('hidden');
         $("#vw-in-call").removeClass('hidden');
         $("#vw-rating").addClass('hidden');
+        $("#vw-unable-to-acces-mic").addClass('hidden');
+        break;
+      case 'setCallFailedUserMedia':
+        $("#vw-title").text("Call Failed");
+        $(".vw-animated-dots").addClass('hidden');
+        $("#vw-in-call").addClass('hidden');
+        $("#vw-unable-to-acces-mic").removeClass('hidden');
         break;
     };
   });
