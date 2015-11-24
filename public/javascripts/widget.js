@@ -4,7 +4,6 @@ function loadScript(url, callback)
   var head = document.getElementsByTagName('head')[0];
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.async = false;
   script.src = url;
 
   // Then bind the event to the callback function.
@@ -21,8 +20,7 @@ var check1Ready = (function() {
 });
 
 var check2Ready = (function() {
-  console.log("jQuery is loaded");
-  console.log("Raty is loaded");
+  console.log("jQuery & Raty are loaded");
 
   $(document).ready(function () {
     $('#control').append(' \
