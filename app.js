@@ -26,7 +26,7 @@ var voxbone = new Voxbone({
 var app = express();
 
 // set timeout
-app.use(timeout('12s'));
+app.use(timeout(process.env.TIMEOUT || '12s'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -39,7 +39,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-var secret_key = process.env.SECRET_KEY ? process.env.SECRET_KEY : 'xXxXxXxXxX';
+var secret_key = process.env.SECRET_KEY || 'xXxXxXxXxX';
 app.use(session({
   secret: secret_key,
   name: 'voxbone-generator',

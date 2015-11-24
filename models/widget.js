@@ -26,7 +26,7 @@ widgetSchema.pre('save', function(next){
 });
 
 widgetSchema.methods.generateHtmlCode = function() {
-  var app_url = process.env.APP_URL ? process.env.APP_URL : 'http://widget.voxbone.com';
+  var app_url = process.env.APP_URL || 'http://widget.voxbone.com';
 
   var html = '';
   html += '<div class="voxButton" id="voxButton_' + this.id + '">';

@@ -36,6 +36,9 @@ module.exports = function(passport, voxbone){
   router.post('/login', function(req, res, next){
     var formData = req.body;
     passport.authenticate('local-login', function(err, account, info) {
+
+      if(err) return console.log('Error:', err);
+
       if(account === false){
         var result = { message: "Email or password incorrect", errors: err, email: formData.email }
         console.log("Entered incorrect authentication, response should be: 401");
@@ -383,6 +386,9 @@ module.exports = function(passport, voxbone){
         request.get(url,
           { auth: getApiCredentials(), headers: getJsonHeaders() },
           function(err, response, body){
+
+            if(err) return console.log('Error:', err);
+
             var response_body = JSON.parse(body);
             var voice_uris = response_body.voiceUris;
             var voice_uri = voice_uris.filter(function(vu){
@@ -417,6 +423,8 @@ module.exports = function(passport, voxbone){
             body: JSON.stringify(put_data)
           },
           function(err, response, body){
+
+            if(err) return console.log('Error:', err);
 
             var response_body = JSON.parse(body);
             if(response_body['httpStatusCode']){
