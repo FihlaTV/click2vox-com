@@ -2,6 +2,7 @@ if (process.env.NEW_RELIC_LICENSE_KEY)
   var newrelic = require('newrelic');
 
 var express = require('express');
+var timeout = require('connect-timeout');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -23,6 +24,9 @@ var voxbone = new Voxbone({
 });
 
 var app = express();
+
+// set timeout
+app.use(timeout('12s'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
