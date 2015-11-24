@@ -24,7 +24,7 @@
 * VOXBONE_API_USERNAME
 * VOXBONE_API_PASSWORD
 * GOOGLE_ANALYTICS_ID
-* BYPASS_PRE_EXISTING_ACCOUNTS_CHECK (WARNING: Use Carefully! )
+* BYPASS_PRE_EXISTING_ACCOUNTS_CHECK (WARNING: Use Carefully! it is NOT the idea to use it in production )
 * NEW_RELIC_LICENSE_KEY
 
 ### To Run locally
@@ -39,9 +39,17 @@ npm install
 npm start
 ```
 
-### Heroku Environment
+### Mongo Tasks
 
-* TBD
+* To Import the accounts
+```
+mongoimport -h $HOST:$PORT -d $DB_NAME -c accounts -u $DB_USER -p $DB_PASSWORD --file accounts.json
+```
+
+* To Connect to the Mongo Database
+```
+mongo $HOST:$PORT/$DB_NAME -u $DB_USER -p $DB_PASSWORD
+```
 
 ### Resources
 
