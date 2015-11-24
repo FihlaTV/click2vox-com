@@ -120,8 +120,9 @@ block content
       };
 
       $scope.showCallButton = function () {
-        var icb = $scope.widget.incompatible_browser_configuration;
-        return (icb != 'hide_widget') && (icb != 'show_text_html');
+        var icb_value = $scope.widget.incompatible_browser_configuration;
+        var icb_collapsed = angular.element('#collapseIncompatileBrowserConfiguration').hasClass('in');
+        return !icb_collapsed || icb_value == 'link_button_to_a_page';
       }
 
       $scope.getHiddenButtonText = function () {
@@ -282,7 +283,6 @@ block content
     }]);
 
     $(document).ready(function () {
-
       $('[data-toggle="tooltip"]').tooltip();
 
       $(".title-toggle").click(function() {
