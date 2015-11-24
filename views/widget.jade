@@ -140,7 +140,6 @@ block content
       }
 
       $scope.makeCall = function () {
-
         if ($scope.isInCall())
           return;
 
@@ -173,11 +172,9 @@ block content
             voxbone.WebRTC.configuration.dialer_string = $scope.widget.send_digits;
           }
 
-          var number = '#{did}';
-          console.log('Calling ' + number);
-          voxbone.WebRTC.call(number);
+          voxbone.WebRTC.call('#{did}');
           window.onbeforeunload = function(e){
-            voxbone.WebRTC.rtcSession.terminate();
+            voxbone.WebRTC.unloadHandler();
           }
         }
       };

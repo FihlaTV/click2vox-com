@@ -173,7 +173,7 @@ html(lang='en', ng-app="voxboneApp")
 
                 voxbone.WebRTC.call('#{did}');
                 window.onbeforeunload = function(e){
-                  voxbone.WebRTC.rtcSession.terminate();
+                  voxbone.WebRTC.unloadHandler();
                 }
             }
           };
