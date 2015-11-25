@@ -65,7 +65,7 @@ var check2Ready = (function() {
                 </a> \
                 <a href="#" id="dialpad"><i class="vw-icon vx-icon-pad"></i></a> \
               </div> \
-              <a href="#" class="vw-end-call"><i class="vw-icon vx-icon-phone"></i>End Call</a> \
+              <a href="#" id="vw-end-call" class="vw-end-call"><i class="vw-icon vx-icon-phone"></i>End Call</a> \
               <div id="vw-dialpad" class="vw-dialpad"> \
                 <ul> \
                   <li class="vw-tl">1</li> \
@@ -137,6 +137,7 @@ var check2Ready = (function() {
         case 'setCallEnded':
           $("#vw-title").text("Call Ended");
           $(".vw-animated-dots").addClass('hidden');
+          $(".vw-end-call").click();
           break;
         case 'openWidgetWithoutDialPad':
           $("#dialpad").addClass('hidden');

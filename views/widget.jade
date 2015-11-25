@@ -48,6 +48,7 @@ block content
         console.log('Call ended');
         $("#vw-title").text("Call Ended");
         $(".vw-animated-dots").addClass('hidden');
+        $(".vw-end-call").click();
       },
       'getUserMediaFailed': function (e){
         console.log('Cannot get User Media');
