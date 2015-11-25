@@ -650,12 +650,7 @@ strong {
   background-repeat: no-repeat;
 }
 .widget-box .btn-style {
-  display: inline-block;
-  min-width: 150px;
-  padding-left: 10px;
-  padding-right: 10px;
-  text-align: center;
-  width: auto;
+  width: 100%;
 }
 .widget-box.style-a {
   -webkit-box-shadow: inset 0px 0px 5px 0px #ffffff, 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
@@ -693,7 +688,6 @@ strong {
   -ms-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
   -o-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
-  margin: 0;
 }
 .widget-box.style-a .btn-style span {
   display: block;
@@ -751,7 +745,6 @@ strong {
   -ms-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
   -o-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
-  margin: 0;
 }
 .widget-box.style-b .btn-style span {
   display: block;
