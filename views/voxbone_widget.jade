@@ -61,15 +61,15 @@ html(lang='en', ng-app="voxboneApp")
 
             voxbone.WebRTC.customEventHandler = eventHandlers;
 
-            if('#{the_widget.caller_id}')
-              voxbone.WebRTC.configuration.uri = (new JsSIP.URI(scheme="sip", user='#{the_widget.caller_id}', "voxbone.com")).toString();
+            if("#{the_widget.caller_id}")
+              voxbone.WebRTC.configuration.uri = (new JsSIP.URI(scheme="sip", user="#{the_widget.caller_id}", "voxbone.com")).toString();
 
-            if('#{the_widget.context}')
-              voxbone.WebRTC.context = '#{the_widget.context}';
+            if("#{the_widget.context}")
+              voxbone.WebRTC.context = "#{the_widget.context}";
 
-            if('#{the_widget.send_digits}') {
-              console.log('Digits sent: #{the_widget.send_digits}');
-              voxbone.WebRTC.configuration.dialer_string = '#{the_widget.send_digits}';
+            if("#{the_widget.send_digits}") {
+              console.log("Digits sent: #{the_widget.send_digits}");
+              voxbone.WebRTC.configuration.dialer_string = "#{the_widget.send_digits}";
             }
 
             voxbone.WebRTC.init(#{voxrtc_config});
@@ -127,7 +127,7 @@ html(lang='en', ng-app="voxboneApp")
               data: {
                 rate: rate,
                 comment: comment,
-                token: '#{the_widget._id}'
+                token: "#{the_widget._id}"
               }
             };
 
@@ -144,7 +144,7 @@ html(lang='en', ng-app="voxboneApp")
           }
 
           $scope.showCallButton = function () {
-            return $scope.isWebRTCSupported() || '#{the_widget.link_button_to_a_page}';
+            return $scope.isWebRTCSupported() || "#{the_widget.link_button_to_a_page}";
           }
 
           $scope.isInCall = function () {
@@ -157,8 +157,8 @@ html(lang='en', ng-app="voxboneApp")
 
               if(#{the_widget.hide_widget})
                 return;
-              else if('#{the_widget.link_button_to_a_page}')
-                $window.open('#{the_widget.link_button_to_a_page}','_blank');
+              else if("#{the_widget.link_button_to_a_page}")
+                $window.open("#{the_widget.link_button_to_a_page}",'_blank');
 
             } else{
 
