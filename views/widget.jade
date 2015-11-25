@@ -83,6 +83,17 @@ block content
       };
     });
 
+    app.directive('autoFocus', function($timeout) {
+      return {
+        restrict: 'AC',
+          link: function(_scope, _element) {
+          $timeout(function(){
+            _element[0].focus();
+          }, 0);
+        }
+      };
+    });
+
     app.controller('WidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
 
       $scope.showWidgetCode = false;
@@ -365,7 +376,7 @@ block content
                   .form-group
                     label.control-label SIP URI
                       span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?
-                    input.form-control(required type="text" id="sip_uri" name="sip_uri" ng-model="widget.sip_uri" ng-pattern="/^[^@]+@[^@]+$/" ng-blur="sip_provisioning(widget_form)" placeholder="i.e. echo@ivrs")
+                    input.form-control(required type="text" id="sip_uri" name="sip_uri" ng-model="widget.sip_uri" ng-pattern="/^[^@]+@[^@]+$/" ng-blur="sip_provisioning(widget_form)" placeholder="i.e. echo@ivrs" auto-focus)
                     div(style='color: green' ng-show="widget_form.sip_provisioning || widget_form.sip_provisioned")
                       div(ng-show="widget_form.sip_provisioning") Provisioning SIP URI...
                       div(ng-show="widget_form.sip_provisioned") SIP URI Provisioned!
