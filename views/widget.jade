@@ -86,6 +86,7 @@ block content
 
       $scope.showWidgetCode = false;
       $scope.sipUriLinked = false;
+      $scope.collapsedIncompatibleConfig = true;
 
       $scope.master = {
         dial_pad: true,
@@ -121,10 +122,19 @@ block content
       };
 
       $scope.showCallButton = function () {
-        var icb_value = $scope.widget.incompatible_browser_configuration;
-        var icb_collapsed = angular.element('#collapseIncompatileBrowserConfiguration').hasClass('in');
-        return !icb_collapsed || icb_value == 'link_button_to_a_page';
-      }
+        var ibc_value = $scope.widget.incompatible_browser_configuration;
+        return $scope.collapsedIncompatibleConfig || ibc_value == 'link_button_to_a_page';
+      };
+
+      angular.element('#collapseIncompatileBrowserConfiguration').on('hidden.bs.collapse', function (e) {
+        $scope.collapsedIncompatibleConfig = true;
+        $scope.$apply();
+      });
+
+      angular.element('#collapseIncompatileBrowserConfiguration').on('shown.bs.collapse', function (e) {
+        $scope.collapsedIncompatibleConfig = false;
+        $scope.$apply();
+      });
 
       $scope.getHiddenButtonText = function () {
         switch($scope.widget.incompatible_browser_configuration) {
@@ -145,7 +155,7 @@ block content
         if ($scope.isInCall())
           return;
 
-        if($scope.widget.incompatible_browser_configuration == 'link_button_to_a_page') {
+        if(!$scope.collapsedIncompatibleConfig && $scope.widget.incompatible_browser_configuration == 'link_button_to_a_page') {
           $window.open($scope.widget.link_button_to_a_page_value,'_blank');
           return;
         }
@@ -412,7 +422,7 @@ block content
                 .prev-view.light
                   .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
                   .widget-box.style-b(ng-show="showCallButton()")
-                    button.btn-style.mdi-communication-call#launch_call(ng-disabled="!showWidgetCode" ng-click="makeCall()") #[span {{widget.button_label || 'Call Sales'}}]
+                    button.btn-style.launch_call(ng-disabled="!showWidgetCode" ng-click="makeCall()") #[span {{widget.button_label || 'Call Sales'}}]
                     .widget-footer-left
                       a(href="https://test.webrtc.org/" target="_blank") Test your setup
                     .widget-footer-right
