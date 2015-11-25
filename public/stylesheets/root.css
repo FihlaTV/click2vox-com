@@ -358,7 +358,7 @@ strong {
   border-radius: 6px;
 }
 .createButton .boxPanel button {
-  margin-bottom: 10px;
+  margin: 0 5px 10px;
 }
 .createButton .boxPanel label {
   display: block;
@@ -472,6 +472,9 @@ strong {
 .createButton .preview .prev-view .togle-bg a.light {
   background: #fbfcfc;
 }
+.createButton .preview .prev-view button {
+  margin: 0;
+}
 .createButton .preview .prev-code {
   padding: 20px;
 }
@@ -528,10 +531,10 @@ strong {
 /*Btn Widget Stuff*/
 .btn-style-a {
   max-width: 100%;
+  min-width: 140px;
   display: inline-block;
   border: 1px solid #17a0f3;
   padding: 0;
-  margin-right: 10px;
   text-decoration: none;
   font-size: 14px;
   text-align: center;
@@ -560,7 +563,6 @@ strong {
 }
 .btn-style-a span {
   display: block;
-  min-width: 120px;
   padding: 10px 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   text-shadow: 0px -1px #07619e;
@@ -583,10 +585,10 @@ strong {
 }
 .btn-style-b {
   max-width: 100%;
+  min-width: 140px;
   display: inline-block;
   border: 1px solid #90168c;
   padding: 0;
-  margin-right: 10px;
   text-decoration: none;
   font-size: 14px;
   text-align: center;
@@ -615,7 +617,6 @@ strong {
 }
 .btn-style-b span {
   display: block;
-  min-width: 120px;
   padding: 10px 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   text-shadow: 0px -1px #07619e;
@@ -638,7 +639,7 @@ strong {
 }
 .widget-box {
   position: relative;
-  padding: 70px 10px;
+  padding: 70px 40px;
   text-align: center;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
@@ -668,11 +669,9 @@ strong {
 }
 .widget-box .btn-style {
   display: inline-block;
-  min-width: 150px;
   padding-left: 10px;
   padding-right: 10px;
   text-align: center;
-  width: 100%;
 }
 .widget-box.style-a {
   -webkit-box-shadow: inset 0px 0px 5px 0px #ffffff, 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
@@ -682,10 +681,10 @@ strong {
 }
 .widget-box.style-a .btn-style {
   max-width: 100%;
+  min-width: 140px;
   display: inline-block;
   border: 1px solid #17a0f3;
   padding: 0;
-  margin-right: 10px;
   text-decoration: none;
   font-size: 14px;
   text-align: center;
@@ -711,11 +710,9 @@ strong {
   -ms-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
   -o-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
-  margin: 0;
 }
 .widget-box.style-a .btn-style span {
   display: block;
-  min-width: 120px;
   padding: 10px 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   text-shadow: 0px -1px #07619e;
@@ -747,10 +744,10 @@ strong {
 }
 .widget-box.style-b .btn-style {
   max-width: 100%;
+  min-width: 140px;
   display: inline-block;
   border: 1px solid #90168c;
   padding: 0;
-  margin-right: 10px;
   text-decoration: none;
   font-size: 14px;
   text-align: center;
@@ -776,11 +773,9 @@ strong {
   -ms-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
   -o-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
-  margin: 0;
 }
 .widget-box.style-b .btn-style span {
   display: block;
-  min-width: 120px;
   padding: 10px 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   text-shadow: 0px -1px #07619e;
