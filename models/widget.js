@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var pjson = require('../package.json');
+var version = pjson.version.split('.').join('');
 
 var widgetSchema = new Schema({
   _account : { type: Schema.Types.ObjectId, ref: 'Account' },
@@ -31,8 +33,8 @@ widgetSchema.methods.generateHtmlCode = function() {
   var html = '';
   html += '<div class="voxButton" id="voxButton_' + this.id + '">';
 
-  html += '<link rel="stylesheet" href="' + app_url + '/stylesheets/widget.css">';
-  html += '<script src="' + app_url + '/javascripts/widget.js"></script>';
+  html += '<link rel="stylesheet" href="' + app_url + '/stylesheets/widget.css?v=' + version +'">';
+  html += '<script src="' + app_url + '/javascripts/widget.js?v=' + version +'"></script>';
 
   var iframe_styles = 'width="300" height="183" frameBorder="0" scrolling="no"';
   html += '<iframe id="call_button_frame" ' + iframe_styles + ' src="' + app_url + '/voxbone_widget/' + this.id + '">';
