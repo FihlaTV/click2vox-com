@@ -90,7 +90,7 @@ var check2Ready = (function() {
                 <input type="text" name="rating-message" id="rating-message" placeholder="Optional"" class="form-control"> \
               </div> \
               <div id="vw-rating-button" class="vw-button"> \
-                <button class="btn-style mdi-communication-call" id="send-rating"> \
+                <button class="btn-style" id="send-rating"> \
                   <span>Send</span> \
                 </button> \
               </div> \
