@@ -357,6 +357,9 @@ strong {
   -moz-border-radius: 6px;
   border-radius: 6px;
 }
+.createButton .boxPanel button {
+  margin-bottom: 10px;
+}
 .createButton .boxPanel label {
   display: block;
   color: #58646e;
@@ -563,6 +566,12 @@ strong {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: top;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
 }
 .btn-style-a:hover {
   background: -webkit-linear-gradient(#0b85ce, #19a1f3);
@@ -611,6 +620,12 @@ strong {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: top;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
 }
 .btn-style-b:hover {
   background: -webkit-linear-gradient(#660f63, #92168e);
@@ -655,7 +670,7 @@ strong {
   padding-left: 10px;
   padding-right: 10px;
   text-align: center;
-  width: auto;
+  width: 100%;
 }
 .widget-box.style-a {
   -webkit-box-shadow: inset 0px 0px 5px 0px #ffffff, 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
@@ -704,6 +719,12 @@ strong {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: top;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
 }
 .widget-box.style-a .btn-style:hover {
   background: -webkit-linear-gradient(#0b85ce, #19a1f3);
@@ -762,6 +783,12 @@ strong {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: top;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
 }
 .widget-box.style-b .btn-style:hover {
   background: -webkit-linear-gradient(#660f63, #92168e);

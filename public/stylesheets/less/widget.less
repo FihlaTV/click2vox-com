@@ -33,6 +33,7 @@
   -ms-box-shadow: 0 1px 1px rgba(0,0,0,0.16);
   -o-box-shadow: 0 1px 1px rgba(0,0,0,0.16);
   box-shadow: 0 1px 1px rgba(0,0,0,0.16);
+  
   span{
     display: block;
     min-width: 120px;
@@ -40,6 +41,7 @@
     border-top:1px solid rgba(255, 255, 255, 0.10);
     text-shadow: 0px -1px #07619E;
     .rounded(4px);
+    .truncate-line();
   }
   &:hover{
   background: -webkit-linear-gradient(darken(@btn-color,10%),@btn-color);
@@ -90,7 +92,7 @@
     padding-left:10px;
     padding-right:10px;
     text-align: center;
-    width: auto;
+    width: 100%;
   }
   &.style-a{
     .boxShadow(1,0.2);
