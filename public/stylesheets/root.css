@@ -527,6 +527,7 @@ strong {
 /* Widget Style */
 /*Btn Widget Stuff*/
 .btn-style-a {
+  max-width: 100%;
   display: inline-block;
   border: 1px solid #17a0f3;
   padding: 0;
@@ -581,6 +582,7 @@ strong {
   background: linear-gradient(#0b85ce, #19a1f3);
 }
 .btn-style-b {
+  max-width: 100%;
   display: inline-block;
   border: 1px solid #90168c;
   padding: 0;
@@ -679,6 +681,7 @@ strong {
   background: #f5f5f7;
 }
 .widget-box.style-a .btn-style {
+  max-width: 100%;
   display: inline-block;
   border: 1px solid #17a0f3;
   padding: 0;
@@ -743,6 +746,7 @@ strong {
   background: #2a2929;
 }
 .widget-box.style-b .btn-style {
+  max-width: 100%;
   display: inline-block;
   border: 1px solid #90168c;
   padding: 0;
