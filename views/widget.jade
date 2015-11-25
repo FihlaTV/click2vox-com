@@ -98,7 +98,6 @@ block content
 
       $scope.showWidgetCode = false;
       $scope.sipUriLinked = false;
-      $scope.collapsedIncompatibleConfig = true;
 
       $scope.master = {
         dial_pad: true,
@@ -107,7 +106,8 @@ block content
         widget_code: 'Click on the SIP URI field to the left to use the Echo Service(echo@ivrs), or enter your SIP URI to Generate the code snippet',
         sip_uri: 'echo@ivrs',
         show_text_html_value: '<h3>This is a placeholder for your message</h3>',
-        incompatible_browser_configuration: 'hide_widget'
+        incompatible_browser_configuration: 'hide_widget',
+        preview_webrtc_compatible: 'true'
       };
 
       $scope.prepareHtmlForCodepen = function(data){
@@ -135,18 +135,8 @@ block content
 
       $scope.showCallButton = function () {
         var ibc_value = $scope.widget.incompatible_browser_configuration;
-        return $scope.collapsedIncompatibleConfig || ibc_value == 'link_button_to_a_page';
+        return ($scope.widget.preview_webrtc_compatible == 'true') || (ibc_value == 'link_button_to_a_page');
       };
-
-      angular.element('#collapseIncompatileBrowserConfiguration').on('hidden.bs.collapse', function (e) {
-        $scope.collapsedIncompatibleConfig = true;
-        $scope.$apply();
-      });
-
-      angular.element('#collapseIncompatileBrowserConfiguration').on('shown.bs.collapse', function (e) {
-        $scope.collapsedIncompatibleConfig = false;
-        $scope.$apply();
-      });
 
       $scope.getHiddenButtonText = function () {
         switch($scope.widget.incompatible_browser_configuration) {
@@ -167,7 +157,7 @@ block content
         if ($scope.isInCall())
           return;
 
-        if(!$scope.collapsedIncompatibleConfig && $scope.widget.incompatible_browser_configuration == 'link_button_to_a_page') {
+        if(($scope.widget.preview_webrtc_compatible == 'false') && ($scope.widget.incompatible_browser_configuration == 'link_button_to_a_page')) {
           $window.open($scope.widget.link_button_to_a_page_value,'_blank');
           return;
         }
@@ -429,7 +419,15 @@ block content
 
           .col-sm-6.right-col
             .section
-              span.title Preview
+              div
+                span.title Widget Preview
+                input(type='radio' name='preview' ng-model='widget.preview_webrtc_compatible' value="true")
+                span.radio-name(style="padding-left: 4px;") WebRTC Browser
+                span.badge(data-toggle='tooltip' data-placement="right" title="This is how the widget will look like in a WebRTC compatible browser") ?
+                span &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                input(type='radio' name='preview' ng-model='widget.preview_webrtc_compatible' value="false")
+                span.radio-name(style="padding-left: 4px;") Non-WebRTC Browser
+                span.badge(data-toggle='tooltip' data-placement="right" title="This is how the widget will look like in a WebRTC incompatible browser") ?
               .boxPanel.preview
                 .prev-view.light
                   .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
