@@ -424,12 +424,12 @@ block content
 
           .col-sm-6.right-col
             .section
-              span.title Widget Preview
+              span.title Widget Preview in a Browser:
               ul.nav.nav-tabs
                 li(ng-click="onClickTab(true)" ng-class="{active:preview_webrtc_compatible}")
-                  a(data-toggle="tab" href="#") WebRTC Browser #[span.badge(data-toggle='tooltip' data-placement="right" title="This is how the widget will look like in a WebRTC compatible browser") ?]
+                  a(data-toggle="tab" href="#") WebRTC #[span.badge(data-toggle='tooltip' data-placement="right" title="This is how the widget will look like in a WebRTC compatible browser") ?]
                 li(ng-click="onClickTab(false)" ng-class="{active:!preview_webrtc_compatible}")
-                  a(data-toggle="tab" href="#") Non-WebRTC Browser #[span.badge(data-toggle='tooltip' data-placement="right" title="This is how the widget will look like in a WebRTC incompatible browser") ?]
+                  a(data-toggle="tab" href="#") Non-WebRTC #[span.badge(data-toggle='tooltip' data-placement="right" title="This is how the widget will look like in a WebRTC incompatible browser") ?]
 
               .boxPanel.preview
                 .prev-view.light

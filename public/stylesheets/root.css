@@ -565,7 +565,7 @@ strong {
   display: block;
   padding: 10px 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  text-shadow: 0px -1px #07619e;
+  text-shadow: 0px -1px #07619E;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -619,7 +619,7 @@ strong {
   display: block;
   padding: 10px 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  text-shadow: 0px -1px #07619e;
+  text-shadow: 0px -1px #07619E;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -715,7 +715,7 @@ strong {
   display: block;
   padding: 10px 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  text-shadow: 0px -1px #07619e;
+  text-shadow: 0px -1px #07619E;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -778,7 +778,7 @@ strong {
   display: block;
   padding: 10px 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  text-shadow: 0px -1px #07619e;
+  text-shadow: 0px -1px #07619E;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -847,3 +847,6 @@ Plugin Css
 /* Awesome Bootstrap Checkbox */
 /* Bootstrap Select */
 /* Bootstrap Toggle */
+.nav-tabs {
+  border-bottom: 0px;
+}
