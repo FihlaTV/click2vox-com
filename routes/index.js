@@ -29,7 +29,7 @@ module.exports = function(passport, voxbone){
       next();
   })
 
-  router.get('/login', function(req, res, next){
+  router.get('/login', redirectToWidgetIfLoggedIn, function(req, res, next){
     res.render('login', { title: title, email: req.query.email, account: accountLoggedIn(req), message: req.flash('loginMessage') });
   });
 
@@ -56,6 +56,7 @@ module.exports = function(passport, voxbone){
 
   router.get('/signup', function(req, res, next){
     req.logout();
+    req.session.destroy();
     if (req.query.email && req.query.password){
       res.render('signup', { title: title, email: req.query.email, temp_password: req.query.password, account: accountLoggedIn(req) });
     } else {
@@ -121,6 +122,7 @@ module.exports = function(passport, voxbone){
 
   router.get('/logout', function(req, res){
     req.logout();
+    req.session.destroy();
     res.redirect('/');
   });
 
@@ -134,7 +136,7 @@ module.exports = function(passport, voxbone){
       });
   });
 
-  router.get('/', function(req, res, next) {
+  router.get('/', redirectToWidgetIfLoggedIn, function(req, res, next) {
     res.render('login', { title: title, account: accountLoggedIn(req) });
   });
 
@@ -343,11 +345,15 @@ module.exports = function(passport, voxbone){
   });
 
   function isLoggedIn(req, res, next) {
-    // if user is authenticated in the session, carry on
     if (req.isAuthenticated())
       return next();
-    // if they aren't redirect them to the home page
     res.redirect('/');
+  }
+
+  function redirectToWidgetIfLoggedIn(req, res, next) {
+    if (req.isAuthenticated())
+      res.redirect('/widget');
+    return next();
   }
 
   function accountLoggedIn(req) {
@@ -467,18 +473,6 @@ module.exports = function(passport, voxbone){
       }
     );
   });
-
-  function isLoggedIn(req, res, next) {
-    // if user is authenticated in the session, carry on
-    if (req.isAuthenticated())
-      return next();
-    // if they aren't redirect them to the home page
-    res.redirect('/');
-  }
-
-  function accountLoggedIn(req) {
-    return req.isAuthenticated();
-  }
 
   return router;
 }
