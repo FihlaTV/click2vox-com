@@ -84,16 +84,18 @@ var check2Ready = (function() {
               </div> \
             </div> \
             <div id="vw-rating" class="vw-rating hidden"> \
-              <div id="vw-rating-question" class="vw-question">How was the quality of your call?</div> \
-              <div id="vw-rating-stars" class="vw-stars"></div> \
-              <div id="vw-rating-message" class="vw-message">Any additional feedback? \
-                <input type="text" name="rating-message" id="rating-message" placeholder="Optional"" class="form-control"> \
-              </div> \
-              <div id="vw-rating-button" class="vw-button"> \
-                <button class="btn-style" id="send-rating"> \
-                  <span>Send</span> \
-                </button> \
-              </div> \
+              <form name="rating"> \
+                <div id="vw-rating-question" class="vw-question">How was the quality of your call?</div> \
+                <div id="vw-rating-stars" class="vw-stars"></div> \
+                <div id="vw-rating-message" class="vw-message">Any additional feedback? \
+                  <input type="text" name="rating-message" id="rating-message" placeholder="Optional"" class="form-control"> \
+                </div> \
+                <div id="vw-rating-button" class="vw-button"> \
+                  <button class="btn-style" id="send-rating"> \
+                    <span>Send</span> \
+                  </button> \
+                </div> \
+              </form> \
             </div> \
             <div id="vw-rating-after-message" class="vw-rating hidden"> \
               <p>Thank you for rating our service</p> \
