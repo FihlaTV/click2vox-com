@@ -189,7 +189,7 @@ var check2Ready = (function() {
     };
 
     function send_voxbone_interaction(message){
-      if (!voxbone.WebRTC.rtcSession.isEstablished())
+      if (!(typeof voxbone.WebRTC.rtcSession.isEstablished === "function") || voxbone.WebRTC.rtcSession.isEnded())
         return;
 
       switch(message) {
