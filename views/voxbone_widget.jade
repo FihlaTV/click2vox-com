@@ -145,7 +145,7 @@ html(lang='en', ng-app="voxboneApp")
           }
 
           $scope.showCallButton = function () {
-            return $scope.isWebRTCSupported() || "#{the_widget.link_button_to_a_page}";
+            return $scope.isWebRTCSupported() || "#{the_widget.link_button_to_a_page}" != undefined;
           }
 
           $scope.isInCall = function () {
