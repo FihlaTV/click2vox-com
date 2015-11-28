@@ -112,25 +112,22 @@ var check2Ready = (function() {
       // console.log(event.data);
       var message = event.data;
 
-      if (typeof message === 'string' && message.substring(0,12) == 'setMicVolume') {
-        var vol = parseInt(message.substring(12,13));
-        // console.log("Vol -> " + vol);
-
-        $("#microphone em").removeClass();
-        if (vol > 0) $("#mic1").addClass('on');
-        if (vol > 1) $("#mic2").addClass('on');
-        if (vol > 2) $("#mic3").addClass('on');
-        if (vol > 3) $("#mic4").addClass('on');
-        if (vol > 4) $("#mic5").addClass('peak');
-        return;
-      };
-
-      switch(message) {
+      switch(message.action) {
+        case 'setMicVolume':
+          $("#microphone em").removeClass();
+          if (message.value > 0.01) $("#mic1").addClass('on');
+          if (message.value > 0.05) $("#mic2").addClass('on');
+          if (message.value > 0.10) $("#mic3").addClass('on');
+          if (message.value > 0.20) $("#mic4").addClass('on');
+          if (message.value > 0.30) $("#mic5").addClass('peak');
+          break;
         case 'setCallCalling':
           $("#vw-title").text("Calling");
           break;
         case 'setCallFailed':
-          $("#vw-title").text("Call Failed");
+          $("#vw-title").text("Call Failed: " + message.value);
+          $(".vw-animated-dots").addClass('hidden');
+          $(".vw-end-call").click();
           break;
         case 'setInCall':
           $("#vw-title").text("In Call");
@@ -250,7 +247,7 @@ var check2Ready = (function() {
       $("#vw-in-call").addClass('hidden');
       $("#vw-rating").removeClass('hidden');
 
-      $("#vw-title").text("Call Ended");
+      // $("#vw-title").text("Call Ended");
       $(".vw-animated-dots").addClass('hidden');
       callAction('hang_up');
     });

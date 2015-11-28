@@ -15,40 +15,39 @@ html(lang='en', ng-app="voxboneApp")
 
     script(src="//webrtc.voxbone.com/js/jssip-0.7.9-vox.js",type="application/javascript")
     script(src="//webrtc.voxbone.com/js/voxbone-0.0.3.js",type="application/javascript")
-    //- script(src="/javascripts/voxbone-0.0.3_patched.js",type="application/javascript")
 
     script.
+
+      function sendPostMessage(action, value){
+        if (typeof value === 'undefined') { value = ''; }
+        var message = { action: action, value: value };
+        parent.postMessage(message, "*");
+      }
+
       var eventHandlers = {
         'localMediaVolume': function (e) {
-          //- console.log('Microphone Volume -> ' + e.localVolume);
           if(voxbone.WebRTC.isMuted) return;
-
-          if (e.localVolume > 0.30) parent.postMessage("setMicVolume5","*")
-          else if (e.localVolume > 0.20) parent.postMessage("setMicVolume4","*")
-          else if (e.localVolume > 0.10) parent.postMessage("setMicVolume3","*")
-          else if (e.localVolume > 0.05) parent.postMessage("setMicVolume2","*")
-          else if (e.localVolume > 0.01) parent.postMessage("setMicVolume1","*")
-          else if (e.localVolume <= 0.01) parent.postMessage("setMicVolume0","*")
+          sendPostMessage('setMicVolume', e.localVolume )
         },
         'progress': function (e) {
           console.log('Calling...');
-          parent.postMessage("setCallCalling","*");
+          sendPostMessage('setCallCalling');
         },
         'failed': function (e){
           console.log('Failed to connect: ' + e.cause);
-          parent.postMessage("setCallFailed","*");
+          sendPostMessage('setCallFailed', e.cause);
         },
         'accepted': function (e){
           console.log('Call started');
-          parent.postMessage("setInCall","*");
+          sendPostMessage('setInCall');
         },
         'ended': function (e){
           console.log('Call ended');
-          parent.postMessage("setCallEnded","*");
+          sendPostMessage('setCallEnded');
         },
         'getUserMediaFailed': function (e){
           console.log('Cannot get User Media');
-          parent.postMessage("setCallFailedUserMedia","*");
+          sendPostMessage('setCallFailedUserMedia');
         }
       };
 
@@ -166,11 +165,10 @@ html(lang='en', ng-app="voxboneApp")
                 if ($scope.isInCall())
                   return;
 
-                if(#{the_widget.dial_pad}) {
-                  parent.postMessage("openWidget","*");
-                } else {
-                  parent.postMessage("openWidgetWithoutDialPad","*");
-                }
+                if(#{the_widget.dial_pad})
+                  sendPostMessage('openWidget');
+                else
+                  sendPostMessage('openWidgetWithoutDialPad');
 
                 voxbone.WebRTC.call('#{did}');
                 window.onbeforeunload = function(e){
