@@ -35,8 +35,9 @@ block content
       },
       'failed': function (e){
         console.log('Failed to connect: ' + e.cause);
-        $("#vw-title").text("Call Failed");
+        $("#vw-title").text("Call Failed: " + e.cause);
         $(".vw-animated-dots").addClass('hidden');
+        $(".vw-end-call").click();
       },
       'accepted': function (e){
         console.log('Call started');
