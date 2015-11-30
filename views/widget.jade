@@ -40,7 +40,7 @@ block content
           $("#vw-title").text("Call Failed: " + e.cause);
         else {
           $("#vw-title").text("Call Failed: Token Expired");
-          alert('Please reload the page');
+          window.location.reload();
         }
 
         $(".vw-animated-dots").addClass('hidden');
@@ -104,7 +104,6 @@ block content
 
     app.controller('WidgetController', ['$scope', '$http', '$window', '$cookies', function($scope, $http, $window, $cookies){
 
-      $scope.showWidgetCode = false;
       $scope.sipUriLinked = false;
       $scope.preview_webrtc_compatible = true;
 
@@ -113,6 +112,7 @@ block content
       };
 
       $scope.master = {
+        showWidgetCode: false,
         dial_pad: true,
         button_style: 'style-b',
         background_style: 'dark',
@@ -235,8 +235,6 @@ block content
           send_digits: $scope.widget.send_digits
         }
 
-        $cookies.putObject('widget_data', $scope.widget);
-
         var ibc = $scope.widget.incompatible_browser_configuration;
         if (ibc == 'hide_widget')
           data['hide_widget'] = true;
@@ -258,18 +256,19 @@ block content
             .then(function successCallback(response){
               //- console.log(response.data);
               $('#generate-output-code')[0].text = "Regenerate Code";
-              $scope.showWidgetCode = true;
+              $scope.widget.showWidgetCode = true;
               $scope.widget.widget_code = response.data.widget_code;
+              $cookies.putObject('widget_data', $scope.widget);
             },
             function errorCallback(){
-              $scope.showWidgetCode = false;
+              $scope.widget.showWidgetCode = false;
               console.log("entered error callback");
             });
       };
 
       $scope.sip_provisioning = function(form) {
         $scope.sipUriLinked = false;
-        $scope.showWidgetCode = false;
+        $scope.widget.showWidgetCode = false;
         $scope.widget.widget_code = 'Generating code snippet...';
         $scope.widget_form.sip_provisioning = true;
         $scope.widget_form.sip_provisioned = false;
@@ -291,7 +290,7 @@ block content
           .then(function successCallback(response){
             //- console.log(response.data);
             //- console.log("Success!");
-            $scope.showWidgetCode = true;
+            $scope.widget.showWidgetCode = true;
             $scope.sipUriLinked = true;
             $scope.widget.generateOutputCode();
             $scope.widget_form.cannot_validate_sip_uri = '';
@@ -449,7 +448,7 @@ block content
                 .prev-view.light
                   .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
                   .widget-box.style-b(ng-show="showCallButton()")
-                    button.btn-style.launch_call(ng-disabled="!showWidgetCode" ng-click="makeCall()") #[span {{widget.button_label || 'Call Sales'}}]
+                    button.btn-style.launch_call(ng-disabled="!widget.showWidgetCode" ng-click="makeCall()") #[span {{widget.button_label || 'Call Sales'}}]
                     .widget-footer-left
                       a(href="https://test.webrtc.org/" target="_blank") Test your setup
                     .widget-footer-right
@@ -465,11 +464,11 @@ block content
                       p Paste the following HTML code into your website or give it a try using on
 
                       .btn-code-playground
-                        .btn-jsfiddle(ng-show="showWidgetCode")
+                        .btn-jsfiddle(ng-show="widget.showWidgetCode")
                           form#code_debug_jsfiddle(action="https://jsfiddle.net/api/post/library/pure/" method="POST" target="_blank")
                             input(type="hidden" name="html" value='{{ prepareHtmlForCodepen(widget.widget_code) }}')
                             a(href="#" onclick="$('#code_debug_jsfiddle').submit();") JSFiddle
-                        .btn-jsfiddle(ng-show="showWidgetCode")
+                        .btn-jsfiddle(ng-show="widget.showWidgetCode")
                           form#code_debug_codepen(action="https://codepen.io/pen/define" method="POST" target="_blank")
                             input(type="hidden" name="data" value='{"html": "{{ prepareHtmlForCodepen(widget.widget_code) }}"}')
                             a(href="#" onclick="$('#code_debug_codepen').submit();") CodePen
@@ -479,7 +478,7 @@ block content
                       pre.prettyprint.lang-html
                         code.prettyprint.lang-html
                           | {{ widget.widget_code }}
-                    .codebox-actions(ng-show='showWidgetCode')
+                    .codebox-actions(ng-show='widget.showWidgetCode')
                       a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy to Clipboard
                       a(href="#" class="hidden" id="generate-output-code" ng-click='widget.generateOutputCode()') Generate Code
   script(src="/javascripts/widget.js",type="application/javascript")
