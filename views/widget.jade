@@ -4,6 +4,13 @@ block content
   link(href="/stylesheets/widget.css", rel="stylesheet")
 
   script.
+    window.setInterval("reloadPage();", 270000);
+
+    function reloadPage() {
+      if(!voxbone.WebRTC.isCallOpen())
+        window.location.reload();
+    };
+
     //Copy to Clipboard
     var clipboard = new Clipboard('#clipboard_copy');
     clipboard.on('success', function(e) {
@@ -38,10 +45,8 @@ block content
 
         if (e.cause.trim().toLowerCase() != 'authentication error')
           $("#vw-title").text("Call Failed: " + e.cause);
-        else {
+        else
           $("#vw-title").text("Call Failed: Token Expired");
-          window.location.reload();
-        }
 
         $(".vw-animated-dots").addClass('hidden');
         $(".vw-end-call").click();
