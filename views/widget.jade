@@ -35,7 +35,14 @@ block content
       },
       'failed': function (e){
         console.log('Failed to connect: ' + e.cause);
-        $("#vw-title").text("Call Failed: " + e.cause);
+
+        if (e.cause.trim().toLowerCase() != 'authentication error')
+          $("#vw-title").text("Call Failed: " + e.cause);
+        else {
+          $("#vw-title").text("Call Failed: Token Expired");
+          alert('Please reload the page');
+        }
+
         $(".vw-animated-dots").addClass('hidden');
         $(".vw-end-call").click();
       },
@@ -60,7 +67,7 @@ block content
       }
     };
 
-    var app = angular.module('voxboneApp', ['ngSanitize']);
+    var app = angular.module('voxboneApp', ['ngSanitize', 'ngCookies']);
 
     app.directive('httpPrefix', function() {
       return {
@@ -95,7 +102,7 @@ block content
       };
     });
 
-    app.controller('WidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
+    app.controller('WidgetController', ['$scope', '$http', '$window', '$cookies', function($scope, $http, $window, $cookies){
 
       $scope.showWidgetCode = false;
       $scope.sipUriLinked = false;
@@ -124,6 +131,10 @@ block content
           form.$setPristine();
           form.$setUntouched();
         }
+
+        var cookie_data = $cookies.getObject('widget_data');
+        for (var attrname in cookie_data)
+          $scope.master[attrname] = cookie_data[attrname];
 
         $scope.widget = angular.copy($scope.master);
       };
@@ -223,6 +234,8 @@ block content
           dial_pad: $scope.widget.dial_pad,
           send_digits: $scope.widget.send_digits
         }
+
+        $cookies.putObject('widget_data', $scope.widget);
 
         var ibc = $scope.widget.incompatible_browser_configuration;
         if (ibc == 'hide_widget')

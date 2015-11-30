@@ -20,7 +20,8 @@ require('./config/passport')(passport);
 var Voxbone = require('voxbone-webrtc');
 var voxbone = new Voxbone({
   voxrtcUsername: process.env.VOXBONE_WEBRTC_USERNAME,
-  voxrtcSecret: process.env.VOXBONE_WEBRTC_PASSWORD
+  voxrtcSecret: process.env.VOXBONE_WEBRTC_PASSWORD,
+  voxrtcExpiresInSeconds: 300
 });
 
 var app = express();

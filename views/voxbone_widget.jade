@@ -11,18 +11,25 @@ html(lang='en', ng-app="voxboneApp")
 
     script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js",type="application/javascript")
     script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js' )
-    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js",type="application/javascript")
+    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js",type="application/javascript")
 
     script(src="//webrtc.voxbone.com/js/jssip-0.7.9-vox.js",type="application/javascript")
     script(src="//webrtc.voxbone.com/js/voxbone-0.0.3.js",type="application/javascript")
 
     script.
 
+      window.setInterval("reloadIFrame();", 240000);
+
+      function reloadIFrame() {
+        if(!voxbone.WebRTC.isCallOpen())
+          window.location.reload();
+      };
+
       function sendPostMessage(action, value){
         if (typeof value === 'undefined') { value = ''; }
         var message = { action: action, value: value };
         parent.postMessage(message, "*");
-      }
+      };
 
       var eventHandlers = {
         'localMediaVolume': function (e) {

@@ -1,6 +1,6 @@
 {
   "name": "voxbone-generator",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -29,6 +29,6 @@
     "passport-local": "^1.0.0",
     "request": "^2.65.0",
     "serve-favicon": "~2.3.0",
-    "voxbone-webrtc": "~0.0.8"
+    "voxbone-webrtc": "0.0.9"
   }
 }
