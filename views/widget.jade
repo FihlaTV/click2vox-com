@@ -387,7 +387,7 @@ block content
                     div(style='color: green' ng-show="widget_form.sip_provisioning || widget_form.sip_provisioned")
                       div(ng-show="widget_form.sip_provisioning") Provisioning SIP URI...
                       div(ng-show="widget_form.sip_provisioned") SIP URI Provisioned!
-                    div(style='color: red' ng-show="widget_form.sip_uri.$touched" )
+                    .error-label(ng-show="widget_form.sip_uri.$touched" )
                       div(ng-show="widget_form.sip_uri.$error.required") SIP URI is required
                       div(ng-show="widget_form.sip_uri.$error.pattern") SIP URI must be valid
                       div(ng-show="widget_form.cannot_validate_sip_uri") {{ widget_form.cannot_validate_sip_uri || 'SIP URI cannot be validated. Please, try again'}}

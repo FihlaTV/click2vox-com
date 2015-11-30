@@ -60,14 +60,14 @@ block content
                     label.control-label Email
                     input.form-control(type="email" id="uemail" name="uemail" ng-model="login.uemail", required, value= "#{email}")
                     div(ng-show="login_form.$submitted || login_form.uemail.$touched")
-                      div(ng-show="login_form.uemail.$error.required") Email is required
+                      .error-label(ng-show="login_form.uemail.$error.required") Email is required
                     div(ng-show="login_form.uemail.$dirty && login_form.uemail.$invalid")
-                      div(ng-show="login_form.uemail.$error.email") Email is invalid
+                      .error-label(ng-show="login_form.uemail.$error.email") Email is invalid
                   .form-group
                     label.control-label Password
                     input.form-control(type="password", id="upassword", name="upassword", ng-model="login.upassword", required)
                     div(ng-show="login_form.$submitted || login_form.upassword.$touched")
-                      div(ng-show="login_form.upassword.$error.required") Password is required
+                      .error-label(ng-show="login_form.upassword.$error.required") Password is required
 
                   button.btn.btn-default#login(ng-disabled="login_form.$invalid" ng-click="login.processForm()") Login
                   br

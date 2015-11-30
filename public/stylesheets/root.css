@@ -90,6 +90,9 @@ Main Css
   height: 40px;
   border-color: #a1aeb7;
 }
+.error-label {
+  color: red;
+}
 /*Checkbox*/
 .checkbox label {
   padding-left: 2px;
