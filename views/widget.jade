@@ -476,8 +476,7 @@ block content
                   .widget-code-wrap
                     .sample.shadow-z-2#widget_code
                       pre.prettyprint.lang-html
-                        code.prettyprint.lang-html
-                          {{ widget.widget_code }}
+                        {{ widget.widget_code }}
                     .codebox-actions(ng-show='widget.showWidgetCode')
                       a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy to Clipboard
                       a(href="#" class="hidden" id="generate-output-code" ng-click='widget.generateOutputCode()') Generate Code
