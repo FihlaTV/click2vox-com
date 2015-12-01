@@ -38,6 +38,7 @@ block content
         if (e.localVolume > 0.30) $("#mic5").addClass('peak');
       },
       'progress': function (e) {
+        $("#audio-ringback-tone").trigger('play');
         console.log('Calling...');
       },
       'failed': function (e){
@@ -45,12 +46,14 @@ block content
         console.log('Failed to connect: ' + e.cause);
 
         if (e.cause.trim().toLowerCase() != 'authentication error')
-          $("#vw-title").text("Call Failed: " + e.cause);
+          $("#vw-title").text("Call Failed: " + e.cause.substr(0,11));
         else
           $("#vw-title").text("Call Failed: Token Expired");
 
+        $("#vw-in-call").addClass('hidden');
         $(".vw-animated-dots").addClass('hidden');
-        $(".vw-end-call").click();
+
+        $("#vw-rating-after-message").removeClass('hidden');
       },
       'accepted': function (e){
         $("#audio-ringback-tone").trigger('pause');
@@ -64,6 +67,8 @@ block content
         console.log('Call ended');
         $("#vw-title").text("Call Ended");
         $(".vw-animated-dots").addClass('hidden');
+        $("#vw-in-call").addClass('hidden');
+        $("#vw-rating").removeClass('hidden');
         $(".vw-end-call").click();
       },
       'getUserMediaFailed': function (e){
@@ -188,7 +193,6 @@ block content
         }
 
         if($scope.isWebRTCSupported()){
-          $("#audio-ringback-tone").trigger('play');
           $("#vw-title").text("Calling");
           $("#vw-unable-to-acces-mic").addClass('hidden');
           $(".vw-animated-dots").removeClass('hidden');

@@ -101,7 +101,7 @@ var check2Ready = (function() {
               </form> \
             </div> \
             <div id="vw-rating-after-message" class="vw-rating hidden"> \
-              <p>Thank you for rating our service</p> \
+              <p>Thank you for using our service</p> \
             </div> \
             <div id="vw-footer" class="vw-footer"> \
               <a href="https://voxbone.com" target="_blank">powered by:</a> \
@@ -125,13 +125,15 @@ var check2Ready = (function() {
           if (message.value > 0.30) $("#mic5").addClass('peak');
           break;
         case 'setCallCalling':
+          playRingbackTone();
           $("#vw-title").text("Calling");
           break;
         case 'setCallFailed':
           stopRingbackTone();
           $("#vw-title").text("Call Failed: " + message.value);
           $(".vw-animated-dots").addClass('hidden');
-          $(".vw-end-call").click();
+          $("#vw-in-call").addClass('hidden');
+          $("#vw-rating-after-message").removeClass('hidden');
           break;
         case 'setInCall':
           stopRingbackTone();
@@ -141,6 +143,8 @@ var check2Ready = (function() {
         case 'setCallEnded':
           $("#vw-title").text("Call Ended");
           $(".vw-animated-dots").addClass('hidden');
+          $("#vw-in-call").addClass('hidden');
+          $("#vw-rating").removeClass('hidden');
           $(".vw-end-call").click();
           break;
         case 'openWidgetWithoutDialPad':
@@ -153,7 +157,6 @@ var check2Ready = (function() {
           $("#vw-unable-to-acces-mic").addClass('hidden');
           break;
         case 'openWidget':
-          playRingbackTone();
           $("#vw-title").text("Calling");
           $(".vw-animated-dots").removeClass('hidden');
           $(".vox-widget-wrapper").removeClass('hidden');
@@ -162,7 +165,6 @@ var check2Ready = (function() {
           $("#vw-unable-to-acces-mic").addClass('hidden');
           break;
         case 'setCallFailedUserMedia':
-          playRingbackTone();
           $("#vw-title").text("Call Failed");
           $(".vw-animated-dots").addClass('hidden');
           $("#vw-in-call").addClass('hidden');
@@ -260,12 +262,6 @@ var check2Ready = (function() {
     $(".vw-end-call").click(function(e) {
       e.preventDefault();
       resetRating();
-
-      $("#vw-in-call").addClass('hidden');
-      $("#vw-rating").removeClass('hidden');
-
-      // $("#vw-title").text("Call Ended");
-      $(".vw-animated-dots").addClass('hidden');
       callAction('hang_up');
     });
 
