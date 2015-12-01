@@ -125,7 +125,6 @@ var check2Ready = (function() {
           if (message.value > 0.30) $("#mic5").addClass('peak');
           break;
         case 'setCallCalling':
-          playRingbackTone();
           $("#vw-title").text("Calling");
           break;
         case 'setCallFailed':
@@ -154,6 +153,7 @@ var check2Ready = (function() {
           $("#vw-unable-to-acces-mic").addClass('hidden');
           break;
         case 'openWidget':
+          playRingbackTone();
           $("#vw-title").text("Calling");
           $(".vw-animated-dots").removeClass('hidden');
           $(".vox-widget-wrapper").removeClass('hidden');
@@ -162,6 +162,7 @@ var check2Ready = (function() {
           $("#vw-unable-to-acces-mic").addClass('hidden');
           break;
         case 'setCallFailedUserMedia':
+          playRingbackTone();
           $("#vw-title").text("Call Failed");
           $(".vw-animated-dots").addClass('hidden');
           $("#vw-in-call").addClass('hidden');
