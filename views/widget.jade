@@ -306,7 +306,7 @@ block content
             console.log(response.data);
             $scope.widget.widget_code = 'Error generating widget code snippet. Please check it.';
 
-            if(response.data.errors && response.data.errors.comeback_errors && response.data.errors.comeback_errors.apiErrorMessage)
+            if(response.data && response.data.errors && response.data.errors.comeback_errors && response.data.errors.comeback_errors.apiErrorMessage)
               $scope.widget_form.cannot_validate_sip_uri = response.data.errors.comeback_errors.apiErrorMessage;
             else
               $scope.widget_form.cannot_validate_sip_uri = "Unexpected error linking your SIP URI. Please try again. ";
