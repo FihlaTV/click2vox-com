@@ -24,7 +24,7 @@ var check2Ready = (function() {
 
   $(document).ready(function () {
     $('#control').append(' \
-      <audio id="audio-ringback-tone" controls preload="none" style="display: none;"> \
+      <audio id="audio-ringback-tone" preload="auto"> \
         <source src="https://upload.wikimedia.org/wikipedia/commons/c/cd/US_ringback_tone.ogg" type="audio/ogg"> \
       </audio> \
       <div class="vox-widget-wrapper hidden"> \
