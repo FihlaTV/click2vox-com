@@ -41,6 +41,7 @@ block content
         console.log('Calling...');
       },
       'failed': function (e){
+        $("#audio-ringback-tone").trigger('pause');
         console.log('Failed to connect: ' + e.cause);
 
         if (e.cause.trim().toLowerCase() != 'authentication error')
@@ -52,18 +53,21 @@ block content
         $(".vw-end-call").click();
       },
       'accepted': function (e){
+        $("#audio-ringback-tone").trigger('pause');
         console.log('Call started');
         $("#vw-title").text("In Call");
         $(".vw-animated-dots").removeClass('hidden');
         $("#vw-unable-to-acces-mic").addClass('hidden');
       },
       'ended': function (e){
+        $("#audio-ringback-tone").trigger('pause');
         console.log('Call ended');
         $("#vw-title").text("Call Ended");
         $(".vw-animated-dots").addClass('hidden');
         $(".vw-end-call").click();
       },
       'getUserMediaFailed': function (e){
+        $("#audio-ringback-tone").trigger('pause');
         console.log('Cannot get User Media');
         $("#vw-title").text("Call Failed");
         $(".vw-animated-dots").addClass('hidden');
@@ -184,6 +188,7 @@ block content
         }
 
         if($scope.isWebRTCSupported()){
+          $("#audio-ringback-tone").trigger('play');
           $("#vw-title").text("Calling");
           $("#vw-unable-to-acces-mic").addClass('hidden');
           $(".vw-animated-dots").removeClass('hidden');

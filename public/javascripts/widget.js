@@ -24,6 +24,9 @@ var check2Ready = (function() {
 
   $(document).ready(function () {
     $('#control').append(' \
+      <audio id="audio-ringback-tone" controls preload="none" style="display: none;"> \
+        <source src="https://upload.wikimedia.org/wikipedia/commons/c/cd/US_ringback_tone.ogg" type="audio/ogg"> \
+      </audio> \
       <div class="vox-widget-wrapper hidden"> \
         <div class="vw-main"> \
           <div class="vw-header"> \
@@ -122,14 +125,17 @@ var check2Ready = (function() {
           if (message.value > 0.30) $("#mic5").addClass('peak');
           break;
         case 'setCallCalling':
+          playRingbackTone();
           $("#vw-title").text("Calling");
           break;
         case 'setCallFailed':
+          stopRingbackTone();
           $("#vw-title").text("Call Failed: " + message.value);
           $(".vw-animated-dots").addClass('hidden');
           $(".vw-end-call").click();
           break;
         case 'setInCall':
+          stopRingbackTone();
           $("#vw-title").text("In Call");
           $(".vw-animated-dots").removeClass('hidden');
           break;
@@ -180,6 +186,16 @@ var check2Ready = (function() {
       $("#vw-rating").addClass('hidden');
       $("#vw-rating-after-message").removeClass('hidden');
     });
+
+    function stopRingbackTone(){
+      $("#audio-ringback-tone").trigger('pause');
+      $("#audio-ringback-tone").prop("currentTime",0);
+    };
+
+    function playRingbackTone(){
+      $("#audio-ringback-tone").prop("currentTime",0);
+      $("#audio-ringback-tone").trigger('play');
+    };
 
     function is_iframe() {
       return $('#call_button_frame').length > 0;
