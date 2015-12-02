@@ -24,7 +24,7 @@ var check2Ready = (function() {
 
   $(document).ready(function () {
     $('#control').append(' \
-      <audio id="audio-ringback-tone" preload="auto"> \
+      <audio id="audio-ringback-tone" preload="auto" loop> \
         <source src="https://upload.wikimedia.org/wikipedia/commons/c/cd/US_ringback_tone.ogg" type="audio/ogg"> \
       </audio> \
       <div class="vox-widget-wrapper hidden"> \
@@ -125,7 +125,6 @@ var check2Ready = (function() {
           if (message.value > 0.30) $("#mic5").addClass('peak');
           break;
         case 'setCallCalling':
-          playRingbackTone();
           $("#vw-title").text("Calling");
           break;
         case 'setCallFailed':
@@ -148,6 +147,7 @@ var check2Ready = (function() {
           $(".vw-end-call").click();
           break;
         case 'openWidgetWithoutDialPad':
+          playRingbackTone();
           $("#dialpad").addClass('hidden');
           $("#vw-title").text("Calling");
           $(".vw-animated-dots").removeClass('hidden');
@@ -157,6 +157,7 @@ var check2Ready = (function() {
           $("#vw-unable-to-acces-mic").addClass('hidden');
           break;
         case 'openWidget':
+          playRingbackTone();
           $("#vw-title").text("Calling");
           $(".vw-animated-dots").removeClass('hidden');
           $(".vox-widget-wrapper").removeClass('hidden');
@@ -165,6 +166,7 @@ var check2Ready = (function() {
           $("#vw-unable-to-acces-mic").addClass('hidden');
           break;
         case 'setCallFailedUserMedia':
+          stopRingbackTone();
           $("#vw-title").text("Call Failed");
           $(".vw-animated-dots").addClass('hidden');
           $("#vw-in-call").addClass('hidden');

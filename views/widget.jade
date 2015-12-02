@@ -38,7 +38,6 @@ block content
         if (e.localVolume > 0.30) $("#mic5").addClass('peak');
       },
       'progress': function (e) {
-        $("#audio-ringback-tone").trigger('play');
         console.log('Calling...');
       },
       'failed': function (e){
@@ -193,6 +192,7 @@ block content
         }
 
         if($scope.isWebRTCSupported()){
+          $("#audio-ringback-tone").trigger('play');
           $("#vw-title").text("Calling");
           $("#vw-unable-to-acces-mic").addClass('hidden');
           $(".vw-animated-dots").removeClass('hidden');
