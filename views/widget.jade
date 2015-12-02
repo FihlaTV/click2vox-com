@@ -153,6 +153,7 @@ block content
       };
 
       $scope.init = function () {
+        voxbone.WebRTC.configuration.post_logs = true;
         voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
         voxbone.WebRTC.customEventHandler = eventHandlers;
         voxbone.WebRTC.init(#{voxrtc_config});
