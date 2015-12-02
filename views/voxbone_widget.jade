@@ -64,8 +64,8 @@ html(lang='en', ng-app="voxboneApp")
           $scope.master = { };
 
           $scope.init = function () {
+            voxbone.WebRTC.configuration.post_logs = true;
             voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
-
             voxbone.WebRTC.customEventHandler = eventHandlers;
 
             if("#{the_widget.caller_id}")
