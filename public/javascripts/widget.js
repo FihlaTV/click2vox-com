@@ -126,6 +126,7 @@ var check2Ready = (function() {
           break;
         case 'setCallCalling':
           $("#vw-title").text("Calling");
+          playRingbackTone();
           break;
         case 'setCallFailed':
           stopRingbackTone();
@@ -147,7 +148,6 @@ var check2Ready = (function() {
           $(".vw-end-call").click();
           break;
         case 'openWidgetWithoutDialPad':
-          playRingbackTone();
           $("#dialpad").addClass('hidden');
           $("#vw-title").text("Calling");
           $(".vw-animated-dots").removeClass('hidden');
@@ -157,7 +157,6 @@ var check2Ready = (function() {
           $("#vw-unable-to-acces-mic").addClass('hidden');
           break;
         case 'openWidget':
-          playRingbackTone();
           $("#vw-title").text("Calling");
           $(".vw-animated-dots").removeClass('hidden');
           $(".vox-widget-wrapper").removeClass('hidden');
