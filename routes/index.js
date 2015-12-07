@@ -15,6 +15,8 @@ var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 var request = require('request');
 
+var sendgrid  = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
+
 module.exports = function(passport, voxbone){
 
   router.get('/ping', function(req, res, next){
@@ -168,33 +170,22 @@ module.exports = function(passport, voxbone){
         });
       },
       function(token, account, done) {
-        var smtpTransport = nodemailer.createTransport('SMTP', {
-          service: 'SendGrid',
-          auth: {
-            user: process.env.SENDGRID_USERNAME,
-            pass: process.env.SENDGRID_PASSWORD
-          }
-        });
+        var email = new sendgrid.Email({to: account.email});
+        email.from = process.env.SENDGRID_FROM;
+        email.replyto = process.env.SENDGRID_FROM;
+        email.subject = 'Voxbone Widget Generator - Password Reset';
 
-        var mailOptions = {
-          to: account.email,
-          from: process.env.SENDGRID_FROM,
-          subject: 'Voxbone Widget Generator - Password Reset',
-          text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-            'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-            'https://' + req.headers.host + '/reset/' + token + '\n\n' +
-            'If you did not request this, please ignore this email and your password will remain unchanged.\n',
-          html: "<h2> Password Reset </h2> <p>You are receiving this because you (or someone else) have requested the reset of the password for your account.<br/> Please click on the following link, or paste this into your browser to complete the process: <br/> http://"+ req.headers.host + "/reset/" + token +"<br/> If you did not request this, please ignore this email and your password will remain unchanged. </p>"
-        };
+        email.html = ' ';
 
-        smtpTransport.sendMail(mailOptions, function(err) {
-          if(err){
-            console.log(err);
-            done(err, 'done');
-          }else{
-            var result = { message: "An e-mail has been sent to " + account.email + " with further instructions. Please check your inbox.", errors: null }
-            res.status(200).json(result);
-          }
+        email.addFilter('templates', 'enable', 1);
+        email.addFilter('templates', 'template_id', '385daaaf-0f67-4c79-8b5f-966c43111d18');
+
+        email.addSubstitution('-button_link-', 'https://' + req.headers.host + '/reset/' + token);
+
+        sendgrid.send(email, function(err, json) {
+          var result = { message: "An e-mail has been sent to " + account.email + " with further instructions. Please check your inbox.", errors: null }
+          res.status(200).json(result);
+          // console.log(json);
         });
       }
     ], function(err) {
@@ -238,24 +229,21 @@ module.exports = function(passport, voxbone){
         });
       },
       function(account, done) {
-        var smtpTransport = nodemailer.createTransport('SMTP', {
-          service: 'SendGrid',
-          auth: {
-            user: process.env.SENDGRID_USERNAME,
-            pass: process.env.SENDGRID_PASSWORD
-          }
-        });
-        var mailOptions = {
-          to: account.email,
-          from: process.env.SENDGRID_FROM,
-          subject: 'Your password has been changed',
-          text: 'Hello,\n\n' +
-            'This is a confirmation that the password for your account ' + account.email + ' has just been changed.\n',
-          html: "<h2> Hello </h2> <p> This is a confirmation that the password for your account " +account.email+" has just been changed.</p>"
-        };
-        smtpTransport.sendMail(mailOptions, function(err) {
+
+        var email = new sendgrid.Email({to: account.email});
+        email.from = process.env.SENDGRID_FROM;
+        email.replyto = process.env.SENDGRID_FROM;
+        email.subject = 'Voxbone Widget Generator - Your password has been changed';
+
+        email.html = ' ';
+
+        email.addFilter('templates', 'enable', 1);
+        email.addFilter('templates', 'template_id', '385daaaf-0f67-4c79-8b5f-966c43111d18');
+
+        sendgrid.send(email, function(err, json) {
           req.flash('success', 'Success! Your password has been changed.');
           done(err);
+          // console.log(json);
         });
       }
     ], function(err) {
