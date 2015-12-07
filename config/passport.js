@@ -2,19 +2,19 @@ var LocalStrategy = require('passport-local').Strategy;
 var Account = require('../models/account');
 
 module.exports = function(passport) {
-  
+
   passport.use('local-login', new LocalStrategy({
     usernameField : 'email',
     passwordField : 'password',
     passReqToCallback : true
   },
   function(req, email, password, done) {
-    Account.findOne({ 'email' :  email, 'temporary': false }, function(err, account) {
+    Account.findOne({ 'email' : new RegExp(email, "i"), 'temporary': false }, function(err, account) {
       if (err){
         return done(err);
       }
       if (!account){
-        return done(null, false, req.flash('loginMessage', 'No account found.'));
+        return done(null, false, req.flash('loginMessage', 'Account not found'));
       }
       if (!account.validPassword(password)){
         return done(null, false, req.flash('loginMessage', 'Wrong password. Try again'));

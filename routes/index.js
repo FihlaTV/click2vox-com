@@ -72,7 +72,7 @@ module.exports = function(passport, voxbone){
     var result = { message: "", errors: true, redirect: "", email: formData.email }
     var bypass_account_check = (process.env.BYPASS_PRE_EXISTING_ACCOUNTS_CHECK === "true");
 
-    Account.findOne({ email: formData.email }, function(err, the_account){
+    Account.findOne({ email: new RegExp(formData.email, "i") }, function(err, the_account){
 
       if (!bypass_account_check) {
         console.log('-' +bypass_account_check+'-');
@@ -155,7 +155,7 @@ module.exports = function(passport, voxbone){
         });
       },
       function(token, done) {
-        Account.findOne({ email: req.body.email }, function(err, account) {
+        Account.findOne({ email: new RegExp(req.body.email, "i") }, function(err, account) {
           if (!account) {
             var result = { message: "No account with that email address exists.", errors: err }
             return res.status(404).json(result);
@@ -366,7 +366,7 @@ module.exports = function(passport, voxbone){
     async.waterfall([
       function(done){
         //step 1 Find the account
-        Account.findOne({ email: req.user.email }, function(err, the_account){
+        Account.findOne({ email: new RegExp(req.user.email, "i") }, function(err, the_account){
           done(err, the_account);
         });
       },
