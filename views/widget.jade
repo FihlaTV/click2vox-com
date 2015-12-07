@@ -128,7 +128,7 @@ block content
       $scope.master = {
         showWidgetCode: false,
         dial_pad: true,
-        button_style: 'style-b',
+        button_style: 'style-a',
         background_style: 'dark',
         widget_code: 'Click on the SIP URI field to the left to use the Echo Service(echo@ivrs), or enter your SIP URI to Generate the code snippet',
         sip_uri: 'echo@ivrs',
@@ -339,14 +339,6 @@ block content
         $(this).parent().toggleClass("active");
       });
 
-      $(".btn-style-a").click(function() {
-        $(".widget-box").removeClass("style-b").addClass("style-a");
-      });
-
-      $(".btn-style-b").click(function() {
-        $(".widget-box").removeClass("style-a").addClass("style-b");
-      });
-
       $(".togle-bg a.dark").click(function() {
         $(".prev-view").removeClass("light").removeClass("grey").addClass("dark");
       });
@@ -462,7 +454,7 @@ block content
               .boxPanel.preview
                 .prev-view.light
                   .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
-                  .widget-box.style-b(ng-show="showCallButton()")
+                  .widget-box(ng-class="widget.button_style" ng-show="showCallButton()")
                     button.btn-style.launch_call(ng-disabled="!widget.showWidgetCode" ng-click="makeCall()") #[span {{widget.button_label || 'Call Sales'}}]
                     .widget-footer-left
                       a(href="https://test.webrtc.org/" target="_blank") Test your setup
