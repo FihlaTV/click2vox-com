@@ -417,7 +417,7 @@ block content
                             span DTMF Dial Pad
                             span.badge(data-toggle='tooltip' data-placement="right" title="Display a dialpad to allow your users to enter DTMF digits during a call.") ?
                         .form-group
-                          label(for="btn-context") Send Digits #[span.badge(data-toggle='tooltip' data-placement="right" title="Automatically send DTMF digit(s) after a call is connected. This is useful for automatically navigating IVRs or entering access codes for a conference bridge. Digits should use the following format:'1,2,3,1200ms,4,5,900ms,6,#' - This string will generate 1 2 3, wait 1200 milliseconds, enter 4, 5, wait 900 milliseconds then enter 6, #") ?]
+                          label(for="btn-context") Send Digits #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" title="Automatically send DTMF digit(s) after a call is connected. This is useful for automatically navigating IVRs or entering access codes for a conference bridge. Digits should use the following format: <br><br>1,2,3,1200ms,4,5,900ms,6,#<br><br>This string will generate 1 2 3, wait 1200 milliseconds, enter 4, 5, wait 900 milliseconds then enter 6, #") ?]
                           input.form-control(type="text" name="send_digits" ng-model="widget.send_digits" ng-change='widget.generateOutputCode()' ng-model-options="{ updateOn: 'blur' }")
                   .panel.panel-default
                     .panel-heading
@@ -447,9 +447,9 @@ block content
               span.title Widget Preview in a Browser:
               ul.nav.nav-tabs
                 li(ng-click="onClickTab(true)" ng-class="{active:preview_webrtc_compatible}")
-                  a(data-toggle="tab" href="#") WebRTC #[span.badge(data-toggle='tooltip' data-placement="right" title="This is how the widget will look like in a WebRTC compatible browser") ?]
+                  a(data-toggle="tab" href="#") WebRTC #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This is how the widget will look like in a WebRTC compatible browser") ?]
                 li(ng-click="onClickTab(false)" ng-class="{active:!preview_webrtc_compatible}")
-                  a(data-toggle="tab" href="#") Non-WebRTC #[span.badge(data-toggle='tooltip' data-placement="right" title="This is how the widget will look like in a WebRTC incompatible browser") ?]
+                  a(data-toggle="tab" href="#") Non-WebRTC #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This is how the widget will look like in a WebRTC incompatible browser") ?]
 
               .boxPanel.preview
                 .prev-view.light
