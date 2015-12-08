@@ -178,7 +178,7 @@ module.exports = function(passport, voxbone){
         email.html = ' ';
 
         email.addFilter('templates', 'enable', 1);
-        email.addFilter('templates', 'template_id', '385daaaf-0f67-4c79-8b5f-966c43111d18');
+        email.addFilter('templates', 'template_id', process.env.SENDGRID_PASSWORD_RESET_TEMPLATE);
 
         email.addSubstitution('-button_link-', 'https://' + req.headers.host + '/reset/' + token);
 
@@ -238,7 +238,7 @@ module.exports = function(passport, voxbone){
         email.html = ' ';
 
         email.addFilter('templates', 'enable', 1);
-        email.addFilter('templates', 'template_id', 'aac23488-a0b8-4a59-8868-641a78df35b0');
+        email.addFilter('templates', 'template_id', process.env.SENDGRID_PASSWORD_CHANGED_TEMPLATE);
 
         sendgrid.send(email, function(err, json) {
           req.flash('success', 'Success! Your password has been changed.');
