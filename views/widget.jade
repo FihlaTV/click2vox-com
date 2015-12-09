@@ -195,6 +195,7 @@ block content
 
         if($scope.isWebRTCSupported()){
           $("#vw-title").text("Calling");
+          $("#microphone em").removeClass('on').removeClass('off');
           $("#vw-unable-to-acces-mic").addClass('hidden');
           $(".vw-animated-dots").removeClass('hidden');
           $(".vox-widget-wrapper").removeClass('hidden');
