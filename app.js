@@ -25,6 +25,8 @@ var voxbone = new Voxbone({
 });
 
 var app = express();
+if (process.env.NEW_RELIC_LICENSE_KEY)
+  app.locals.newrelic = newrelic;
 
 // set timeout
 app.use(timeout(process.env.TIMEOUT || '12s'));

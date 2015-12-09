@@ -1,6 +1,9 @@
 doctype html
 html(lang='en', ng-app="voxboneApp")
   head
+    if process.env.NEW_RELIC_LICENSE_KEY
+      != newrelic.getBrowserTimingHeader()
+
     title= title
 
     link(rel="apple-touch-icon" href="")
