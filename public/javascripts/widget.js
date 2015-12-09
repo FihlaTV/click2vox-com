@@ -150,6 +150,7 @@ var check2Ready = (function() {
         case 'openWidgetWithoutDialPad':
           $("#dialpad").addClass('hidden');
           $("#vw-title").text("Calling");
+          $("#microphone em").removeClass('on').removeClass('off');
           $(".vw-animated-dots").removeClass('hidden');
           $(".vox-widget-wrapper").removeClass('hidden');
           $("#vw-in-call").removeClass('hidden');
@@ -158,6 +159,7 @@ var check2Ready = (function() {
           break;
         case 'openWidget':
           $("#vw-title").text("Calling");
+          $("#microphone em").removeClass('on').removeClass('off');
           $(".vw-animated-dots").removeClass('hidden');
           $(".vox-widget-wrapper").removeClass('hidden');
           $("#vw-in-call").removeClass('hidden');
