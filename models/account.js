@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt-nodejs');
 
+const ADMIN_DOMAINS = ['agilityfeat.com', 'voxbone.com'];
+
 var accountSchema = new Schema({
   email: { type: String, required: true, index: { unique: true } },
   password: String,
@@ -28,6 +30,11 @@ accountSchema.methods.generateHash = function(password) {
 
 accountSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.password);
+};
+
+accountSchema.methods.isAdmin = function() {
+  var domain = this.email.replace(/.*@/, "");
+  return ADMIN_DOMAINS.indexOf(domain) > -1;
 };
 
 var Account = mongoose.model('Account', accountSchema);
