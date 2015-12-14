@@ -23,6 +23,23 @@ module.exports = function(passport, voxbone){
     res.json({ 'ping': Date.now(), 'version': pjson.version });
   });
 
+  router.get('/stats', function(req, res, next){
+
+    if(req.isAuthenticated()) {
+      Account.findOne({ email: new RegExp(req.user.email, "i") }, {}, function(err, account){
+        if (err || !account)
+          return res.render('forgot', { title: title, message: "lalalla", errors: err })
+
+        var show_stats = req.isAuthenticated() && account.isAdmin()
+        if (show_stats)
+          res.json({ 'stats': Date.now(), 'version': pjson.version, 'show_stats': show_stats });
+        else
+          res.redirect('/');
+      });
+    } else
+      res.redirect('/');
+  });
+
   // Redirects if not HTTPS
   router.get('*',function(req,res,next){
     if(process.env.FORCE_HTTPS == 'true' && process.env.APP_URL && req.headers['x-forwarded-proto'] != 'https')
