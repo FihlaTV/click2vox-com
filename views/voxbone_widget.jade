@@ -72,7 +72,7 @@ html(lang='en', ng-app="voxboneApp")
             voxbone.WebRTC.customEventHandler = eventHandlers;
 
             if("#{the_widget.caller_id}")
-              voxbone.WebRTC.configuration.uri = (new JsSIP.URI(scheme="sip", user="#{the_widget.caller_id}", "voxbone.com")).toString();
+              voxbone.WebRTC.configuration.uri = (new JsSIP.URI(scheme="sip", user="#{the_widget.caller_id}".replace(/[^a-zA-Z0-9-_]/g, ''), "voxbone.com")).toString();
 
             if("#{the_widget.context}")
               voxbone.WebRTC.context = "#{the_widget.context}";
