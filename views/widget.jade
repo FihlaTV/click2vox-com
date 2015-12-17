@@ -290,6 +290,11 @@ block content
             });
       };
 
+      $scope.conditional_sip_provisioning = function(form) {
+        if (!$scope.sipUriLinked)
+          $scope.sip_provisioning(form);
+      }
+
       $scope.sip_provisioning = function(form) {
         $scope.sipUriLinked = false;
         $scope.widget.showWidgetCode = false;
@@ -400,7 +405,7 @@ block content
                   .form-group
                     label.control-label SIP URI
                       span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?
-                    input.form-control(required type="text" id="sip_uri" name="sip_uri" ng-model="widget.sip_uri" ng-pattern="/^[^@]+@[^@]+$/" ng-change='sip_provisioning(widget_form)' ng-model-options="{ updateOn: 'blur' }" placeholder="i.e. echo@ivrs" auto-focus list="suggested-sips")
+                    input.form-control(required type="text" id="sip_uri" name="sip_uri" ng-model="widget.sip_uri" ng-pattern="/^[^@]+@[^@]+$/" ng-change='sip_provisioning(widget_form)' ng-model-options="{ updateOn: 'blur' }" placeholder="i.e. echo@ivrs" auto-focus list="suggested-sips" ng-blur="conditional_sip_provisioning(widget_form)")
                     datalist#suggested-sips
                       option echo@ivrs
                       option digits@ivrs
