@@ -427,6 +427,7 @@ module.exports = function(passport, voxbone){
           }
         };
 
+        console.log(put_data);
         var url = "https://api.voxbone.com/ws-voxbone/services/rest/configuration/voiceuri";
         request.put(url,
           { auth: getApiCredentials(),
