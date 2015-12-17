@@ -430,13 +430,20 @@ module.exports = function(passport, voxbone){
         console.log(put_data);
         var url = "https://api.voxbone.com/ws-voxbone/services/rest/configuration/voiceuri";
         request.put(url,
-          { auth: getApiCredentials(),
+          {
+            auth: getApiCredentials(),
             headers: getJsonHeaders(),
             body: JSON.stringify(put_data)
           },
           function(err, response, body){
+            if(err){
+              if(err.code === 'ETIMEDOUT' || err.connect === true)
+                done({ httpStatusCode: 503, comeback_errors: "Timeout", message: "Timeout - Could not create the voice uri for SIP URI: " + req.body.sip_uri + " and user: " + req.user.email + " . Probably already exists. View previous logs for more details." });
+              else
+                console.log('Error:', err);
 
-            if(err) return console.log('Error:', err);
+              return;
+            }
 
             var response_body = JSON.parse(body);
             if(response_body['httpStatusCode']){
