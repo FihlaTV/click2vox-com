@@ -24,8 +24,15 @@ html(lang='en', ng-app="voxboneApp")
       window.setInterval("reloadIFrame();", 240000);
 
       function reloadIFrame() {
-        if(!voxbone.WebRTC.isCallOpen())
-          window.location.reload();
+        var online = navigator.onLine;
+        try {
+          if(online && !voxbone.WebRTC.isCallOpen())
+            window.location.reload();
+        }
+        catch(err) {
+          if(online)
+            window.location.reload();
+        }
       };
 
       function sendPostMessage(action, value){
