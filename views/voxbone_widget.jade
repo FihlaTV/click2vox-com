@@ -12,12 +12,12 @@ html(lang='en', ng-app="voxboneApp")
     link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css", rel="stylesheet")
     link(href="/stylesheets/root.css", rel="stylesheet")
 
-    script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js",type="application/javascript")
+    script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js")
     script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js' )
-    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js",type="application/javascript")
+    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js")
 
-    script(src="//webrtc.voxbone.com/js/jssip-0.7.9.min-vox.js",type="application/javascript")
-    script(src="//webrtc.voxbone.com/js/voxbone-0.0.3.js",type="application/javascript")
+    script(src="//webrtc.voxbone.com/js/jssip-0.7.9.min-vox.js")
+    script(src="//webrtc.voxbone.com/js/voxbone-0.0.3.js")
 
     script.
 
@@ -78,8 +78,8 @@ html(lang='en', ng-app="voxboneApp")
             voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
             voxbone.WebRTC.customEventHandler = eventHandlers;
 
-            if("#{the_widget.caller_id}")
-              voxbone.WebRTC.configuration.uri = (new JsSIP.URI(scheme="sip", user="#{the_widget.caller_id}".replace(/[^a-zA-Z0-9-_]/g, ''), "voxbone.com")).toString();
+            var caller_id = "#{the_widget.caller_id}" ? "#{the_widget.caller_id}" : "click2vox";
+            voxbone.WebRTC.configuration.uri = (new JsSIP.URI(scheme="sip", user=(caller_id).replace(/[^a-zA-Z0-9-_]/g, ''), "voxbone.com")).toString();
 
             if("#{the_widget.context}")
               voxbone.WebRTC.context = "#{the_widget.context}";
