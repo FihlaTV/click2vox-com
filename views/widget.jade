@@ -90,6 +90,46 @@ block content
 
     var app = angular.module('voxboneApp', ['ngSanitize', 'ngCookies']);
 
+    app.directive('qtip', function() {
+      return {
+        restrict: 'A',
+        scope : {
+            qtipVisible : '='
+        },
+        link: function(scope, element, attrs) {
+          var my = attrs.qtipMy || 'center right'
+            , at = attrs.qtipAt || 'center left'
+            , qtipClass = attrs.qtipClass || 'qtip-bootstrap'
+            , content = attrs.qtipContent || attrs.qtip
+            ;
+
+          if (attrs.qtipTitle) {
+            content = {'title': attrs.qtipTitle, 'text': attrs.qtip};
+          }
+
+          $(element).qtip({
+            content: content,
+            position: {
+              my: my,
+              at: at,
+              target: element
+            },
+            hide: {
+              fixed : true,
+              delay : 100
+            },
+            style: qtipClass
+          });
+
+          if(attrs.qtipVisible) {
+            scope.$watch('qtipVisible', function (newValue, oldValue) {
+                $(element).qtip('toggle', newValue);
+            });
+          }
+        }
+      }
+    });
+
     app.directive('httpPrefix', function() {
       return {
         restrict: 'A',
@@ -158,6 +198,7 @@ block content
           $scope.sipUriLinked = true;
           for (var attrname in cookie_data)
             $scope.master[attrname] = cookie_data[attrname];
+          //- $scope.createMakeCallToolip();
         };
 
         $scope.widget = angular.copy($scope.master);
@@ -249,7 +290,6 @@ block content
       $scope.widget.generateOutputCode = function(){
         if (!$scope.sipUriLinked) return;
         console.log("--> Generating Output Code...");
-
 
         var caller_id = $scope.widget.caller_id;
         if(caller_id)
@@ -480,8 +520,8 @@ block content
               .boxPanel.preview
                 .prev-view.light
                   .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
-                  .widget-box(ng-class="widget.button_style" ng-show="showCallButton()")
-                    button.btn-style.launch_call(ng-disabled="!widget.showWidgetCode" ng-click="makeCall()") #[span {{widget.button_label || 'Call Sales'}}]
+                  .widget-box#launch_call_div(ng-class="widget.button_style" ng-show="showCallButton()")
+                    button.btn-style.launch_call#launch_call(ng-disabled="!widget.showWidgetCode" ng-click="makeCall()" qtip="You can click the button to make a call and test the service!<br>(once you setup your widget)" qtip-visible='true') #[span {{widget.button_label || 'Call Sales'}}]
                     .widget-footer-left
                       a(href="https://test.webrtc.org/" target="_blank") Test your setup
                     .widget-footer-right
