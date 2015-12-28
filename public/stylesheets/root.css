@@ -475,6 +475,21 @@ strong {
 .createButton .preview .prev-view .togle-bg a.light {
   background: #fbfcfc;
 }
+.createButton .preview .prev-view .togle-bg-tooltip {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+.createButton .preview .prev-view .togle-bg-tooltip a {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  margin-left: 2px;
+}
 .createButton .preview .prev-view button {
   margin: 0;
 }
@@ -808,16 +823,16 @@ strong {
 }
 /* Responsive Style */
 /* =================================================================================
-smaller than 1280 
+smaller than 1280
 ================================================================================= */
 /* =================================================================================
-smaller than 1024 
+smaller than 1024
 ================================================================================= */
 /* =================================================================================
-smaller than 760 
+smaller than 760
 ================================================================================= */
 /* =================================================================================
-smaller than 620 
+smaller than 620
 ================================================================================= */
 @media screen and (max-width: 620px) {
   .navbar.navbar span.subBrand {
@@ -835,7 +850,7 @@ smaller than 620
   }
 }
 /* =================================================================================
-smaller than 428 
+smaller than 428
 ================================================================================= */
 @media screen and (max-width: 428px) {
   .registerPage .formWrap {
