@@ -151,12 +151,12 @@ module.exports = function(passport, voxbone){
     Account
       .findOne({_id: req.user._id})
       .exec(function(err, the_account) {
-        res.render('widget', { title: title, did: the_account.did, account: accountLoggedIn(req) });
+        res.render('widget', { title: title, did: the_account.did, account: accountLoggedIn(req), email: the_account.email });
       });
   });
 
   router.get('/', redirectToWidgetIfLoggedIn, function(req, res, next) {
-    res.render('login', { title: title, account: accountLoggedIn(req) });
+    res.render('login', { title: title, account: accountLoggedIn(req), email: req.query.email});
   });
 
   router.get('/forgot', function(req, res, next){
@@ -217,7 +217,7 @@ module.exports = function(passport, voxbone){
       if (!account) {
         return res.render('forgot', { title: title, message: "Password reset token is invalid or has expired.", errors: err })
       }
-      res.render('reset', { title: title, account: accountLoggedIn(req), the_account: req.user, token:req.params.token });
+      res.render('reset', { title: title, account: accountLoggedIn(req), the_account: req.user, token:req.params.token, email: req.query.email });
     });
   });
 
