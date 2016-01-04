@@ -183,9 +183,7 @@ var check2Ready = (function() {
       if (!rate) return;
 
       var comment = $('#rating-message').val();
-      var url = document.URL;
-
-      var data =  { rate: rate, comment: comment, url: url };
+      var data =  { rate: rate, comment: comment, url: document.URL };
       var message = { action: 'rate', data: data };
 
       callAction(message);
@@ -273,6 +271,11 @@ var check2Ready = (function() {
       e.preventDefault();
       $(".vox-widget-wrapper").addClass('hidden');
       callAction('hang_up');
+
+      // send "no rating"
+      var data =  { rate: 0, comment: 'Closed Without Rating', url: document.URL };
+      var message = { action: 'rate', data: data };
+      callAction(message);
     });
 
     $("#full-screen i").click(function(e) {

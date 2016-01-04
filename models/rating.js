@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var ratingSchema = new Schema({
   _widget : { type: Schema.Types.ObjectId, ref: 'Widget' },
-  rate: { type: Number, required: true, min: 1, max: 5 },
+  rate: { type: Number, required: true, min: 0, max: 5 },
   comment: String,
   url: String,
   created_at: Date,
