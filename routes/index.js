@@ -335,6 +335,7 @@ module.exports = function(passport, voxbone){
       var a_rating = new Rating({
         rate: req.body.rate,
         comment: req.body.comment,
+        url: req.body.url,
         _widget: the_widget._id
       });
 
