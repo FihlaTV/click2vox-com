@@ -434,7 +434,7 @@ block content
     .body(ng-controller="WidgetController")
       .container
         .row
-          .col-sm-6.left-col
+          .col-md-6.left-col
             section
               span.title Button Configuration
               form
@@ -508,7 +508,7 @@ block content
                             span.badge(data-toggle='tooltip' data-placement="right" title="Instead of showing the button, display the entered HTML ") ?
                             textarea.form-control(type="text" name="show_text_html_value", placeholder="Enter text or HTML" ng-show="widget.incompatible_browser_configuration == 'show_text_html'" ng-model="widget.show_text_html_value" ng-change='widget.generateOutputCode()' ng-model-options="{ updateOn: 'blur' }")
 
-          .col-sm-6.right-col
+          .col-md-6.right-col
             .section
               span.title Widget Preview in a Browser:
               ul.nav.nav-tabs
