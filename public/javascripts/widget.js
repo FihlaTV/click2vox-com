@@ -183,8 +183,9 @@ var check2Ready = (function() {
       if (!rate) return;
 
       var comment = $('#rating-message').val();
+      var url = document.URL;
 
-      var data =  { rate: rate, comment: comment };
+      var data =  { rate: rate, comment: comment, url: url };
       var message = { action: 'rate', data: data };
 
       callAction(message);
