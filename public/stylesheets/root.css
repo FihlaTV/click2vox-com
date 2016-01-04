@@ -1,11 +1,14 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,400italic);
+@import url('plugin/font-awesome/font-awesome.min.css');
+@import url('plugin/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css');
+@import url('plugin/bootstrap-select/bootstrap-select.css');
+@import url('plugin/bootstrap-toggle/bootstrap-toggle.min.css');
 /* ================================================
 Google Web Fonts
 ================================================ */
 /* Istok Web */
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,400italic);
 /* === Icons === */
 /* Font Awesome */
-@import url('plugin/font-awesome/font-awesome.min.css');
 /* ================================================
 Main Css
 ================================================ */
@@ -13,9 +16,6 @@ Main Css
 /* Shortcuts Css Codes */
 /** Shortcuts **/
 /*** Float ***/
-@import url('plugin/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css');
-@import url('plugin/bootstrap-select/bootstrap-select.css');
-@import url('plugin/bootstrap-toggle/bootstrap-toggle.min.css');
 .float-l {
   float: left;
 }
@@ -217,7 +217,7 @@ strong {
   padding: 0;
   margin: 0;
   float: left;
-  background-image: url('../../images/navbar-brand.png');
+  background-image: url('../images/navbar-brand.png');
   background-size: 110px;
   background-position: center center;
   background-repeat: no-repeat;
@@ -339,11 +339,15 @@ strong {
   width: 1px;
   background: #d7dfe1;
 }
-.createButton .body .left-col {
-  padding-right: 50px;
+@media (min-width: 992px) {
+  .createButton .body .left-col {
+    padding-right: 50px;
+  }
 }
-.createButton .body .right-col {
-  padding-left: 50px;
+@media (min-width: 992px) {
+  .createButton .body .right-col {
+    padding-left: 50px;
+  }
 }
 .createButton .title {
   display: block;
@@ -583,7 +587,7 @@ strong {
   display: block;
   padding: 10px 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  text-shadow: 0px -1px #07619E;
+  text-shadow: 0px -1px #07619e;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -637,7 +641,7 @@ strong {
   display: block;
   padding: 10px 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  text-shadow: 0px -1px #07619E;
+  text-shadow: 0px -1px #07619e;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -680,7 +684,7 @@ strong {
 }
 .widget-box .widget-footer-right a {
   padding-right: 62px;
-  background-image: url('../../images/widget-brand.png');
+  background-image: url('../images/widget-brand.png');
   background-size: 60px 12.5px;
   background-position: right center;
   background-repeat: no-repeat;
@@ -733,7 +737,7 @@ strong {
   display: block;
   padding: 10px 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  text-shadow: 0px -1px #07619E;
+  text-shadow: 0px -1px #07619e;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -796,7 +800,7 @@ strong {
   display: block;
   padding: 10px 12px 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  text-shadow: 0px -1px #07619E;
+  text-shadow: 0px -1px #07619e;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -819,20 +823,20 @@ strong {
   color: #adb3b7;
 }
 .widget-box.style-b .widget-footer-right a {
-  background-image: url('../../images/widget-brand-light.png');
+  background-image: url('../images/widget-brand-light.png');
 }
 /* Responsive Style */
 /* =================================================================================
-smaller than 1280
+smaller than 1280 
 ================================================================================= */
 /* =================================================================================
-smaller than 1024
+smaller than 1024 
 ================================================================================= */
 /* =================================================================================
-smaller than 760
+smaller than 760 
 ================================================================================= */
 /* =================================================================================
-smaller than 620
+smaller than 620 
 ================================================================================= */
 @media screen and (max-width: 620px) {
   .navbar.navbar span.subBrand {
@@ -850,7 +854,7 @@ smaller than 620
   }
 }
 /* =================================================================================
-smaller than 428
+smaller than 428 
 ================================================================================= */
 @media screen and (max-width: 428px) {
   .registerPage .formWrap {
