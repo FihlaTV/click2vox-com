@@ -101,11 +101,10 @@ html(lang='en', ng-app="voxboneApp")
                 voxbone.WebRTC.hangup();
                 break;
               case 'microphone-mute':
-                if (voxbone.WebRTC.isMuted) {
+                if (voxbone.WebRTC.isMuted)
                   voxbone.WebRTC.unmute();
-                } else {
+                else
                   voxbone.WebRTC.mute();
-                }
                 break;
               case '1':
               case '2':
@@ -129,12 +128,12 @@ html(lang='en', ng-app="voxboneApp")
             var message = event.data;
 
             if (message.action &&  message.action == 'rate')
-              $scope.sendRate(message.data.rate, message.data.comment);
+              $scope.sendRate(message.data);
             else
               $scope.send_voxbone_interaction(event.data);
           });
 
-          $scope.sendRate = function (rate, comment) {
+          $scope.sendRate = function (data) {
             var req = {
               method: 'POST',
               url: '/rating',
@@ -142,8 +141,9 @@ html(lang='en', ng-app="voxboneApp")
                 'Content-Type': 'application/json; charset=utf-8'
               },
               data: {
-                rate: rate,
-                comment: comment,
+                rate: data.rate,
+                comment: data.comment,
+                url: data.url,
                 token: "#{the_widget._id}"
               }
             };
