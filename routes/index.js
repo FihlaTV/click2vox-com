@@ -31,9 +31,13 @@ module.exports = function(passport, voxbone){
           return res.render('forgot', { title: title, message: "lalalla", errors: err })
 
         var show_stats = req.isAuthenticated() && account.isAdmin()
-        if (show_stats)
-          res.render('stats', { title: title });
-          // res.json({ 'stats': Date.now(), 'version': pjson.version, 'show_stats': show_stats });
+        if (show_stats){
+          var data = [
+            { domain_name: 'domain name 1', accounts_number: 1, widgets_number: 2, unique_sip_uris: 3, call_reports: 4 },
+            { domain_name: 'domain name 2', accounts_number: 11, widgets_number: 22, unique_sip_uris: 33, call_reports: 44 }
+          ];
+          res.render('stats', { title: title, data: data });
+        }
         else
           res.redirect('/');
       });
