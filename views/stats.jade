@@ -1,0 +1,72 @@
+doctype html
+html(lang='en', ng-app="voxboneApp")
+  head
+    if process.env.NEW_RELIC_LICENSE_KEY
+      != newrelic.getBrowserTimingHeader()
+
+    title= title
+
+    link(rel="apple-touch-icon" href="")
+    link(rel="shortcut icon" type="image/x-icon" href="/images/favicon.png")
+
+    script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js")
+
+    style.
+      table, td, th {
+        border: 1px solid #888;
+        text-align: left;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th, td {
+        padding: 15px;
+      }
+
+      tr:nth-child(odd) {background-color: #ddd}
+      tr:nth-child(even), th{background-color: #bbb}
+
+    script.
+      window.setInterval("window.location.reload();", 10000);
+
+  body
+    .main
+      .body(ng-controller="VoxboneWidgetController")
+        h1 click2vox.com - Statistics
+        div(style="overflow-x:auto;")
+          table
+            thead
+              tr
+                th Domain name
+                th Accounts
+                th Widgets
+                th SIP URI's
+                th Call reports
+            tbody
+              tr
+                td 1
+                td 2
+                td 3
+                td 4
+                td 5
+              tr
+                td 1
+                td 2
+                td 3
+                td 4
+                td 5
+              tr
+                td 1
+                td 2
+                td 3
+                td 4
+                td 5
+              tr
+                td 1
+                td 2
+                td 3
+                td 4
+                td 5
