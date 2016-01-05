@@ -32,7 +32,8 @@ module.exports = function(passport, voxbone){
 
         var show_stats = req.isAuthenticated() && account.isAdmin()
         if (show_stats)
-          res.json({ 'stats': Date.now(), 'version': pjson.version, 'show_stats': show_stats });
+          res.render('stats', { title: title });
+          // res.json({ 'stats': Date.now(), 'version': pjson.version, 'show_stats': show_stats });
         else
           res.redirect('/');
       });
