@@ -36,6 +36,7 @@ html(lang='en', ng-app="voxboneApp")
     .main
       .body(ng-controller="VoxboneWidgetController")
         h1 click2vox.com - Statistics
+        h4 Automatically reloads every minute
         div(style="overflow-x:auto;")
           table
             thead
@@ -46,27 +47,7 @@ html(lang='en', ng-app="voxboneApp")
                 th SIP URI's
                 th Call reports
             tbody
-              tr
-                td 1
-                td 2
-                td 3
-                td 4
-                td 5
-              tr
-                td 1
-                td 2
-                td 3
-                td 4
-                td 5
-              tr
-                td 1
-                td 2
-                td 3
-                td 4
-                td 5
-              tr
-                td 1
-                td 2
-                td 3
-                td 4
-                td 5
+              for x in data
+                tr
+                  for y in x
+                    td #{y}
