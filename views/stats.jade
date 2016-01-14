@@ -36,7 +36,7 @@ html(lang='en', ng-app="voxboneApp")
     .main
       .body(ng-controller="VoxboneWidgetController")
         h1 click2vox.com - Statistics
-        h4 Automatically reloads every minute
+        h4 Automatically reloads every minute (Filtering out voxbone, agilityfeat and testrtc)
         div(style="overflow-x:auto;")
           table
             thead
@@ -49,5 +49,8 @@ html(lang='en', ng-app="voxboneApp")
             tbody
               for x in data
                 tr
-                  for y in x
-                    td #{y}
+                  td #{x.domain_name}
+                  td #{x.accounts_number}
+                  td #{x.widgets_number}
+                  td #{x.unique_sip_uris}
+                  td #{x.call_reports}
