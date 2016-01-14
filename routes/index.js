@@ -23,27 +23,93 @@ module.exports = function(passport, voxbone){
     res.json({ 'ping': Date.now(), 'version': pjson.version });
   });
 
-  router.get('/stats', function(req, res, next){
+  router.get('/stats', function(req, res) {
+    async.waterfall([
+      function(callback){
+        var o = {};
+        o.map = function() { emit(this.email.replace(/.*@/, ""), 1) }
+        o.reduce = function(k, v) { return v.length };
+        o.limit = 500;
 
-    if(req.isAuthenticated()) {
-      Account.findOne({ email: new RegExp(req.user.email, "i") }, {}, function(err, account){
-        if (err || !account)
-          return res.render('forgot', { title: title, message: "lalalla", errors: err })
-
-        var show_stats = req.isAuthenticated() && account.isAdmin()
-        if (show_stats){
-          var data = [
-            { domain_name: 'domain name 1', accounts_number: 1, widgets_number: 2, unique_sip_uris: 3, call_reports: 4 },
-            { domain_name: 'domain name 2', accounts_number: 11, widgets_number: 22, unique_sip_uris: 33, call_reports: 44 }
-          ];
-          res.render('stats', { title: title, data: data });
+        if (req.query.unfiltered == null){
+          o.query = {
+            "temporary": false,
+            "email": new RegExp('^((?!(voxbone|agilityfeat|testrtc)).)*$', "i")
+          };
         }
-        else
-          res.redirect('/');
-      });
-    } else
-      res.redirect('/');
+
+        var getAccounts = Account.mapReduce(o, function (err, accounts) {
+          callback(null, accounts)
+        });
+      },
+      function(accounts, callback){
+        // console.log(accounts);
+        var parsedResults = accounts.map(function(x) {
+          var r = {};
+          var sip_uris = [];
+          r.domain_name = x._id;
+          r.accounts_number = x.value;
+          r.unique_sip_uris = '-';
+          r.widgets_number = '-';
+          r.call_reports = '-';
+          return r;
+        });
+
+        callback(null, parsedResults)
+      },
+      function(rows, callback){
+        // console.log(rows);
+
+        var text = [];
+        for (i = 0; i < rows.length; i++) {
+          var row = rows[i];
+          Account.find({'email': new RegExp(rows[i].domain_name, 'i')}).lean().exec(function(err,docs){
+            row.accounts = docs;
+          });
+          text.push(row);
+        }
+
+        // rows.map(function(row){
+        //   var getAccounts = Account.find({'email': new RegExp(row.domain_name, 'i')});
+        //   getAccounts.then(function(accounts){
+        //     var getWidgets = Widget.find({ _account: new ObjectId(accounts[0]._id) });
+        //     getWidgets.then(function(widgets){
+        //       // rows.widgets_number += 1;
+        //       // console.log(rows);
+        //       // callback(null, rows);
+        //       // console.log(widgets);
+        //       console.log(rows);
+        //       if(widget.sip_uri != 'echo@ivrs' && widget.sip_uri != 'digits@ivrs')
+        //         sip_uris.push(widget.sip_uri);
+        //       callback(null, rows);
+        //     });
+        //   });
+        // });
+
+        callback(null, rows);
+      }], function (err, results) {
+        // results = [{ domain_name: 'domain name 1', accounts_number: 1, widgets_number: 2, unique_sip_uris: 3, call_reports: 4 }];
+        res.render('stats', { title: title, data: results });
+      }
+    )
   });
+
+  // router.get('/stats', function(req, res, next){
+
+  //   if(req.isAuthenticated()) {
+  //     Account.findOne({ email: new RegExp(req.user.email, "i") }, {}, function(err, account){
+  //       if (err || !account)
+  //         return res.render('forgot', { title: title, message: "lalalla", errors: err })
+
+  //       var show_stats = req.isAuthenticated() && account.isAdmin()
+  //       if (show_stats)
+  //         res.render('stats', { title: title, data: getStatisticsData() });
+  //       else
+  //         res.redirect('/');
+  //     });
+  //   } else
+  //     res.redirect('/');
+  // });
 
   // Redirects if not HTTPS
   router.get('*',function(req,res,next){
