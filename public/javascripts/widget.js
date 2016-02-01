@@ -304,4 +304,4 @@ var check2Ready = (function() {
   });
 });
 
-loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js", check1Ready);
+loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js", check1Ready);
