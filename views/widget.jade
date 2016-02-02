@@ -45,6 +45,7 @@ block content
         if (e.localVolume > 0.30) $("#mic5").addClass('peak');
       },
       'progress': function (e) {
+        $("#vw-title").text("Calling");
         $("#audio-ringback-tone").trigger('play');
         console.log('Calling...');
       },
@@ -250,7 +251,7 @@ block content
         }
 
         if($scope.isWebRTCSupported()){
-          $("#vw-title").text("Calling");
+          $("#vw-title").text("Waiting for User Media");
           $("#microphone em").removeClass('on').removeClass('off');
           $("#vw-unable-to-acces-mic").addClass('hidden');
           $(".vw-animated-dots").removeClass('hidden');
