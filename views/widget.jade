@@ -88,6 +88,7 @@ block content
         $("#vw-unable-to-acces-mic").removeClass('hidden');
       },
       'getUserMediaAccepted': function(e) {
+        $("#vw-title").text("Calling");
         $("#audio-ringback-tone").trigger('play');
         console.log('local media accepted');
         voxbone.Logger.loginfo("local media accepted");
