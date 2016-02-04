@@ -94,7 +94,7 @@ var check2Ready = (function() {
                   <input type="text" name="rating-message" id="rating-message" placeholder="Optional"" class="form-control"> \
                 </div> \
                 <div id="vw-rating-button" class="vw-button"> \
-                  <button class="btn-style" id="send-rating"> \
+                  <button class="btn-style-disabled" id="send-rating" disabled> \
                     <span>Send</span> \
                   </button> \
                 </div> \
@@ -144,6 +144,7 @@ var check2Ready = (function() {
           $("#vw-title").text("Call Ended");
           $(".vw-animated-dots").addClass('hidden');
           $("#vw-in-call").addClass('hidden');
+          resetRating();
           $("#vw-rating").removeClass('hidden');
           $(".vw-end-call").click();
           break;
@@ -180,9 +181,10 @@ var check2Ready = (function() {
       e.preventDefault();
 
       var rate = $('#vw-rating-stars').raty('score');
-      if (!rate) return;
-
       var comment = $('#rating-message').val();
+
+      if (!rate && !comment) return;
+
       var data =  { rate: rate, comment: comment, url: document.URL };
       var message = { action: 'rate', data: data };
 
@@ -254,7 +256,14 @@ var check2Ready = (function() {
       $('#rating-message').val('');
     };
 
-    $('#vw-rating-stars').raty({ starType : 'i' });
+    $('#vw-rating-stars').raty({
+      starType  : 'i',
+      click     : function(score, evt) {
+        // alert("Score: " + score);
+        $('#send-rating').removeClass("btn-style-disabled");
+        $('#send-rating').addClass("btn-style");
+      }
+    });
 
     $('.vw-dialpad li').click(function(e) {
       e.preventDefault();
