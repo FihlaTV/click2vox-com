@@ -253,7 +253,7 @@ var check2Ready = (function() {
 
     function resetRating() {
       $('#send-rating').addClass("btn-style-disabled");
-      $('#vw-rating-stars').raty('score', 0);
+      $('#vw-rating-stars').raty('cancel');
       $('#rating-message').val('');
     };
 
