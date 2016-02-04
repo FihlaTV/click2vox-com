@@ -94,7 +94,7 @@ var check2Ready = (function() {
                   <input type="text" name="rating-message" id="rating-message" placeholder="Optional"" class="form-control"> \
                 </div> \
                 <div id="vw-rating-button" class="vw-button"> \
-                  <button class="btn-style-disabled" id="send-rating" disabled> \
+                  <button class="btn-style btn-style-disabled" id="send-rating"> \
                     <span>Send</span> \
                   </button> \
                 </div> \
@@ -252,6 +252,7 @@ var check2Ready = (function() {
     };
 
     function resetRating() {
+      $('#send-rating').addClass("btn-style-disabled");
       $('#vw-rating-stars').raty('score', 0);
       $('#rating-message').val('');
     };
