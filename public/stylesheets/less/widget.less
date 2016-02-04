@@ -17,7 +17,6 @@
   white-space: nowrap;
   vertical-align: middle;
   touch-action: manipulation;
-  cursor: pointer;
   -webkit-user-select: none;
 
   background: @btn-color;
@@ -34,7 +33,7 @@
   -ms-box-shadow: 0 1px 1px rgba(0,0,0,0.16);
   -o-box-shadow: 0 1px 1px rgba(0,0,0,0.16);
   box-shadow: 0 1px 1px rgba(0,0,0,0.16);
-  
+
   span{
     display: block;
     width: 100%;
@@ -54,11 +53,16 @@
 }
 .btn-style-a{
   .btn-widget(#19a1f3);
+  cursor: pointer !important;
 }
 .btn-style-b{
   .btn-widget(#92168e);
+  cursor: pointer !important;
 }
-
+.btn-style-disabled {
+  .btn-widget(#cccccc);
+  cursor: not-allowerd !important;
+}
 
 .widget-box{
   position: relative;
