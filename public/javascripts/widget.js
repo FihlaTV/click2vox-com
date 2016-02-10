@@ -22,7 +22,8 @@ var check1Ready = (function() {
 var check2Ready = (function() {
   console.log("jQuery & Raty are loaded");
 
-  $(document).ready(function () {
+  // Disabling this in order not to wait the whole set of pings to proxies be done.
+  // $(document).ready(function () {
     $('#control').append(' \
       <audio id="audio-ringback-tone" preload="auto" loop> \
         <source src="https://upload.wikimedia.org/wikipedia/commons/c/cd/US_ringback_tone.ogg" type="audio/ogg"> \
@@ -311,7 +312,8 @@ var check2Ready = (function() {
       $("#volume em").toggleClass('on').toggleClass('off');
       callAction('volume-mute');
     });
-  });
+  // });
+  // Disabling this in order not to wait the whole set of pings to proxies be done.
 });
 
 loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js", check1Ready);
