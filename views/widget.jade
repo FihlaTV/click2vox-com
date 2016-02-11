@@ -4,19 +4,6 @@ block content
   link(href="/stylesheets/widget.css", rel="stylesheet")
 
   script.
-    window.setInterval("reloadPage();", 270000);
-
-    function reloadPage() {
-      var online = navigator.onLine;
-      try {
-        if(online && !voxbone.WebRTC.isCallOpen())
-          window.location.reload();
-      }
-      catch(err) {
-        if(online)
-          window.location.reload();
-      }
-    };
 
     //Copy to Clipboard
     var clipboard = new Clipboard('#clipboard_copy');
@@ -92,6 +79,10 @@ block content
         $("#audio-ringback-tone").trigger('play');
         console.log('local media accepted');
         voxbone.Logger.loginfo("local media accepted");
+      },
+      'authExpired': function (e){
+        console.log('Auth Expired!');
+        voxbone.WebRTC.init(#{voxrtc_config});
       }
     };
 
