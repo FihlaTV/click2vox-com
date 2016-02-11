@@ -20,21 +20,6 @@ html(lang='en', ng-app="voxboneApp")
     script(src="/javascripts/voxbone-0.0.4.js")
 
     script.
-
-      window.setInterval("reloadIFrame();", 240000);
-
-      function reloadIFrame() {
-        var online = navigator.onLine;
-        try {
-          if(online && !voxbone.WebRTC.isCallOpen())
-            window.location.reload();
-        }
-        catch(err) {
-          if(online)
-            window.location.reload();
-        }
-      };
-
       function sendPostMessage(action, value){
         if (typeof value === 'undefined') { value = ''; }
         var message = { action: action, value: value };
@@ -70,6 +55,10 @@ html(lang='en', ng-app="voxboneApp")
           sendPostMessage('setCallCalling');
           console.log('local media accepted');
           voxbone.Logger.loginfo("local media accepted");
+        },
+        'authExpired': function (e){
+          console.log('Auth Expired!');
+          voxbone.WebRTC.init(#{voxrtc_config});
         }
       };
 
