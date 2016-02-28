@@ -29,3 +29,5 @@ node_modules
 
 #Gedit temp files
 *~
+
+setup_db.sh

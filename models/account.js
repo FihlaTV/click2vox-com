@@ -24,21 +24,24 @@ accountSchema.pre('save', function(next){
   self = this
   now = new Date();
   self.updated_at = now;
-  if (!self.created_at) {
+
+  if (!self.created_at)
     self.created_at = now;
-    self.temporary = true;
-    Did.findOneAndUpdate({ assigned: false }, { assigned: true }, function(err, found_did){
-      if(err) {
-        next(err);
-      } else if (found_did) {
-        self.did = found_did.did;
-        self.didId = found_did.didId;
-        next();
-      } else {
-        next();
-      }
-    });
-  }
+
+  Did.findOne({ assigned: false }, function(err, found_did){
+    if(err) {
+      next(err);
+    } else if (found_did && !self.did && !self.didId) {
+      self.temporary = true;
+      self.did = found_did.did;
+      self.didId = found_did.didId;
+      found_did.assigned = true
+      found_did.save()
+      next();
+    } else {
+      next();
+    }
+  });
 });
 
 accountSchema.methods.generateHash = function(password) {
