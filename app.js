@@ -60,14 +60,35 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes(passport, voxbone));
 
+require('coffee-script/register') // <-- This dependency is to be removed very soon.
+penguin = require('penguin')
+admin = new penguin.Admin({
+  fileManager: false,
+  indexTitle: 'Click2Vox.com Admin Panel',
+  menu: [
+    [ 'Click2vox.com Home', '/admin' ],
+    [ 'Sections', [
+      [ 'Accounts', '/admin/accounts' ],
+      [ 'Dids', '/admin/dids' ],
+      [ 'Ratings', '/admin/ratings' ],
+      [ 'Widgets', '/admin/widgets' ]
+    ] ]
+  ]
+  // preMiddleware: (req, res, next)
+  //   #return if -1 != req.headers['user-agent'].indexOf('Firefox') then next() else res.redirect '/'
+  //   console.log 'Administration Request:', req.url, req.$p
+  //   return next()
+})
+admin.setupApp(app)
+
+// error handlers
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
-
-// error handlers
 
 // development error handler
 // will print stacktrace
