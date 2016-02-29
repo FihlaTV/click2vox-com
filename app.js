@@ -13,6 +13,9 @@ var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
+
+var Account = require('./models/account');
+
 require('./db/configuration');
 require('./config/passport')(passport);
 
@@ -67,17 +70,28 @@ admin = new penguin.Admin({
   indexTitle: 'Click2Vox.com Admin Panel',
   menu: [
     [ 'Click2vox.com Home', '/admin' ],
-    [ 'Sections', [
-      [ 'Accounts', '/admin/accounts' ],
-      [ 'Dids', '/admin/dids' ],
-      [ 'Ratings', '/admin/ratings' ],
-      [ 'Widgets', '/admin/widgets' ]
-    ] ]
-  ]
-  // preMiddleware: (req, res, next)
-  //   #return if -1 != req.headers['user-agent'].indexOf('Firefox') then next() else res.redirect '/'
-  //   console.log 'Administration Request:', req.url, req.$p
-  //   return next()
+    [ 'Accounts', '/admin/accounts' ]
+    // [ 'Sections', [
+    //   [ 'Accounts', '/admin/accounts' ],
+      // [ 'Dids', '/admin/dids' ],
+      // [ 'Ratings', '/admin/ratings' ],
+      // [ 'Widgets', '/admin/widgets' ]
+    // ] ]
+  ],
+
+  beforeMiddleware: function(req, res, next) {
+    console.log('beforeMiddleware', req.url, Object.keys(req.$p));
+
+    if(req.isAuthenticated()) {
+      Account.findOne({ email: new RegExp(req.user.email, "i"), admin: true }, {}, function(err, admin_account){
+        if (err || !admin_account)
+          res.redirect('/');
+        return next();
+      });
+    } else {
+      res.redirect('/');
+    }
+  }
 })
 admin.setupApp(app)
 

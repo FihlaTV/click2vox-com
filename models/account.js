@@ -10,6 +10,7 @@ var accountSchema = new Schema({
   temporary_password: { type: String, required: true },
   first_name: { type: String, required: true },
   temporary: { type: Boolean, default: true },
+  admin: { type: Boolean, default: false },
   did: Number,
   didId: Number,
   forgotten_pasword: String,
