@@ -31,3 +31,5 @@ node_modules
 *~
 
 setup_db.sh
+
+.env
