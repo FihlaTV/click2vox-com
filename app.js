@@ -51,7 +51,7 @@ app.use(session({
   name: 'voxbone-generator',
   resave: true,
   saveUninitialized: true
-}))
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -63,8 +63,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes(passport, voxbone));
 
-require('coffee-script/register') // <-- This dependency is to be removed very soon.
-penguin = require('penguin')
+require('coffee-script/register'); // <-- This dependency is to be removed very soon.
+penguin = require('penguin');
 admin = new penguin.Admin({
   fileManager: false,
   indexTitle: 'Click2Vox.com Admin Panel',
@@ -92,8 +92,8 @@ admin = new penguin.Admin({
       res.redirect('/');
     }
   }
-})
-admin.setupApp(app)
+});
+admin.setupApp(app);
 
 // error handlers
 
