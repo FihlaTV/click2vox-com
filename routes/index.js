@@ -216,9 +216,12 @@ module.exports = function(passport, voxbone){
     res.redirect('/');
   });
 
-  router.get('/widget', isLoggedIn, function(req, res, next) {
+  router.get('/token_config', function(req, res) {
     voxrtc_config = voxbone.generate();
+    res.send(voxrtc_config);
+  });
 
+  router.get('/widget', isLoggedIn, function(req, res, next) {
     Account
       .findOne({_id: req.user._id})
       .exec(function(err, the_account) {
@@ -346,8 +349,6 @@ module.exports = function(passport, voxbone){
   });
 
   router.get('/voxbone_widget/:id', function (req, res) {
-    voxrtc_config = voxbone.generate();
-
     var searchForWidget = { _id: new ObjectId(req.params.id) };
 
     Widget
