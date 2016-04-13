@@ -9,14 +9,15 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var MongoDBStore = require('connect-mongodb-session')(session);
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
 
 var Account = require('./models/account');
+var dbURI = require('./db/configuration');
 
-require('./db/configuration');
 require('./config/passport')(passport);
 
 //New Voxbone Object used for authentication
@@ -45,12 +46,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+var sessionStore = new MongoDBStore({uri: dbURI, collection: 'sessions'});
 var secret_key = process.env.SECRET_KEY || 'xXxXxXxXxX';
+
 app.use(session({
   secret: secret_key,
   name: 'voxbone-generator',
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: false,
+  store: sessionStore
 }));
 
 app.use(passport.initialize());
