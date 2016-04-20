@@ -40,10 +40,7 @@ require.config({
       '//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.5/clipboard.min',
       'lib/clipboard/dist/clipboard.min'
     ],
-    jquery: [
-      '//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min',
-      'lib/jquery/dist/jquery.min'
-    ],
+    jquery: 'lib/jquery/dist/jquery.min',
     'jquery.qtip': [
       '//cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min',
       'lib/qtip2/basic/jquery.qtip.min'
