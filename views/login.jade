@@ -2,47 +2,51 @@ extends layout
 
 block content
   script.
-    var loginApp =
-      angular.module('voxboneApp', [])
-      .controller('LoginController', ['$scope', '$http', '$window', function($scope, $http, $window){
-        $scope.master = {};
+    require(
+      ['angular', 'angular-cookies', 'clipboard', 'jquery', 'bootstrap', 'jquery.qtip'],
+      function(angular, ngCookies, Clipboard, $) {
+        var loginApp = angular.module('voxboneApp', []);
+        loginApp.controller('LoginController', ['$scope', '$http', '$window', function($scope, $http, $window){
+          $scope.master = {};
 
-        $scope.update = function(login){
-          $scope.master = angular.copy(login);
-        };
-
-        $scope.reset = function(form){
-          if(form){
-            form.$setPristine();
-            form.$setUntouched();
-          }
-          $scope.login = angular.copy($scope.master);
-        };
-
-        $scope.reset();
-
-        $scope.login.processForm = function(){
-          console.log("--> Submitting...");
-          var req = {
-            method: 'POST',
-            url: '/login',
-            headers: {
-              'Content-Type': 'application/json; charset=utf-8'
-            },
-            data: {
-              email: $scope.login.uemail,
-              password: $scope.login.upassword
-            }
+          $scope.update = function(login){
+            $scope.master = angular.copy(login);
           };
-          $http(req)
-            .then(function successCallback(response){
-              $window.location.href = response.data.redirect;
-            }, function errorCallback(response){
-              $("#alert").removeClass('hidden');
-            });
-        }
-      }]);
 
+          $scope.reset = function(form){
+            if(form){
+              form.$setPristine();
+              form.$setUntouched();
+            }
+            $scope.login = angular.copy($scope.master);
+          };
+
+          $scope.reset();
+
+          $scope.login.processForm = function(){
+            console.log("--> Submitting...");
+            var req = {
+              method: 'POST',
+              url: '/login',
+              headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+              },
+              data: {
+                email: $scope.login.uemail,
+                password: $scope.login.upassword
+              }
+            };
+            $http(req)
+              .then(function successCallback(response){
+                $window.location.href = response.data.redirect;
+              }, function errorCallback(response){
+                $("#alert").removeClass('hidden');
+              });
+          }
+        }]);
+
+        angular.bootstrap(document, ['voxboneApp']);
+    });
   .main.registerPage
     .body
       .container

@@ -19,7 +19,8 @@ html(lang='en')
     script(src="/javascripts/voxbone-0.0.4.js")
 
     //- load requirejs and its config
-    script(data-main="config.js" src="lib/requirejs/require.js")
+    script(src="lib/requirejs/require.js")
+    script(src="config.js")
 
     if process.env.GOOGLE_ANALYTICS_ID
       script.
