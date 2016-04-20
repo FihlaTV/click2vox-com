@@ -35,5 +35,11 @@
     "sendgrid": "^2.0.0",
     "serve-favicon": "~2.3.0",
     "voxbone-webrtc": "0.0.9"
+  },
+  "devDependencies": {
+    "bower": "^1.7.9",
+    "grunt": "^1.0.1",
+    "grunt-bower-requirejs": "^2.0.0",
+    "grunt-bower-task": "^0.4.0"
   }
 }
