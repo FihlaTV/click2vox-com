@@ -2,20 +2,20 @@ extends layout
 
 block content
   script.
-    var formApp =
-      angular.module('voxboneApp', [])
-      .controller('formController', ['$scope', '$http', '$window', function($scope, $http, $window){
+    require(['angular', 'jquery'], function (angular, $) {
+      var formApp = angular.module('voxboneApp', []);
+      formApp.controller('formController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
         $scope.master = {
           uemail: '#{email}',
           temporary_password: '#{temp_password}'
         };
 
-        $scope.update = function(account){
+        $scope.update = function (account) {
           $scope.master = angular.copy(account);
         };
 
-        $scope.reset = function(form){
-          if(form){
+        $scope.reset = function (form) {
+          if (form) {
             form.$setPristine();
             form.$setUntouched();
           }
@@ -24,7 +24,7 @@ block content
 
         $scope.reset();
 
-        $scope.account.processForm = function(){
+        $scope.account.processForm = function () {
           console.log("--> Submitting...");
           var req = {
             method: 'POST',
@@ -49,20 +49,23 @@ block content
         }
       }]);
 
-    formApp.directive('pwCheck', [function () {
-      return {
-        require: 'ngModel',
-        link: function (scope, elem, attrs, ctrl) {
-          var firstPassword = '#' + attrs.pwCheck;
-          elem.add(firstPassword).on('keyup', function () {
-            scope.$apply(function () {
-              var v = elem.val()===$(firstPassword).val();
-              ctrl.$setValidity('pwmatch', v);
+      formApp.directive('pwCheck', [function () {
+        return {
+          require: 'ngModel',
+          link: function (scope, elem, attrs, ctrl) {
+            var firstPassword = '#' + attrs.pwCheck;
+            elem.add(firstPassword).on('keyup', function () {
+              scope.$apply(function () {
+                var v = elem.val() === $(firstPassword).val();
+                ctrl.$setValidity('pwmatch', v);
+              });
             });
-          });
+          }
         }
-      }
-    }]);
+      }]);
+
+      angular.bootstrap(document, ['voxboneApp']);
+    });
 
   .main.registerPage
     .body

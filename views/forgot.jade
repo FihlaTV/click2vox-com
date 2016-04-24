@@ -2,9 +2,10 @@ extends layout
 
 block content
   script.
-    var forgotApp =
-      angular.module('voxboneApp', [])
-      .controller('ForgotController', ['$scope', '$http', '$window', function($scope, $http, $window){
+    require(['angular', 'jquery'], function (angular, $) {
+      var forgotApp = angular.module('voxboneApp', []);
+
+      forgotApp.controller('ForgotController', ['$scope', '$http', '$window', function($scope, $http, $window){
         $scope.master = {};
 
         $scope.update = function(forgot){
@@ -47,6 +48,9 @@ block content
             });
         }
       }]);
+
+      angular.bootstrap(document, ['voxboneApp']);
+    });
 
   .main.registerPage
     .body

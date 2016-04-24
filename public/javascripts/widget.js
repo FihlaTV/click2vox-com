@@ -316,4 +316,7 @@ var check2Ready = (function() {
   // Disabling this in order not to wait the whole set of pings to proxies be done.
 });
 
-loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js", check1Ready);
+if (typeof jQuery === 'undefined')
+  loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js", check1Ready);
+else
+  check1Ready();

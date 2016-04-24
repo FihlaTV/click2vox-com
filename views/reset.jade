@@ -2,9 +2,9 @@ extends layout
 
 block content
   script.
-    var resetPasswordApp =
-      angular.module('voxboneApp', [])
-      .controller('ResetController', ['$scope', '$http', '$window', function($scope, $http, $window){
+    require(['angular', 'jquery'], function (angular, $) {
+      var resetPasswordApp = angular.module('voxboneApp', []);
+      resetPasswordApp.controller('ResetController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
         $scope.master = {};
 
         $scope.update = function(resetpass){
@@ -52,13 +52,16 @@ block content
             var firstPassword = '#' + attrs.pwCheck;
             elem.add(firstPassword).on('keyup', function () {
               scope.$apply(function () {
-                var v = elem.val()===$(firstPassword).val();
+                var v = elem.val() === $(firstPassword).val();
                 ctrl.$setValidity('pwmatch', v);
               });
             });
           }
         }
       }]);
+
+      angular.bootstrap(document, ['voxboneApp']);
+    });
 
   .main.registerPage
     .body

@@ -49,6 +49,7 @@ require.config({
       '//cdnjs.cloudflare.com/ajax/libs/raty/2.7.0/jquery.raty.min',
       'lib/raty/lib/jquery.raty'
     ],
+    widget: 'javascripts/widget',
     requirejs: 'lib/requirejs/require'
   },
   packages: [

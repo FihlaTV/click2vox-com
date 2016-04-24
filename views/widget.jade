@@ -8,6 +8,7 @@ block content
       ['angular', 'angular-cookies', 'clipboard', 'jquery', 'bootstrap', 'jquery.qtip'],
       function(angular, ngCookies, Clipboard, $) {
         var jQuery = $;
+        window.jQuery = jQuery;
 
         // Copy to Clipboard
         var clipboard = new Clipboard('#clipboard_copy');
@@ -436,6 +437,9 @@ block content
         });
 
         angular.bootstrap(document, ['voxboneApp']);
+
+        //- now we should load the widget.js script when all is ready
+        require(['widget'], function () {});
     });
 
   .div#control
@@ -572,5 +576,3 @@ block content
                     .codebox-actions(ng-show='widget.showWidgetCode')
                       a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy to Clipboard
                       a(href="#" class="hidden" id="generate-output-code" ng-click='widget.generateOutputCode()') Generate Code
-  script(src="/javascripts/widget.js")
-
