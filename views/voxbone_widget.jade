@@ -25,48 +25,48 @@ html(lang='en', ng-app="voxboneApp")
         parent.postMessage(message, "*");
       };
 
-      var eventHandlers = {
-        'localMediaVolume': function (e) {
-          if(voxbone.WebRTC.isMuted) return;
-          sendPostMessage('setMicVolume', e.localVolume )
-        },
-        'progress': function (e) {
-          console.log('Calling...');
-          //- sendPostMessage('setCallCalling');
-        },
-        'failed': function (e){
-          console.log('Failed to connect: ' + e.cause);
-          sendPostMessage('setCallFailed', e.cause.substr(0,11));
-        },
-        'accepted': function (e){
-          console.log('Call started');
-          sendPostMessage('setInCall');
-        },
-        'ended': function (e){
-          console.log('Call ended');
-          sendPostMessage('setCallEnded');
-        },
-        'getUserMediaFailed': function (e){
-          console.log('Cannot get User Media');
-          sendPostMessage('setCallFailedUserMedia');
-        },
-        'getUserMediaAccepted': function(e) {
-          sendPostMessage('setCallCalling');
-          console.log('local media accepted');
-          voxbone.Logger.loginfo("local media accepted");
-        },
-        'authExpired': function (e){
-          console.log('Auth Expired!');
-          $scope.getVoxrtcConfig(function(data) {
-            voxbone.WebRTC.init(data)
-          });
-        }
-      };
-
       var app = angular.module('voxboneApp', [])
         .controller('VoxboneWidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
 
           $scope.master = { };
+
+          $scope.eventHandlers = {
+            'localMediaVolume': function (e) {
+              if(voxbone.WebRTC.isMuted) return;
+              sendPostMessage('setMicVolume', e.localVolume )
+            },
+            'progress': function (e) {
+              console.log('Calling...');
+              //- sendPostMessage('setCallCalling');
+            },
+            'failed': function (e){
+              console.log('Failed to connect: ' + e.cause);
+              sendPostMessage('setCallFailed', e.cause.substr(0,11));
+            },
+            'accepted': function (e){
+              console.log('Call started');
+              sendPostMessage('setInCall');
+            },
+            'ended': function (e){
+              console.log('Call ended');
+              sendPostMessage('setCallEnded');
+            },
+            'getUserMediaFailed': function (e){
+              console.log('Cannot get User Media');
+              sendPostMessage('setCallFailedUserMedia');
+            },
+            'getUserMediaAccepted': function(e) {
+              sendPostMessage('setCallCalling');
+              console.log('local media accepted');
+              voxbone.Logger.loginfo("local media accepted");
+            },
+            'authExpired': function (e){
+              console.log('Auth Expired!');
+              $scope.getVoxrtcConfig(function(data) {
+                voxbone.WebRTC.init(data);
+              });
+            }
+          };
 
           $scope.getVoxrtcConfig = function (callback) {
             $.get('/token_config', function(data){
@@ -78,7 +78,7 @@ html(lang='en', ng-app="voxboneApp")
           $scope.init = function () {
             voxbone.WebRTC.configuration.post_logs = true;
             voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
-            voxbone.WebRTC.customEventHandler = eventHandlers;
+            voxbone.WebRTC.customEventHandler = $scope.eventHandlers;
 
             var caller_id = "#{the_widget.caller_id}" ? "#{the_widget.caller_id}" : "click2vox";
             voxbone.WebRTC.configuration.uri = (new JsSIP.URI(scheme="sip", user=(caller_id).replace(/[^a-zA-Z0-9-_]/g, ''), "voxbone.com")).toString();

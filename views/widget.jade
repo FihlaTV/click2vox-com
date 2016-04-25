@@ -132,13 +132,13 @@ block content
               if (e.localVolume > 0.30) $("#mic5").addClass('peak');
             },
             'progress': function (e) {
+              console.log('Calling...');
               $("#vw-title").text("Calling");
               $("#audio-ringback-tone").trigger('play');
-              console.log('Calling...');
             },
             'failed': function (e){
-              $("#audio-ringback-tone").trigger('pause');
               console.log('Failed to connect: ' + e.cause);
+              $("#audio-ringback-tone").trigger('pause');
 
               if (e.cause.trim().toLowerCase() != 'authentication error')
                 $("#vw-title").text("Call Failed: " + e.cause.substr(0,11));
@@ -151,15 +151,15 @@ block content
               $("#vw-rating-after-message").removeClass('hidden');
             },
             'accepted': function (e){
-              $("#audio-ringback-tone").trigger('pause');
               console.log('Call started');
+              $("#audio-ringback-tone").trigger('pause');
               $("#vw-title").text("In Call");
               $(".vw-animated-dots").removeClass('hidden');
               $("#vw-unable-to-acces-mic").addClass('hidden');
             },
             'ended': function (e){
-              $("#audio-ringback-tone").trigger('pause');
               console.log('Call ended');
+              $("#audio-ringback-tone").trigger('pause');
               $("#vw-title").text("Call Ended");
               $(".vw-animated-dots").addClass('hidden');
               $("#vw-in-call").addClass('hidden');
@@ -167,23 +167,23 @@ block content
               $(".vw-end-call").click();
             },
             'getUserMediaFailed': function (e){
-              $("#audio-ringback-tone").trigger('pause');
               console.log('Cannot get User Media');
+              $("#audio-ringback-tone").trigger('pause');
               $("#vw-title").text("Call Failed");
               $(".vw-animated-dots").addClass('hidden');
               $("#vw-in-call").addClass('hidden');
               $("#vw-unable-to-acces-mic").removeClass('hidden');
             },
             'getUserMediaAccepted': function(e) {
+              console.log('local media accepted');
               $("#vw-title").text("Calling");
               $("#audio-ringback-tone").trigger('play');
-              console.log('local media accepted');
               voxbone.Logger.loginfo("local media accepted");
             },
             'authExpired': function (e){
               console.log('Auth Expired!');
               $scope.getVoxrtcConfig(function(data) {
-                voxbone.WebRTC.init(data)
+                voxbone.WebRTC.init(data);
               });
             }
           };
