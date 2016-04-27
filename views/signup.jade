@@ -1,9 +1,11 @@
 extends layout
 
 block content
+  link(href="/stylesheets/custom.css", rel="stylesheet")
   script.
     require(['angular', 'jquery'], function (angular, $) {
       var formApp = angular.module('voxboneApp', []);
+
       formApp.controller('formController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
         $scope.master = {
           uemail: '#{email}',
@@ -33,7 +35,9 @@ block content
               'Content-Type': 'application/json; charset=utf-8'
             },
             data: {
+              name: $scope.account.uname,
               email: $scope.account.uemail,
+              company: $scope.account.ucompany,
               temporary_password: $scope.account.temporary_password,
               password: $scope.account.upassword,
               confirmation: $scope.account.confirmation
@@ -49,20 +53,59 @@ block content
         }
       }]);
 
-      formApp.directive('pwCheck', [function () {
+      formApp.directive('pwCheck', function () {
         return {
           require: 'ngModel',
           link: function (scope, elem, attrs, ctrl) {
             var firstPassword = '#' + attrs.pwCheck;
             elem.add(firstPassword).on('keyup', function () {
               scope.$apply(function () {
-                var v = elem.val() === $(firstPassword).val();
-                ctrl.$setValidity('pwmatch', v);
+                var pwVerify = elem.val() === $(firstPassword).val();
+                ctrl.$setValidity('pwmatch', pwVerify);
               });
             });
           }
         }
-      }]);
+      });
+
+      formApp.directive('passwordStrength', function () {
+        return {
+          restrict: 'A',
+          link: function (scope, elem, attrs, ctrl) {
+
+            scope.$watch(attrs.passwordStrength, function(value) {
+              if (angular.isDefined(value) ) {
+                elem.addClass('no-bottom-border-radius');
+
+                if (value.length > 12) {
+                  scope.strength = 'strong';
+                  scope.strength_class = 'progress-bar-success';
+                  scope.strength_percent = 100;
+                } else if (value.length > 8) {
+                  scope.strength = 'fair';
+                  scope.strength_class = 'progress-bar-warning';
+                  scope.strength_percent = 70;
+                } else {
+                  scope.strength = 'weak';
+                  scope.strength_class = 'progress-bar-danger';
+                  scope.strength_percent = 40;
+                }
+              }
+            });
+
+            //- check min length when leave the field
+            elem.on('blur', function () {
+              if (elem.val().length < 8)
+                scope.create_account.upassword.$setValidity('minlength', false);
+            });
+
+            //- let's set as true to be able to validate password strength
+            elem.on('focus', function () {
+              scope.create_account.upassword.$setValidity('minlength', true);
+            });
+          }
+        };
+      });
 
       angular.bootstrap(document, ['voxboneApp']);
     });
@@ -83,20 +126,30 @@ block content
               .formWrap
                 form#create_account(name="create_account" novalidate ng-controller="formController")
                   .form-group
-                    input(type="hidden" name="temporary_password" ng-model="account.temporary_password")
+                    label.control-label Name
+                    input.form-control(type="text" id="uname" name="uname" ng-model="account.uname" required)
+                    .error-label(ng-show="create_account.$submitted || create_account.uname.$touched")
+                      div.ng-hide(ng-show="create_account.uname.$error.required") Please enter your name
+                  .form-group
+                    label.control-label Company
+                    input.form-control(type="text" id="ucompany" name="ucompany" ng-model="account.ucompany")
+                  .form-group
                     label.control-label Email address
-                    input.form-control(type="text" id="uemail" name="uemail" ng-model="account.uemail" disabled)
+                    input.form-control(type="text" id="uemail" name="uemail" ng-model="account.uemail")
                   .form-group
                     label.control-label Password
-                    input.form-control(type="password" id="upassword" name="upassword" ng-model="account.upassword" required ng-minlength="8")
+                    input.form-control(type="password" id="upassword" name="upassword" ng-model="account.upassword" required password-strength="account.upassword")
+                    .progress.passwordStrength.ng-hide(ng-show="create_account.upassword.$dirty")
+                      .progress-bar(role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: {{strength_percent}}%" class="{{strength_class}}")
+                        span Strength: {{strength}}!
                     .error-label(ng-show="create_account.$submitted || create_account.upassword.$touched")
-                      div(ng-show="create_account.upassword.$error.required") Password is required
-                      div(ng-show="create_account.upassword.$error.minlength") Password must be at least 8 characters in length
+                      div.ng-hide(ng-show="create_account.upassword.$error.required") Password is required
+                      div.ng-hide(ng-show="create_account.upassword.$error.minlength") Password must be at least 8 characters in length
                   .form-group
                     label.control-label Confirm Password
                     input.form-control(type="password" id="confirmation" name="confirmation" ng-model="account.confirmation" required pw-check="upassword")
                     .error-label(ng-show="create_account.$submitted || create_account.confirmation.$touched")
-                      div(ng-show="create_account.confirmation.$error.pwmatch") Password confirmation does not match
+                      div.ng-hide(ng-show="create_account.confirmation.$error.pwmatch") Password confirmation does not match
                   button.btn.btn-default#create(ng-disabled="create_account.$invalid" ng-click="account.processForm()") Create Account
                   br
                   p Already have an account? #[a(href="login") Login here]
