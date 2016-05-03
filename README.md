@@ -28,7 +28,6 @@ Create a click to call button from a widget generator
 * `GOOGLE_ANALYTICS_ID`
 * `INSPECTLET_ID`
 * `HOTJAR_ID`
-* `BYPASS_PRE_EXISTING_ACCOUNTS_CHECK` (WARNING: Use Carefully! it is NOT the idea to use it in production )
 * `NEW_RELIC_LICENSE_KEY`
 * `TIMEOUT` (in miliseconds, defaults to '12000' )
 

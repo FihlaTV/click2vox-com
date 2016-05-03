@@ -159,7 +159,6 @@ module.exports = function (passport, voxbone) {
   router.post('/signup', function (req, res, next) {
     var formData = req.body;
     var result = { message: "", errors: true, redirect: "", email: formData.email };
-    var bypassAccountCheck = (process.env.BYPASS_PRE_EXISTING_ACCOUNTS_CHECK === "true");
 
     // making some validations no matter if account exists or not
     if (formData.password !== formData.confirmation) {
@@ -172,7 +171,6 @@ module.exports = function (passport, voxbone) {
       return res.status(400).json(result);
     }
 
-
     Account.findOne({ email: formData.email }, function (err, theAccount) {
       // if account has password, it means was already registered. If not,
       // it was created while invite functionality was working.
@@ -181,9 +179,12 @@ module.exports = function (passport, voxbone) {
           result.message = "Account already registered";
           return res.status(400).json(result);
         }
-      } else
-        theAccount = new Account({email: formData.email});
-
+      } else {
+        result.message = "Cannot signup new users by the moment";
+        return res.status(400).json(result);
+        // TODO [vxb-db-2]
+        // theAccount = new Account({email: formData.email});
+      }
       result.errors = false;
       result.redirect = "/widget";
 
@@ -191,6 +192,9 @@ module.exports = function (passport, voxbone) {
       theAccount.first_name = formData.name;
       theAccount.company = formData.company;
       theAccount.temporary = false;
+      // TODO [vxb-db-2]
+      // theAccount.did = ??;
+      // theAccount.didId = ??;
       theAccount.save(function (err) {
         if (err) throw err;
         req.logIn(theAccount, function (err) {
