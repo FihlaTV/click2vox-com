@@ -61,11 +61,20 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
+// set some default variables to be accessed in views
+app.use(function (req, res, next) {
+  res.locals.authenticated = !!req.user;
+  res.locals.currentUser = req.user || {};
+  next();
+});
+
 var routes = require('./routes/index');
+var accountRoutes = require('./routes/account');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes(passport, voxbone));
+app.use('/account', accountRoutes);
 
 require('coffee-script/register'); // <-- This dependency is to be removed very soon.
 penguin = require('penguin');

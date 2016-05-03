@@ -1,11 +1,17 @@
+/* TODO: all these css below will be moved into a less file */
 .no-bottom-border-radius{
     border-bottom-right-radius: 0 !important;
     border-bottom-left-radius: 0 !important;
 }
+
 .progress.passwordStrength {
     -webkit-border-radius: 0 !important;
      -moz-border-radius: 0 !important;
           border-radius: 0 !important;
+}
+
+.user-pill {
+    margin-right: 5px;
 }
 
 /* adding this to prevent showing hidden tags while requirejs does its work*/

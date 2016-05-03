@@ -11,6 +11,7 @@ html(lang='en')
 
     link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css", rel="stylesheet")
     link(href="/stylesheets/root.css", rel="stylesheet")
+    link(href="/stylesheets/custom.css", rel="stylesheet")
     link(href="//cdnjs.cloudflare.com/ajax/libs/raty/2.7.0/jquery.raty.min.css", rel="stylesheet")
     link(href="//cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.css", rel="stylesheet")
 
@@ -53,6 +54,8 @@ html(lang='en')
             a.appendChild(r);
         })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
 
+    block extra_head
+
   body
     .container
       nav.navbar
@@ -60,8 +63,9 @@ html(lang='en')
           a.navbar-brand(href='https://voxbone.com' target="_blank")
           span.subBrand Voxbone WebRTC Beta
         .pull-right
-          if account
-            a.login.withripple(href="/logout") Logout
+          if authenticated
+            a.login.pull-left.user-pill(href="/account/edit") #{currentUser.email}
+            a.login.withripple.pull-left(href="/logout") Logout
           else
             a.login.withripple(href="/login") Login
 

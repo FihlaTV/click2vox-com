@@ -17,6 +17,8 @@ var request = require('request');
 
 var sendgrid  = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
 
+var utils = require('./utils');
+
 module.exports = function (passport, voxbone) {
 
   router.get('/ping', function (req, res, next) {
@@ -110,15 +112,15 @@ module.exports = function (passport, voxbone) {
   // });
 
   // Redirects if not HTTPS
-  router.get('*',function (req,res,next) {
+  router.get('*', function (req, res, next) {
     if (process.env.FORCE_HTTPS == 'true' && process.env.APP_URL && req.headers['x-forwarded-proto'] != 'https')
       res.redirect(process.env.APP_URL + req.url);
     else
       next();
   });
 
-  router.get('/login', redirectToWidgetIfLoggedIn, function (req, res, next) {
-    res.render('login', { title: title, email: req.query.email, account: accountLoggedIn(req), message: req.flash('loginMessage') });
+  router.get('/login', utils.redirectToWidgetIfLoggedIn, function (req, res, next) {
+    res.render('login', { title: title, email: req.query.email, message: req.flash('loginMessage') });
   });
 
   router.post('/login', function (req, res, next) {
@@ -149,11 +151,11 @@ module.exports = function (passport, voxbone) {
     req.session.destroy();
     res.render('signup', {
       title: title, email: req.query.email,
-      temp_password: req.query.password, account: accountLoggedIn(req)
+      temp_password: req.query.password
     });
   });
 
-  //POST /signup fetch the account with that email, set the new password and temporary to false.
+  // POST /signup fetch the account with that email, set the new password and temporary to false.
   router.post('/signup', function (req, res, next) {
     var formData = req.body;
     var result = { message: "", errors: true, redirect: "", email: formData.email };
@@ -209,20 +211,24 @@ module.exports = function (passport, voxbone) {
     res.send(voxrtc_config);
   });
 
-  router.get('/widget', isLoggedIn, function (req, res, next) {
+  router.get('/widget', utils.isLoggedIn, function (req, res, next) {
     Account
       .findOne({_id: req.user._id})
       .exec(function (err, the_account) {
-        res.render('widget', { title: title, did: the_account.did, account: accountLoggedIn(req), email: the_account.email });
+        res.render('widget', {
+          title: title,
+          did: the_account.did,
+          email: the_account.email
+        });
       });
   });
 
-  router.get('/', redirectToWidgetIfLoggedIn, function (req, res, next) {
-    res.render('login', { title: title, account: accountLoggedIn(req), email: req.query.email});
+  router.get('/', utils.redirectToWidgetIfLoggedIn, function (req, res, next) {
+    res.render('login', { title: title, email: req.query.email});
   });
 
   router.get('/forgot', function (req, res, next) {
-    res.render('forgot', { title: title, email: req.query.email, account: accountLoggedIn(req) });
+    res.render('forgot', { title: title, email: req.query.email });
   });
 
   router.post('/forgot', function (req, res, next) {
@@ -286,8 +292,9 @@ module.exports = function (passport, voxbone) {
           title: title, message: "Password reset token is invalid or has expired.", errors: err });
       }
       res.render('reset', {
-        title: title, account: accountLoggedIn(req),
-        the_account: req.user, token:req.params.token,
+        title: title,
+        the_account: req.user,
+        token:req.params.token,
         email: req.query.email
       });
     });
@@ -420,22 +427,7 @@ module.exports = function (passport, voxbone) {
     });
   });
 
-  function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
-      return next();
-    res.redirect('/');
-  }
-
-  function redirectToWidgetIfLoggedIn(req, res, next) {
-    if (req.isAuthenticated())
-      res.redirect('/widget');
-    return next();
-  }
-
-  function accountLoggedIn(req) {
-    return req.isAuthenticated();
-  }
-
+  // TODO: ask if we should move these below to utils module
   function getApiCredentials() {
     return {
       'user' : process.env.VOXBONE_API_USERNAME,

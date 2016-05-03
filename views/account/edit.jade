@@ -1,0 +1,72 @@
+extends ../layout
+
+block extra_head
+  script.
+    require(['angular', 'jquery'], function (angular, jQuery) {
+      var app = angular.module('voxboneApp', []);
+
+      app.controller('formController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
+        $scope.account = {
+          email: '#{currentUser.email}',
+          name: '#{currentUser.first_name}',
+          company: '#{currentUser.company}'
+        };
+
+        $scope.showAlert = function (type, message) {
+          jQuery('#alert')
+            .html(message)
+            .addClass('alert-' + type)
+            .css('display', 'block');
+        };
+
+        $scope.saveProfile = function (account) {
+          console.log('Saving profile...');
+
+          var req = {
+            method: 'POST',
+            url: '/account/edit',
+            headers: {
+              'Content-Type': 'application/json; charset=utf-8'
+            },
+            data: account
+          };
+
+          $http(req).then(
+            function successCallback (response) {
+              $scope.showAlert('success', 'Your profile has been saved succesfully');
+            }, function errorCallback (response) {
+              $scope.showAlert('danger', response.data.message);
+            });
+        };
+      }]);
+
+      angular.bootstrap(document, ['voxboneApp']);
+    });
+
+block content
+  .main.registerPage
+    .body
+      .container
+        .row
+          .col-sm-12
+            h1 Edit your profile
+
+            #alert.alert(style="display: none;")
+
+            #form_container
+              p You can change your personal information and settings here.
+
+              .formWrap
+                form#editProfile(name="editProfile" novalidate ng-controller="formController")
+                  .form-group
+                    label.control-label Name
+                    input.form-control(type="text" id="name" name="name" ng-model="account.name" required)
+                    .error-label(ng-show="editProfile.$submitted || editProfile.name.$touched")
+                      div.ng-hide(ng-show="editProfile.name.$error.required") Please enter your name
+                  .form-group
+                    label.control-label Company
+                    input.form-control(type="text" id="company" name="company" ng-model="account.company")
+                  .form-group
+                    label.control-label Email address
+                    input.form-control(type="text" ng-model="account.email" disabled)
+                  button.btn.btn-default#save(ng-disabled="editProfile.$invalid" ng-click="saveProfile(account)") Save Profile
