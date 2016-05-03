@@ -487,10 +487,19 @@ module.exports = function (passport, voxbone) {
       },
 
       function (account, voice_uri_id, done) {
-        //step 1b Create / Update the voice uri
+        // Step 1b
+        var post_data = { "didIds" : [ account.didId ], "voiceUriId" : voice_uri_id };
+
+        // If the voice uri exists, directly link it
+        if (voice_uri_id) {
+          done(null, post_data);
+          return;
+        }
+
+        // If not, create the voice uri
         var put_data = {
           "voiceUri" : {
-            "voiceUriId"       : voice_uri_id,
+            "voiceUriId"       : null,
             "backupUriId"      : null,
             "voiceUriProtocol" : "SIP",
             "uri"              : req.body.sip_uri,
@@ -517,13 +526,10 @@ module.exports = function (passport, voxbone) {
             }
 
             var response_body = JSON.parse(body);
-            if (response_body['httpStatusCode']) {
-              done({ httpStatusCode: response_body['httpStatusCode'], comeback_errors: response_body.errors[0], message: "Could not create the voice uri for SIP URI: " + req.body.sip_uri + " and user: " + req.user.email + " . Probably already exists. View previous logs for more details." });
-            } else {
-              //success
-              var post_data = { "didIds" : [ account.didId ], "voiceUriId" : voice_uri_id };
+            if (response_body['httpStatusCode'])
+              done({ httpStatusCode: response_body['httpStatusCode'], comeback_errors: response_body.errors[0], message: "Could not create the voice uri for SIP URI: " + req.body.sip_uri + " and user: " + req.user.email + ". Probably already exists. View previous logs for more details." });
+            else
               done(err, post_data);
-            }
           }
         );
       },
