@@ -1,22 +1,33 @@
-.form-control{
+.form-control {
   height: 40px;
-  border-color:#a1aeb7;
+  border-color: #a1aeb7;
 }
 
-.error-label{
-  color: red;
+/*Form Error*/
+.error-label {
+  display: block;
+  padding: 0 4px;
+  margin: 5px 0;
+  background: #f2dede;
+  color: #a94442;
+  font-size: 85%;
+  line-height: 20px;
+  .rounded(3px);
 }
 
 /*Checkbox*/
-.checkbox{
-  label{
+.checkbox {
+
+  label {
     padding-left: 2px;
   }
-  label::before{
+  
+  label::before {
     background: #dbe1e5;
-    border-color:#8a9399;
+    border-color: #8a9399;
   }
-  input[type="checkbox"]:checked + label::after{
+  
+  input[type="checkbox"]:checked + label::after {
     color: @vx-purple;
   }
 }

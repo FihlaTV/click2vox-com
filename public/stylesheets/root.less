@@ -25,10 +25,14 @@ Main Css
 @import "less/fonts";
 @import "less/base";
 @import "less/header";
+@import "less/custom";
+@import "less/components";
 
 /* App Sections */
 @import "less/registerPage";
 @import "less/createButton";
+@import "less/buttonList";
+@import "less/addNewModal";
 
 /* Widget Style */
 @import "less/widget";
@@ -48,51 +52,3 @@ Plugin Css
 
 /* Bootstrap Toggle */
 @import url('plugin/bootstrap-toggle/bootstrap-toggle.min.css');
-
-.nav-tabs {
-  border-bottom: 0px;
-}
-
-.tooltip-inner {
-  max-width: 250px;
-  min-width: 150px;
-  /* If max-width does not work, try using width instead */
-  width: 250px;
-}
-
-pre {
-  white-space: pre-wrap;
-}
-
-/* Sticky footer styles
--------------------------------------------------- */
-
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-}
-
-#bottom-footer{
-  margin-bottom: 20px;
-  padding-top: 15px;
-  padding-bottom: 15px;
-}
-
-#bottom-footer a{
-  text-decoration: none;
-  color: #626262;
-  -webkit-transition: all .2s ease-in-out;
-  -moz-transition: all .2s ease-in-out;
-  -o-transition: all .2s ease-in-out;
-  -ms-transition: all .2s ease-in-out;
-  transition: all .2s ease-in-out;
-  font-size: 12px;
-  padding: 0px 15px;
-  border-right: 1px solid #ccc;
-  color: #626262;
-  padding: 0 12px;
-  text-shadow: 1px 1px 0 rgba(255,255,255,1);
-}

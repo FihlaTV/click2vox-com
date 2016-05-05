@@ -52,6 +52,9 @@
     margin-bottom: 20px;
     border: 1px solid @border-grey;
     .rounded(6px);
+    &.preview {
+      border-top-left-radius: 0;     
+    }
     button{
       margin: 0 5px 10px;
     }
@@ -115,6 +118,9 @@
       }
     }
 
+  }
+  .nav-tabs>li.active>a{
+    background: #FBFCFC;
   }
   .preview{
     background: #f0f4f7;
