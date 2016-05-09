@@ -8,7 +8,7 @@ module.exports = {
 
   redirectToWidgetIfLoggedIn: function (req, res, next) {
     if (req.isAuthenticated())
-      res.redirect('/widget');
+      return res.redirect('/widget');
     return next();
   },
 
