@@ -462,11 +462,11 @@ block content
                 .boxPanel
                   .form-group
                     label Button Label:
-                    input.form-control(type="text", name="button_label", ng-model="widget.button_label" value="Call Sales" placeholder="i.e. Call Sales" ng-change='widget.generateOutputCode()' ng-model-options="{ updateOn: 'blur' }")
+                    input.form-control(type="text", name="button_label", ng-model="widget.button_label" value="#{defaultBtnLabel}" placeholder="i.e. #{defaultBtnLabel}" ng-change='widget.generateOutputCode()' ng-model-options="{ updateOn: 'blur' }")
                   .form-group
                     label Button Style:
-                    button.btn-style-a(ng-click="widget.setTheme('style-a')") #[span {{ widget.button_label || 'Call Sales' }}]
-                    button.btn-style-b(ng-click="widget.setTheme('style-b')") #[span {{ widget.button_label || 'Call Sales' }}]
+                    button.btn-style-a(ng-click="widget.setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                    button.btn-style-b(ng-click="widget.setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
               span.title Call Configuration
               form#widget_form(name="widget_form", novalidate)
                 .boxPanel

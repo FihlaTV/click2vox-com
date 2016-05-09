@@ -4,6 +4,10 @@ html(lang='en')
     if process.env.NEW_RELIC_LICENSE_KEY
       != newrelic.getBrowserTimingHeader()
 
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+
     title= title
 
     link(rel="apple-touch-icon" href="")
@@ -11,7 +15,6 @@ html(lang='en')
 
     link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css", rel="stylesheet")
     link(href="/stylesheets/root.css", rel="stylesheet")
-    link(href="/stylesheets/custom.css", rel="stylesheet")
     link(href="//cdnjs.cloudflare.com/ajax/libs/raty/2.7.0/jquery.raty.min.css", rel="stylesheet")
     link(href="//cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.css", rel="stylesheet")
 
@@ -64,7 +67,9 @@ html(lang='en')
           span.subBrand Voxbone WebRTC Beta
         .pull-right
           if authenticated
-            a.login.pull-left.user-pill(href="/account/edit") #{currentUser.email}
+            a.login.pull-left.user-pill(href="/") Home
+            a.login.pull-left.user-pill(href="/account/widgets") Buttons
+            a.login.pull-left.user-pill(href="/account/edit") Profile
             a.login.withripple.pull-left(href="/logout") Logout
           else
             a.login.withripple(href="/login") Login

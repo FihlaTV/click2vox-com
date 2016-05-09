@@ -11,8 +11,7 @@ module.exports = function (grunt) {
           optimization: 2
         },
         files: {
-          "public/stylesheets/root.css": "public/stylesheets/root.less",
-          "public/stylesheets/custom.css": "public/stylesheets/custom.less"
+          "public/stylesheets/root.css": "public/stylesheets/root.less"
         }
       }
     },

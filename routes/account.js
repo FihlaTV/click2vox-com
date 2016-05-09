@@ -5,6 +5,7 @@ var express = require('express');
 var router = express.Router();
 
 var Account = require('../models/account');
+var Widget = require('../models/widget');
 var utils = require('./utils');
 
 // GET edit user profile
@@ -35,6 +36,19 @@ router.post('/edit', utils.isLoggedIn, function (req, res) {
       req.logIn(theAccount, function (err) {
         res.status(200).json(result);
       });
+    });
+  });
+});
+
+// ---- edit profile ----
+
+router.get('/widgets', utils.isLoggedIn, function (req, res) {
+  var defaultBtnLabel = process.env.DEFAULT_BUTTON_LABEL || 'Call Sales';
+
+  Widget.find({_account: req.user._id}, function (err, widgets) {
+    res.render('account/widget-list', {
+      widgets: widgets,
+      defaultBtnLabel: defaultBtnLabel
     });
   });
 });

@@ -30,6 +30,7 @@ Create a click to call button from a widget generator
 * `HOTJAR_ID`
 * `NEW_RELIC_LICENSE_KEY`
 * `TIMEOUT` (in miliseconds, defaults to '12000' )
+* `DEFAULT_BUTTON_LABEL` The text to be used by default (Call Sales) when creating buttons
 
 ### To Run locally
 
@@ -48,6 +49,24 @@ bower install
 #### To start the server
 ```
 npm start
+```
+
+#### Extra dev commands
+- To compile .less to .css
+```
+grunt less
+```
+
+- To watch changes on .less files and automatically compile them
+```
+grunt watch
+```
+
+- Alternatively to run the local server. This will restart the server when there are new changes in the code and
+also it will watch for changes in the .less files and will compile them automatically to css
+
+```
+grunt
 ```
 
 ### Mongo Tasks

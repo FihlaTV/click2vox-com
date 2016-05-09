@@ -216,13 +216,15 @@ module.exports = function (passport, voxbone) {
   });
 
   router.get('/widget', utils.isLoggedIn, function (req, res, next) {
+    var defaultBtnLabel = process.env.DEFAULT_BUTTON_LABEL || 'Call Sales';
     Account
       .findOne({_id: req.user._id})
       .exec(function (err, the_account) {
         res.render('widget', {
           title: title,
           did: the_account.did,
-          email: the_account.email
+          email: the_account.email,
+          defaultBtnLabel: defaultBtnLabel
         });
       });
   });

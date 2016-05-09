@@ -1,0 +1,33 @@
+extends ../layout
+
+block content
+  .main.buttonList
+    .header
+      .container
+        h1 Click2Vox Buttons
+        p This is a free account. You will only be able to create buttons with the same SIP. #[a(href="#") Upgrade Now]
+
+        .actions-wrap
+          #[a.btn.btn-purple Add SIP] #[a.btn.btn-success Add New Button]
+
+
+    .body
+      .container
+        .row
+          .col-xs-12
+            table.table
+              thead
+                tr
+                  td Sip URI
+                  td Configuraton Name
+                  td Button Label
+                  td.text-right Actions
+              tbody
+                - each widget in widgets
+                  tr
+                    td #{widget.sip_uri}
+                    td #{widget.configuration_name}
+                    td #{widget.button_label || defaultBtnLabel}
+                    td.text-right
+                      #[a.btn.btn-sm.btn-primary(href="#") Copy Code] #[a.btn.btn-sm.btn-info(href="#") View / Edit]
+
