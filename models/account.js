@@ -30,16 +30,19 @@ accountSchema.pre('save', function (next) {
   if (!self.created_at)
     self.created_at = now;
 
-  Did.findOne({ assigned: false }, function (err, foundDid) {
+  Did.findOne({ assigned: {$ne: true} }, function (err, foundDid) {
     if(err) {
       next(err);
-    } else if (foundDid && !self.did && !self.didId) {
-      self.temporary = true;
-      self.did = foundDid.did;
-      self.didId = foundDid.didId;
-      foundDid.assigned = true;
-      foundDid.save();
-      next();
+    } else if (!self.did || !self.didId) {
+      if (foundDid) {
+        self.did = foundDid.did;
+        self.didId = foundDid.didId;
+        foundDid.assigned = true;
+        foundDid.save();
+        next();
+      } else {
+        next(new Error('NoDidsAvailable'));
+      }
     } else {
       next();
     }

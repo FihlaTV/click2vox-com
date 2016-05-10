@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var didSchema = new Schema({
-  assigned: { type: Boolean, default: false },
+  assigned: Boolean,
   did: Number,
   didId: Number
 });

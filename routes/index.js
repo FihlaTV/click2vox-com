@@ -136,8 +136,7 @@ module.exports = function (passport, voxbone) {
         console.log("Entered incorrect authentication, response should be: 401");
         console.log(result);
         return res.status(401).json(result);
-      }
-      else{
+      } else{
         result = { message: "", errors: null, redirect: '/widget', email: formData.email };
         req.logIn(account, function (err) {
           return res.status(200).json(result);
@@ -180,10 +179,7 @@ module.exports = function (passport, voxbone) {
           return res.status(400).json(result);
         }
       } else {
-        result.message = "Cannot signup new users by the moment";
-        return res.status(400).json(result);
-        // TODO [vxb-db-2]
-        // theAccount = new Account({email: formData.email});
+        theAccount = new Account({email: formData.email});
       }
       result.errors = false;
       result.redirect = "/widget";
@@ -192,11 +188,17 @@ module.exports = function (passport, voxbone) {
       theAccount.first_name = formData.name;
       theAccount.company = formData.company;
       theAccount.temporary = false;
-      // TODO [vxb-db-2]
-      // theAccount.did = ??;
-      // theAccount.didId = ??;
+
       theAccount.save(function (err) {
-        if (err) throw err;
+        if (err) {
+          if (err.message != 'NoDidsAvailable')
+            throw err;
+          else {
+            console.log('*** NoDidsAvailable ***');
+            result.message = "Cannot signup at the moment (No Dids Available)";
+            return res.status(400).json(result);
+          }
+        }
         req.logIn(theAccount, function (err) {
           res.status(200).json(result);
         });

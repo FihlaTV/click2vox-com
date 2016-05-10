@@ -31,7 +31,7 @@ block content
               'Content-Type': 'application/json; charset=utf-8'
             },
             data: {
-              email: $scope.login.uemail,
+              email: $scope.login.uemail.toLowerCase(),
               password: $scope.login.upassword
             }
           };
