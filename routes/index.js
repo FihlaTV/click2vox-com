@@ -331,6 +331,7 @@ module.exports = function (passport, voxbone) {
 
     var a_widget = new Widget({
       _account: req.user._id,
+      configuration_name: req.body.configuration_name,
       button_label: req.body.button_label,
       button_style: req.body.button_style,
       background_style: req.body.background_style,

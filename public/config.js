@@ -1,4 +1,5 @@
 require.config({
+  baseUrl: '/javascripts/',
   shim: {
     bootstrap: {
       deps: [
@@ -58,9 +59,11 @@ require.config({
       '/lib/raty/lib/jquery.raty'
     ],
     widget: '/javascripts/widget',
-    requirejs: '/lib/requirejs/require'
+    requirejs: '/lib/requirejs/require',
+    // editWidget: '/javascripts/controllers/editWidget'
   },
   packages: [
-
+    "controllers",
+    "directives"
   ]
 });

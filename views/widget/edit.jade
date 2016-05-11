@@ -1,0 +1,181 @@
+extends ../layout
+
+block extra_head
+  link(href="/stylesheets/widget.css", rel="stylesheet")
+
+block content
+  script.
+    require([
+      'angular',
+      'angular-cookies',
+      'jquery',
+      'controllers/widget.edit',
+      'directives/qtip',
+      'directives/http.prefix',
+      'directives/autofocus',
+    ],
+    function(
+      angular, ngCookies, $,
+      WidgetEditController, qtipDirective,
+      httpPrefixDirective, autoFocusDirective) {
+
+        angular.module('voxboneApp', ['ngCookies'])
+          .directive('qtip', qtipDirective)
+          .directive('httpPrefix', httpPrefixDirective)
+          .directive('autoFocus', autoFocusDirective)
+          .controller('EditWidgetController', WidgetEditController);
+
+        angular.bootstrap(document, ['voxboneApp']);
+
+        //- now we should load the widget.js script when all is ready
+        require(['widget'], function () {});
+    });
+
+  .div#control
+
+  .main.createButton
+    .header
+      .container
+        .row
+          .col-xs-12
+            h1 Edit a WebRTC Call Button
+            p #[b Questions?] #[a(href="https://docs.google.com/document/d/1L6swwK_rVu_2XqSNMzmMRxBxL3YL50YTzkF6NaqeLqU/edit?usp=sharing" target="_blank") See our Frequently Asked Questions document.]
+
+            #alert-success.alert.alert-success(style="display: none;")
+
+    .body(ng-controller="EditWidgetController" ng-init='initData={widget: #{JSON.stringify(widget)}, did: #{user.did}}')
+      .container
+        .row
+          .col-md-6.left-col
+            section
+              form
+                .boxPanel
+                  .form-group
+                    label Configuration Name:
+                    input.form-control(type="text", name="configuration_name", ng-model="widget.configuration_name" placeholder="i.e. Sales Button" ng-model-options="{ updateOn: 'blur' }")
+            section
+              span.title Button Configuration
+              form
+                .boxPanel
+                  .form-group
+                    label Button Label:
+                    input.form-control(type="text", name="button_label", ng-model="widget.button_label" value="#{defaultBtnLabel}" placeholder="i.e. #{defaultBtnLabel}" ng-model-options="{ updateOn: 'blur' }")
+                  .form-group
+                    label Button Style:
+                    button.btn-style-a(ng-click="widget.setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                    button.btn-style-b(ng-click="widget.setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+              span.title Call Configuration
+              form#widget_form(name="widget_form", novalidate)
+                .boxPanel
+                  .form-group
+                    label.control-label SIP URI
+                      span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?
+                    input.form-control(required type="text" id="sip_uri" name="sip_uri" ng-model="widget.sip_uri" ng-pattern="/^[^@]+@[^@]+$/" ng-change='sip_provisioning(widget_form)' ng-model-options="{ updateOn: 'blur' }" placeholder="i.e. echo@ivrs" auto-focus list="suggested-sips" ng-blur="conditional_sip_provisioning(widget_form)")
+                    datalist#suggested-sips
+                      option echo@ivrs
+                      option digits@ivrs
+
+                    div(style='color: green' ng-show="widget_form.sip_provisioning || widget_form.sip_provisioned")
+                      div(ng-show="widget_form.sip_provisioning") Provisioning SIP URI...
+                      div(ng-show="widget_form.sip_provisioned") SIP URI Provisioned!
+                    .error-label(ng-show="widget_form.sip_uri.$touched" )
+                      div(ng-show="widget_form.sip_uri.$error.required") SIP URI is required
+                      div(ng-show="widget_form.sip_uri.$error.pattern") SIP URI must be valid
+                      div(ng-show="widget_form.cannot_validate_sip_uri") {{ widget_form.cannot_validate_sip_uri || 'SIP URI cannot be validated. Please, try again'}}
+                  .panel.panel-default
+                    .panel-heading
+                      a.collapsed.title-toggle(data-toggle="collapse",data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
+                    .panel-collapse.collapse#collapseAdvancedCallConfiguration
+                      .options-wrap.active
+                        .form-group
+                          label(for="btn-context") Caller ID
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Enter the Caller ID that you would like sent with your Click2Vox widget calls (Only valid URI characters will be sent)") ?
+                          input.form-control(type="text" name="caller_id" ng-model="widget.caller_id" value="click2vox" placeholder="i.e. click2vox_demo" ng-model-options="{ updateOn: 'blur' }")
+                        .form-group
+                          label(for="btn-context") Context
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Send custom data to your SIP server using the X-Voxbone-Context header. Make sure to configure your SIP server to process this header.") ?
+                          input.form-control(type="text" name="context" ng-model="widget.context" ng-model-options="{ updateOn: 'blur' }")
+                        .form-group
+                          label(for="btn-context")
+                            input(type="checkbox" name="dial_pad" ng-model="widget.dial_pad" ng-model-options="{ updateOn: 'blur' }")
+                            span DTMF Dial Pad
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Display a dialpad to allow your users to enter DTMF digits during a call.") ?
+                        .form-group
+                          label(for="btn-context") Send Digits #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" title="Automatically send DTMF digit(s) after a call is connected. This is useful for automatically navigating IVRs or entering access codes for a conference bridge. Digits should use the following format: <br><br>1,2,3,1200ms,4,5,900ms,6,#<br><br>This string will generate 1 2 3, wait 1200 milliseconds, enter 4, 5, wait 900 milliseconds then enter 6, #") ?]
+                          input.form-control(type="text" name="send_digits" ng-model="widget.send_digits" ng-model-options="{ updateOn: 'blur' }")
+                  .panel.panel-default
+                    .panel-heading
+                      a.collapsed.title-toggle(data-toggle="collapse" data-target="#collapseIncompatileBrowserConfiguration" href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
+                    .panel-collapse.collapse#collapseIncompatileBrowserConfiguration
+                      .options-wrap.active
+                        .form-group
+                          label
+                            input(type='radio' name='incompatible_browser_configuration' ng-model='widget.incompatible_browser_configuration' value="hide_widget")
+                            span.radio-name Hide the widget
+                            span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, hide the widget") ?
+                        .form-group
+                          label
+                            input(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="link_button_to_a_page")
+                            span.radio-name Link button to a page
+                            span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, specify a URL to go to when the button is clicked") ?
+                            input.form-control(http-prefix type="url" name="link_button_to_a_page_value" ng-model="widget.link_button_to_a_page_value" ng-show="widget.incompatible_browser_configuration == 'link_button_to_a_page'" placeholder="i.e. https://mysite.com" ng-model-options="{ updateOn: 'blur' }")
+                        .form-group
+                          label
+                            input(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="show_text_html")
+                            span.radio-name Show text/HTML
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Instead of showing the button, display the entered HTML ") ?
+                            textarea.form-control(type="text" name="show_text_html_value", placeholder="Enter text or HTML" ng-show="widget.incompatible_browser_configuration == 'show_text_html'" ng-model="widget.show_text_html_value" ng-model-options="{ updateOn: 'blur' }")
+
+          .col-md-6.right-col
+            .section
+              span.title Widget Preview in a Browser:
+              ul.nav.nav-tabs
+                li(ng-click="onClickTab(true)" ng-class="{active:preview_webrtc_compatible}")
+                  a(data-toggle="tab" href="#") WebRTC #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This is how the widget will look like in a WebRTC compatible browser") ?]
+                li(ng-click="onClickTab(false)" ng-class="{active:!preview_webrtc_compatible}")
+                  a(data-toggle="tab" href="#") Non-WebRTC #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This is how the widget will look like in a WebRTC incompatible browser") ?]
+
+              .boxPanel.preview
+                .prev-view.light
+                  .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
+                  .togle-bg-tooltip
+                    #[span.badge(data-toggle='tooltip' data-placement="left" data-html="true" data-width="350" title="You can click the button to make a call and test the service!<br>(once you setup your widget)") ?]
+                  .widget-box#launch_call_div(ng-class="widget.button_style" ng-show="showCallButton()")
+                    button.btn-style.launch_call#launch_call(ng-disabled="!widget.showWidgetCode" ng-click="makeCall()" qtip="You can click the button to make a call and test the service!<br>(once you setup your widget)" qtip-visible='true') #[span {{widget.button_label || 'Call Sales'}}]
+                    .widget-footer-left
+                      a(href="https://test.webrtc.org/" target="_blank") Test your setup
+                    .widget-footer-right
+                      a(href="https://voxbone.com" target="_blank") powered by:
+                  .togle-bg
+                    a.dark(href="javascript:void(0)" ng-click="widget.background_style = 'dark'")
+                    a.grey(href="javascript:void(0)" ng-click="widget.background_style = 'grey'")
+                    a.light(href="javascript:void(0)" ng-click="widget.background_style = 'light'")
+
+                .prev-code
+                  .title
+                    span Widget Code Snippet
+                      p Paste the following HTML code into your website or give it a try using on
+
+                      .btn-code-playground
+                        .btn-jsfiddle(ng-show="widget.showWidgetCode")
+                          form#code_debug_jsfiddle(action="https://jsfiddle.net/api/post/library/pure/" method="POST" target="_blank")
+                            input(type="hidden" name="html" value='{{ prepareHtmlForCodepen(widget.widget_code) }}')
+                            a(href="#" onclick="$('#code_debug_jsfiddle').submit();") JSFiddle
+                        .btn-jsfiddle(ng-show="widget.showWidgetCode")
+                          form#code_debug_codepen(action="https://codepen.io/pen/define" method="POST" target="_blank")
+                            input(type="hidden" name="data" value='{"html": "{{ prepareHtmlForCodepen(widget.widget_code) }}"}')
+                            a(href="#" onclick="$('#code_debug_codepen').submit();") CodePen
+
+                  .widget-code-wrap
+                    .sample.shadow-z-2#widget_code
+                      pre
+                        {{ widget.widget_code }}
+                    .codebox-actions(ng-show='widget.showWidgetCode')
+                      a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy to Clipboard
+                      a(href="#" class="hidden" id="generate-output-code" ng-click='widget.generateOutputCode()') Generate Code
+
+              div
+                .pull-right
+                  button.btn.btn-default(ng-click='widget.generateOutputCode()' ng-disabled="widget_form.$invalid || widget_form.sip_provisioning" ) Save Configuration
+                .clearfix
+                br

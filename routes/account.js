@@ -54,12 +54,15 @@ router.post('/edit', utils.isLoggedIn, function (req, res) {
 router.get('/widgets', utils.isLoggedIn, function (req, res) {
   var defaultBtnLabel = process.env.DEFAULT_BUTTON_LABEL || 'Call Sales';
 
-  Widget.find({_account: req.user._id}, function (err, widgets) {
-    res.render('account/widget-list', {
-      widgets: widgets,
-      defaultBtnLabel: defaultBtnLabel
+  Widget
+    .find({_account: req.user._id})
+    .sort({updated_at: 'desc'})
+    .exec(function (err, widgets) {
+      res.render('account/widget-list', {
+        widgets: widgets,
+        defaultBtnLabel: defaultBtnLabel
+      });
     });
-  });
 });
 
 // ---- sign up user ----

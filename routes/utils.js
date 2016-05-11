@@ -14,5 +14,11 @@ module.exports = {
 
   accountLoggedIn: function (req) {
     return req.isAuthenticated();
+  },
+
+  objectNotFound: function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
   }
 };

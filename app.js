@@ -11,6 +11,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoDBStore = require('connect-mongodb-session')(session);
 
+var params = require('strong-params');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
@@ -44,6 +45,10 @@ app.use(favicon(path.join(__dirname, 'public/images', 'favicon.png')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// set strong params
+app.use(params.expressMiddleware());
+
 app.use(cookieParser());
 
 var sessionStore = new MongoDBStore({uri: dbURI, collection: 'sessions'});
@@ -70,11 +75,14 @@ app.use(function (req, res, next) {
 
 var routes = require('./routes/index');
 var accountRoutes = require('./routes/account');
+var widgetRoutes = require('./routes/widget');
+var utils = require('./routes/utils');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes(passport, voxbone));
 app.use('/account', accountRoutes);
+app.use('/widget', widgetRoutes);
 
 require('coffee-script/register'); // <-- This dependency is to be removed very soon.
 penguin = require('penguin');
@@ -111,11 +119,7 @@ admin.setupApp(app);
 // error handlers
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+app.use(utils.objectNotFound);
 
 // development error handler
 // will print stacktrace

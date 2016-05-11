@@ -19,7 +19,7 @@ block content
               thead
                 tr
                   td Sip URI
-                  td Configuraton Name
+                  td Configuration Name
                   td Button Label
                   td.text-right Actions
               tbody
@@ -29,5 +29,5 @@ block content
                     td #{widget.configuration_name}
                     td #{widget.button_label || defaultBtnLabel}
                     td.text-right
-                      #[a.btn.btn-sm.btn-primary(href="#") Copy Code] #[a.btn.btn-sm.btn-info(href="#") View / Edit]
+                      #[a.btn.btn-sm.btn-primary(href="#") Copy Code] #[a.btn.btn-sm.btn-info(href="/widget/#{widget._id}/edit") View / Edit]
 
