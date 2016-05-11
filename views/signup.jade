@@ -1,9 +1,12 @@
 extends layout
 
+block extra_head
+  script(src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer)
+
 block content
   script.
-    require(['angular', 'jquery'], function (angular, $) {
-      var formApp = angular.module('voxboneApp', []);
+    require(['angular', 'angular-recaptcha', 'jquery'], function (angular, vcRecaptcha, $) {
+      var formApp = angular.module('voxboneApp', ['vcRecaptcha']);
 
       formApp.controller('formController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
         $scope.master = {
@@ -29,7 +32,7 @@ block content
           console.log("--> Submitting...");
           var req = {
             method: 'POST',
-            url: '/signup',
+            url: '/account/signup',
             headers: {
               'Content-Type': 'application/json; charset=utf-8'
             },
@@ -39,7 +42,8 @@ block content
               company: $scope.account.ucompany,
               temporary_password: $scope.account.temporary_password,
               password: $scope.account.upassword,
-              confirmation: $scope.account.confirmation
+              confirmation: $scope.account.confirmation,
+              'g-recaptcha-response': $scope.account.recaptcha
             }
           };
           $http(req)
@@ -149,8 +153,10 @@ block content
                     input.form-control(type="password" id="confirmation" name="confirmation" ng-model="account.confirmation" required pw-check="upassword")
                     .error-label(ng-show="create_account.$submitted || create_account.confirmation.$touched")
                       div.ng-hide(ng-show="create_account.confirmation.$error.pwmatch") Password confirmation does not match
+
+                  .form-group.text-center
+                    .captcha(ng-model="account.recaptcha" vc-recaptcha key='"#{process.env.GOOGLE_RECAPTCHA_SITE_KEY}"')
+
                   button.btn.btn-default#create(ng-disabled="create_account.$invalid" ng-click="account.processForm()") Create Account
                   br
                   p Already have an account? #[a(href="login") Login here]
-
-

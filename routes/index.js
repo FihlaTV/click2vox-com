@@ -21,6 +21,10 @@ var utils = require('./utils');
 
 module.exports = function (passport, voxbone) {
 
+  router.get('/signup', function (req, res) {
+    res.redirect('/account/signup?email=' + req.query.email);
+  });
+
   router.get('/ping', function (req, res, next) {
     res.json({ 'ping': Date.now(), 'version': pjson.version });
   });
@@ -143,67 +147,6 @@ module.exports = function (passport, voxbone) {
         });
       }
     })(req, res, next);
-  });
-
-  router.get('/signup', function (req, res, next) {
-    req.logout();
-    req.session.destroy();
-    res.render('signup', {
-      title: title, email: req.query.email,
-      temp_password: req.query.password
-    });
-  });
-
-  // POST /signup fetch the account with that email, set the new password and temporary to false.
-  router.post('/signup', function (req, res, next) {
-    var formData = req.body;
-    var result = { message: "", errors: true, redirect: "", email: formData.email };
-
-    // making some validations no matter if account exists or not
-    if (formData.password !== formData.confirmation) {
-      result.message = "Validation failed. Password and Confirmation do not match";
-      return res.status(400).json(result);
-    }
-
-    if (formData.password && formData.password.trim() < 8) {
-      result.message = "Validation failed. Password policies are not satisfied";
-      return res.status(400).json(result);
-    }
-
-    Account.findOne({ email: formData.email }, function (err, theAccount) {
-      // if account has password, it means was already registered. If not,
-      // it was created while invite functionality was working.
-      if (theAccount) {
-        if (theAccount.password) {
-          result.message = "Account already registered";
-          return res.status(400).json(result);
-        }
-      } else {
-        theAccount = new Account({email: formData.email});
-      }
-      result.errors = false;
-      result.redirect = "/widget";
-
-      theAccount.password = theAccount.generateHash(formData.password);
-      theAccount.first_name = formData.name;
-      theAccount.company = formData.company;
-      theAccount.temporary = false;
-
-      theAccount.save(function (err) {
-        if (err) {
-          if (err.message != 'NoDidsAvailable')
-            throw err;
-          else {
-            console.log('*** NoDidsAvailable ***');
-            result.message = "Cannot signup at the moment (No Dids Available)";
-            return res.status(400).json(result);
-          }
-        }
-        req.logIn(theAccount, function (err) {
-          res.status(200).json(result);
-        });
-      });
-    });
   });
 
   router.get('/logout', function (req, res) {

@@ -3,7 +3,6 @@
   "description": "",
   "license": "Private",
   "homepage": "https://github.com/agilityfeat/voxbone-generator",
-
   "ignore": [
     "**/.*",
     "node_modules",
@@ -11,7 +10,6 @@
     "test",
     "tests"
   ],
-
   "dependencies": {
     "jquery": "1.12.0",
     "bootstrap": "3.3.6",
@@ -21,6 +19,7 @@
     "qtip2": "2.2.1",
     "raty": "2.7.0",
     "clipboard": "1.5.5",
-    "requirejs": "^2.2.0"
+    "requirejs": "^2.2.0",
+    "angular-recaptcha": "^3.0.3"
   }
 }

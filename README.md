@@ -31,6 +31,8 @@ Create a click to call button from a widget generator
 * `NEW_RELIC_LICENSE_KEY`
 * `TIMEOUT` (in miliseconds, defaults to '12000' )
 * `DEFAULT_BUTTON_LABEL` The text to be used by default (Call Sales) when creating buttons
+* `GOOGLE_RECAPTCHA_SITE_KEY`
+* `GOOGLE_RECAPTCHA_SECRET_KEY`
 
 ### To Run locally
 

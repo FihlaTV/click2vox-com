@@ -13,6 +13,11 @@ require.config({
         return 'ngCookies';
       }
     },
+    'angular-recaptcha': {
+      deps: ['angular'], init: function () {
+        return 'vcRecaptcha';
+      }
+    },
     'angular-sanitize': {
       deps: 'angular', init: function () {
         return 'ngSanitize';
@@ -27,6 +32,9 @@ require.config({
     'angular-cookies': [
       '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.min',
       '/lib/angular-cookies/angular-cookies.min'
+    ],
+    'angular-recaptcha': [
+      '/lib/angular-recaptcha/release/angular-recaptcha.min'
     ],
     'angular-sanitize': [
       '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-sanitize.min',
