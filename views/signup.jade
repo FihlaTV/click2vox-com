@@ -29,7 +29,8 @@ block content
         $scope.reset();
 
         $scope.account.processForm = function () {
-          console.log("--> Submitting...");
+          $(".alert").addClass('hidden');
+
           var req = {
             method: 'POST',
             url: '/account/signup',
@@ -48,10 +49,14 @@ block content
           };
           $http(req)
             .then(function successCallback(response){
-              $window.location.href = response.data.redirect + '?email=' + response.data.email;
+              if (response.data.verified) {
+                $window.location.href = response.data.redirect + '?email=' + response.data.email;
+              } else {
+                $("#form_container").addClass('hidden');
+                $("#alert-info").removeClass('hidden').text(response.data.message);
+              }
             }, function errorCallback(response){
-              document.getElementById("alert").innerHTML = response.data.message;
-              document.getElementById("alert").style.display = "block";
+              $("#alert-error").removeClass('hidden').text(response.data.message);
             });
         }
       }]);
@@ -120,7 +125,8 @@ block content
           .col-sm-12
             h1 Create Account
 
-            #alert.alert.alert-danger(style="display: none;")
+            #alert-error.alert.alert-danger.hidden
+            #alert-info.alert.alert-info.hidden
 
             #form_container
               p.

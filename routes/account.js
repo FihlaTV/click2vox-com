@@ -16,6 +16,7 @@ recaptcha.init(
 var Account = require('../models/account');
 var Widget = require('../models/widget');
 var utils = require('./utils');
+var emails = require('./emails');
 
 // GET edit user profile
 router.get('/edit', utils.isLoggedIn, function (req, res) {
@@ -67,74 +68,103 @@ router.get('/widgets', utils.isLoggedIn, function (req, res) {
 
 // ---- sign up user ----
 
-  router.get('/signup', recaptcha.middleware.render, function (req, res, next) {
-    req.logout();
-    req.session.destroy();
-    res.render('signup', {
-      title: title,
-      email: req.query.email,
-      temp_password: req.query.password,
-      captcha: req.recaptcha
-    });
+router.get('/signup', recaptcha.middleware.render, function (req, res, next) {
+  req.logout();
+  req.session.destroy();
+  res.render('signup', {
+    title: title,
+    email: req.query.email,
+    temp_password: req.query.password,
+    captcha: req.recaptcha
   });
+});
 
-  // POST /signup fetch the account with that email, set the new password and temporary to false.
-  router.post('/signup', recaptcha.middleware.verify, function (req, res, next) {
-    var formData = req.body;
-    var result = { message: "", errors: true, redirect: "", email: formData.email };
+// POST /signup fetch the account with that email, set the new password and temporary to false.
+router.post('/signup', recaptcha.middleware.verify, function (req, res, next) {
+  var formData = req.body;
+  var result = { message: "", errors: true, redirect: "", email: formData.email };
 
-    // making some validations no matter if account exists or not
-    if (formData.password !== formData.confirmation) {
-      result.message = "Validation failed. Password and Confirmation do not match";
-      return res.status(400).json(result);
+  // making some validations no matter if account exists or not
+  if (formData.password !== formData.confirmation) {
+    result.message = "Validation failed. Password and Confirmation do not match";
+    return res.status(400).json(result);
+  }
+
+  if (formData.password && formData.password.trim() < 8) {
+    result.message = "Validation failed. Password policies are not satisfied";
+    return res.status(400).json(result);
+  }
+
+  if (req.recaptcha.error) {
+    console.log(req.recaptcha);
+    result.message = "Wrong Captcha! Try it again";
+    return res.status(400).json(result);
+  }
+
+  Account.findOne({ email: formData.email }, function (err, theAccount) {
+    // if account has password, it means was already registered. If not,
+    // it was created while invite functionality was working.
+    if (theAccount) {
+      if (theAccount.password) {
+        result.message = "Account already registered";
+        return res.status(400).json(result);
+      }
+      theAccount.verified = true;
+    } else {
+      theAccount = new Account(
+        {
+          email: formData.email,
+          verified: false
+        }
+      );
     }
+    result.errors = false;
 
-    if (formData.password && formData.password.trim() < 8) {
-      result.message = "Validation failed. Password policies are not satisfied";
-      return res.status(400).json(result);
-    }
+    theAccount.password = theAccount.generateHash(formData.password);
+    theAccount.first_name = formData.name;
+    theAccount.company = formData.company;
+    theAccount.temporary = false;
 
-    if (req.recaptcha.error) {
-      console.log(req.recaptcha);
-      result.message = "Wrong Captcha! Try it again";
-      return res.status(400).json(result);
-    }
-
-    Account.findOne({ email: formData.email }, function (err, theAccount) {
-      // if account has password, it means was already registered. If not,
-      // it was created while invite functionality was working.
-      if (theAccount) {
-        if (theAccount.password) {
-          result.message = "Account already registered";
+    theAccount.save(function (err) {
+      if (err) {
+        if (err.message != 'NoDidsAvailable')
+          throw err;
+        else {
+          console.log('*** NoDidsAvailable ***');
+          result.message = "Cannot signup at the moment (No Dids Available)";
           return res.status(400).json(result);
         }
-      } else {
-        theAccount = new Account({email: formData.email});
       }
-      result.errors = false;
-      result.redirect = "/widget";
 
-      theAccount.password = theAccount.generateHash(formData.password);
-      theAccount.first_name = formData.name;
-      theAccount.company = formData.company;
-      theAccount.temporary = false;
+      result.verified = theAccount.verified;
 
-      theAccount.save(function (err) {
-        if (err) {
-          if (err.message != 'NoDidsAvailable')
-            throw err;
-          else {
-            console.log('*** NoDidsAvailable ***');
-            result.message = "Cannot signup at the moment (No Dids Available)";
-            return res.status(400).json(result);
-          }
-        }
+      if (result.verified) {
         req.logIn(theAccount, function (err) {
+          result.redirect = "/widget";
           res.status(200).json(result);
         });
-      });
+      } else {
+        emails.sendPasswordReset(req, res, theAccount.email, 'verify');
+      }
     });
   });
+});
 
+router.get('/verify/:token', function (req, res, next) {
+  req.logout();
+  req.session.destroy();
+  Account.findOne({ verifyAccountToken: req.params.token, verifyAccountExpires: { $gt: Date.now() } }, function (err, account) {
+    if (!account) {
+      return res.render('login', {
+        title: title, message: "Verification token is invalid or has expired.", errors: err });
+    }
+
+    account.verified = true;
+    account.save(function (err) {
+      return res.render('login', {
+        title: title, message: "Verification succedeed. Please login", errors: null });
+    });
+  });
+});
 
 module.exports = router;

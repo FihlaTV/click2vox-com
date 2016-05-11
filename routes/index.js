@@ -12,17 +12,18 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 var async = require('async');
 var crypto = require('crypto');
-var nodemailer = require('nodemailer');
 var request = require('request');
 
-var sendgrid  = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
+var sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
 
 var utils = require('./utils');
+var emails = require('./emails');
 
 module.exports = function (passport, voxbone) {
 
   router.get('/signup', function (req, res) {
-    res.redirect('/account/signup?email=' + req.query.email);
+    var email = req.query.email ? req.query.email : "";
+    res.redirect('/account/signup?email=' + email);
   });
 
   router.get('/ping', function (req, res, next) {
@@ -140,7 +141,11 @@ module.exports = function (passport, voxbone) {
         console.log("Entered incorrect authentication, response should be: 401");
         console.log(result);
         return res.status(401).json(result);
-      } else{
+      } else if (!account.verified) {
+        result = { message: "Unverified account:", email: formData.email };
+        console.log(result);
+        return res.status(403).json(result);
+      } else {
         result = { message: "", errors: null, redirect: '/widget', email: formData.email };
         req.logIn(account, function (err) {
           return res.status(200).json(result);
@@ -183,57 +188,7 @@ module.exports = function (passport, voxbone) {
   });
 
   router.post('/forgot', function (req, res, next) {
-    async.waterfall([
-      function (done) {
-        crypto.randomBytes(20, function (err, buf) {
-          var token = buf.toString('hex');
-          done(err, token);
-        });
-      },
-      function (token, done) {
-        Account.findOne({ email: new RegExp(req.body.email, "i") }, function (err, account) {
-          if (!account) {
-            var result = { message: "No account with that email address exists.", errors: err };
-            return res.status(404).json(result);
-          }
-
-          account.resetPasswordToken = token;
-          account.resetPasswordExpires = Date.now() + 3600000; // 1 hour
-
-          account.save(function (err) {
-            done(err, token, account);
-          });
-        });
-      },
-      function (token, account, done) {
-        var email = new sendgrid.Email({to: account.email});
-        email.from = process.env.SENDGRID_FROM;
-        email.replyto = process.env.SENDGRID_FROM;
-        email.subject = 'Voxbone Widget Generator - Password Reset';
-
-        email.html = ' ';
-
-        email.addFilter('templates', 'enable', 1);
-        email.addFilter('templates', 'template_id', process.env.SENDGRID_PASSWORD_RESET_TEMPLATE);
-
-        email.addSubstitution ('-button_link-', 'https://' + req.headers.host + '/reset/' + token);
-
-        sendgrid.send(email, function (err, json) {
-          var result = {
-            message: [
-              "An e-mail has been sent to", account.email,
-              "with further instructions. Please check your inbox."
-            ].join(" "),
-            errors: null
-          };
-          res.status(200).json(result);
-        });
-      }
-    ], function (err) {
-      if (err) return next(err);
-      var result = { message: "There was an error", errors: err };
-      res.status(500).json(result);
-    });
+    emails.sendPasswordReset(req, res, req.body.email, 'forgot');
   });
 
   router.get('/reset/:token', function (req, res) {
@@ -245,7 +200,7 @@ module.exports = function (passport, voxbone) {
       res.render('reset', {
         title: title,
         the_account: req.user,
-        token:req.params.token,
+        token: req.params.token,
         email: req.query.email
       });
     });

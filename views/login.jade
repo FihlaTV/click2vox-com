@@ -39,7 +39,11 @@ block content
             .then(function successCallback(response){
               $window.location.href = response.data.redirect;
             }, function errorCallback(response){
-              $("#alert").removeClass('hidden');
+              $(".alert").addClass('hidden');
+              if (response && response.status == 403)
+                $("#alert-unverified").removeClass('hidden');
+              else
+                $("#alert-user-pass").removeClass('hidden');
             });
         }
       }]);
@@ -54,7 +58,16 @@ block content
 
             h1 Login
 
-            #alert.alert.alert-danger.hidden Incorrect Email or Password, try again.
+            if message
+              if err
+                #tokenError.alert.alert-danger
+                  div= message
+              else
+                #tokenSuccess.alert.alert-success
+                  div= message
+
+            #alert-user-pass.alert.alert-danger.hidden Incorrect Email or Password, try again.
+            #alert-unverified.alert.alert-danger.hidden Unverified account. Please check your inbox.
 
             #form_container
               .formWrap
