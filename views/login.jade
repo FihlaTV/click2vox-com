@@ -58,7 +58,7 @@ block content
 
             h1 Login
 
-            if message.trim
+            if message && message.trim
               if error
                 #tokenError.alert.alert-danger
                   div= message
