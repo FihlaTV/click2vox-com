@@ -1,15 +1,19 @@
 extends ../layout
 
 block content
+  script.
+    require([
+      'jquery',
+      'bootstrap'
+    ])
   .main.buttonList
     .header
       .container
         h1 Click2Vox Buttons
-        p This is a free account. You will only be able to create buttons with the same SIP. #[a(href="#") Upgrade Now]
+        p This is a free account. You will only be able to create buttons with the same SIP. #[a(href="#" data-toggle="modal" data-target="#myModal") Upgrade Now]
 
         .actions-wrap
-          #[a.btn.btn-purple Add SIP] #[a.btn.btn-success Add New Button]
-
+          #[a.btn.btn-purple(data-toggle="modal" data-target="#myModal") Add SIP URI] #[a.btn.btn-success Add New Button]
 
     .body
       .container
@@ -30,4 +34,18 @@ block content
                     td #{widget.button_label || defaultBtnLabel}
                     td.text-right
                       #[a.btn.btn-sm.btn-primary(href="#") Copy Code] #[a.btn.btn-sm.btn-info(href="/widget/#{widget._id}/edit") View / Edit]
-
+  .modal.fade.add-new-modal#myModal(tabindex="-1" role="dialog" aria-labelledby="myModalLabel")
+    .modal-dialog(role="document")
+      .modal-content
+        .modal-header
+          button.close(type="button" class="" data-dismiss="modal" aria-label="Close")
+            span(aria-hidden="true")&times;
+          h4.modal-title#myModalLabel
+            i.glyphicon.glyphicon-exclamation-sign
+            span  Add New SIP URI
+        .modal-body
+          p#[strong Coming Soon.] To add a new SIP URI you will need to upgrade to a paid account. We are currently working on these feature. Please contact us directly if you need this sooner.
+        .modal-footer
+          button.btn.btn-purple(type="button" data-dismiss="modal") Ok
+          a(href="mailto:info@voxbone.com?subject=%5BCLICK2VOX%5D%20About%20Upgrading")
+            button.btn.btn-success(type="button") Contact me about upgrading

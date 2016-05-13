@@ -22,8 +22,7 @@ var emails = require('./emails');
 module.exports = function (passport, voxbone) {
 
   router.get('/signup', function (req, res) {
-    var email = req.query.email ? req.query.email : "";
-    res.redirect('/account/signup?email=' + email);
+    res.redirect('/account/signup?email=' + (req.query.email || ""));
   });
 
   router.get('/ping', function (req, res, next) {

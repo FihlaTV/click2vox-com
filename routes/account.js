@@ -60,6 +60,7 @@ router.get('/widgets', utils.isLoggedIn, function (req, res) {
     .sort({updated_at: 'desc'})
     .exec(function (err, widgets) {
       res.render('account/widget-list', {
+        title: title,
         widgets: widgets,
         defaultBtnLabel: defaultBtnLabel
       });
