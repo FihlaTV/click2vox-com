@@ -154,17 +154,27 @@ router.get('/verify/:token', function (req, res, next) {
   req.logout();
   req.session.destroy();
   Account.findOne({ verifyAccountToken: req.params.token, verifyAccountExpires: { $gt: Date.now() } }, function (err, account) {
-    if (!account) {
-      return res.render('login', {
-        title: title, message: "Verification token is invalid or has expired.", errors: err });
-    }
-
-    account.verified = true;
-    account.save(function (err) {
-      return res.render('login', {
-        title: title, message: "Verification succedeed. Please login", errors: null });
-    });
+    if (account) {
+      if (account.verified) {
+        renderLogin(res, "Account verification was already done. Please login", null);
+      } else {
+        account.verified = true;
+        account.save(function (err) {
+          renderLogin(res, "Account verification succedeed. Please login", null);
+        });
+      };
+    } else {
+      renderLogin(res, "Account verification token is invalid or has expired.", "TokenInvalidOrExpired");
+    };
   });
 });
+
+function renderLogin(res, message, error) {
+  return res.render('login', {
+    title: title,
+    error: error,
+    message: message
+  });
+};
 
 module.exports = router;
