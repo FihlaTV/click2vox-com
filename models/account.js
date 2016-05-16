@@ -12,6 +12,7 @@ var accountSchema = new Schema({
   temporary: { type: Boolean, default: true },
   verified: { type: Boolean, default: false },
   admin: { type: Boolean, default: false },
+  paid: { type: Boolean, default: false },
   did: Number,
   didId: Number,
   forgotten_pasword: String,
@@ -22,7 +23,8 @@ var accountSchema = new Schema({
   password: String,
   created_at: Date,
   updated_at: Date,
-  company: String
+  company: String,
+  sip_uris: [String]
 });
 
 accountSchema.pre('save', function (next) {

@@ -56,12 +56,23 @@ router.get('/widgets', utils.isLoggedIn, function (req, res) {
   var defaultBtnLabel = process.env.DEFAULT_BUTTON_LABEL || 'Call Sales';
 
   Widget
-    .find({_account: req.user._id})
-    .sort({updated_at: 'desc'})
-    .exec(function (err, widgets) {
+    .aggregate([
+      {$match: {_account: req.user._id}},
+      {$sort: {updated_at: -1}},
+      {$group: {
+        _id: '$sip_uri',
+        widgets: {$push: {
+          button_label: "$button_label",
+          configuration_name: "$configuration_name",
+          sip_uri: '$sip_uri',
+          _id: '$_id'
+        }}
+      }},
+      {$sort: {_id: 1}},
+    ], function (err, result) {
       res.render('account/widget-list', {
         title: title,
-        widgets: widgets,
+        widgetsData: result,
         defaultBtnLabel: defaultBtnLabel
       });
     });
@@ -163,10 +174,10 @@ router.get('/verify/:token', function (req, res, next) {
         account.save(function (err) {
           renderLogin(res, "Account verification succedeed. Please login", null);
         });
-      };
+      }
     } else {
       renderLogin(res, "Account verification token is invalid or has expired.", "TokenInvalidOrExpired");
-    };
+    }
   });
 });
 
@@ -176,6 +187,6 @@ function renderLogin(res, message, error) {
     error: error,
     message: message
   });
-};
+}
 
 module.exports = router;

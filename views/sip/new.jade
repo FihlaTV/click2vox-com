@@ -1,0 +1,53 @@
+extends ../layout
+
+block extra_head
+  script.
+    require([
+      'angular',
+      'jquery',
+      'controllers/sip.add',
+      'directives/autofocus',
+      'directives/check.allowed.sip'
+    ],
+    function (
+      angular, $,
+      AddSIPController,
+      autoFocus,
+      checkAllowedSip) {
+
+      angular.module('voxboneApp', [])
+        .directive('autoFocus', autoFocus)
+        .directive('checkAllowedSip', checkAllowedSip)
+        .controller('AddSIPController', AddSIPController);
+
+      angular.bootstrap(document, ['voxboneApp']);
+    });
+
+block content
+  .main.createButton.addSip
+    .header
+      .container
+        h1 Add a new SIP
+        p Add your free SIP URI to create a webRTC Button. Your account allows you to #[b Create one SIP URI. You can always return to create a SIP URI and use a sample SIP for now]
+
+    .body(ng-controller='AddSIPController' ng-init="init()")
+      .container
+        .row
+          .col-xs-6
+            section
+              span.title Add a new SIP
+              form(name="sip_form" novalidate)
+                .boxPanel
+                  .form-group
+                    label SIP URI
+                      span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI") ?
+                    input.form-control(type="text", name="sip_uri", ng-model="sip.uri" ng-pattern="/^[^@]+@[^@]+$/" check-allowed-sip auto-focus required)
+                    div(style='color: green')
+                      div.ng-cloak(ng-show="onSubmitting") {{successMessage}}
+
+                    .error-label
+                      div.ng-cloak(ng-show="sip_form.sip_uri.$error.notallowed") SIP URI not allowed
+                      div.ng-cloak(ng-show="errorMessage") {{errorMessage}}
+
+                  .form-group
+                    button.btn.btn-default.save-sip(ng-disabled="sip_form.$invalid || onSubmitting" ng-click="saveSipURI(sip_form)" data-loading-text="Loading..." name="submitBtn") {{submitText}}

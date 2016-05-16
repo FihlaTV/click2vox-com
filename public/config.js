@@ -59,8 +59,7 @@ require.config({
       '/lib/raty/lib/jquery.raty'
     ],
     widget: '/javascripts/widget',
-    requirejs: '/lib/requirejs/require',
-    // editWidget: '/javascripts/controllers/editWidget'
+    requirejs: '/lib/requirejs/require'
   },
   packages: [
     "controllers",

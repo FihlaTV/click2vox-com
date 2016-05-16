@@ -333,130 +333,28 @@ module.exports = function (passport, voxbone) {
     });
   });
 
-  // TODO: ask if we should move these below to utils module
-  function getApiCredentials() {
-    return {
-      'user' : process.env.VOXBONE_API_USERNAME,
-      'pass' : process.env.VOXBONE_API_PASSWORD
-    };
-  }
-
-  function getJsonHeaders() {
-    return {
-      'Content-type' : 'application/json',
-      'Accept'       : 'application/json'
-    };
-  }
-
   router.post('/sip_provisioning', function (req, res, next) {
-    async.waterfall([
-      function (done) {
-        //step 1 Find the account
-        Account.findOne({ email: new RegExp(req.user.email, "i") }, function (err, the_account) {
-          done(err, the_account);
-        });
-      },
+    Account
+      .findOne({_id: req.user._id})
+      .exec(function (err, account) {
 
-      function (account, done) {
-        //step 1a Check if SIP is already linked
-        //if so, return the corresponding VoiceUriId
-
-        var url = "https://api.voxbone.com/ws-voxbone/services/rest/configuration/voiceuri?pageNumber=0&pageSize=1000";
-
-        request.get(url,
-          { auth: getApiCredentials(), headers: getJsonHeaders() },
-          function (err, response, body) {
-
-            if (err) return console.log('Error:', err);
-
-            var response_body = JSON.parse(body);
-            var voice_uris = response_body.voiceUris;
-            var voice_uri = voice_uris.filter(function (vu) {
-              return vu.uri == req.body.sip_uri;
+        if (account) {
+          utils.provisionSIP(
+            account, req.body.sip_uri,
+            function (err, result) {
+              result = { errors: null };
+              if (err) {
+                console.log('An error ocurred: ', err);
+                result.errors = err;
+                return res.status(result.errors.httpStatusCode || 500).json(result);
+              } else {
+                result.message = 'Success';
+                return res.status(200).json(result);
+              }
             });
-
-            var voice_uri_id;
-            if (voice_uri[0])
-              voice_uri_id = voice_uri[0].voiceUriId;
-
-            done(err, account, voice_uri_id);
-          }
-        );
-      },
-
-      function (account, voice_uri_id, done) {
-        // Step 1b
-        var post_data = { "didIds" : [ account.didId ], "voiceUriId" : voice_uri_id };
-
-        // If the voice uri exists, directly link it
-        if (voice_uri_id) {
-          done(null, post_data);
-          return;
-        }
-
-        // If not, create the voice uri
-        var put_data = {
-          "voiceUri" : {
-            "voiceUriId"       : null,
-            "backupUriId"      : null,
-            "voiceUriProtocol" : "SIP",
-            "uri"              : req.body.sip_uri,
-            "description"      : "Voice URI for: " + req.user.email + " from promotional widget generator."
-          }
-        };
-
-        console.log(put_data);
-        var url = "https://api.voxbone.com/ws-voxbone/services/rest/configuration/voiceuri";
-        request.put(url,
-          {
-            auth: getApiCredentials(),
-            headers: getJsonHeaders(),
-            body: JSON.stringify(put_data)
-          },
-          function (err, response, body) {
-            if (err) {
-              if (err.code === 'ETIMEDOUT' || err.connect === true)
-                done({ httpStatusCode: 503, comeback_errors: "Timeout", message: "Timeout - Could not create the voice uri for SIP URI: " + req.body.sip_uri + " and user: " + req.user.email + " . Probably already exists. View previous logs for more details." });
-              else
-                console.log('Error:', err);
-
-              return;
-            }
-
-            var response_body = JSON.parse(body);
-            if (response_body['httpStatusCode'])
-              done({ httpStatusCode: response_body['httpStatusCode'], comeback_errors: response_body.errors[0], message: "Could not create the voice uri for SIP URI: " + req.body.sip_uri + " and user: " + req.user.email + ". Probably already exists. View previous logs for more details." });
-            else
-              done(err, post_data);
-          }
-        );
-      },
-
-      function (post_data, done) {
-        //step 2 link the voice uri id
-        var url = "https://api.voxbone.com/ws-voxbone/services/rest/configuration/configuration";
-        request.post(url,
-          { auth: getApiCredentials(),
-            headers: getJsonHeaders(),
-            body: JSON.stringify(post_data)
-          },
-          function (err, response, body) {
-            done(err);
-          }
-        );
-      }
-      ],
-      function (err, result) {
-        result = { errors: null };
-        if (err) {
-          console.log("An error ocurred: ");
-          console.log(err);
-          result.errors = err;
-          return res.status(result.errors.httpStatusCode || 500).json(result);
         } else {
-          // console.log(result);
-          result.message = "Success";
-          return res.status(200).json(result);
+          var result = { message: 'Account not found', errors: null };
+          return res.status(404).json(result);
         }
       }
     );
