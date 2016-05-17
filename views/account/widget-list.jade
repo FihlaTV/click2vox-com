@@ -63,6 +63,8 @@ block content
         .modal-body
           p#[strong Coming Soon.] To add a new SIP URI you will need to upgrade to a paid account. We are currently working on these feature. Please contact us directly if you need this sooner.
         .modal-footer
-          button.btn.btn-purple(type="button" data-dismiss="modal") Ok
+          div
+            include call-button.html
+          //- button.btn.btn-purple(type="button" data-dismiss="modal") Click to Call Voxbone
           a(href="mailto:info@voxbone.com?subject=%5BCLICK2VOX%5D%20About%20Upgrading")
-            button.btn.btn-success(type="button") Contact me about upgrading
+            button.btn.btn-success(type="button") Click to Email Voxbone
