@@ -1,5 +1,11 @@
 // Here it goes only utility methods
 module.exports = {
+
+  defaultSipUris: function () {
+    var sip_uris = process.env.DEFAULT_SIP_URIS;
+    return sip_uris.split(',');
+  },
+
   apiCredentials: {
     'user': process.env.VOXBONE_API_USERNAME,
     'pass': process.env.VOXBONE_API_PASSWORD

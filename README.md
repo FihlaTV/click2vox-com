@@ -34,6 +34,7 @@ Create a click to call button from a widget generator
 * `DEFAULT_BUTTON_LABEL` The text to be used by default (Call Sales) when creating buttons
 * `GOOGLE_RECAPTCHA_SITE_KEY`
 * `GOOGLE_RECAPTCHA_SECRET_KEY`
+* `DEFAULT_SIP_URIS` (Array flavoured i.e. 'echo@ivrs,digits@ivrs,test@test.voxbone.com')
 
 ### To Run locally
 
