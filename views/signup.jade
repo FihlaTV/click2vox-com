@@ -138,7 +138,7 @@ block content
                     label.control-label Name
                     input.form-control(type="text" id="uname" name="uname" ng-model="account.uname" required)
                     .error-label(ng-show="create_account.$submitted || create_account.uname.$touched")
-                      div.ng-hide(ng-show="create_account.uname.$error.required") Please enter your name
+                      .ng-hide(ng-show="create_account.uname.$error.required") Please enter your name
                   .form-group
                     label.control-label Company
                     input.form-control(type="text" id="ucompany" name="ucompany" ng-model="account.ucompany")
@@ -152,16 +152,22 @@ block content
                       .progress-bar(role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: {{strength_percent}}%" class="{{strength_class}}")
                         span Strength: {{strength}}!
                     .error-label(ng-show="create_account.$submitted || create_account.upassword.$touched")
-                      div.ng-hide(ng-show="create_account.upassword.$error.required") Password is required
-                      div.ng-hide(ng-show="create_account.upassword.$error.minlength") Password must be at least 8 characters in length
+                      .ng-hide(ng-show="create_account.upassword.$error.required") Password is required
+                      .ng-hide(ng-show="create_account.upassword.$error.minlength") Password must be at least 8 characters in length
                   .form-group
                     label.control-label Confirm Password
                     input.form-control(type="password" id="confirmation" name="confirmation" ng-model="account.confirmation" required pw-check="upassword")
                     .error-label(ng-show="create_account.$submitted || create_account.confirmation.$touched")
-                      div.ng-hide(ng-show="create_account.confirmation.$error.pwmatch") Password confirmation does not match
+                      .ng-hide(ng-show="create_account.confirmation.$error.pwmatch") Password confirmation does not match
 
                   .form-group.text-center
                     .captcha(ng-model="account.recaptcha" vc-recaptcha key='"#{process.env.GOOGLE_RECAPTCHA_SITE_KEY}"')
+
+                  .form-group
+                    label.control-label
+                      span You must #[a(href="#{process.env.APP_URL}/docs/click2vox-aup.docx") Accept our  User Policy]
+                      span &nbsp;
+                      input(type="checkbox" id="uaup" name="uaup" ng-model="account.uaup" required)
 
                   button.btn.btn-default#create(ng-disabled="create_account.$invalid" ng-click="account.processForm()") Create Account
                   br
