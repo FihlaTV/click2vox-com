@@ -1,7 +1,6 @@
 define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
 
-  var WidgetEditController = function ($scope, $http, $window, $cookies) {
-    $scope.sipUriLinked = false;
+  var WidgetAddController = function ($scope, $http, $window, $cookies) {
     $scope.preview_webrtc_compatible = true;
 
     $scope.onClickTab = function (is_preview_webrtc_compatible) {
@@ -13,7 +12,7 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
       dial_pad: true,
       button_style: 'style-a',
       background_style: 'dark',
-      widget_code: 'Select from the SIP URI field the Echo Service (echo@ivrs), Digits Service (digits@ivrs) or enter your SIP URI to Generate the code snippet',
+      widget_code: 'Select from the SIP URI field the Echo Service (echo@ivrs), Digits Service (digits@ivrs) or one of your SIP URIs to create the button',
       show_text_html_value: '<h3>This is a placeholder for your message</h3>',
       incompatible_browser_configuration: 'hide_widget'
     };
@@ -92,11 +91,6 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
     };
 
     $scope.reset = function (form) {
-      if (form) {
-        form.$setPristine();
-        form.$setUntouched();
-      }
-
       $scope.widget = angular.copy($scope.master);
     };
 
@@ -110,17 +104,6 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
         voxbone.WebRTC.init(data);
       });
     };
-
-    // watch for initial widget data
-    $scope.$watch('initData', function () {
-      $scope.widget = angular.extend(
-        {}, $scope.widget, $scope.master,
-        $scope.initData['widget']
-      );
-
-      $scope.widget.widget_code = $scope.initData['widgetCode'];
-      $scope.did = $scope.initData['did'];
-    });
 
     $scope.getVoxrtcConfig = function (callback) {
       $.get('/token_config', function (data) {
@@ -193,10 +176,10 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
     };
 
     $scope.makeCall = function (did) {
-      if ($scope.isInCall()) return;
+      if (this.isInCall()) return;
 
-      if (!$scope.preview_webrtc_compatible && ($scope.widget.incompatible_browser_configuration == 'link_button_to_a_page')) {
-        $window.open($scope.widget.link_button_to_a_page_value, '_blank');
+      if (!this.preview_webrtc_compatible && (this.widget.incompatible_browser_configuration == 'link_button_to_a_page')) {
+        $window.open(this.widget.link_button_to_a_page_value, '_blank');
         return;
       }
 
@@ -240,9 +223,8 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
         $scope.widget.button_style = theme;
     };
 
-    $scope.generateOutputCode = function () {
-      if (!$scope.widget.sip_uri) return;
-      console.log("--> Generating Output Code...");
+    $scope.saveConfiguration = function () {
+      console.log("--> Saving configuration...");
 
       var caller_id = $scope.widget.caller_id;
       if (caller_id)
@@ -261,7 +243,7 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
 
       var req = {
         method: 'POST',
-        url: '/widget/' + $scope.widget._id + '/edit',
+        url: '/widget/new',
         headers: {
           'Content-Type': 'application/json; charset=utf-8'
         },
@@ -270,75 +252,16 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
 
       $http(req)
         .then(function successCallback(response) {
-            $('#generate-output-code')[0].text = "Regenerate Code";
-            $scope.widget.showWidgetCode = true;
-            $scope.widget.widget_code = response.data.widget_code;
-
-            $('#alert-success')
-              .css('display', 'block')
-              .html('Your configuration has been saved successfully');
-            $window.scrollTo(0, 0);
+            $window.location.href = response.data.redirect;
           },
           function errorCallback() {
             $scope.widget.showWidgetCode = false;
             console.log("entered error callback");
           });
     };
-
-    $scope.conditional_sip_provisioning = function (form) {
-      if (!$scope.sipUriLinked)
-        $scope.sip_provisioning(form);
-    };
-
-    $scope.sip_provisioning = function (form) {
-      $scope.sipUriLinked = false;
-      $scope.widget.showWidgetCode = false;
-      $scope.widget.widget_code = 'Generating code snippet...';
-      $scope.widget_form.sip_provisioning = true;
-      $scope.widget_form.sip_provisioned = false;
-      $scope.widget_form.cannot_validate_sip_uri = '';
-
-      if (form.$valid) {
-        var req = {
-          method: 'POST',
-          url: '/sip_provisioning',
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8'
-          },
-          data: {
-            sip_uri: $scope.widget.sip_uri
-          }
-        };
-
-        $http(req)
-          .then(function successCallback(response) {
-            $scope.widget.showWidgetCode = true;
-            $scope.sipUriLinked = true;
-            $scope.widget_form.cannot_validate_sip_uri = '';
-            $scope.widget_form.sip_provisioning = false;
-            $scope.widget_form.sip_provisioned = true;
-          }, function errorCallback(response) {
-            console.log("Error: ");
-            console.log(response.data);
-            $scope.widget.widget_code = 'Error generating widget code snippet. Please check it.';
-
-            if (response.data && response.data.errors && response.data.errors.comeback_errors && response.data.errors.comeback_errors.apiErrorMessage)
-              $scope.widget_form.cannot_validate_sip_uri = response.data.errors.comeback_errors.apiErrorMessage;
-            else
-              $scope.widget_form.cannot_validate_sip_uri = "Unexpected error linking your SIP URI. Please try again. ";
-
-            $scope.widget_form.sip_provisioning = false;
-            $scope.widget_form.sip_provisioned = false;
-          });
-      } else {
-        $scope.widget_form.sip_provisioning = false;
-        $scope.widget_form.sip_provisioned = false;
-        $scope.widget_form.sip_uri.$error.pattern = true;
-      }
-    };
   };
 
-  WidgetEditController.$inject = ['$scope', '$http', '$window'];
+  WidgetAddController.$inject = ['$scope', '$http', '$window'];
 
-  return WidgetEditController;
+  return WidgetAddController;
 });

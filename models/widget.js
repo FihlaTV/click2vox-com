@@ -26,6 +26,7 @@ var widgetSchema = new Schema({
   },
   show_text_html: String,
   link_button_to_a_page: String,
+  incompatible_browser_configuration: String,
   created_at: Date,
   updated_at: Date
 });

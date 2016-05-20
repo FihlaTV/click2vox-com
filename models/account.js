@@ -6,13 +6,34 @@ var Did = require('./dids');
 const ADMIN_DOMAINS = ['agilityfeat.com', 'voxbone.com'];
 
 var accountSchema = new Schema({
-  email: { type: String, required: true, index: { unique: true } },
+  email: {
+    type: String,
+    required: true,
+    index: {
+      unique: true
+    }
+  },
   temporary_password: String,
-  first_name: { type: String, required: true },
-  temporary: { type: Boolean, default: true },
-  verified: { type: Boolean, default: false },
-  admin: { type: Boolean, default: false },
-  paid: { type: Boolean, default: false },
+  first_name: {
+    type: String,
+    required: true
+  },
+  temporary: {
+    type: Boolean,
+    default: true
+  },
+  verified: {
+    type: Boolean,
+    default: false
+  },
+  admin: {
+    type: Boolean,
+    default: false
+  },
+  paid: {
+    type: Boolean,
+    default: false
+  },
   did: Number,
   didId: Number,
   forgotten_pasword: String,
@@ -35,8 +56,12 @@ accountSchema.pre('save', function (next) {
   if (!self.created_at)
     self.created_at = now;
 
-  Did.findOne({ assigned: {$ne: true} }, function (err, foundDid) {
-    if(err) {
+  Did.findOne({
+    assigned: {
+      $ne: true
+    }
+  }, function (err, foundDid) {
+    if (err) {
       next(err);
     } else if (!self.did || !self.didId) {
       if (foundDid) {
@@ -65,6 +90,26 @@ accountSchema.methods.validPassword = function (password) {
 accountSchema.methods.isAdmin = function () {
   var domain = this.email.replace(/.*@/, "");
   return ADMIN_DOMAINS.indexOf(domain) > -1;
+};
+
+accountSchema.methods.getSipURIs = function () {
+  var Widget = require('./widget');
+  var defaultSips = require('../routes/utils').defaultSipUris();
+  var account = this;
+
+  // if user has no sip_uris, check for old version generated widgets
+  // and get the sips that are store on those widgets
+  if (this.sip_uris.length === 0) {
+    Widget
+      .distinct('sip_uri', {_account: this._id})
+      .exec(function (err, sips) {
+        var diff = sips.filter(function (x) {return defaultSips.indexOf(x) < 0; });
+        account.sip_uris = diff;
+        account.save();
+      });
+  }
+
+  return defaultSips.concat(this.sip_uris);
 };
 
 var Account = mongoose.model('Account', accountSchema);

@@ -20,7 +20,7 @@ require.config({
       }
     },
     'angular-sanitize': {
-      deps: 'angular', init: function () {
+      deps: ['angular'], init: function () {
         return 'ngSanitize';
       }
     },

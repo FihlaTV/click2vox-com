@@ -10,9 +10,36 @@ var Account = require('../models/account');
 var Widget = require('../models/widget');
 var utils = require('./utils');
 
-router.get('/:id/edit', utils.isLoggedIn, function (req, res, next) {
-  var defaultBtnLabel = process.env.DEFAULT_BUTTON_LABEL || 'Call Sales';
+router.get('/new', utils.isLoggedIn, function (req, res, next) {
+  res.render('widget/new', {
+    defaultBtnLabel: utils.defaultBtnLabel,
+    userSipUris: req.user.getSipURIs()
+  });
+});
 
+router.post('/new', utils.isLoggedIn, function (req, res, next) {
+  var params = req.parameters;
+  var widgetData = params
+    .permit(
+      'configuration_name', 'button_label', 'button_style',
+      'background_style', 'sip_uri', 'caller_id', 'context',
+      'dial_pad', 'send_digits', 'hide_widget', 'updated_at',
+      'link_button_to_a_page', 'show_text_html',
+      'incompatible_browser_configuration'
+    );
+
+  var result = { message: "", errors: null };
+  widgetData['_account'] = req.user._id;
+
+  Widget.create(widgetData, function (err, widget) {
+    if (err) throw err;
+    result['redirect'] = '/widget/' + widget._id + '/edit';
+    res.status(200).json(result);
+  });
+});
+
+
+router.get('/:id/edit', utils.isLoggedIn, function (req, res, next) {
   async.parallel({
     user: function (callback) {
       Account
@@ -28,10 +55,11 @@ router.get('/:id/edit', utils.isLoggedIn, function (req, res, next) {
         .exec(callback);
     }
   },
-  function (err, results) {
-    if (!results.widget) return utils.objectNotFound(res, req, next);
-    results['defaultBtnLabel'] = defaultBtnLabel;
-    res.render('widget/edit', results);
+  function (err, result) {
+    if (!result.widget) return utils.objectNotFound(res, req, next);
+    result['defaultBtnLabel'] = utils.defaultBtnLabel;
+    result['widget_code'] = result.widget.generateHtmlCode();
+    res.render('widget/edit', result);
   });
 });
 
@@ -43,7 +71,8 @@ router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
       'configuration_name', 'button_label', 'button_style',
       'background_style', 'sip_uri', 'caller_id', 'context',
       'dial_pad', 'send_digits', 'hide_widget', 'updated_at',
-      'link_button_to_a_page', 'show_text_html'
+      'link_button_to_a_page', 'show_text_html',
+      'incompatible_browser_configuration'
     );
 
   console.log(updateData);

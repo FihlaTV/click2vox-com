@@ -53,8 +53,6 @@ router.post('/edit', utils.isLoggedIn, function (req, res) {
 // ---- edit profile ----
 
 router.get('/widgets', utils.isLoggedIn, function (req, res) {
-  var defaultBtnLabel = process.env.DEFAULT_BUTTON_LABEL || 'Call Sales';
-
   Widget
     .aggregate([
       {$match: {_account: req.user._id}},
@@ -73,7 +71,7 @@ router.get('/widgets', utils.isLoggedIn, function (req, res) {
       res.render('account/widget-list', {
         title: title,
         widgetsData: result,
-        defaultBtnLabel: defaultBtnLabel
+        defaultBtnLabel: utils.defaultBtnLabel
       });
     });
 });
