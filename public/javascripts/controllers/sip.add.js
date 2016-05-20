@@ -6,7 +6,8 @@ define(['jquery', 'bootstrap'], function (jQuery) {
       this.onSubmitting = false;
       this.errorMessage = '';
       this.successMessage = '';
-      this.submitText = 'Add SIP';
+      this.submitText = 'Add your new SIP';
+      this.skipText = 'Skip for now';
     };
 
     $scope.init = function () {
@@ -17,6 +18,10 @@ define(['jquery', 'bootstrap'], function (jQuery) {
     $scope.wirePlugins = function () {
       jQuery('[data-toggle="tooltip"]').tooltip();
     };
+
+    $scope.skipURI = function (redirect_to) {
+      $window.location.href = redirect_to;
+    }
 
     $scope.saveSipURI = function (form) {
       this.reset();

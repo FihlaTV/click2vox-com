@@ -50,4 +50,6 @@ block content
                       div.ng-cloak(ng-show="errorMessage") {{errorMessage}}
 
                   .form-group
-                    button.btn.btn-default.save-sip(ng-disabled="sip_form.$invalid || onSubmitting" ng-click="saveSipURI(sip_form)" data-loading-text="Loading..." name="submitBtn") {{submitText}}
+                    button.btn.btn-purple.save-sip(ng-disabled="sip_form.$invalid || onSubmitting" ng-click="saveSipURI(sip_form)" data-loading-text="Loading..." name="submitBtn") {{submitText}}
+                    button.btn.btn-success.pull-right.skip-sip(ng-click="skipURI('#{process.env.APP_URL}/widget/new')"
+                    name="submitBtn") {{skipText}}
