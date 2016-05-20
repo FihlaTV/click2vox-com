@@ -61,6 +61,7 @@ router.get('/widgets', utils.isLoggedIn, function (req, res) {
         _id: '$sip_uri',
         widgets: {$push: {
           button_label: "$button_label",
+          button_style: "$button_style",
           configuration_name: "$configuration_name",
           sip_uri: '$sip_uri',
           _id: '$_id'

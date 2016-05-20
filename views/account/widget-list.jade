@@ -39,15 +39,15 @@ block content
                   thead
                     tr
                       td(width="25%") Configuration Name
-                      td(width="25%") Button Label
-                      td(width="30%") Sip URI
+                      td.text-center(width="55%") Button Preview
                       td.text-right Actions
                   tbody
                     - each widget in group.widgets
                       tr
                         td #{widget.configuration_name}
-                        td #{widget.button_label || defaultBtnLabel}
-                        td #{widget.sip_uri}
+                        td.text-center
+                          button(class="btn-#{widget.button_style}")
+                            span #{widget.button_label || defaultBtnLabel}
                         td.text-right
                           #[a.btn.btn-sm.btn-primary(href="#") Copy Code] #[a.btn.btn-sm.btn-info(href="/widget/#{widget._id}/edit") View / Edit]
 
