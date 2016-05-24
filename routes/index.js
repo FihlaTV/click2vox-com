@@ -183,7 +183,7 @@ module.exports = function (passport, voxbone) {
   });
 
   router.get('/', utils.redirectToWidgetIfLoggedIn, function (req, res, next) {
-    res.render('login', { title: title, email: req.query.email});
+    res.render('home', { title: title, email: req.query.email});
   });
 
   router.get('/forgot', function (req, res, next) {
