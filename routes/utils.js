@@ -26,7 +26,7 @@ module.exports = {
 
   redirectToWidgetIfLoggedIn: function (req, res, next) {
     if (req.isAuthenticated())
-      return res.redirect('/widget');
+      return res.redirect('/account/widgets');
     return next();
   },
 

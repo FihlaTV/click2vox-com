@@ -151,7 +151,7 @@ router.post('/signup', recaptcha.middleware.verify, function (req, res, next) {
 
       if (result.verified) {
         req.logIn(theAccount, function (err) {
-          result.redirect = "/widget";
+          result.redirect = "/sip/new";
           res.status(200).json(result);
         });
       } else {

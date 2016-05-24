@@ -145,7 +145,12 @@ module.exports = function (passport, voxbone) {
         console.log(result);
         return res.status(403).json(result);
       } else {
-        result = { message: "", errors: null, redirect: '/widget', email: formData.email };
+        result = { message: "", errors: null, redirect: '/account/widgets', email: formData.email };
+
+        if (utils.defaultSipUris().length === account.getSipURIs().length) {
+          result['redirect'] = '/sip/new';
+        }
+
         req.logIn(account, function (err) {
           return res.status(200).json(result);
         });
@@ -253,7 +258,7 @@ module.exports = function (passport, voxbone) {
         result = { message: "An error has ocurred.", errors: err };
         return res.status(400).json(result);
       }else{
-        result = { message: "Your password has been changed.", errors: null, redirect: '/widget' };
+        result = { message: "Your password has been changed.", errors: null, redirect: '/account/widgets' };
         return res.status(200).json(result);
       }
     });

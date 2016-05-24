@@ -24,11 +24,20 @@ block extra_head
     });
 
 block content
-  .main.createButton.addSip
+  .main.createButton.addSip(class=showWizard ? 'wizard' : '')
     .header
       .container
         h1 Add a new SIP
         p Add your free SIP URI to create a webRTC Button. Your account allows you to #[b Create one SIP URI. You can always return to create a SIP URI and use a sample SIP for now]
+
+        .row
+          if showWizard
+            .col-xs-6.col-xs-offset-3
+              .sip-steps
+                .step.active
+                  span Add Sip
+                .step.right
+                  span Add WebRTC Call Button
 
     .body(ng-controller='AddSIPController' ng-init="init()")
       .container

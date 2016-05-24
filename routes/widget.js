@@ -11,10 +11,15 @@ var Widget = require('../models/widget');
 var utils = require('./utils');
 
 router.get('/new', utils.isLoggedIn, function (req, res, next) {
-  res.render('widget/new', {
-    defaultBtnLabel: utils.defaultBtnLabel,
-    userSipUris: req.user.getSipURIs()
-  });
+  Widget
+    .find({_account: req.user._id})
+    .exec(function (err, widgets) {
+      res.render('widget/new', {
+        defaultBtnLabel: utils.defaultBtnLabel,
+        userSipUris: req.user.getSipURIs(),
+        showWizard: (widgets.length === 0)
+      });
+    });
 });
 
 router.post('/new', utils.isLoggedIn, function (req, res, next) {

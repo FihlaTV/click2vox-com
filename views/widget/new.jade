@@ -33,7 +33,7 @@ block content
 
   .div#control
 
-  .main.createButton
+  .main.createButton(class=showWizard ? 'wizard' : '')
     .header
       .container
         .row
@@ -42,6 +42,14 @@ block content
             p #[b Questions?] #[a(href="https://docs.google.com/document/d/1L6swwK_rVu_2XqSNMzmMRxBxL3YL50YTzkF6NaqeLqU/edit?usp=sharing" target="_blank") See our Frequently Asked Questions document.]
 
             #alert-success.alert.alert-success(style="display: none;")
+
+          if showWizard
+            .col-xs-6.col-xs-offset-3
+              .sip-steps
+                .step
+                  span Add Sip
+                .step.right.active
+                  span Add WebRTC Call Button
 
     .body(ng-controller="WidgetAddController")
       .container
