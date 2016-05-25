@@ -43,7 +43,6 @@ router.post('/new', utils.isLoggedIn, function (req, res, next) {
   });
 });
 
-
 router.get('/:id/edit', utils.isLoggedIn, function (req, res, next) {
   async.parallel({
     user: function (callback) {
@@ -95,6 +94,44 @@ router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
     result.widget_id = widget.id;
     res.status(200).json(result);
   });
+});
+
+router.get('/demo', function (req, res, next) {
+  var demoEmail = process.env.DEMO_USER_EMAIL || 'demo.widget@click2vox.com';
+  var demoSip = process.env.DEMO_SIP_URI || 'echo@ivrs';
+
+  var renderResponse = function (account) {
+    res.render('widget/demo', {
+      defaultBtnLabel: utils.defaultBtnLabel,
+      demoSipUris: utils.defaultSipUris(),
+      demoSip: demoSip,
+      demoUser: account,
+      title: 'Create sample call button'
+    });
+  };
+
+  // check if demo user exists
+  Account.findOne({
+    email: demoEmail
+  }, function (err, account) {
+    if (!account) {
+      account = new Account({
+        email: demoEmail,
+        verified: true,
+        temporary: false,
+        first_name: 'Demo User'
+      });
+      account.save();
+
+      // let provision the default sip uri with demo account
+      utils.provisionSIP(account, demoSip, function (err, result) {
+        if (err) console.log('Error while provisioning demo sip uri: ', err);
+        renderResponse(account);
+      });
+    } else
+      renderResponse(account);
+  });
+
 
 });
 
