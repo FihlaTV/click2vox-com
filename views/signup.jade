@@ -1,5 +1,9 @@
 extends layout
 
+block default_nav
+  a.login.user-pill.pull-left(href="/") Home
+  a.login.user-pill.pull-left(href="/login") Login
+
 block extra_head
   script(src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer)
 

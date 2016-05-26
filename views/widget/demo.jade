@@ -3,6 +3,9 @@ extends ../layout
 block extra_head
   link(href="/stylesheets/widget.css", rel="stylesheet")
 
+prepend default_nav
+  a.login.user-pill.pull-left(href="/") Home
+
 block content
   script.
     require([

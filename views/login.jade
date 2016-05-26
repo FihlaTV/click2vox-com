@@ -1,5 +1,9 @@
 extends layout
 
+block default_nav
+  a.login.user-pill.pull-left(href="/") Home
+  a.login.user-pill.pull-left(href="/account/signup") Create account
+
 block content
   script.
     require(['angular', 'jquery'], function (angular, $) {
