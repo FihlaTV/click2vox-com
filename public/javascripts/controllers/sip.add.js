@@ -45,7 +45,7 @@ define(['jquery', 'bootstrap'], function (jQuery) {
           .then(function successCallback(response) {
             $scope.successMessage = 'SIP provisioned. Redirecting...';
             $timeout(function() {
-              $window.location.href = '/account/widgets';
+              $window.location.href = response.data.redirect_to;
             }, 100);
 
           }, function errorCallback(response) {

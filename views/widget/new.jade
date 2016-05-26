@@ -11,18 +11,16 @@ block content
       'jquery',
       'controllers/widget.add',
       'directives/qtip',
-      'directives/http.prefix',
-      'directives/autofocus',
+      'directives/http.prefix'
     ],
     function(
       angular, ngSanitize, $,
       WidgetAddController, qtipDirective,
-      httpPrefixDirective, autoFocusDirective) {
+      httpPrefixDirective) {
 
         angular.module('voxboneApp', ['ngSanitize'])
           .directive('qtip', qtipDirective)
           .directive('httpPrefix', httpPrefixDirective)
-          .directive('autoFocus', autoFocusDirective)
           .controller('WidgetAddController', WidgetAddController);
 
         angular.bootstrap(document, ['voxboneApp']);
@@ -51,7 +49,7 @@ block content
                 .step.right.active
                   span Add WebRTC Call Button
 
-    .body(ng-controller="WidgetAddController")
+    .body(ng-controller="WidgetAddController" ng-init="widget.sip_uri='#{addedSip}'")
       .container
         .row
           .col-md-6.left-col
