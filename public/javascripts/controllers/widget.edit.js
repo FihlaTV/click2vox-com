@@ -3,19 +3,23 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
   var WidgetEditController = function ($scope, $http, $window, $cookies) {
     $scope.sipUriLinked = false;
     $scope.preview_webrtc_compatible = true;
+    $scope.submitText = 'Save Configuration';
+    $scope.savingConfig = false;
+    $scope.savedSuccessfully = false;
 
     $scope.onClickTab = function (is_preview_webrtc_compatible) {
       $scope.preview_webrtc_compatible = is_preview_webrtc_compatible;
     };
 
     $scope.master = {
-      showWidgetCode: false,
+      showWidgetCode: true,
       dial_pad: true,
       button_style: 'style-a',
       background_style: 'dark',
       widget_code: 'Select from the SIP URI field the Echo Service (echo@ivrs), Digits Service (digits@ivrs) or enter your SIP URI to Generate the code snippet',
       show_text_html_value: '<h3>This is a placeholder for your message</h3>',
-      incompatible_browser_configuration: 'hide_widget'
+      incompatible_browser_configuration: 'hide_widget',
+      shouldProvision: false
     };
 
     $scope.eventHandlers = {
@@ -120,6 +124,11 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
 
       $scope.widget.widget_code = $scope.initData['widgetCode'];
       $scope.did = $scope.initData['did'];
+      $scope.currentSip = $scope.initData['currentSip'];
+    });
+
+    $scope.$watchCollection('widget', function () {
+      $scope.savedSuccessfully = false;
     });
 
     $scope.getVoxrtcConfig = function (callback) {
@@ -240,9 +249,12 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
         $scope.widget.button_style = theme;
     };
 
-    $scope.generateOutputCode = function () {
+    $scope.saveConfiguration = function () {
       if (!$scope.widget.sip_uri) return;
       console.log("--> Generating Output Code...");
+
+      $scope.submitText = 'Loading...';
+      $scope.savingConfig = true;
 
       var caller_id = $scope.widget.caller_id;
       if (caller_id)
@@ -273,68 +285,29 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
             $('#generate-output-code')[0].text = "Regenerate Code";
             $scope.widget.showWidgetCode = true;
             $scope.widget.widget_code = response.data.widget_code;
+            $scope.savedSuccessfully = true;
 
-            $('#alert-success')
-              .css('display', 'block')
-              .html('Your configuration has been saved successfully');
-            $window.scrollTo(0, 0);
+            $scope.currentSip = $scope.widget.sip_uri;
+            $scope.submitText = 'Save Configuration';
+            $scope.savingConfig = false;
           },
-          function errorCallback() {
-            $scope.widget.showWidgetCode = false;
-            console.log("entered error callback");
-          });
-    };
+          function errorCallback(response) {
+            var data = response.data;
+            console.log("Error: ", data);
 
-    $scope.conditional_sip_provisioning = function (form) {
-      if (!$scope.sipUriLinked)
-        $scope.sip_provisioning(form);
-    };
-
-    $scope.sip_provisioning = function (form) {
-      $scope.sipUriLinked = false;
-      $scope.widget.showWidgetCode = false;
-      $scope.widget.widget_code = 'Generating code snippet...';
-      $scope.widget_form.sip_provisioning = true;
-      $scope.widget_form.sip_provisioned = false;
-      $scope.widget_form.cannot_validate_sip_uri = '';
-
-      if (form.$valid) {
-        var req = {
-          method: 'POST',
-          url: '/sip_provisioning',
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8'
-          },
-          data: {
-            sip_uri: $scope.widget.sip_uri
-          }
-        };
-
-        $http(req)
-          .then(function successCallback(response) {
-            $scope.widget.showWidgetCode = true;
-            $scope.sipUriLinked = true;
-            $scope.widget_form.cannot_validate_sip_uri = '';
-            $scope.widget_form.sip_provisioning = false;
-            $scope.widget_form.sip_provisioned = true;
-          }, function errorCallback(response) {
-            console.log("Error: ");
-            console.log(response.data);
+            $scope.submitText = 'Save Configuration';
+            $scope.savingConfig = false;
             $scope.widget.widget_code = 'Error generating widget code snippet. Please check it.';
 
-            if (response.data && response.data.errors && response.data.errors.comeback_errors && response.data.errors.comeback_errors.apiErrorMessage)
-              $scope.widget_form.cannot_validate_sip_uri = response.data.errors.comeback_errors.apiErrorMessage;
+            if (data && data.errors && data.errors.comeback_errors && data.errors.comeback_errors.apiErrorMessage)
+              $scope.widget_form.cannotValidateSipUri = data.errors.comeback_errors.apiErrorMessage;
             else
-              $scope.widget_form.cannot_validate_sip_uri = "Unexpected error linking your SIP URI. Please try again. ";
-
-            $scope.widget_form.sip_provisioning = false;
-            $scope.widget_form.sip_provisioned = false;
+              $scope.widget_form.cannotValidateSipUri = "Unexpected error linking your SIP URI. Please try again.";
           });
-      } else {
-        $scope.widget_form.sip_provisioning = false;
-        $scope.widget_form.sip_provisioned = false;
-        $scope.widget_form.sip_uri.$error.pattern = true;
-      }
+    };
+
+    $scope.sipUriChange = function () {
+      $scope.widget.shouldProvision = ($scope.currentSip !== $scope.widget.sip_uri);
     };
   };
 

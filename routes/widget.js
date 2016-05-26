@@ -81,7 +81,7 @@ router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
 
   console.log(updateData);
 
-  var result = { message: "", errors: null, redirect: '/account/widgets' };
+  var result = { message: "", errors: null };
 
   Widget.findOneAndUpdate({
     _account: req.user._id,
@@ -89,10 +89,27 @@ router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
   },
   updateData,
   function (err, widget) {
-    if (err) throw err;
-    result.widget_code = widget.generateHtmlCode();
-    result.widget_id = widget.id;
-    res.status(200).json(result);
+    var successResponse = function () {
+      result.widget_code = widget.generateHtmlCode();
+      result.widget_id = widget.id;
+      result.widget = widget;
+      return res.status(200).json(result);
+    };
+
+    if (params.shouldProvision) {
+      utils.provisionSIP(req.user, params.sip_uri, function (err, data) {
+        if (err) {
+          console.log('Error while provisioning demo sip uri: ', err);
+          result.errors = err;
+          return res.status(data.errors.httpStatusCode || 500).json(result);
+        } else {
+          result.message = 'Success';
+          return successResponse();
+        }
+      });
+    } else {
+      return successResponse();
+    }
   });
 });
 

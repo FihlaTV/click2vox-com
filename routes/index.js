@@ -345,12 +345,12 @@ module.exports = function (passport, voxbone) {
         if (account) {
           utils.provisionSIP(
             account, req.body.sip_uri,
-            function (err, result) {
+            function (err, data) {
               result = { errors: null };
               if (err) {
                 console.log('An error ocurred: ', err);
                 result.errors = err;
-                return res.status(result.errors.httpStatusCode || 500).json(result);
+                return res.status(data.errors.httpStatusCode || 500).json(result);
               } else {
                 result.message = 'Success';
                 return res.status(200).json(result);

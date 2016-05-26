@@ -41,7 +41,7 @@ block content
 
             #alert-success.alert.alert-success(style="display: none;")
 
-    .body(ng-controller="EditWidgetController" ng-init="initData={widget: #{JSON.stringify(widget)}, did: #{user.did}, widgetCode: '#{widget_code}'}")
+    .body(ng-controller="EditWidgetController" ng-init="initData={widget: #{JSON.stringify(widget)}, did: #{user.did}, widgetCode: '#{widget_code}', currentSip: '#{widget.sip_uri}'}")
       .container
         .row
           .col-md-6.left-col
@@ -63,19 +63,19 @@ block content
                     button.btn-style-a(ng-click="setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
                     button.btn-style-b(ng-click="setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
               span.title Call Configuration
-              form#widget_form(name="widget_form", novalidate)
+              form#widget_form(name="widget_form" novalidate)
                 .boxPanel
                   .form-group
                     label.control-label SIP URI
                       span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?
-                    select.form-control(ng-model="widget.sip_uri" ng-options="sip for sip in #{JSON.stringify(currentUser.getSipURIs())}" required)
+                    select.form-control(ng-model="widget.sip_uri" ng-options="sip for sip in #{JSON.stringify(currentUser.getSipURIs())}" ng-change="sipUriChange()" required)
                       option(value="") Select a SIP URI
                     .error-label(ng-show="widget_form.sip_uri.$touched" )
                       div(ng-show="widget_form.sip_uri.$error.required") SIP URI is required
 
                   .panel.panel-default
                     .panel-heading
-                      a.collapsed.title-toggle(data-toggle="collapse",data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
+                      a.collapsed.title-toggle(data-toggle="collapse", data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
                     .panel-collapse.collapse#collapseAdvancedCallConfiguration
                       .options-wrap.active
                         .form-group
@@ -166,7 +166,13 @@ block content
                       a(href="#" class="hidden" id="generate-output-code" ng-click='widget.generateOutputCode()') Generate Code
 
               div
+                .error-label(ng-show="widget_form.cannotValidateSipUri")
+                  div {{ widget_form.cannotValidateSipUri || 'SIP URI cannot be validated. Please, try again'}}
+
+                div(style="color: green" ng-show="savedSuccessfully")
+                  div Your configuration has been saved successfully!
+
                 .pull-right
-                  button.btn.btn-default(ng-click='generateOutputCode()' ng-disabled="widget_form.$invalid || widget_form.sip_provisioning" ) Save Configuration
+                  button.btn.btn-default(ng-click='saveConfiguration()' ng-disabled="widget_form.$invalid || savingConfig" ) {{submitText}}
                 .clearfix
                 br
