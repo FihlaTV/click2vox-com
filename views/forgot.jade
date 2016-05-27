@@ -36,7 +36,7 @@ block content
           };
           $http(req)
             .then(function successCallback(response){
-              document.getElementById("successmsg").innerHTML = "An email has been sent with a link to reset your password. Please check your inbox.";
+              document.getElementById("successmsg").innerHTML = "An email has been sent with a link to reset your password. Please check your inbox for an email from no-reply@voxbone.com.";
               document.getElementById("successmsg").style.display = "block";
               document.getElementById("errormsg").style.display = "none";
               document.getElementById("tokenError").style.display = "none";

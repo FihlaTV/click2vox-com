@@ -36,7 +36,7 @@ block content
       .container
         .row
           .col-xs-12
-            h1 Create a WebRTC Call Button
+            h1 Create a WebRTC Click-to-Call Button
             p #[b Questions?] #[a(href="https://docs.google.com/document/d/1L6swwK_rVu_2XqSNMzmMRxBxL3YL50YTzkF6NaqeLqU/edit?usp=sharing" target="_blank") See our Frequently Asked Questions document.]
 
             #alert-success.alert.alert-success(style="display: none;")
@@ -45,9 +45,9 @@ block content
             .col-xs-6.col-xs-offset-3
               .sip-steps
                 .step
-                  span Add Sip
+                  span Add a SIP Address
                 .step.right.active
-                  span Add WebRTC Call Button
+                  span Create a Click-to-Call Button
 
     .body(ng-controller="WidgetAddController" ng-init="widget.sip_uri='#{addedSip}'")
       .container
@@ -80,7 +80,7 @@ block content
                     select.form-control(ng-model="widget.sip_uri" ng-options="sip for sip in #{JSON.stringify(currentUser.getSipURIs())}" required)
                       option(value="") Select a SIP URI
                     .error-label(ng-show="widget_form.sip_uri.$touched" )
-                      div(ng-show="widget_form.sip_uri.$error.required") SIP URI is required
+                      div(ng-show="widget_form.sip_uri.$error.required") SIP URI required
                   .panel.panel-default
                     .panel-heading
                       a.collapsed.title-toggle(data-toggle="collapse", data-target="#collapseAdvancedCallConfiguration", href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
