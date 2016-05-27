@@ -27,8 +27,9 @@ block content
   .main.createButton.addSip(class=showWizard ? 'wizard' : '')
     .header
       .container
-        h1 Add a new SIP
-        p Add your free SIP URI to create a webRTC Button. Your account allows you to #[b Create one SIP URI. You can always return to create a SIP URI and use a sample SIP for now]
+        h1 Add a new SIP address
+        p Enter the SIP URI you would like to use for your button. Your free account allows you to use one SIP URI at a time. You can always return to change your SIP URI.
+        p Don't have a SIP URI? You can skip this for now or enter ours: timeivr@sip1vox.voxbone.com.
 
         .row
           if showWizard
@@ -44,12 +45,12 @@ block content
         .row
           .col-xs-6
             section
-              span.title Add a new SIP
+              span.title Add a new SIP Address
               form(name="sip_form" novalidate)
                 .boxPanel
                   .form-group
                     label SIP URI
-                      span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI") ?
+                      span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI.") ?
                     input.form-control(type="text", name="sip_uri", ng-model="sip.uri" ng-pattern="/^[^@]+@[^@]+$/" check-allowed-sip auto-focus required)
                     div(style='color: green')
                       div.ng-cloak(ng-show="onSubmitting") {{successMessage}}
