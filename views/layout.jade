@@ -18,9 +18,9 @@ html(lang='en')
     link(href="//cdnjs.cloudflare.com/ajax/libs/raty/2.7.0/jquery.raty.min.css", rel="stylesheet")
     link(href="//cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.css", rel="stylesheet")
 
-    script(src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js")
-    script(src="//webrtc.voxbone.com/js/jssip-latest.js ")
-    script(src="//webrtc.voxbone.com/js/voxbone-latest.js")
+    script(src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js" async)
+    script(src="//webrtc.voxbone.com/js/jssip-latest.js")
+    script(src="//webrtc.voxbone.com/js/voxbone-latest.js" async)
 
     //- load requirejs and its config
     script(src="/lib/requirejs/require.js")
@@ -35,7 +35,7 @@ html(lang='en')
 
         ga('create', '#{process.env.GOOGLE_ANALYTICS_ID}', 'auto');
         ga('send', 'pageview');
-        
+
     if process.env.INSPECTLET_ID
       script#inspectletjs.
         window.__insp = window.__insp || [];

@@ -66,3 +66,6 @@ require.config({
     "directives"
   ]
 });
+
+// this is just to "preload" stuff
+require(['angular', 'jquery']);
