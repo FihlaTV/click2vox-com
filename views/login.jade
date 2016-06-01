@@ -4,56 +4,17 @@ block default_nav
   a.login.user-pill.pull-left(href="/") Home
   a.login.user-pill.pull-left(href="/account/signup") Create account
 
-block content
+block extra_head
   script.
-    require(['angular', 'jquery'], function (angular, $) {
-      var loginApp = angular.module('voxboneApp', []);
+    require(
+      ['angular', 'jquery', 'controllers/login'],
+      function (angular, $, LoginController) {
+        angular.module('voxboneApp', [])
+          .controller('LoginController', LoginController);
+        angular.bootstrap(document, ['voxboneApp']);
+      });
 
-      loginApp.controller('LoginController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
-        $scope.master = {};
-
-        $scope.update = function (login) {
-          $scope.master = angular.copy(login);
-        };
-
-        $scope.reset = function (form) {
-          if (form) {
-            form.$setPristine();
-            form.$setUntouched();
-          }
-          $scope.login = angular.copy($scope.master);
-        };
-
-        $scope.reset();
-
-        $scope.login.processForm = function () {
-          console.log("--> Submitting...");
-          var req = {
-            method: 'POST',
-            url: '/login',
-            headers: {
-              'Content-Type': 'application/json; charset=utf-8'
-            },
-            data: {
-              email: $scope.login.uemail.toLowerCase(),
-              password: $scope.login.upassword
-            }
-          };
-          $http(req)
-            .then(function successCallback(response){
-              $window.location.href = response.data.redirect;
-            }, function errorCallback(response){
-              $(".alert").addClass('hidden');
-              if (response && response.status == 403)
-                $("#alert-unverified").removeClass('hidden');
-              else
-                $("#alert-user-pass").removeClass('hidden');
-            });
-        }
-      }]);
-
-      angular.bootstrap(document, ['voxboneApp']);
-    });
+block content
   .main.registerPage
     .body
       .container
@@ -75,18 +36,18 @@ block content
 
             #form_container
               .formWrap
-                form#login_form(name="login_form", novalidate, ng-controller="LoginController")
+                form#login_form(ng-controller="LoginController" ng-init="login.uemail='#{email}'" name="login_form" novalidate)
                   .form-group
                     label.control-label Email
-                    input.form-control(type="email" id="uemail" name="uemail" ng-model="login.uemail", required, value= "#{email}")
-                    div(ng-show="login_form.$submitted || login_form.uemail.$touched")
+                    input.form-control(type="email" id="uemail" name="uemail" ng-model="login.uemail" required)
+                    .ng-cloak(ng-show="login_form.$submitted || login_form.uemail.$touched")
                       .error-label(ng-show="login_form.uemail.$error.required") Email is required
-                    div(ng-show="login_form.uemail.$dirty && login_form.uemail.$invalid")
+                    .ng-cloak(ng-show="login_form.uemail.$dirty && login_form.uemail.$invalid")
                       .error-label(ng-show="login_form.uemail.$error.email") Email is invalid
                   .form-group
                     label.control-label Password
                     input.form-control(type="password", id="upassword", name="upassword", ng-model="login.upassword", required)
-                    div(ng-show="login_form.$submitted || login_form.upassword.$touched")
+                    .ng-cloak(ng-show="login_form.$submitted || login_form.upassword.$touched")
                       .error-label(ng-show="login_form.upassword.$error.required") Password is required
 
                   button.btn.btn-default#login(ng-disabled="login_form.$invalid" ng-click="login.processForm()") Login
