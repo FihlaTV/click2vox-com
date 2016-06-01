@@ -42,7 +42,7 @@ block content
             h1 Demo WebRTC Click-to-Call Button
             p #[b Questions?] #[a(href="https://docs.google.com/document/d/1L6swwK_rVu_2XqSNMzmMRxBxL3YL50YTzkF6NaqeLqU/edit?usp=sharing" target="_blank") See our Frequently Asked Questions document.]
 
-    .body(ng-controller="WidgetDemoController")
+    .body(ng-controller="WidgetDemoController" ng-init="widget.sip_uri='echo@ivrs'")
       .container
         .row
           .col-md-6.left-col
@@ -70,10 +70,10 @@ block content
                     label.control-label SIP URI
                       span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?
 
-                    select.form-control(ng-model="widget.sip_uri" ng-options="sip for sip in #{JSON.stringify(demoSipUris)}" name="sip_uri" required)
+                    select.form-control(ng-model="widget.sip_uri" ng-options="sip for sip in #{JSON.stringify(demoSipUris)}" name="sip_uri" required disabled)
                       option(value="") Select a SIP URI
-                    div(style="color: green" ng-show="widget_form.$dirty")
-                      div(ng-show="widget.sip_uri && widget.sip_uri!='#{demoSip}'") To try your own SIP URI please #[a(href="/account/signup") create an Account]
+                    div(style="color: green")
+                      div To try your own SIP URI please #[a(href="/account/signup") create an Account]
 
                   .panel.panel-default
                     .panel-heading
