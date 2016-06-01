@@ -61,8 +61,8 @@ block content
                     input.form-control(type="text", name="button_label", ng-model="widget.button_label" value="#{defaultBtnLabel}" placeholder="i.e. #{defaultBtnLabel}" ng-model-options="{ updateOn: 'blur' }")
                   .form-group
                     label Button Style:
-                    button.btn-style-a(ng-click="setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
-                    button.btn-style-b(ng-click="setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                    button.btn-style-a(ng-cloak ng-click="setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                    button.btn-style-b(ng-cloak ng-click="setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
               span.title Call Configuration
               form#widget_form(name="widget_form", novalidate)
                 .boxPanel
@@ -134,7 +134,7 @@ block content
                   .togle-bg-tooltip
                     #[span.badge(data-toggle='tooltip' data-placement="left" data-html="true" data-width="350" title="You can click the button to make a call and test the service!<br>(once you setup your widget)") ?]
                   .widget-box#launch_call_div(ng-class="widget.button_style" ng-show="showCallButton()")
-                    button.btn-style.launch_call#launch_call(ng-disabled="!widget.sip_uri" ng-click="makeCall(#{demoUser.did})" qtip="You can click the button to make a call and test the service!<br>(once you select a SIP URI)" qtip-visible='true') #[span {{widget.button_label || 'Call Sales'}}]
+                    button.btn-style.launch_call#launch_call(ng-cloak ng-disabled="!widget.sip_uri" ng-click="makeCall(#{demoUser.did})" qtip="You can click the button to make a call and test the service!<br>(once you select a SIP URI)" qtip-visible='true') #[span {{widget.button_label || 'Call Sales'}}]
                     .widget-footer-left
                       a(href="https://test.webrtc.org/" target="_blank") Test your setup
                     .widget-footer-right
@@ -147,11 +147,17 @@ block content
                 .prev-code
                   .title
                     span Widget Code Snippet
-                      p The following HTML code it is just for demo purposes. Please do not use it for real
+                      p The following HTML code it is just for demo purposes.
+
+                      .btn-code-playground
+                        .btn-jsfiddle
+                          a.inactive(href="javascript:;") JSFiddle
+                        .btn-jsfiddle
+                          a.inactive(href="javascript:;") CodePen
 
                   .widget-code-wrap
                     .sample.shadow-z-2#widget_code
-                      pre.
+                      pre.noselect(ng-cloak)
                         {{ widget.demoCode }}
 
               div
