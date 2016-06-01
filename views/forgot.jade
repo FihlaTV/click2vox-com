@@ -68,13 +68,13 @@ block content
 
             #form_container
               .formWrap
-                form#forgot_form(name="forgot_form", novalidate, ng-controller="ForgotController")
+                form#forgot_form(ng-controller="ForgotController" name="forgot_form" novalidate)
                   .form-group
                     label.control-label Email
-                    input.form-control(type="email" id="uemail" name="uemail" ng-model="forgot.uemail", required, value= "#{email}")
-                    .error-label(ng-show="forgot_form.$submitted || forgot_form.uemail.$touched")
+                    input.form-control(type="email" id="uemail" name="uemail" ng-model="forgot.uemail" value="#{email}" required)
+                    .error-label(ng-cloak ng-show="forgot_form.$submitted || forgot_form.uemail.$touched")
                       div(ng-show="forgot_form.uemail.$error.required") Email is required
-                    .error-label(ng-show="forgot_form.uemail.$dirty && forgot_form.uemail.$invalid")
+                    .error-label(ng-cloak ng-show="forgot_form.uemail.$dirty && forgot_form.uemail.$invalid")
                       div(ng-show="forgot_form.uemail.$error.email") Email is invalid
 
                   button.btn.btn-default#forgot(ng-disabled="forgot_form.$invalid" ng-click="forgot.processForm()") Reset Password
