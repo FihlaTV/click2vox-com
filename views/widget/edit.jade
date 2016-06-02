@@ -60,8 +60,8 @@ block content
                     input.form-control(type="text", name="button_label", ng-model="widget.button_label" value="#{defaultBtnLabel}" placeholder="i.e. #{defaultBtnLabel}" ng-model-options="{ updateOn: 'blur' }")
                   .form-group
                     label Button Style:
-                    button.btn-style-a(ng-click="setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
-                    button.btn-style-b(ng-click="setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                    button.btn-style-a(ng-cloak ng-click="setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                    button.btn-style-b(ng-cloak ng-click="setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
               span.title Call Configuration
               form#widget_form(name="widget_form" novalidate)
                 .boxPanel
@@ -70,7 +70,7 @@ block content
                       span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?
                     select.form-control(ng-model="widget.sip_uri" ng-options="sip for sip in #{JSON.stringify(currentUser.getSipURIs())}" ng-change="sipUriChange()" required)
                       option(value="") Select a SIP URI
-                    .error-label(ng-show="widget_form.sip_uri.$touched" )
+                    .error-label(ng-cloak ng-show="widget_form.sip_uri.$touched" )
                       div(ng-show="widget_form.sip_uri.$error.required") SIP URI is required
 
                   .panel.panel-default
@@ -132,7 +132,7 @@ block content
                   .togle-bg-tooltip
                     #[span.badge(data-toggle='tooltip' data-placement="left" data-html="true" data-width="350" title="You can click the button to make a call and test the service!<br>(once you setup your widget)") ?]
                   .widget-box#launch_call_div(ng-class="widget.button_style" ng-show="showCallButton()")
-                    button.btn-style.launch_call#launch_call(ng-disabled="!widget.sip_uri" ng-click="makeCall(#{currentUser.did})" qtip="You can click the button to make a call and test the service!<br>(once you setup your widget)" qtip-visible='true') #[span {{widget.button_label || 'Call Sales'}}]
+                    button.btn-style.launch_call#launch_call(ng-cloak ng-disabled="!widget.sip_uri" ng-click="makeCall(#{currentUser.did})" qtip="You can click the button to make a call and test the service!<br>(once you setup your widget)" qtip-visible='true') #[span {{widget.button_label || 'Call Sales'}}]
                     .widget-footer-left
                       a(href="https://test.webrtc.org/" target="_blank") Test your setup
                     .widget-footer-right
@@ -159,13 +159,13 @@ block content
 
                   .widget-code-wrap
                     .sample.shadow-z-2#widget_code
-                      pre
+                      pre(ng-cloak)
                         {{ widget.widget_code }}
                     .codebox-actions(ng-show='widget.showWidgetCode')
                       a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy to Clipboard
                       a(href="#" class="hidden" id="generate-output-code" ng-click='widget.generateOutputCode()') Generate Code
 
-              div
+              div(ng-cloak)
                 .error-label(ng-show="widget_form.cannotValidateSipUri")
                   div {{ widget_form.cannotValidateSipUri || 'SIP URI cannot be validated. Please, try again'}}
 
@@ -173,6 +173,6 @@ block content
                   div Your configuration has been saved successfully!
 
                 .pull-right
-                  button.btn.btn-default(ng-click='saveConfiguration()' ng-disabled="widget_form.$invalid || savingConfig" ) {{submitText}}
+                  button.btn.btn-default(ng-cloak ng-click='saveConfiguration()' ng-disabled="widget_form.$invalid || savingConfig" ) {{submitText}}
                 .clearfix
                 br

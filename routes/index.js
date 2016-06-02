@@ -124,7 +124,7 @@ module.exports = function (passport, voxbone) {
   });
 
   router.get('/login', utils.redirectToWidgetIfLoggedIn, function (req, res, next) {
-    res.render('login', { title: title, email: req.query.email, message: req.flash('loginMessage') });
+    res.render('login', { title: title, email: req.query.email || '', message: req.flash('loginMessage') });
   });
 
   router.post('/login', function (req, res, next) {

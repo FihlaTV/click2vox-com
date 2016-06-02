@@ -21,7 +21,7 @@ define(['jquery', 'bootstrap'], function (jQuery) {
 
     $scope.skipURI = function (redirect_to) {
       $window.location.href = redirect_to;
-    }
+    };
 
     $scope.saveSipURI = function (form) {
       this.reset();
