@@ -27,7 +27,6 @@ Create a click to call button from a widget generator
 * `VOXBONE_API_USERNAME`
 * `VOXBONE_API_PASSWORD`
 * `GOOGLE_ANALYTICS_ID`
-* `INSPECTLET_ID`
 * `HOTJAR_ID`
 * `NEW_RELIC_LICENSE_KEY`
 * `TIMEOUT` (in miliseconds, defaults to '12000' )
