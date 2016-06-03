@@ -9,118 +9,24 @@ block extra_head
 
 block content
   script.
-    require(['angular', 'angular-recaptcha', 'jquery'], function (angular, vcRecaptcha, $) {
-      var formApp = angular.module('voxboneApp', ['vcRecaptcha']);
+    require([
+        'angular-recaptcha',
+        'controllers/signup',
+        'directives/password.check',
+        'directives/password.strength'
+      ],
+      function (
+        vcRecaptcha, SignUpController,
+        passwordCheck, passwordStrength) {
 
-      formApp.controller('formController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
-        $scope.master = {
-          uemail: '#{email}',
-          temporary_password: '#{temp_password}'
-        };
+        angular.module('voxboneApp', ['vcRecaptcha'])
+          .directive('pwCheck', passwordCheck)
+          .directive('passwordStrength', passwordStrength)
+          .controller('SignUpController', SignUpController);
 
-        $scope.update = function (account) {
-          $scope.master = angular.copy(account);
-        };
-
-        $scope.reset = function (form) {
-          if (form) {
-            form.$setPristine();
-            form.$setUntouched();
-          }
-          $scope.account = angular.copy($scope.master);
-        };
-
-        $scope.reset();
-
-        $scope.account.processForm = function () {
-          $(".alert").addClass('hidden');
-
-          var req = {
-            method: 'POST',
-            url: '/account/signup',
-            headers: {
-              'Content-Type': 'application/json; charset=utf-8'
-            },
-            data: {
-              name: $scope.account.uname,
-              email: $scope.account.uemail,
-              company: $scope.account.ucompany,
-              temporary_password: $scope.account.temporary_password,
-              password: $scope.account.upassword,
-              confirmation: $scope.account.confirmation,
-              'g-recaptcha-response': $scope.account.recaptcha
-            }
-          };
-          $http(req)
-            .then(function successCallback(response){
-              if (response.data.verified) {
-                $window.location.href = response.data.redirect + '?email=' + response.data.email;
-              } else {
-                $("#form_container").addClass('hidden');
-                $("#alert-info").removeClass('hidden').text(response.data.message);
-              }
-            }, function errorCallback(response){
-              $("#alert-error").removeClass('hidden').text(response.data.message);
-            });
-        }
-      }]);
-
-      formApp.directive('pwCheck', function () {
-        return {
-          require: 'ngModel',
-          link: function (scope, elem, attrs, ctrl) {
-            var firstPassword = '#' + attrs.pwCheck;
-            elem.add(firstPassword).on('keyup', function () {
-              scope.$apply(function () {
-                var pwVerify = elem.val() === $(firstPassword).val();
-                ctrl.$setValidity('pwmatch', pwVerify);
-              });
-            });
-          }
-        }
-      });
-
-      formApp.directive('passwordStrength', function () {
-        return {
-          restrict: 'A',
-          link: function (scope, elem, attrs, ctrl) {
-
-            scope.$watch(attrs.passwordStrength, function(value) {
-              if (angular.isDefined(value) ) {
-                elem.addClass('no-bottom-border-radius');
-
-                if (value.length > 12) {
-                  scope.strength = 'strong';
-                  scope.strength_class = 'progress-bar-success';
-                  scope.strength_percent = 100;
-                } else if (value.length > 8) {
-                  scope.strength = 'fair';
-                  scope.strength_class = 'progress-bar-warning';
-                  scope.strength_percent = 70;
-                } else {
-                  scope.strength = 'weak';
-                  scope.strength_class = 'progress-bar-danger';
-                  scope.strength_percent = 40;
-                }
-              }
-            });
-
-            //- check min length when leave the field
-            elem.on('blur', function () {
-              if (elem.val().length < 8)
-                scope.create_account.upassword.$setValidity('minlength', false);
-            });
-
-            //- let's set as true to be able to validate password strength
-            elem.on('focus', function () {
-              scope.create_account.upassword.$setValidity('minlength', true);
-            });
-          }
-        };
-      });
-
-      angular.bootstrap(document, ['voxboneApp']);
-    });
+        angular.bootstrap(document, ['voxboneApp']);
+      }
+    );
 
   .main.registerPage
     .body
@@ -137,7 +43,7 @@ block content
                 #[b Note:] the Voxbone WebRTC Free Trial will not be linked to your existing Voxbone account. To use your Voxbone account and an existing DID, please see #[a(href="https://developers.voxbone.com/docs/webrtc/") view instructions]
 
               .formWrap
-                form#create_account(name="create_account" novalidate ng-controller="formController")
+                form#create_account(ng-controller="SignUpController" name="create_account" ng-init="account.uemail='#{email|| ''}'" novalidate)
                   .form-group
                     label.control-label Name
                     input.form-control(type="text" id="uname" name="uname" ng-model="account.uname" required)
@@ -148,7 +54,9 @@ block content
                     input.form-control(type="text" id="ucompany" name="ucompany" ng-model="account.ucompany")
                   .form-group
                     label.control-label Email address
-                    input.form-control(type="text" id="uemail" name="uemail" ng-model="account.uemail")
+                    input.form-control(type="text" id="uemail" name="uemail" ng-model="account.uemail" required)
+                    .error-label(ng-show="create_account.$submitted || create_account.uemail.$touched")
+                      .ng-hide(ng-show="create_account.uemail.$error.required") Email is required
                   .form-group
                     label.control-label Password
                     input.form-control(type="password" id="upassword" name="upassword" ng-model="account.upassword" required password-strength="account.upassword")
@@ -165,7 +73,7 @@ block content
                       .ng-hide(ng-show="create_account.confirmation.$error.pwmatch") Password confirmation does not match
 
                   .form-group.text-center
-                    .captcha(ng-model="account.recaptcha" vc-recaptcha key='"#{process.env.GOOGLE_RECAPTCHA_SITE_KEY}"')
+                    .captcha(ng-model="account.recaptcha" vc-recaptcha key='"#{process.env.GOOGLE_RECAPTCHA_SITE_KEY}"' on-create="setWidgetId(widgetId)")
 
                   .form-group
                     label.control-label
@@ -173,6 +81,6 @@ block content
                       span &nbsp;
                       input(type="checkbox" id="uaup" name="uaup" ng-model="account.uaup" required)
 
-                  button.btn.btn-default#create(ng-disabled="create_account.$invalid" ng-click="account.processForm()") Create Account
+                  button.btn.btn-default#create(ng-disabled="create_account.$invalid" ng-click="processForm()") Create Account
                   br
                   p Already have an account? #[a(href="../login") Login here]

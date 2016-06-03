@@ -35,6 +35,7 @@ require.config({
       '/lib/angular-cookies/angular-cookies.min'
     ],
     'angular-recaptcha': [
+      '//cdnjs.cloudflare.com/ajax/libs/angular-recaptcha/3.0.3/angular-recaptcha.min',
       '/lib/angular-recaptcha/release/angular-recaptcha.min'
     ],
     'angular-sanitize': [
