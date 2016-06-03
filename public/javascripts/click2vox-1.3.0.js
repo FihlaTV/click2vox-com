@@ -143,7 +143,7 @@ var check3Ready = (function() {
   };
 
   $('.voxButton').append(' \
-    <div id="launch_call_div" class="widget-box style-b" style="max-width: 200px; max-height: 200px;">\
+    <div id="launch_call_div" class="widget-box style-b">\
       <button id="launch_call" class="btn-style launch_call">\
         <span>' +  info.text + '</span>\
       </button>\
