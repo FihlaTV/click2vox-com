@@ -11,7 +11,9 @@ module.exports = function (grunt) {
           optimization: 2
         },
         files: {
-          "public/stylesheets/root.css": "public/stylesheets/root.less"
+          "public/stylesheets/root.css": "public/stylesheets/root.less",
+          "public/stylesheets/vxb-button.css": "public/stylesheets/less/vxb-button.less",
+          "public/stylesheets/vxb-widget.css": "public/stylesheets/less/vxb-widget.less"
         }
       }
     },

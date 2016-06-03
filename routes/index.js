@@ -19,7 +19,15 @@ var sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SE
 var utils = require('./utils');
 var emails = require('./emails');
 
+// Keep the starting slash
+var click2voxJsFileName = "/click2vox.js";
+
 module.exports = function (passport, voxbone) {
+  router.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
 
   router.get('/signup', function (req, res) {
     res.redirect('/account/signup?email=' + (req.query.email || ""));
@@ -261,6 +269,42 @@ module.exports = function (passport, voxbone) {
         result = { message: "Your password has been changed.", errors: null, redirect: '/account/widgets' };
         return res.status(200).json(result);
       }
+    });
+  });
+
+  // This is indented to get the latest version always
+  router.get(click2voxJsFileName, function(req, res) {
+    res.redirect('/javascripts/click2vox-1.3.0.js');
+  });
+
+  router.get('/voxbone_widget/v2/:id', function (req, res) {
+    var searchForWidget = { _id: new ObjectId(req.params.id) };
+
+    Widget
+      .findOne(searchForWidget)
+      .populate('_account')
+      .exec(function (err, the_widget) {
+
+        if (!the_widget || err) {
+          var result = { message: "Widget not found", errors: null };
+          return res.status(404).json(result);
+        } else if (the_widget && the_widget._account && the_widget._account.did) {
+
+          var script = process.env.APP_URL + click2voxJsFileName;
+          var params = {
+            script: script,
+            id: req.params.id,
+            title: title,
+            label: the_widget.button_label || process.env.DEFAULT_BUTTON_LABEL,
+            redirect_url: the_widget.link_button_to_a_page || 'https://voxbone.com',
+            did: the_widget._account.did,
+            the_widget: the_widget
+          };
+
+          res.render('voxbone_widget_new', params);
+        }
+
+        res.end("");
     });
   });
 

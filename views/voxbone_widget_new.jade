@@ -1,0 +1,10 @@
+.voxButton(id="voxButton_#{id}" data-button_id="#{id}" data-text="#{label}" data-redirect_url="#{redirect_url || ''}" data-did="#{did}" data-dial_pad="#{the_widget.dial_pad || ''}"
+ data-context="#{the_widget.context || ''}"
+ data-send_digits="#{the_widget.send_digits || ''}"
+ data-caller_id="#{the_widget.caller_id || ''}"
+ data-incompatible_browser_configuration="#{the_widget.incompatible_browser_configuration || ''}"
+ data-show_frame="true"
+ data-server_url="#{process.env.APP_URL}"
+ data-default_button_css="true"
+)
+  script(src="#{script}")
