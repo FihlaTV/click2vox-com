@@ -1,3 +1,5 @@
+@import url(//fonts.googleapis.com/css?family=Open+Sans:400,300,700,400italic);
+
 // Color variables (appears count calculates by raw css)
 @color0: #19a1f3; // Appears 28 times
 @color1: #92168e; // Appears 28 times
@@ -12,9 +14,17 @@
 @width0: 140px; // Appears 4 times
 @width1: 100%; // Appears 5 times
 
+.widget-box a {
+  font-family: 'Open Sans', sans-serif;
+  text-decoration:none;
+  color:#343c3e;
+  font-weight:400;
+}
+
 .btn-style-a span,.btn-style-b span,.widget-box.style-a .btn-style span,.widget-box.style-b .btn-style span {
   text-shadow:0 -1px #07619e;
-  // width:@width1;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
 }
 .btn-style-a {
   -moz-border-radius:4px;
@@ -210,11 +220,6 @@
       background:-o-linear-gradient(@color2,@color0);
       background:-webkit-linear-gradient(@color2,@color0);
       background:linear-gradient(@color2,@color0);
-    }
-  }
-  .widget-footer {
-    a {
-      color:#8b8b8b;
     }
   }
 }
