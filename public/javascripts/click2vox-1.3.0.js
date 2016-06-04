@@ -38,7 +38,7 @@ var check3Ready = (function() {
     .append($('<link rel="stylesheet" type="text/css" />')
     .attr('href', info.server_url + '/stylesheets/vxb-widget.css') );
 
-  if(info.default_button_css){
+  if(info.use_default_button_css){
     $('head')
       .append($('<link rel="stylesheet" type="text/css" />')
       .attr('href', info.server_url + '/stylesheets/vxb-button.css') );
@@ -133,7 +133,7 @@ var check3Ready = (function() {
   ');
 
   var links = "";
-  if(info.show_frame && info.default_button_css) {
+  if(info.show_frame && info.use_default_button_css) {
     links = '<div class="widget-footer-left">\
                <a href="https://test.webrtc.org/" target="_blank">Test your setup</a>\
              </div>\
@@ -143,7 +143,7 @@ var check3Ready = (function() {
   };
 
   $('.voxButton').append(' \
-    <div id="launch_call_div" class="widget-box style-b">\
+    <div id="launch_call_div" class="widget-box ' + (info.button_css_class_name || "style-b") + '">\
       <button id="launch_call" class="btn-style launch_call">\
         <span>' +  info.text + '</span>\
       </button>\

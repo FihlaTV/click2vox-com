@@ -301,7 +301,7 @@ module.exports = function (passport, voxbone) {
             the_widget: the_widget
           };
 
-          res.render('voxbone_widget_new', params);
+          res.render('voxbone_widget_div', params);
         }
 
         res.end("");
@@ -320,7 +320,7 @@ module.exports = function (passport, voxbone) {
           var result = { message: "Widget not found", errors: null };
           return res.status(404).json(result);
         } else if (the_widget && the_widget._account && the_widget._account.did) {
-          res.render('voxbone_widget', { layout: false, title: title, did: the_widget._account.did, the_widget: the_widget });
+          res.render('voxbone_widget_iframe', { layout: false, title: title, did: the_widget._account.did, the_widget: the_widget });
         }
 
         res.end("");
