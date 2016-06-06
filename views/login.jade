@@ -36,7 +36,7 @@ block content
 
             #form_container
               .formWrap
-                form#login_form(ng-controller="LoginController" ng-init="login.uemail='#{email}'" name="login_form" novalidate)
+                form#login_form(ng-controller="LoginController" ng-init="login.uemail='#{email || ''}'" name="login_form" novalidate)
                   .form-group
                     label.control-label Email
                     input.form-control(type="email" id="uemail" name="uemail" ng-model="login.uemail" required)
