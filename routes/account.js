@@ -69,6 +69,12 @@ router.get('/widgets', utils.isLoggedIn, function (req, res) {
       }},
       {$sort: {_id: 1}},
     ], function (err, result) {
+      var widgets = result[0].widgets;
+
+      widgets.forEach(function(widget) {
+        widget.divCode = utils.widgetDivHtmlCode(widget, req.user.did);
+      });
+
       res.render('account/widget-list', {
         title: title,
         widgetsData: result,

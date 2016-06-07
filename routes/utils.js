@@ -155,6 +155,22 @@ module.exports = {
       ],
       callback
     );
+  },
+
+  widgetDivHtmlCode: function (widget, did) {
+    var jade = require('jade');
+    var script = process.env.APP_URL + this.click2voxJsFileName;
+
+    var params = {
+      did: did,
+      script: script,
+      id: widget._id,
+      label: widget.button_label || process.env.DEFAULT_BUTTON_LABEL,
+      redirect_url: widget.link_button_to_a_page || 'https://voxbone.com',
+      the_widget: widget
+    };
+
+    return jade.renderFile('./views/voxbone_widget_div.jade', params);
   }
 
 };

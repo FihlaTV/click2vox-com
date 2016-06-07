@@ -63,7 +63,7 @@ block content
                           button(class="btn-#{widget.button_style}")
                             span #{widget.button_label || defaultBtnLabel}
                         td.text-right
-                          #[button.btn.btn-sm.btn-primary.clipboard(href="#" ng-click="copyCode('#{widget._id}')") Copy Code] #[a.btn.btn-sm.btn-info(href="/widget/#{widget._id}/edit") View / Edit]
+                          #[button.btn.btn-sm.btn-primary.clipboard(widget-code="#{widget.divCode}") Copy Code] #[a.btn.btn-sm.btn-info(href="/widget/#{widget._id}/edit") View / Edit]
 
   .modal.fade.add-new-modal#myModal(tabindex="-1" role="dialog" aria-labelledby="myModalLabel")
     .modal-dialog(role="document")
