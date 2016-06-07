@@ -1,6 +1,8 @@
 // Voxbone Click2Vox Widget library
 // Version - v1.3.0
 
+var info = null;
+
 function loadScript(url, callback) {
   // Adding the script tag to the head as suggested before
   var head = document.getElementsByTagName('head')[0];
@@ -18,11 +20,14 @@ function loadScript(url, callback) {
 };
 
 var check0Ready = (function() {
-  loadScript("//webrtc.voxbone.com/js/jssip-latest.js", check1Ready);
+  info = $(".voxButton").data();
+  info.server_url = (info.server_url === undefined) ? 'https://click2vox.com' : info.server_url;
+
+  loadScript(info.server_url + "/javascripts/jssip-0.7.9.min-vox.js", check1Ready);
 });
 
 var check1Ready = (function() {
-  loadScript("//webrtc.voxbone.com/js/voxbone-latest.js", check2Ready);
+  loadScript(info.server_url + "/javascripts/voxbone-0.0.5.js", check2Ready);
 });
 
 var check2Ready = (function() {
@@ -31,9 +36,6 @@ var check2Ready = (function() {
 
 var check3Ready = (function() {
   console.log("jQuery & Raty are loaded");
-
-  var info = $(".voxButton").data();
-  info.server_url = (info.server_url === undefined) ? 'https://click2vox.com' : info.server_url;
 
   $('head')
     .append($('<link rel="stylesheet" type="text/css" />')
