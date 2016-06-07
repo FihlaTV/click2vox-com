@@ -33,12 +33,13 @@ var check3Ready = (function() {
   console.log("jQuery & Raty are loaded");
 
   var info = $(".voxButton").data();
+  info.server_url = (info.server_url === undefined) ? 'https://click2vox.com' : info.server_url;
 
   $('head')
     .append($('<link rel="stylesheet" type="text/css" />')
     .attr('href', info.server_url + '/stylesheets/vxb-widget.css') );
 
-  if(info.use_default_button_css){
+  if(info.use_default_button_css !== false){
     $('head')
       .append($('<link rel="stylesheet" type="text/css" />')
       .attr('href', info.server_url + '/stylesheets/vxb-button.css') );
@@ -133,7 +134,7 @@ var check3Ready = (function() {
   ');
 
   var links = "";
-  if(info.show_frame && info.use_default_button_css) {
+  if(info.show_frame !== false && info.use_default_button_css !== false) {
     links = '<div class="widget-footer-left">\
                <a href="https://test.webrtc.org/" target="_blank">Test your setup</a>\
              </div>\
@@ -143,10 +144,8 @@ var check3Ready = (function() {
   };
 
   $('.voxButton').append(' \
-    <div id="launch_call_div" class="widget-box ' + (info.button_css_class_name || "style-b") + '">\
-      <button id="launch_call" class="btn-style launch_call">\
-        <span>' +  info.text + '</span>\
-      </button>\
+    <div id="launch_call_div" class="vxb-widget-box ' + (info.div_css_class_name || "style-b") + '">\
+      <button id="launch_call" class="vxb-btn-style ' + (info.button_css_class_name) + '"><span>' +  info.text + '</span></button>\
       ' + links + '\
     </div>\
   ');
@@ -223,7 +222,7 @@ var check3Ready = (function() {
   function makeCall(did) {
     if (isInCall()) return;
 
-    if (!isWebRTCSupported() && (info.incompatible_browser_configuration == 'link_button_to_a_page')) {
+    if (!isWebRTCSupported() && (info.incompatible_browser_configuration === 'link_button_to_a_page') && info.redirect_url) {
       $window.open(info.redirect_url, '_blank');
       return;
     }
@@ -237,7 +236,7 @@ var check3Ready = (function() {
       $("#vw-in-call").removeClass('hidden');
       $(".vw-rating").addClass('hidden');
 
-      if (info.dial_pad)
+      if (info.dial_pad !== false)
         $("#dialpad").removeClass('hidden');
       else
         $("#dialpad").addClass('hidden');
