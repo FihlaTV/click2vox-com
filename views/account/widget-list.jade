@@ -2,7 +2,21 @@ extends ../layout
 
 block extra_head
   script.
-    require(['jquery', 'bootstrap'], function ($) {
+
+    require([
+      'angular',
+      'jquery',
+      'controllers/widget.list',
+      'bootstrap'
+    ],
+    function(angular, $, WidgetListController) {
+      angular.module('voxboneApp', [])
+        .controller('ListWidgetController', WidgetListController);
+
+      angular.bootstrap(document, ['voxboneApp']);
+
+      //- now we should load the widget.js script when all is ready
+      //- require(['widget'], function () {});
       $(document).on('hide.bs.collapse show.bs.collapse', '.sipCollapse', function () {
         var trigger = $('[data-toggle="collapse"][href="#' + $(this).attr('id') + '"]');
         trigger.find('i').toggleClass('glyphicon-chevron-down glyphicon-chevron-right');
@@ -24,7 +38,7 @@ block content
 
           #[=" "] #[a.btn.btn-success(href="/widget/new") Add New Button]
 
-    .body
+    .body(ng-controller="ListWidgetController")
       .container
         .row
           - each group in widgetsData
@@ -49,7 +63,7 @@ block content
                           button(class="btn-#{widget.button_style}")
                             span #{widget.button_label || defaultBtnLabel}
                         td.text-right
-                          #[a.btn.btn-sm.btn-primary(href="#") Copy Code] #[a.btn.btn-sm.btn-info(href="/widget/#{widget._id}/edit") View / Edit]
+                          #[button.btn.btn-sm.btn-primary.clipboard(href="#" ng-click="copyCode('#{widget._id}')") Copy Code] #[a.btn.btn-sm.btn-info(href="/widget/#{widget._id}/edit") View / Edit]
 
   .modal.fade.add-new-modal#myModal(tabindex="-1" role="dialog" aria-labelledby="myModalLabel")
     .modal-dialog(role="document")
