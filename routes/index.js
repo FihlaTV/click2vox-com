@@ -19,9 +19,6 @@ var sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SE
 var utils = require('./utils');
 var emails = require('./emails');
 
-// Keep the starting slash
-var click2voxJsFileName = "/click2vox.js";
-
 module.exports = function (passport, voxbone) {
   router.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -273,7 +270,7 @@ module.exports = function (passport, voxbone) {
   });
 
   // This is indented to get the latest version always
-  router.get(click2voxJsFileName, function(req, res) {
+  router.get(utils.click2voxJsFileName, function(req, res) {
     res.redirect('/javascripts/click2vox-1.3.0.js');
   });
 
@@ -290,7 +287,7 @@ module.exports = function (passport, voxbone) {
           return res.status(404).json(result);
         } else if (the_widget && the_widget._account && the_widget._account.did) {
 
-          var script = process.env.APP_URL + click2voxJsFileName;
+          var script = process.env.APP_URL + utils.click2voxJsFileName;
           var params = {
             script: script,
             id: req.params.id,
@@ -349,7 +346,7 @@ module.exports = function (passport, voxbone) {
 
     a_widget.save(function (err) {
       if (err) throw err;
-      result.widget_code = a_widget.generateHtmlCode();
+      result.widget_code = a_widget.generateDivHtmlCode();
       result.widget_id = a_widget.id;
       res.status(200).json(result);
     });

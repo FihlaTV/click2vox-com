@@ -38,6 +38,26 @@ widgetSchema.pre('save', function(next) {
   next();
 });
 
+widgetSchema.methods.generateDivHtmlCode = function() {
+  var utils = require("../routes/utils.js");
+  var jade = require("jade");
+
+  var script = process.env.APP_URL + utils.click2voxJsFileName;
+
+  var params = {
+    script: script,
+    id: this.id,
+    label: this.button_label || process.env.DEFAULT_BUTTON_LABEL,
+    redirect_url: this.link_button_to_a_page || 'https://voxbone.com',
+    did: this._account.did,
+    the_widget: this
+  };
+
+  var html = jade.renderFile('./views/voxbone_widget_div.jade', params);
+
+  return html;
+}
+
 widgetSchema.methods.generateHtmlCode = function() {
   var app_url = process.env.APP_URL || 'http://widget.voxbone.com';
 

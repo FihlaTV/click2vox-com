@@ -249,7 +249,7 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
         $scope.widget.button_style = theme;
     };
 
-    $scope.saveConfiguration = function () {
+    $scope.saveConfiguration = function (type = "div") {
       if (!$scope.widget.sip_uri) return;
       console.log("--> Generating Output Code...");
 
@@ -262,6 +262,7 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
 
       var data = $scope.widget;
       data['caller_id'] = caller_id;
+      data['type'] = type;
 
       var ibc = $scope.widget.incompatible_browser_configuration;
       if (ibc == 'hide_widget')
@@ -282,7 +283,6 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
 
       $http(req)
         .then(function successCallback(response) {
-            $('#generate-output-code')[0].text = "Regenerate Code";
             $scope.widget.showWidgetCode = true;
             $scope.widget.widget_code = response.data.widget_code;
             $scope.savedSuccessfully = true;

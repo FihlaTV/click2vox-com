@@ -63,7 +63,7 @@ router.get('/:id/edit', utils.isLoggedIn, function (req, res, next) {
   function (err, result) {
     if (!result.widget) return utils.objectNotFound(res, req, next);
     result['defaultBtnLabel'] = utils.defaultBtnLabel;
-    result['widget_code'] = result.widget.generateHtmlCode();
+    result['widget_code'] = result.widget.generateDivHtmlCode();
     res.render('widget/edit', result);
   });
 });
@@ -88,10 +88,14 @@ router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
     _account: req.user._id,
     _id: req.params.id
   },
-  updateData,
+  updateData).populate('_account').exec(
   function (err, widget) {
     var successResponse = function () {
-      result.widget_code = widget.generateHtmlCode();
+      if (params.type === 'iframe') {
+        result.widget_code = widget.generateHtmlCode();
+      } else {
+        result.widget_code = widget.generateDivHtmlCode();
+      }
       result.widget_id = widget.id;
       result.widget = widget;
       return res.status(200).json(result);

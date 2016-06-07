@@ -130,7 +130,7 @@ block content
                 .prev-view.light
                   .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
                   .togle-bg-tooltip
-                    #[span.badge(data-toggle='tooltip' data-placement="left" data-html="true" data-width="350" title="You can click the button to make a call and test the service!<br>(once you setup your widget)") ?]
+                    #[span.badge(ng-show="showCallButton()" data-toggle='tooltip' data-placement="left" data-html="true" data-width="350" title="You can click the button to make a call and test the service!<br>(once you setup your widget)") ?]
                   .widget-box#launch_call_div(ng-class="widget.button_style" ng-show="showCallButton()")
                     button.btn-style.launch_call#launch_call(ng-cloak ng-disabled="!widget.sip_uri" ng-click="makeCall(#{currentUser.did})" qtip="You can click the button to make a call and test the service!<br>(once you setup your widget)" qtip-visible='true') #[span {{widget.button_label || 'Call Sales'}}]
                     .widget-footer-left
@@ -163,7 +163,8 @@ block content
                         {{ widget.widget_code }}
                     .codebox-actions(ng-show='widget.showWidgetCode')
                       a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy to Clipboard
-                      a(href="#" class="hidden" id="generate-output-code" ng-click='widget.generateOutputCode()') Generate Code
+                      a(href="#" class="" id="generate-output-code" ng-click='saveConfiguration("div")') DIV
+                      a(href="#" class="" id="generate-output-code" ng-click='saveConfiguration("iframe")') IFRAME
 
               div(ng-cloak)
                 .error-label(ng-show="widget_form.cannotValidateSipUri")

@@ -11,6 +11,9 @@ module.exports = {
     'Accept': 'application/json'
   },
 
+  // Keep the starting slash
+  click2voxJsFileName: "/click2vox.js",
+
   defaultBtnLabel: process.env.DEFAULT_BUTTON_LABEL || 'Call Sales',
 
   defaultSipUris: function () {

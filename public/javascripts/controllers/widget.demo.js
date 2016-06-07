@@ -12,7 +12,7 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
       dial_pad: true,
       button_style: 'style-a',
       background_style: 'dark',
-      demoCode: '<div class="voxButton" id="voxButton_573a8abc66a0301f00ce6fe3"><link rel="stylesheet" href="https://click2vox.com/stylesheets/widget.css?v=110"><script src="https://click2vox.com/javascripts/widget.js?v=110"></script><iframe id="call_button_frame" width="300" height="130" frameBorder="0" scrolling="no" src="https://click2vox.com/voxbone_widget/573a8abc66a0301f00ce6fe3"></iframe><div id="control"></div></div>',
+      demoCode: '<div id="voxButton_574774ad1ce40fbf62562a22" data-button_id="574774ad1ce40fbf62562a22" data-text="Call Me!" data-redirect_url="https://voxbone.com" data-did="883510080144" data-dial_pad="true" data-context="context" data-send_digits="1,1200ms,2,1200ms,3,1200ms" data-caller_id="my_caller_id" data-incompatible_browser_configuration="link_button_to_a_page" data-show_frame="true" data-server_url="https://click2vox.com/" data-use_default_button_css="true" data-button_css_class_name="style-b" class="voxButton"></div><script src="https://click2vox.com/click2vox.js"></script>',
       show_text_html_value: '<h3>This is a placeholder for your message</h3>',
       incompatible_browser_configuration: 'hide_widget'
     };
