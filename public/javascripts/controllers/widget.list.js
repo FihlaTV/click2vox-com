@@ -14,6 +14,10 @@ define(['jquery', 'clipboard'], function ($, Clipboard) {
         event.trigger.textContent = 'Copy Code';
       }, 2500);
     });
+
+    $scope.callVoxbone = function () {
+      $('.call-to-voxbone-button .vxb-widget-box #launch_call')[0].click();
+    };
   };
 
   return WidgetListController;
