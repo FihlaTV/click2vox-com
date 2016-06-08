@@ -1,9 +1,9 @@
 {
   "name": "voxbone-generator",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www",
+    "start": "node ./bin/www",
     "postinstall": "bower cache clean && bower install"
   },
   "engines": {
