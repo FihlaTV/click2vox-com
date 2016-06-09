@@ -23,6 +23,7 @@ router.get('/new', utils.isLoggedIn, function (req, res) {
 // POST to add a new SIP URI
 router.post('/new', utils.isLoggedIn, function (req, res) {
   var sipUri = req.body.sip_uri;
+  var result = {};
 
   var sucessCallback = function (result) {
     result.redirect_to = (req.user.sip_uris.length === 0) ?
@@ -39,12 +40,12 @@ router.post('/new', utils.isLoggedIn, function (req, res) {
       if (account) {
         utils.provisionSIP(
           account, sipUri,
-          function (err, result) {
+          function (err) {
             result = { errors: null };
             if (err) {
               console.log('An error ocurred: ', err);
               result.errors = err;
-              return res.status(result.errors.httpStatusCode || 500).json(result);
+              return res.status(err.httpStatusCode || 500).json(result);
             } else {
               // append the sipURI in is not already there
               if (account.sip_uris.indexOf(sipUri) === -1) {

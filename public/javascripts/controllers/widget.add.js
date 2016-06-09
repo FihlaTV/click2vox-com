@@ -2,6 +2,7 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
 
   var WidgetAddController = function ($scope, $http, $window, $cookies) {
     $scope.preview_webrtc_compatible = true;
+    $scope.submitText = 'Save Configuration';
 
     $scope.onClickTab = function (is_preview_webrtc_compatible) {
       $scope.preview_webrtc_compatible = is_preview_webrtc_compatible;
@@ -105,6 +106,21 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
       });
     };
 
+    $scope.$watch('widget.sip_uri', function () {
+      var addNewSipUri = ($scope.widget.sip_uri === 'Add a new SIP URI');
+      var modal = $('.modal.add-new-modal');
+
+      if (addNewSipUri && modal.length > 0) {
+        modal.modal('show');
+        modal.on('hidden.bs.modal', function () {
+          // reset the dropdown
+          delete $scope.widget.sip_uri;
+          $scope.$digest();
+        });
+      } else
+        delete $scope.widget.new_sip_uri;
+    });
+
     $scope.getVoxrtcConfig = function (callback) {
       $.get('/token_config', function (data) {
         callback(eval('(' + data + ')'));
@@ -155,6 +171,11 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
       $("#hangup_call").click(function (e) {
         e.preventDefault();
         voxbone.WebRTC.hangup();
+      });
+
+      // TODO: pull this DID out, maybe in an ENV VAR
+      $('#callVoxbone').click(function () {
+        $scope.makeCall(883510080144);
       });
 
       $('.codebox-actions a').click(function (e) {
@@ -225,6 +246,8 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
 
     $scope.saveConfiguration = function () {
       console.log("--> Saving configuration...");
+      $scope.submitText = 'Saving...';
+      $scope.savingConfig = true;
 
       var caller_id = $scope.widget.caller_id;
       if (caller_id)
@@ -254,11 +277,42 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
         .then(function successCallback(response) {
             $window.location.href = response.data.redirect;
           },
-          function errorCallback() {
+          function errorCallback(response) {
+            console.log(response);
             $scope.widget.showWidgetCode = false;
-            console.log("entered error callback");
+            $scope.submitText = 'Save Configuration';
+            $scope.savingConfig = false;
+            $scope.savingError = response.data.errors;
           });
     };
+
+    $scope.$watchCollection('widget', function () {
+      $scope.savingError = false;
+
+      // TODO: convert this into a separate directive
+      // right now this is really ugly
+      if ($scope.widget.sip_uri === 'Add a new SIP URI') {
+        if ($scope.widget.new_sip_uri && $scope.widget.new_sip_uri.length === 0)
+          $scope.sipDirty = true;
+
+        if (!$scope.widget.new_sip_uri)
+          $scope.sipDirty = true;
+
+        if ($scope.widget.new_sip_uri && $scope.widget_form.new_sip_uri.$valid)
+          $scope.sipDirty = false;
+      } else {
+        if ($scope.sip_uri && $scope.sip_uri.length === 0 && $scope.widget_form.$dirty) {
+          $scope.sipDirty = true;
+        }
+
+        if ($scope.widget.sip_uri && $scope.widget_form.sip_uri.$errors && !$scope.widget_form.sip_uri.$errors.notallowed) {
+          $scope.sipDirty = false;
+        }
+
+        if ($scope.widget.sip_uri && $scope.widget_form.sip_uri.$valid)
+          $scope.sipDirty = false;
+      }
+    });
   };
 
   WidgetAddController.$inject = ['$scope', '$http', '$window'];

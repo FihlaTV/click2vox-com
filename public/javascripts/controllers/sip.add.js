@@ -57,7 +57,7 @@ define(['jquery', 'bootstrap'], function (jQuery) {
             if (response.data && errors && errors.comeback_errors && errors.comeback_errors.apiErrorMessage)
               $scope.errorMessage = errors.comeback_errors.apiErrorMessage;
             else
-              $scope.errorMessage = 'Unexpected error linking your SIP URI. Please try again. ';
+              $scope.errorMessage = 'Unexpected error linking your SIP URI. Please try again.';
           });
       }
     };

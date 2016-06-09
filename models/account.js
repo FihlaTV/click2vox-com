@@ -112,6 +112,21 @@ accountSchema.methods.getSipURIs = function () {
   return defaultSips.concat(this.sip_uris);
 };
 
+accountSchema.methods.saveSipURI = function (sipURI) {
+  if (this.sip_uris.indexOf(sipURI) === -1) {
+    this.sip_uris.push(sipURI);
+    this.save();
+  }
+};
+
+accountSchema.methods.removeSipURI = function (sipURI) {
+  var index = this.sip_uris.indexOf(sipURI);
+  if (index > -1) {
+    this.sip_uris.splice(index, 1);
+    this.save();
+  }
+};
+
 var Account = mongoose.model('Account', accountSchema);
 
 module.exports = Account;

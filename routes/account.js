@@ -49,7 +49,6 @@ router.post('/edit', utils.isLoggedIn, function (req, res) {
     });
   });
 });
-
 // ---- edit profile ----
 
 router.get('/widgets', utils.isLoggedIn, function (req, res) {

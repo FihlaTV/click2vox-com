@@ -249,7 +249,9 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
         $scope.widget.button_style = theme;
     };
 
-    $scope.saveConfiguration = function (type = "div") {
+    $scope.saveConfiguration = function (type) {
+      var embedType = (typeof(type) === 'undefined') ? 'div' : type;
+
       if (!$scope.widget.sip_uri) return;
       console.log("--> Generating Output Code...");
 
@@ -262,7 +264,7 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
 
       var data = $scope.widget;
       data['caller_id'] = caller_id;
-      data['type'] = type;
+      data['type'] = embedType;
 
       var ibc = $scope.widget.incompatible_browser_configuration;
       if (ibc == 'hide_widget')
@@ -304,10 +306,6 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
             else
               $scope.widget_form.cannotValidateSipUri = "Unexpected error linking your SIP URI. Please try again.";
           });
-    };
-
-    $scope.sipUriChange = function () {
-      $scope.widget.shouldProvision = ($scope.currentSip !== $scope.widget.sip_uri);
     };
   };
 
