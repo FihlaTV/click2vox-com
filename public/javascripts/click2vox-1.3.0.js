@@ -485,13 +485,9 @@ var check3Ready = (function() {
   init();
 });
 
-(function() {
-   // your page initialization code here
-   // the DOM will be available here
-   if (typeof jQuery === 'undefined') {
-     loadScript("//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.3/jquery.min.js", check0Ready);
-   } else
-     check0Ready();
-})();
-
-
+window.onload = function() {
+  if (typeof window.jQuery === 'undefined') {
+    loadScript("//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.3/jquery.min.js", check0Ready);
+  } else
+    check0Ready();
+}
