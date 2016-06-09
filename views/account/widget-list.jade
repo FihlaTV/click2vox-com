@@ -17,6 +17,10 @@ block extra_head
         var trigger = $('[data-toggle="collapse"][href="#' + $(this).attr('id') + '"]');
         trigger.find('i').toggleClass('glyphicon-chevron-down glyphicon-chevron-right');
       });
+
+      $(document).on('click', '#callVoxbone', function () {
+        $('.call-to-voxbone-button .vxb-widget-box #launch_call')[0].click();
+      });
     });
 
 block content
@@ -61,4 +65,4 @@ block content
                         td.text-right
                           #[button.btn.btn-sm.btn-primary.clipboard(widget-code="#{widget.divCode}") Copy Code] #[a.btn.btn-sm.btn-info(href="/widget/#{widget._id}/edit") View / Edit]
 
-  include contact-voxbone
+    include contact-voxbone

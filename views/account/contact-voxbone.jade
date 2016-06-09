@@ -3,14 +3,4 @@
 .call-to-voxbone-button
   include call-button.html
 
-script.
-  require([
-    'jquery'
-  ],
-  function($) {
-    $(document).on('click', '#callVoxbone', function () {
-      $('.call-to-voxbone-button .vxb-widget-box #launch_call')[0].click();
-    });
-  });
-
 include coming-soon-modal

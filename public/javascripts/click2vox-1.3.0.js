@@ -17,17 +17,23 @@ function loadScript(url, callback) {
 
   // Fire the loading
   head.appendChild(script);
-};
+}
 
 var check0Ready = (function() {
   info = $(".voxButton").data();
   info.server_url = (info.server_url === undefined) ? 'https://click2vox.com' : info.server_url;
 
-  loadScript(info.server_url + "/javascripts/jssip-0.7.9.min-vox.js", check1Ready);
+  if (typeof JsSIP === 'undefined')
+    loadScript(info.server_url + "/javascripts/jssip-0.7.9.min-vox.js", check1Ready);
+  else
+    check1Ready();
 });
 
 var check1Ready = (function() {
-  loadScript(info.server_url + "/javascripts/voxbone-0.0.5.js", check2Ready);
+  if (typeof voxbone === 'undefined')
+    loadScript(info.server_url + "/javascripts/voxbone-0.0.5.js", check2Ready);
+  else
+    check2Ready();
 });
 
 var check2Ready = (function() {
@@ -479,7 +485,13 @@ var check3Ready = (function() {
   init();
 });
 
-if (typeof jQuery === 'undefined')
-  loadScript("//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.3/jquery.min.js", check0Ready);
-else
-  check0Ready();
+(function() {
+   // your page initialization code here
+   // the DOM will be available here
+   if (typeof jQuery === 'undefined') {
+     loadScript("//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.3/jquery.min.js", check0Ready);
+   } else
+     check0Ready();
+})();
+
+
