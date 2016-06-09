@@ -69,10 +69,10 @@ router.get('/widgets', utils.isLoggedIn, function (req, res) {
       {$sort: {_id: 1}},
     ], function (err, result) {
       if (result.length > 0) {
-        var widgets = result[0].widgets;
-
-        widgets.forEach(function(widget) {
-          widget.divCode = utils.widgetDivHtmlCode(widget, req.user.did);
+        result.forEach(function(entry) {
+          entry.widgets.forEach(function (widget) {
+            widget.divCode = utils.widgetDivHtmlCode(widget, req.user.did);
+          });
         });
       }
 
