@@ -1,5 +1,5 @@
 // Voxbone Click2Vox Widget library
-// Version - v1.3.0
+// Version - v1.4.0
 
 var info = null;
 
@@ -161,7 +161,7 @@ var check3Ready = (function() {
   function sendPostMessage(action, value){
     if (typeof value === 'undefined') { value = ''; }
     var message = { action: action, value: value };
-    parent.postMessage(message, "*");
+    postMessage(message, "*");
   };
 
   var eventHandlers = {
