@@ -9,7 +9,7 @@ block extra_head
     ],
     function(angular, $, WidgetListController) {
       angular.module('voxboneApp', [])
-        .controller('ListWidgetController', WidgetListController);
+        .controller('WidgetListController', WidgetListController);
 
       angular.bootstrap(document, ['voxboneApp']);
 
@@ -34,7 +34,7 @@ block content
 
           #[=" "] #[a.btn.btn-success(href="/widget/new") Add New Button]
 
-    .body(ng-controller="ListWidgetController")
+    .body(ng-controller="WidgetListController")
       .container
         .row
           - each group in widgetsData

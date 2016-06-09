@@ -66,4 +66,4 @@ block content
                       div(ng-show="reset_form.confirmation.$error.required") Confirmation is required
                       div(ng-show="reset_form.confirmation.$error.pwmatch") Password confirmation does not match
 
-                  button.btn.btn-default#reset(ng-disabled="reset_form.$invalid" ng-click="resetpass.processForm()") Update Password
+                  button.btn.btn-default#reset(ng-disabled="reset_form.$invalid" ng-click="processForm()") Update Password
