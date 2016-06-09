@@ -1,4 +1,4 @@
-define(['jquery', 'clipboard'], function ($, Clipboard) {
+define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
 
   var WidgetListController = function ($scope, $http, $window) {
     var clipboard = new Clipboard('.clipboard', {
@@ -15,6 +15,8 @@ define(['jquery', 'clipboard'], function ($, Clipboard) {
       }, 2500);
     });
   };
+
+  WidgetListController.inject = ['$scope', '$http', '$window'];
 
   return WidgetListController;
 });

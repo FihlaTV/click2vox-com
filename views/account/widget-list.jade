@@ -2,12 +2,10 @@ extends ../layout
 
 block extra_head
   script.
-
     require([
       'angular',
       'jquery',
-      'controllers/widget.list',
-      'bootstrap'
+      'controllers/widget.list'
     ],
     function(angular, $, WidgetListController) {
       angular.module('voxboneApp', [])
@@ -15,8 +13,6 @@ block extra_head
 
       angular.bootstrap(document, ['voxboneApp']);
 
-      //- now we should load the widget.js script when all is ready
-      //- require(['widget'], function () {});
       $(document).on('hide.bs.collapse show.bs.collapse', '.sipCollapse', function () {
         var trigger = $('[data-toggle="collapse"][href="#' + $(this).attr('id') + '"]');
         trigger.find('i').toggleClass('glyphicon-chevron-down glyphicon-chevron-right');
