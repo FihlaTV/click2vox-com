@@ -113,9 +113,9 @@ block content
             dial_pad: true,
             button_style: 'style-a',
             background_style: 'dark',
-            widget_code: 'Select from the SIP URI field the Echo Service (echo@ivrs), Digits Service (digits@ivrs) or enter your SIP URI to Generate the code snippet',
+            widget_code: 'Select from the SIP URI field the Echo Service (echo@ivrs), Digits Service (digits@ivrs), Voxbone IVR (timeivr@sip1@voxbone.com, or enter your SIP URI to Generate the code snippet',
             //- sip_uri: 'echo@ivrs',
-            show_text_html_value: '<h3>This is a placeholder for your message</h3>',
+            show_text_html_value: '<h3>This is a placeholder for your message or HTML</h3>',
             incompatible_browser_configuration: 'hide_widget'
           };
 
@@ -303,7 +303,7 @@ block content
 
           $scope.widget.generateOutputCode = function(){
             if (!$scope.sipUriLinked) return;
-            console.log("--> Generating Output Code...");
+            console.log("--> Generating Widget Code...");
 
             var caller_id = $scope.widget.caller_id;
             if(caller_id)
@@ -450,7 +450,7 @@ block content
         .row
           .col-xs-12
             h1 Create a WebRTC Call Button
-            p #[b Note:] this will create a code snippet for a click-to-call widget. The widget allows calls to be made without installing any software on browsers that support WebRTC. This snippet code can be embedded into any webpage or Content Management System that supports loading external JavaScript.
+            p #[b Note:] this will create a code snippet for a click-to-call widget. The widget allows calls to be made from any webpage on browsers that support WebRTC. This snippet code can be embedded into any webpage or Content Management System that supports loading external JavaScript.
             p #[b Questions?] #[a(href="https://docs.google.com/document/d/1L6swwK_rVu_2XqSNMzmMRxBxL3YL50YTzkF6NaqeLqU/edit?usp=sharing" target="_blank") See our Frequently Asked Questions document.]
     .body(ng-controller="WidgetController")
       .container

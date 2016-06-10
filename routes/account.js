@@ -109,13 +109,13 @@ router.post('/signup', recaptcha.middleware.verify, function (req, res, next) {
   }
 
   if (formData.password && formData.password.trim() < 8) {
-    result.message = "Validation failed. Password policies are not satisfied";
+    result.message = "Validation failed. Password policy not satisfied";
     return res.status(400).json(result);
   }
 
   if (req.recaptcha.error) {
     console.log(req.recaptcha);
-    result.message = "Wrong Captcha! Try it again";
+    result.message = "Wrong Captcha! Please try again";
     return res.status(400).json(result);
   }
 
@@ -145,11 +145,11 @@ router.post('/signup', recaptcha.middleware.verify, function (req, res, next) {
 
     theAccount.save(function (err) {
       if (err) {
-        if (err.message != 'NoDidsAvailable')
+        if (err.message != 'NoDIDsAvailable')
           throw err;
         else {
-          console.log('*** NoDidsAvailable ***');
-          result.message = "Cannot signup at the moment (No Dids Available)";
+          console.log('*** NoDIDsAvailable ***');
+          result.message = "Cannot signup at the moment (No DIDs Available)";
           return res.status(400).json(result);
         }
       }
@@ -174,11 +174,11 @@ router.get('/verify/:token', function (req, res, next) {
   Account.findOne({ verifyAccountToken: req.params.token, verifyAccountExpires: { $gt: Date.now() } }, function (err, account) {
     if (account) {
       if (account.verified) {
-        renderLogin(res, "Account verification was already done. Please login", null);
+        renderLogin(res, "Account verification already completed. Please login", null);
       } else {
         account.verified = true;
         account.save(function (err) {
-          renderLogin(res, "Account verification succedeed. Please login", null);
+          renderLogin(res, "Account verification successful. Please login", null);
         });
       }
     } else {

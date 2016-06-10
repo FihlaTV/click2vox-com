@@ -71,7 +71,7 @@ accountSchema.pre('save', function (next) {
         foundDid.save();
         next();
       } else {
-        next(new Error('NoDidsAvailable'));
+        next(new Error('NoDIDsAvailable'));
       }
     } else {
       next();

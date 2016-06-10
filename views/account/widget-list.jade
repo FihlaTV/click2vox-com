@@ -28,7 +28,7 @@ block content
     .header
       .container
         h1 Click2Vox Buttons
-        p This is a free account. You will only be able to create buttons with the same SIP. #[a(href="#" data-toggle="modal" data-target="#myModal") Upgrade Now]
+        p You will only be able to create buttons with a single user-defined SIP URI on a free account. #[a(href="#" data-toggle="modal" data-target="#myModal") Upgrade Now]
 
         .actions-wrap
           if currentUser.sip_uris.length > 0 && !currentUser.paid
