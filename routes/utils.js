@@ -60,7 +60,7 @@ module.exports = {
         },
         function (err, response, body) {
 
-          if (err) return console.log('Error:', err);
+          if (err) return done(err);
 
           var responseBody = JSON.parse(body);
           var voiceUris = responseBody.voiceUris;
