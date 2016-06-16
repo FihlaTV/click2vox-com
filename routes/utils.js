@@ -158,14 +158,16 @@ module.exports = {
   },
 
   widgetDivHtmlCode: function (widget, did) {
+    var jsesc = require('jsesc');
     var jade = require('jade');
     var script = process.env.APP_URL + this.click2voxJsFileName;
+    var label = widget.button_label || process.env.DEFAULT_BUTTON_LABEL;
 
     var params = {
       did: did,
       script: script,
       id: widget._id,
-      label: widget.button_label || process.env.DEFAULT_BUTTON_LABEL,
+      label: jsesc(label),
       redirect_url: widget.link_button_to_a_page || 'https://voxbone.com',
       the_widget: widget
     };
