@@ -269,6 +269,10 @@ module.exports = function (passport, voxbone) {
     });
   });
 
+  router.get('/known-issues', function (req, res, next) {
+    res.render('known_issues');
+  });
+
   // This is indented to get the latest version always
   router.get(utils.click2voxJsFileName, function(req, res) {
     res.redirect('/javascripts/click2vox-1.3.0.js');
