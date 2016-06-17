@@ -269,6 +269,11 @@ module.exports = function (passport, voxbone) {
     });
   });
 
+  // FAQ & Known issues documents
+   router.get('/faq', function (req, res, next) {
+    res.render('faq');
+  });
+
   router.get('/known-issues', function (req, res, next) {
     res.render('known_issues');
   });

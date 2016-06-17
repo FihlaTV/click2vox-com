@@ -40,7 +40,7 @@ block content
         .row
           .col-xs-12
             h1 Demo WebRTC Click-to-Call Button
-            p #[b Questions?] #[a(href="https://docs.google.com/document/d/1L6swwK_rVu_2XqSNMzmMRxBxL3YL50YTzkF6NaqeLqU/edit?usp=sharing" target="_blank") See our Frequently Asked Questions document.]
+            p #[b Questions?] #[a(href="https://click2vox.com/faq" target="_blank") See our Frequently Asked Questions document.]
 
     .body(ng-controller="WidgetDemoController" ng-init="widget.sip_uri='echo@ivrs'")
       .container
@@ -73,7 +73,7 @@ block content
                     select.form-control(ng-model="widget.sip_uri" ng-options="sip for sip in #{JSON.stringify(demoSipUris)}" name="sip_uri" required disabled)
                       option(value="") Select a SIP URI
                     div(style="color: green")
-                      div To try your own SIP URI please #[a(href="/account/signup") create an Account]
+                      div To try your own SIP URI please #[a(href="/account/signup") create an account]
 
                   .panel.panel-default
                     .panel-heading
