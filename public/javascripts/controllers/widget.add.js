@@ -13,7 +13,7 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
       dial_pad: true,
       button_style: 'style-a',
       background_style: 'dark',
-      widget_code: 'Select from the SIP URI field the Echo Service (echo@ivrs), Digits Service (digits@ivrs) or one of your SIP URIs to create the button',
+      widget_code: 'You must setup you widget and save your configuration to get the button embed code. Select from the SIP URI field the Echo Service (echo@ivrs), Digits Service (digits@ivrs) or one of your SIP URIs to create the button',
       show_text_html_value: '<h3>This is a placeholder for your message</h3>',
       incompatible_browser_configuration: 'hide_widget'
     };

@@ -156,9 +156,9 @@ block content
                 .prev-view.light
                   .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
                   .togle-bg-tooltip
-                    #[span.badge(ng-show="showCallButton()" data-toggle='tooltip' data-placement="left" data-html="true" data-width="350" title="You can click the button to make a call and test the service!<br>(once you setup your widget)") ?]
-                  .widget-box#launch_call_div(ng-class="widget.button_style" ng-show="showCallButton()")
-                    button.btn-style.launch_call#launch_call(ng-cloak ng-disabled="!widget.sip_uri" ng-click="makeCall(#{currentUser.did})" qtip="You can click the button to make a call and test the service!<br>(once you setup your widget)" qtip-visible='true') #[span {{widget.button_label || 'Call Sales'}}]
+                    #[span.badge(ng-show="showCallButton()" data-toggle='tooltip' data-placement="left" data-html="true" data-width="350" title="You can click the button to make a call and test the service!<br>(once you setup your widget and save the configuration)") ?]
+                  .widget-box#launch_call_div(ng-class="widget.button_style")
+                    button.btn-style.launch_call#launch_call(ng-cloak qtip="You can click the button to make a call and test the service!<br>(once you saved your configuration)" qtip-visible='true') #[span {{widget.button_label || 'Call Sales'}}]
                     .widget-footer-left
                       a(href="https://test.webrtc.org/" target="_blank") Test your setup
                     .widget-footer-right
