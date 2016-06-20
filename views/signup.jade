@@ -43,7 +43,8 @@ block content
                 #[b Note for current Voxbone customers:] your click2vox.com login will not be linked to your existing Voxbone account. To use your Voxbone account and an existing DID, please visit #[a(href="https://developers.voxbone.com/how-to/setup-webrtc/") view instructions]
 
               .formWrap
-                form#create_account(ng-controller="SignUpController" name="create_account" ng-init="account.uemail='#{email|| ''}'" novalidate)
+                form#create_account(ng-controller="SignUpController" name="create_account" ng-init="account.uemail='#{email || ''}'" novalidate)
+                  input.form-control(type="hidden" id="ureference" name="ureference" ng-model="account.ureference" ng-init="account.ureference='#{reference || ''}'")
                   .form-group
                     label.control-label Name
                     input.form-control(type="text" id="uname" name="uname" ng-model="account.uname" required)

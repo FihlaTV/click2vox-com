@@ -26,6 +26,7 @@ define(['angular', 'jquery'], function (angular, $) {
           'Content-Type': 'application/json; charset=utf-8'
         },
         data: {
+          reference: $scope.account.ureference || "",
           name: $scope.account.uname,
           email: $scope.account.uemail,
           company: $scope.account.ucompany,
