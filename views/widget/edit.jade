@@ -162,26 +162,28 @@ block content
                   .title
                     span Widget Code Snippet
                       p Paste the following HTML code into your website or give it a try using on
+                  ul.nav.nav-tabs
+                    li(ng-click="saveConfiguration('div')" ng-class="{active:true}")
+                      a(data-toggle="tab" href="#") DIV #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="TBD") ?]
+                    li(ng-click="saveConfiguration('iframe')" ng-class="{active:false}")
+                      a(data-toggle="tab" href="#") IFRAME #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="TBD") ?]
 
                   .widget-code-wrap
                     .sample.shadow-z-2#widget_code
                       pre(ng-cloak)
                         {{ widget.widget_code }}
 
-                    .codebox-playground
-                      .btn-jsfiddle(ng-show="widget.showWidgetCode")
+                    .codebox-playground(ng-show="widget.showWidgetCode")
+                      .btn-jsfiddle
                         form#code_debug_jsfiddle(action="https://jsfiddle.net/api/post/library/pure/" method="POST" target="_blank")
                           input(type="hidden" name="html" value='{{ prepareHtmlForCodepen(widget.widget_code) }}')
                           a(href="#" onclick="$('#code_debug_jsfiddle').submit();") JSFiddle
-                      .btn-jsfiddle(ng-show="widget.showWidgetCode")
+                      .btn-jsfiddle
                         form#code_debug_codepen(action="https://codepen.io/pen/define" method="POST" target="_blank")
                           input(type="hidden" name="data" value='{"html": "{{ prepareHtmlForCodepen(widget.widget_code) }}"}')
                           a(href="#" onclick="$('#code_debug_codepen').submit();") CodePen
-
-                    .codebox-actions(ng-show='widget.showWidgetCode')
-                      a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy to Clipboard
-                      a(href="#" ng-click='saveConfiguration("div")') DIV
-                      a(href="#" ng-click='saveConfiguration("iframe")') IFRAME
+                      .btn-jsfiddle
+                        a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy to Clipboard
 
               div(ng-cloak)
                 .error-label(ng-show="widget_form.cannotValidateSipUri")
