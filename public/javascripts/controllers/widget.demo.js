@@ -86,10 +86,6 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
       }
     };
 
-    $scope.prepareHtmlForCodepen = function (data) {
-      return data.replace(/"/g, "'");
-    };
-
     $scope.reset = function (form) {
       $scope.widget = angular.copy($scope.master);
     };

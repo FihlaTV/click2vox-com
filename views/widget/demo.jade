@@ -149,16 +149,18 @@ block content
                     span Widget Code Snippet
                       p The following HTML code it is just for demo purposes.
 
-                      .btn-code-playground(style="display: inline-block;" qtip="Create an account to export your widget code or quickly test with free web testing services like JSFiddle or CodePen" qtip-my="center left" qtip-at="center right")
-                        .btn-jsfiddle
-                          a.inactive(href="javascript:;") JSFiddle
-                        .btn-jsfiddle
-                          a.inactive(href="javascript:;") CodePen
-
                   .widget-code-wrap
                     .sample.shadow-z-2#widget_code
                       pre.noselect(ng-cloak)
                         {{ widget.demoCode }}
+
+                      .codebox-playground(qtip="Create an account to export your widget code or quickly test with free web testing services like JSFiddle or CodePen" qtip-my="center left" qtip-at="center right")
+                        .btn-jsfiddle
+                          form
+                            a.inactive(href="#") JSFiddle
+                        .btn-jsfiddle
+                          form
+                            a.inactive(href="#") CodePen
 
               div
                 div.ng-cloak(style="color: green" ng-show="widget.createAccountAlert") To try your own WebRTC Call Button please #[a(href="/account/signup") create an Account] #[br] #[br]
