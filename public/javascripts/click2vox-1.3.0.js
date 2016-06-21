@@ -231,7 +231,7 @@ var check3Ready = (function() {
     if (isInCall()) return;
 
     if (!isWebRTCSupported() && (info.incompatible_browser_configuration === 'link_button_to_a_page') && info.redirect_url) {
-      $window.open(info.redirect_url, '_blank');
+      window.open(info.redirect_url);
       return;
     }
 

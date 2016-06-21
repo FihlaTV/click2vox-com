@@ -35,6 +35,9 @@ block content
             #alert-unverified.alert.alert-danger.hidden Unverified account. Please check your inbox to validate your email address.
 
             #form_container
+              p.
+                #[b Note for current Voxbone customers:] your Click2Vox login will not be linked to your existing Voxbone account. To use your Voxbone account and an existing DID, please visit #[a(href="https://developers.voxbone.com/how-to/setup-webrtc/") view instructions]
+
               .formWrap
                 form#login_form(ng-controller="LoginController" ng-init="login.uemail='#{email || ''}'" name="login_form" novalidate)
                   .form-group
@@ -56,5 +59,3 @@ block content
                   br
                   a(href="/signup") Sign up here
                   br
-                  .login-note.text-center
-                    span Note to Voxbone customers: click2vox.com is not tied to your Voxbone Portal account. Please #[a(href="/account/signup") register] for a new account.

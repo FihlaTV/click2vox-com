@@ -74,6 +74,7 @@ app.use(function (req, res, next) {
 });
 
 var routes = require('./routes/index');
+var contactRoutes = require('./routes/contact');
 var accountRoutes = require('./routes/account');
 var widgetRoutes = require('./routes/widget');
 var sipRoutes = require('./routes/sip');
@@ -83,9 +84,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes(passport, voxbone));
 app.use('/account', accountRoutes);
-app.use('/widget', widgetRoutes);
+app.use('/api', contactRoutes);
 app.use('/sip', sipRoutes);
-
+app.use('/widget', widgetRoutes);
 
 require('coffee-script/register'); // <-- This dependency is to be removed very soon.
 penguin = require('penguin');
