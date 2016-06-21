@@ -19,8 +19,8 @@ html(lang='en')
     link(href="//cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.css", rel="stylesheet")
 
     script(src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js" async)
-    script(src="//webrtc.voxbone.com/js/jssip-latest.js")
-    script(src="//webrtc.voxbone.com/js/voxbone-latest.js" async)
+    script(src="/javascripts/jssip-0.7.9.min-vox.js")
+    script(src="/javascripts/voxbone-0.0.5.js")
 
     //- load requirejs and its config
     script(src="/lib/requirejs/require.js")
@@ -35,16 +35,6 @@ html(lang='en')
 
         ga('create', '#{process.env.GOOGLE_ANALYTICS_ID}', 'auto');
         ga('send', 'pageview');
-
-    if process.env.INSPECTLET_ID
-      script#inspectletjs.
-        window.__insp = window.__insp || [];
-        __insp.push(['wid', #{process.env.INSPECTLET_ID}]);
-        (function() {
-        function ldinsp(){if(typeof window.__inspld != "undefined") return; window.__inspld = 1; var insp = document.createElement('script'); insp.type = 'text/javascript'; insp.async = true; insp.id = "inspsync"; insp.src = ('https:' == document.location.protocol ? 'https' : 'http') + '://cdn.inspectlet.com/inspectlet.js'; var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(insp, x); };
-        setTimeout(ldinsp, 500); document.readyState != "complete" ? (window.attachEvent ? window.attachEvent('onload', ldinsp) : window.addEventListener('load', ldinsp, false)) : ldinsp();
-        })();
-        __insp.push(['tagSession', {email: "#{email || 'nobody@nobody.com'}"}]);
 
     if process.env.HOTJAR_ID
       script.
@@ -64,7 +54,7 @@ html(lang='en')
       nav.navbar
         .navbar-header
           a.navbar-brand(href='https://voxbone.com' target="_blank")
-          span.subBrand Voxbone WebRTC Beta
+          span.subBrand Click2Vox Click-to-Call Gateway
         .pull-right
           if authenticated
             a.login.pull-left.user-pill(href="/") Home
@@ -83,6 +73,8 @@ html(lang='en')
         .col-xs-12.text-center#bottom-footer
           a(target="_blank" href="https://www.voxbone.com/resources/Voxbone_AUP.pdf") Acceptable Use Policy
           a(target="_blank" href="https://www.voxbone.com/privacypolicy.jsf") Privacy Policy
-          a(target="_blank" href="https://docs.google.com/document/d/1rj5O9hJnjlUAe64HeeNo-ZktNRFefseEc8QAF0-z44Y/edit?usp=sharing") Known Issues
-          a(target="_blank" href="mailto:cwhart@voxbone.com?subject=Voxbone Widget Generator Feedback") Send feedback
+          a(href="/known-issues") Known Issues
+          a(href="/faq") FAQ
+          a(target="_blank" href="mailto:cwhart@voxbone.com?subject=Voxbone Widget Generator Feedback") Send Feedback
+          a(target="_blank" href="https://workshop.voxbone.com") A Workshop Project
           a(target="_blank" href="https://www.voxbone.com/" style="border-right: 0px;") Copyright ©2016, VOXBONE SA

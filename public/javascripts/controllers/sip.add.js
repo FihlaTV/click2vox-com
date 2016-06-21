@@ -6,7 +6,7 @@ define(['jquery', 'bootstrap'], function (jQuery) {
       this.onSubmitting = false;
       this.errorMessage = '';
       this.successMessage = '';
-      this.submitText = 'Add your new SIP';
+      this.submitText = 'Add a SIP URI';
       this.skipText = 'Skip for now';
     };
 
@@ -43,21 +43,21 @@ define(['jquery', 'bootstrap'], function (jQuery) {
 
         $http(req)
           .then(function successCallback(response) {
-            $scope.successMessage = 'SIP provisioned. Redirecting...';
+            $scope.successMessage = 'SIP URI provisioned. Redirecting...';
             $timeout(function() {
               $window.location.href = response.data.redirect_to;
             }, 100);
 
           }, function errorCallback(response) {
             var errors = response.data.errors || {};
-            $scope.submitText = 'Add SIP';
+            $scope.submitText = 'Add SIP URI';
             $scope.onSubmitting = false;
             console.log('Error: ', response.data);
 
             if (response.data && errors && errors.comeback_errors && errors.comeback_errors.apiErrorMessage)
               $scope.errorMessage = errors.comeback_errors.apiErrorMessage;
             else
-              $scope.errorMessage = 'Unexpected error linking your SIP URI. Please try again. ';
+              $scope.errorMessage = 'Unexpected error linking your SIP URI. Please try again.';
           });
       }
     };

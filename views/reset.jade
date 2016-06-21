@@ -1,67 +1,44 @@
 extends layout
 
-block content
+block extra_head
   script.
-    require(['angular', 'jquery'], function (angular, $) {
-      var resetPasswordApp = angular.module('voxboneApp', []);
-      resetPasswordApp.controller('ResetController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
-        $scope.master = {};
+    require([
+        'angular', 'jquery',
+        'directives/password.check'
+      ], function (angular, $, passwordCheckDirective) {
+        var resetPasswordApp = angular.module('voxboneApp', []);
 
-        $scope.update = function(resetpass){
-          $scope.master = angular.copy(resetpass);
-        };
+        resetPasswordApp.controller('ResetController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
+          $scope.processForm = function () {
+            var req = {
+              method: 'POST',
+              url: '/reset/#{token}',
+              headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+              },
+              data: {
+                password: $scope.resetpass.upassword,
+                confirmation: $scope.resetpass.confirmation
+              }
+            };
 
-        $scope.reset = function(form){
-          if(form){
-            form.$setPristine();
-            form.$setUntouched();
-          }
-          $scope.resetpass = angular.copy($scope.master);
-        };
-
-        $scope.reset();
-
-        $scope.resetpass.processForm = function(){
-          console.log("--> Submitting...");
-          var req = {
-            method: 'POST',
-            url: '/reset/#{token}',
-            headers: {
-              'Content-Type': 'application/json; charset=utf-8'
-            },
-            data: {
-              password: $scope.resetpass.upassword,
-              confirmation: $scope.resetpass.confirmation
-            }
-          };
-          $http(req)
-            .then(function successCallback(response){
-              $window.location.href = response.data.redirect;
-            }, function errorCallback(response){
-              console.log(response);
-              document.getElementById("alert").innerHTML = "Confirmation doesn't match, try again.";
-              document.getElementById("alert").style.display = "block";
-            });
-        }
-      }]);
-
-      resetPasswordApp.directive('pwCheck', [function () {
-        return {
-          require: 'ngModel',
-          link: function (scope, elem, attrs, ctrl) {
-            var firstPassword = '#' + attrs.pwCheck;
-            elem.add(firstPassword).on('keyup', function () {
-              scope.$apply(function () {
-                var v = elem.val() === $(firstPassword).val();
-                ctrl.$setValidity('pwmatch', v);
+            $http(req)
+              .then(function successCallback (response) {
+                $window.location.href = response.data.redirect;
+              }, function errorCallback (response) {
+                $("#alert")
+                  .html("Confirmation doesn't match, try again.")
+                  .css("display", "block");
               });
-            });
           }
         }
-      }]);
+      ]);
 
+      resetPasswordApp.directive('pwCheck', passwordCheckDirective);
       angular.bootstrap(document, ['voxboneApp']);
     });
+
+block content
 
   .main.registerPage
     .body
@@ -79,14 +56,14 @@ block content
                   .form-group
                     label.control-label New Password
                     input.form-control(type="password" id="upassword" name="upassword" ng-model="resetpass.upassword" required ng-minlength="8")
-                    .error-label(ng-show="reset_form.$submitted || reset_form.upassword.$touched")
+                    .error-label(ng-cloak ng-show="reset_form.$submitted || reset_form.upassword.$touched")
                       div(ng-show="reset_form.upassword.$error.minlength") Password must be at least 8 characters in length
                       div(ng-show="reset_form.upassword.$error.required") Password is required
                   .form-group
                     label.control-label Confirm Password
                     input.form-control(type="password" id="confirmation" name="confirmation" ng-model="resetpass.confirmation" required pw-check="upassword")
-                    .error-label(ng-show="reset_form.$submitted || reset_form.confirmation.$touched")
+                    .error-label(ng-cloak ng-show="reset_form.$submitted || reset_form.confirmation.$touched")
                       div(ng-show="reset_form.confirmation.$error.required") Confirmation is required
                       div(ng-show="reset_form.confirmation.$error.pwmatch") Password confirmation does not match
 
-                  button.btn.btn-default#reset(ng-disabled="reset_form.$invalid" ng-click="resetpass.processForm()") Update Password
+                  button.btn.btn-default#reset(ng-disabled="reset_form.$invalid" ng-click="processForm()") Update Password

@@ -2,10 +2,24 @@ extends ../layout
 
 block extra_head
   script.
-    require(['jquery', 'bootstrap'], function ($) {
+    require([
+      'angular',
+      'jquery',
+      'controllers/widget.list'
+    ],
+    function(angular, $, WidgetListController) {
+      angular.module('voxboneApp', [])
+        .controller('WidgetListController', WidgetListController);
+
+      angular.bootstrap(document, ['voxboneApp']);
+
       $(document).on('hide.bs.collapse show.bs.collapse', '.sipCollapse', function () {
         var trigger = $('[data-toggle="collapse"][href="#' + $(this).attr('id') + '"]');
         trigger.find('i').toggleClass('glyphicon-chevron-down glyphicon-chevron-right');
+      });
+
+      $(document).on('click', '#callVoxbone', function () {
+        $('.call-to-voxbone-button .vxb-widget-box #launch_call')[0].click();
       });
     });
 
@@ -14,7 +28,7 @@ block content
     .header
       .container
         h1 Click2Vox Buttons
-        p This is a free account. You will only be able to create buttons with the same SIP. #[a(href="#" data-toggle="modal" data-target="#myModal") Upgrade Now]
+        p You will only be able to create buttons with a single user-defined SIP URI on a free account. #[a(href="#" data-toggle="modal" data-target="#myModal") Upgrade Now]
 
         .actions-wrap
           if currentUser.sip_uris.length > 0 && !currentUser.paid
@@ -24,7 +38,7 @@ block content
 
           #[=" "] #[a.btn.btn-success(href="/widget/new") Add New Button]
 
-    .body
+    .body(ng-controller="WidgetListController")
       .container
         .row
           - each group in widgetsData
@@ -49,22 +63,6 @@ block content
                           button(class="btn-#{widget.button_style}")
                             span #{widget.button_label || defaultBtnLabel}
                         td.text-right
-                          #[a.btn.btn-sm.btn-primary(href="#") Copy Code] #[a.btn.btn-sm.btn-info(href="/widget/#{widget._id}/edit") View / Edit]
+                          #[button.btn.btn-sm.btn-primary.clipboard(widget-code="#{widget.divCode}") Copy Code] #[a.btn.btn-sm.btn-info(href="/widget/#{widget._id}/edit") View / Edit]
 
-  .modal.fade.add-new-modal#myModal(tabindex="-1" role="dialog" aria-labelledby="myModalLabel")
-    .modal-dialog(role="document")
-      .modal-content
-        .modal-header
-          button.close(type="button" class="" data-dismiss="modal" aria-label="Close")
-            span(aria-hidden="true")&times;
-          h4.modal-title#myModalLabel
-            i.glyphicon.glyphicon-exclamation-sign
-            span  Add New SIP URI
-        .modal-body
-          p#[strong Coming Soon.] To add a new SIP URI you will need to upgrade to a paid account. We are currently working on these feature. Please contact us directly if you need this sooner.
-        .modal-footer
-          div
-            include call-button.html
-          //- button.btn.btn-purple(type="button" data-dismiss="modal") Click to Call Voxbone
-          a(href="mailto:info@voxbone.com?subject=%5BCLICK2VOX%5D%20About%20Upgrading")
-            button.btn.btn-success(type="button") Click to Email Voxbone
+    include contact-voxbone

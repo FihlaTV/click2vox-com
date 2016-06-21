@@ -11,16 +11,18 @@ block content
       'jquery',
       'controllers/widget.add',
       'directives/qtip',
-      'directives/http.prefix'
+      'directives/http.prefix',
+      'directives/check.allowed.sip'
     ],
     function(
       angular, ngSanitize, $,
       WidgetAddController, qtipDirective,
-      httpPrefixDirective) {
+      httpPrefixDirective, checkAllowedSip) {
 
         angular.module('voxboneApp', ['ngSanitize'])
           .directive('qtip', qtipDirective)
           .directive('httpPrefix', httpPrefixDirective)
+          .directive('checkAllowedSip', checkAllowedSip)
           .controller('WidgetAddController', WidgetAddController);
 
         angular.bootstrap(document, ['voxboneApp']);
@@ -37,7 +39,7 @@ block content
         .row
           .col-xs-12
             h1 Create a WebRTC Click-to-Call Button
-            p #[b Questions?] #[a(href="https://docs.google.com/document/d/1L6swwK_rVu_2XqSNMzmMRxBxL3YL50YTzkF6NaqeLqU/edit?usp=sharing" target="_blank") See our Frequently Asked Questions document.]
+            p #[b Questions?] #[a(href="https://click2vox.com/faq" target="_blank") See our Frequently Asked Questions document.]
 
             #alert-success.alert.alert-success(style="display: none;")
 
@@ -75,12 +77,28 @@ block content
                 .boxPanel
                   .form-group
                     label.control-label SIP URI
-                      span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?
+                      span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Select one of yours SIP URIs or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?
 
-                    select.form-control(ng-model="widget.sip_uri" ng-options="sip for sip in #{JSON.stringify(currentUser.getSipURIs())}" required)
+                    select.form-control(
+                      ng-model="widget.sip_uri" name="sip_uri" required
+                      ng-options="sip for sip in #{JSON.stringify(currentUser.getSipURIs().concat('Add a new SIP URI'))}")
                       option(value="") Select a SIP URI
-                    .error-label(ng-cloak ng-show="widget_form.sip_uri.$touched" )
+
+                    .error-label(ng-cloak ng-show="widget_form.sip_uri.$touched")
                       div(ng-show="widget_form.sip_uri.$error.required") SIP URI required
+
+                  .form-group(ng-cloak ng-show="widget.sip_uri == 'Add a new SIP URI'")
+                    if currentUser.sip_uris.length == 0 || currentUser.paid && false
+                      label.control-label Enter a new SIP URI
+                      input.form-control(type="text" name="new_sip_uri" ng-model="widget.new_sip_uri" ng-pattern="/^[^@]+@[^@]+$/" placeholder="i.e. echo@ivrs" check-allowed-sip)
+
+                      .error-label
+                        div(ng-show="widget_form.new_sip_uri.$error.notallowed") SIP URI not allowed
+                        div(ng-show="widget_form.new_sip_uri.$error.required") SIP URI is required
+                        div(ng-show="widget_form.new_sip_uri.$error.pattern") SIP URI must be valid i.e: user@ivrs.voxbone.com
+                    else
+                      include ../account/coming-soon-modal
+
                   .panel.panel-default
                     .panel-heading
                       a.collapsed.title-toggle(data-toggle="collapse", data-target="#collapseAdvancedCallConfiguration", href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
@@ -138,9 +156,9 @@ block content
                 .prev-view.light
                   .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
                   .togle-bg-tooltip
-                    #[span.badge(data-toggle='tooltip' data-placement="left" data-html="true" data-width="350" title="You can click the button to make a call and test the service!<br>(once you setup your widget)") ?]
-                  .widget-box#launch_call_div(ng-class="widget.button_style" ng-show="showCallButton()")
-                    button.btn-style.launch_call#launch_call(ng-cloak ng-disabled="!widget.sip_uri" ng-click="makeCall(#{currentUser.did})" qtip="You can click the button to make a call and test the service!<br>(once you setup your widget)" qtip-visible='true') #[span {{widget.button_label || 'Call Sales'}}]
+                    #[span.badge(ng-show="showCallButton()" data-toggle='tooltip' data-placement="left" data-html="true" data-width="350" title="You can click the button to make a call and test the service!<br>(once you setup your widget and save the configuration)") ?]
+                  .widget-box#launch_call_div(ng-class="widget.button_style")
+                    button.btn-style.launch_call#launch_call(ng-cloak qtip="You can click the button to make a call and test the service!<br>(once you saved your configuration)" qtip-visible='true') #[span {{widget.button_label || 'Call Sales'}}]
                     .widget-footer-left
                       a(href="https://test.webrtc.org/" target="_blank") Test your setup
                     .widget-footer-right
@@ -160,8 +178,11 @@ block content
                       pre(ng-cloak)
                         {{ widget.widget_code }}
 
-              div
+              div(ng-cloak)
+                .error-label(ng-show="savingError")
+                  div(ng-bind="savingError")
+
                 .pull-right
-                  button.btn.btn-default(ng-click='saveConfiguration()' ng-disabled="widget_form.$invalid || !widget.sip_uri" ) Save Configuration
+                  button.btn.btn-default(ng-cloak ng-click='saveConfiguration()' ng-disabled="widget_form.$invalid || savingConfig || widget_form.$pristine || sipDirty") {{submitText}}
                 .clearfix
                 br

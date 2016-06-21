@@ -11,6 +11,9 @@ module.exports = {
     'Accept': 'application/json'
   },
 
+  // Keep the starting slash
+  click2voxJsFileName: "/click2vox.js",
+
   defaultBtnLabel: process.env.DEFAULT_BUTTON_LABEL || 'Call Sales',
 
   defaultSipUris: function () {
@@ -57,7 +60,7 @@ module.exports = {
         },
         function (err, response, body) {
 
-          if (err) return console.log('Error:', err);
+          if (err) return done(err);
 
           var responseBody = JSON.parse(body);
           var voiceUris = responseBody.voiceUris;
@@ -152,6 +155,24 @@ module.exports = {
       ],
       callback
     );
+  },
+
+  widgetDivHtmlCode: function (widget, did) {
+    var jsesc = require('jsesc');
+    var jade = require('jade');
+    var script = process.env.APP_URL + this.click2voxJsFileName;
+    var label = widget.button_label || process.env.DEFAULT_BUTTON_LABEL;
+
+    var params = {
+      did: did,
+      script: script,
+      id: widget._id,
+      label: jsesc(label),
+      redirect_url: widget.link_button_to_a_page || 'https://voxbone.com',
+      the_widget: widget
+    };
+
+    return jade.renderFile('./views/voxbone_widget_div.jade', params);
   }
 
 };

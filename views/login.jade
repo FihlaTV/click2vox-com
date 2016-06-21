@@ -32,11 +32,11 @@ block content
                   div= message
 
             #alert-user-pass.alert.alert-danger.hidden Incorrect Email or Password, try again.
-            #alert-unverified.alert.alert-danger.hidden Unverified account. Please check your inbox.
+            #alert-unverified.alert.alert-danger.hidden Unverified account. Please check your inbox to validate your email address.
 
             #form_container
               .formWrap
-                form#login_form(ng-controller="LoginController" ng-init="login.uemail='#{email}'" name="login_form" novalidate)
+                form#login_form(ng-controller="LoginController" ng-init="login.uemail='#{email || ''}'" name="login_form" novalidate)
                   .form-group
                     label.control-label Email
                     input.form-control(type="email" id="uemail" name="uemail" ng-model="login.uemail" required)
@@ -55,3 +55,6 @@ block content
                   a(href="/forgot") Forgot your password?
                   br
                   a(href="/signup") Sign up here
+                  br
+                  .login-note.text-center
+                    span Note to Voxbone customers: click2vox.com is not tied to your Voxbone Portal account. Please #[a(href="/account/signup") register] for a new account.

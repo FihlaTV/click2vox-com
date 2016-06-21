@@ -1,9 +1,9 @@
 {
   "name": "voxbone-generator",
-  "version": "1.2.1",
+  "version": "1.4.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www",
+    "start": "node ./bin/www",
     "postinstall": "bower cache clean && bower install"
   },
   "engines": {
@@ -28,6 +28,7 @@
     "grunt-bower-requirejs": "^2.0.0",
     "grunt-nodemon": "^0.4.2",
     "jade": "~1.11.0",
+    "jsesc": "^2.2.0",
     "method-override": "~1.0.0",
     "mongoose": "~3.8.0",
     "morgan": "~1.6.1",

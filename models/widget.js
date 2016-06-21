@@ -38,6 +38,11 @@ widgetSchema.pre('save', function(next) {
   next();
 });
 
+widgetSchema.methods.generateDivHtmlCode = function() {
+  var utils = require("../routes/utils.js");
+  return utils.widgetDivHtmlCode(this, this._account.did);
+};
+
 widgetSchema.methods.generateHtmlCode = function() {
   var app_url = process.env.APP_URL || 'http://widget.voxbone.com';
 

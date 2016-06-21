@@ -10,6 +10,14 @@ var Account = require('../models/account');
 var Widget = require('../models/widget');
 var utils = require('./utils');
 
+var PERMITTED_FIELDS = [
+  'configuration_name', 'button_label', 'button_style',
+  'background_style', 'sip_uri', 'caller_id', 'context',
+  'dial_pad', 'send_digits', 'hide_widget', 'updated_at',
+  'link_button_to_a_page', 'show_text_html',
+  'incompatible_browser_configuration', 'new_sip_uri'
+];
+
 router.get('/new', utils.isLoggedIn, function (req, res, next) {
   Widget
     .find({_account: req.user._id})
@@ -24,23 +32,37 @@ router.get('/new', utils.isLoggedIn, function (req, res, next) {
 });
 
 router.post('/new', utils.isLoggedIn, function (req, res, next) {
+  var currentUser = req.user;
   var params = req.parameters;
-  var widgetData = params
-    .permit(
-      'configuration_name', 'button_label', 'button_style',
-      'background_style', 'sip_uri', 'caller_id', 'context',
-      'dial_pad', 'send_digits', 'hide_widget', 'updated_at',
-      'link_button_to_a_page', 'show_text_html',
-      'incompatible_browser_configuration'
-    );
+  var widgetData = params.permit(PERMITTED_FIELDS);
 
   var result = { message: "", errors: null };
-  widgetData['_account'] = req.user._id;
+  widgetData['_account'] = currentUser._id;
 
-  Widget.create(widgetData, function (err, widget) {
-    if (err) throw err;
-    result['redirect'] = '/widget/' + widget._id + '/edit';
-    res.status(200).json(result);
+  // allow new sips if paid user or not sip_uris registered
+  if (widgetData.new_sip_uri) {
+    if (currentUser.sip_uris.length === 0 || currentUser.paid) {
+      currentUser.saveSipURI(widgetData.new_sip_uri);
+      widgetData.sip_uri = widgetData.new_sip_uri;
+    } else {
+      result.errors = 'To add a new SIP URI you will need to upgrade to a paid account';
+      return res.status(401).json(result);
+    }
+  }
+
+  utils.provisionSIP(currentUser, widgetData.sip_uri, function (err) {
+    if (err) {
+      console.log('Error while provisioning demo sip uri: ', err);
+      if (widgetData.new_sip_uri) currentUser.removeSipURI(widgetData.new_sip_uri);
+      result.errors = 'An error occurred while saving your SIP URI. Please try again';
+      return res.status(err.httpStatusCode || 500).json(result);
+    } else {
+      Widget.create(widgetData, function (err, widget) {
+        if (err) throw err;
+        result['redirect'] = '/widget/' + widget._id + '/edit';
+        return res.status(200).json(result);
+      });
+    }
   });
 });
 
@@ -57,61 +79,84 @@ router.get('/:id/edit', utils.isLoggedIn, function (req, res, next) {
           _account: req.user._id,
           _id: req.params.id
         })
+        .populate('_account')
         .exec(callback);
     }
   },
   function (err, result) {
     if (!result.widget) return utils.objectNotFound(res, req, next);
     result['defaultBtnLabel'] = utils.defaultBtnLabel;
-    result['widget_code'] = result.widget.generateHtmlCode();
+    result['widget_code'] = result.widget.generateDivHtmlCode();
     res.render('widget/edit', result);
   });
 });
 
 router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
+  var currentUser = req.user;
   var params = req.parameters;
   var updateData = params
     .merge({updated_at: new Date()})
-    .permit(
-      'configuration_name', 'button_label', 'button_style',
-      'background_style', 'sip_uri', 'caller_id', 'context',
-      'dial_pad', 'send_digits', 'hide_widget', 'updated_at',
-      'link_button_to_a_page', 'show_text_html',
-      'incompatible_browser_configuration'
-    );
+    .permit(PERMITTED_FIELDS);
 
   console.log(updateData);
 
   var result = { message: "", errors: null };
 
-  Widget.findOneAndUpdate({
-    _account: req.user._id,
-    _id: req.params.id
-  },
-  updateData,
-  function (err, widget) {
-    var successResponse = function () {
+  var successResponse = function (widget) {
+    if (params.type === 'iframe') {
       result.widget_code = widget.generateHtmlCode();
-      result.widget_id = widget.id;
-      result.widget = widget;
-      return res.status(200).json(result);
-    };
-
-    if (params.shouldProvision) {
-      utils.provisionSIP(req.user, params.sip_uri, function (err, data) {
-        if (err) {
-          console.log('Error while provisioning demo sip uri: ', err);
-          result.errors = err;
-          return res.status(data.errors.httpStatusCode || 500).json(result);
-        } else {
-          result.message = 'Success';
-          return successResponse();
-        }
-      });
     } else {
-      return successResponse();
+      result.widget_code = widget.generateDivHtmlCode();
+    }
+    result.widget_id = widget.id;
+    result.widget = widget;
+    return res.status(200).json(result);
+  };
+
+  var errorResponse = function (msg, status) {
+    result.errors = msg;
+    return res.status(status || 500).json(result);
+  };
+
+  // allow new sips if paid user or not sip_uris registered
+  if (updateData.new_sip_uri) {
+    if (currentUser.sip_uris.length === 0 || currentUser.paid) {
+      currentUser.saveSipURI(updateData.new_sip_uri);
+      updateData.sip_uri = updateData.new_sip_uri;
+    } else {
+      return errorResponse(
+        'To add a new SIP URI you will need to upgrade to a paid account', 401);
+    }
+  }
+
+  utils.provisionSIP(currentUser, updateData.sip_uri, function (err) {
+    console.log('Provisioning...');
+    if (err) {
+      console.log('Error while provisioning demo sip uri: ', err);
+      if (updateData.new_sip_uri) currentUser.removeSipURI(updateData.new_sip_uri);
+      return errorResponse(
+        'An error occurred while provisioning your SIP URI. Please try again', err.httpStatusCode);
+    } else {
+      Widget
+        .findOneAndUpdate({
+          _account: currentUser._id,
+          _id: req.params.id
+        }, updateData)
+        .populate('_account')
+        .exec(
+          function (err, widget) {
+            if (err) {
+              return errorResponse(
+                'An error occurred while saving your button. Please try again', err.httpStatusCode);
+            } else {
+              result.message = 'Success';
+              return successResponse(widget);
+            }
+          }
+        );
     }
   });
+
 });
 
 router.get('/demo', function (req, res, next) {
@@ -149,8 +194,6 @@ router.get('/demo', function (req, res, next) {
     } else
       renderResponse(account);
   });
-
-
 });
 
 module.exports = router;

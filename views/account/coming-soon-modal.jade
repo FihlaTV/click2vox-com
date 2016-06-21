@@ -1,0 +1,15 @@
+.modal.fade.add-new-modal#myModal(tabindex="-1" role="dialog" aria-labelledby="myModalLabel")
+  .modal-dialog(role="document")
+    .modal-content
+      .modal-header
+        button.close(type="button" class="" data-dismiss="modal" aria-label="Close")
+          span(aria-hidden="true")&times;
+        h4.modal-title#myModalLabel
+          i.glyphicon.glyphicon-exclamation-sign
+          span  Add an Additional SIP URI
+      .modal-body
+        p#[strong Coming Soon.] To add an additional SIP URI you will need to upgrade to a paid account. Please contact us using one of the buttons below for more information.
+      .modal-footer
+        button.btn.btn-purple(type="button" id="callVoxbone") Click to Call Us
+        a(href="mailto:workshop@voxbone.com?subject=%5BCLICK2VOX%5D%20About%20Upgrading")
+          button.btn.btn-success(type="button") Click to Email Us

@@ -37,7 +37,7 @@ block content
         .row
           .col-xs-12
             h1 Edit a WebRTC Call Button
-            p #[b Questions?] #[a(href="https://docs.google.com/document/d/1L6swwK_rVu_2XqSNMzmMRxBxL3YL50YTzkF6NaqeLqU/edit?usp=sharing" target="_blank") See our Frequently Asked Questions document.]
+            p #[b Questions?] #[a(href="https://click2vox.com/faq" target="_blank") See our Frequently Asked Questions document.]
 
             #alert-success.alert.alert-success(style="display: none;")
 
@@ -67,11 +67,27 @@ block content
                 .boxPanel
                   .form-group
                     label.control-label SIP URI
-                      span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?
-                    select.form-control(ng-model="widget.sip_uri" ng-options="sip for sip in #{JSON.stringify(currentUser.getSipURIs())}" ng-change="sipUriChange()" required)
+                      span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Select one of yours SIP URIs or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?
+
+                    select.form-control(
+                      ng-model="widget.sip_uri" name="sip_uri" required
+                      ng-options="sip for sip in #{JSON.stringify(currentUser.getSipURIs().concat('Add a new SIP URI'))}")
                       option(value="") Select a SIP URI
-                    .error-label(ng-cloak ng-show="widget_form.sip_uri.$touched" )
-                      div(ng-show="widget_form.sip_uri.$error.required") SIP URI is required
+
+                    .error-label(ng-cloak ng-show="widget_form.sip_uri.$touched")
+                      div(ng-show="widget_form.sip_uri.$error.required") SIP URI required
+
+                  .form-group(ng-cloak ng-show="widget.sip_uri == 'Add a new SIP URI'")
+                    if currentUser.sip_uris.length == 0 || currentUser.paid && false
+                      label.control-label Enter a new SIP URI
+                      input.form-control(type="text" name="new_sip_uri" ng-model="widget.new_sip_uri" ng-pattern="/^[^@]+@[^@]+$/" placeholder="i.e. echo@ivrs" check-allowed-sip)
+
+                      .error-label
+                        div(ng-show="widget_form.new_sip_uri.$error.notallowed") SIP URI not allowed
+                        div(ng-show="widget_form.new_sip_uri.$error.required") SIP URI is required
+                        div(ng-show="widget_form.new_sip_uri.$error.pattern") SIP URI must be valid i.e: user@ivrs.voxbone.com
+                    else
+                      include ../account/coming-soon-modal
 
                   .panel.panel-default
                     .panel-heading
@@ -130,9 +146,9 @@ block content
                 .prev-view.light
                   .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
                   .togle-bg-tooltip
-                    #[span.badge(data-toggle='tooltip' data-placement="left" data-html="true" data-width="350" title="You can click the button to make a call and test the service!<br>(once you setup your widget)") ?]
+                    #[span.badge(ng-show="showCallButton()" data-toggle='tooltip' data-placement="left" data-html="true" data-width="350" title="You can click the button to make a call and test the service!<br>(once you setup your widget)") ?]
                   .widget-box#launch_call_div(ng-class="widget.button_style" ng-show="showCallButton()")
-                    button.btn-style.launch_call#launch_call(ng-cloak ng-disabled="!widget.sip_uri" ng-click="makeCall(#{currentUser.did})" qtip="You can click the button to make a call and test the service!<br>(once you setup your widget)" qtip-visible='true') #[span {{widget.button_label || 'Call Sales'}}]
+                    button.btn-style.launch_call#launch_call(ng-cloak ng-disabled="!widget.sip_uri" ng-click="makeCall(#{currentUser.did})" qtip="You can click the button to make a call and test the service!<br>(save your configuration before you test)" qtip-visible='true') #[span {{widget.button_label || 'Call Sales'}}]
                     .widget-footer-left
                       a(href="https://test.webrtc.org/" target="_blank") Test your setup
                     .widget-footer-right
@@ -146,24 +162,28 @@ block content
                   .title
                     span Widget Code Snippet
                       p Paste the following HTML code into your website or give it a try using on
-
-                      .btn-code-playground
-                        .btn-jsfiddle(ng-show="widget.showWidgetCode")
-                          form#code_debug_jsfiddle(action="https://jsfiddle.net/api/post/library/pure/" method="POST" target="_blank")
-                            input(type="hidden" name="html" value='{{ prepareHtmlForCodepen(widget.widget_code) }}')
-                            a(href="#" onclick="$('#code_debug_jsfiddle').submit();") JSFiddle
-                        .btn-jsfiddle(ng-show="widget.showWidgetCode")
-                          form#code_debug_codepen(action="https://codepen.io/pen/define" method="POST" target="_blank")
-                            input(type="hidden" name="data" value='{"html": "{{ prepareHtmlForCodepen(widget.widget_code) }}"}')
-                            a(href="#" onclick="$('#code_debug_codepen').submit();") CodePen
+                  ul.nav.nav-tabs
+                    li(ng-click="saveConfiguration('div')" ng-class="{active:true}")
+                      a(data-toggle="tab" href="#") DIV #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="TBD") ?]
+                    li(ng-click="saveConfiguration('iframe')" ng-class="{active:false}")
+                      a(data-toggle="tab" href="#") IFRAME #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="TBD") ?]
 
                   .widget-code-wrap
                     .sample.shadow-z-2#widget_code
                       pre(ng-cloak)
                         {{ widget.widget_code }}
-                    .codebox-actions(ng-show='widget.showWidgetCode')
-                      a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy to Clipboard
-                      a(href="#" class="hidden" id="generate-output-code" ng-click='widget.generateOutputCode()') Generate Code
+
+                    .codebox-playground(ng-show="widget.showWidgetCode")
+                      .btn-jsfiddle
+                        form#code_debug_jsfiddle(action="https://jsfiddle.net/api/post/library/pure/" method="POST" target="_blank")
+                          input(type="hidden" name="html" value='{{ prepareHtmlForCodepen(widget.widget_code) }}')
+                          a(href="#" onclick="$('#code_debug_jsfiddle').submit();") JSFiddle
+                      .btn-jsfiddle
+                        form#code_debug_codepen(action="https://codepen.io/pen/define" method="POST" target="_blank")
+                          input(type="hidden" name="data" value='{"html": "{{ prepareHtmlForCodepen(widget.widget_code) }}"}')
+                          a(href="#" onclick="$('#code_debug_codepen').submit();") CodePen
+                      .btn-jsfiddle
+                        a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy to Clipboard
 
               div(ng-cloak)
                 .error-label(ng-show="widget_form.cannotValidateSipUri")
@@ -173,6 +193,6 @@ block content
                   div Your configuration has been saved successfully!
 
                 .pull-right
-                  button.btn.btn-default(ng-cloak ng-click='saveConfiguration()' ng-disabled="widget_form.$invalid || savingConfig" ) {{submitText}}
+                  button.btn.btn-default(ng-cloak ng-click='saveConfiguration()' ng-disabled="widget_form.$invalid || savingConfig || widget_form.$pristine || sipDirty") {{submitText}}
                 .clearfix
                 br

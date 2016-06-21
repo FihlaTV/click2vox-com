@@ -196,9 +196,10 @@
       }
       .widget-code-wrap{
         position: relative;
-        padding: 10px 10px 30px;
+        padding: 30px 10px 0px;
         .rounded(6px);
         border: 1px solid @border-grey;
+
         .codebox-actions{
           position: absolute;
           bottom: 0;
@@ -207,7 +208,8 @@
           padding: 0 5px;
           background: @border-grey;
           .border-radius(0, 5px, 0, 5px);
-          a{
+
+          a {
             display: inline-block;
             line-height : 22px;
             font-size: 12px;
@@ -215,12 +217,48 @@
               content: "|";
               display: inline-block;
               color: darken(@border-grey, 10%);
-              margin-right: 2px;
+              padding: 0 3px 0 4px;
             }
             &:first-child{
               &:before{
                 content: "";
+                padding: 0;
               }
+            }
+          }
+        }
+
+        // some overrides now
+        .codebox-playground {
+          position: absolute;
+          top: 0;
+          right: 0px;
+          height: 22px;
+          padding: 0 5px;
+          background: @border-grey;
+          .border-radius(5px, 0, 5px, 0);
+
+          .btn-jsfiddle{
+            display: inline-block;
+
+            &:last-child {
+              a:after{
+                content: "" !important;
+                padding: 0;
+              }
+            }
+          }
+
+          a{
+            display: inline-block;
+            line-height : 22px;
+            font-size: 12px;
+
+            &:after{
+              content: "|";
+              display: inline-block;
+              color: darken(@border-grey, 10%);
+              padding: 0 3px 0 4px;
             }
           }
         }
