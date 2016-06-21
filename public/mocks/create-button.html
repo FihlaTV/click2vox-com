@@ -116,6 +116,7 @@
               <div class="col-sm-6 right-col">
                 <section>
                   <span class="title">Preview</span>
+                  <ul class="nav nav-tabs"><li ng-click="onClickTab(true)" ng-class="{active:preview_webrtc_compatible}" class="active"><a data-toggle="tab" href="#">WebRTC <span data-toggle="tooltip" data-placement="right" data-html="true" data-width="350" title="" class="badge" data-original-title="This is how the widget will look like in a WebRTC compatible browser">?</span></a></li><li ng-click="onClickTab(false)" ng-class="{active:!preview_webrtc_compatible}" class=""><a data-toggle="tab" href="#">Non-WebRTC <span data-toggle="tooltip" data-placement="right" data-html="true" data-width="350" title="" class="badge" data-original-title="This is how the widget will look like in a WebRTC incompatible browser">?</span></a></li></ul>                  
                   <div class="boxPanel preview">
                     <div class="prev-view light">
                       <div class="widget-box style-b">
@@ -138,6 +139,7 @@
                         <span>Code Widget</span>
                         <p>Paste the following HTML code into your websiteor give it a try using on <a href="#">JSFiddle</a></p>
                       </div>
+                      <ul class="nav nav-tabs"><li ng-click="saveConfiguration('div')" ng-class="{active:true}" class="active"><a data-toggle="tab" href="#" aria-expanded="true">DIV <span data-toggle="tooltip" data-placement="right" data-html="true" data-width="350" title="" class="badge" data-original-title="TBD">?</span></a></li><li ng-click="saveConfiguration('iframe')" ng-class="{active:false}" class=""><a data-toggle="tab" href="#" aria-expanded="false">IFRAME <span data-toggle="tooltip" data-placement="right" data-html="true" data-width="350" title="" class="badge" data-original-title="TBD">?</span></a></li></ul>
                       <div class="widget-code-wrap">
                         code here
                         <div class="codebox-actions">

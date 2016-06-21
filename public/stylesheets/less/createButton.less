@@ -1,3 +1,7 @@
+.b-r-t{
+  .border-radius(6px, 6px, 6px, 0);
+}
+
 .createButton{
   .panel-heading a:after {
     font-family:'Glyphicons Halflings';
@@ -129,7 +133,7 @@
     .prev-view{
       position: relative;
       padding: 45px 60px 45px;
-      .border-radius(5px, 0, 0, 5px);
+      .border-radius(5px, 0, 0, 0);
       border-bottom: 1px solid @border-grey;
       &.dark{
         background: #363636;
@@ -194,12 +198,17 @@
           font-weight: normal;
         }
       }
+      .nav-tabs{
+        position: relative;
+        z-index: 2;
+      }
       .widget-code-wrap{
         position: relative;
         padding: 30px 10px 0px;
-        .rounded(6px);
+        .border-radius(6px, 6px, 6px, 0);
         border: 1px solid @border-grey;
-
+        background: @panel-bg;
+        
         .codebox-actions{
           position: absolute;
           bottom: 0;
