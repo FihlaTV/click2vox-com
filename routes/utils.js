@@ -52,7 +52,7 @@ module.exports = {
       // step 1 Check if SIP is already linked
       // if so, return the corresponding VoiceUriId
 
-      var url = "https://api.voxbone.com/ws-voxbone/services/rest/configuration/voiceuri?pageNumber=0&pageSize=1000";
+      var url = "https://api.voxbone.com/ws-voxbone/services/rest/configuration/voiceuri?pageNumber=0&pageSize=1000&uri=" + sipUri;
 
       request.get(url, {
           auth: utils.apiCredentials,
