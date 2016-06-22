@@ -209,14 +209,17 @@ var check3Ready = (function() {
   };
 
   function init() {
-    // $scope.wirePluginAndEvents();
-
-    voxbone.WebRTC.configuration.post_logs = true;
-    voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
-    voxbone.WebRTC.customEventHandler = eventHandlers;
-    getVoxrtcConfig(function (data) {
-      voxbone.WebRTC.init(data);
-    });
+    if (isWebRTCSupported()) {
+      voxbone.WebRTC.configuration.post_logs = true;
+      voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
+      voxbone.WebRTC.customEventHandler = eventHandlers;
+      getVoxrtcConfig(function (data) {
+        voxbone.WebRTC.init(data);
+      });
+    } else {
+      if (info.incompatible_browser_configuration === 'hide_widget')
+        $('#voxButton_' + info.button_id).hide();
+    };
   };
 
   function isInCall() {
@@ -230,16 +233,9 @@ var check3Ready = (function() {
   function makeCall(did) {
     if (isInCall()) return;
 
-    if (!isWebRTCSupported()) {
-      if ((info.incompatible_browser_configuration === 'link_button_to_a_page') && info.redirect_url) {
-        window.open(info.redirect_url);
-        return;
-      }
-
-      if ((info.incompatible_browser_configuration === 'hide_widget')) {
-        $('#voxButton_' + info.button_id).hide();
-        return;
-      }
+    if (!isWebRTCSupported() && (info.incompatible_browser_configuration === 'link_button_to_a_page') && info.redirect_url) {
+      window.open(info.redirect_url);
+      return;
     };
 
     if (isWebRTCSupported()) {
