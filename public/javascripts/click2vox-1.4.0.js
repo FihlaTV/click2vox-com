@@ -1,5 +1,5 @@
 // Voxbone Click2Vox Widget library
-// Version - v1.3.0
+// Version - v1.4.0
 
 var info = null;
 
@@ -230,10 +230,17 @@ var check3Ready = (function() {
   function makeCall(did) {
     if (isInCall()) return;
 
-    if (!isWebRTCSupported() && (info.incompatible_browser_configuration === 'link_button_to_a_page') && info.redirect_url) {
-      window.open(info.redirect_url);
-      return;
-    }
+    if (!isWebRTCSupported()) {
+      if ((info.incompatible_browser_configuration === 'link_button_to_a_page') && info.redirect_url) {
+        window.open(info.redirect_url);
+        return;
+      }
+
+      if ((info.incompatible_browser_configuration === 'hide_widget')) {
+        $('#voxButton_' + info.button_id).hide();
+        return;
+      }
+    };
 
     if (isWebRTCSupported()) {
       $("#vw-title").text("Waiting for User Media");
@@ -490,4 +497,4 @@ window.onload = function() {
     loadScript("//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.3/jquery.min.js", check0Ready);
   } else
     check0Ready();
-}
+};
