@@ -1,1 +1,91 @@
-include ./landing.html
+doctype html
+html(lang='en')
+  head
+    if process.env.NEW_RELIC_LICENSE_KEY
+      != newrelic.getBrowserTimingHeader()
+
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+
+    title= title
+
+    link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css", rel="stylesheet")
+    link(href="/stylesheets/root.css", rel="stylesheet")
+
+    if process.env.GOOGLE_ANALYTICS_ID
+      script.
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', '#{process.env.GOOGLE_ANALYTICS_ID}', 'auto');
+        ga('send', 'pageview');
+
+    if process.env.HOTJAR_ID
+      script.
+        (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:#{process.env.HOTJAR_ID},hjsv:5};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);})
+          (window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
+  body
+    .landing-hero
+      .container
+        nav.navbar
+          .navbar-header
+            a.navbar-brand(href='#', style='background-image: url("../images/navbar-brand.png")')
+            span.subBrand
+              | Click2Vox
+              sup β
+          .pull-right
+            a.login.user-pill.pull-left(href='/login') Login
+            a.login.user-pill.pull-left(href='/account/signup') Create account
+      .call-to-action
+        span HD calling to any SIP address straight from any website
+        br
+        span.block No web development needed
+        br
+        a.btn.btn-default.btn-purple(href='/account/signup') Create Account
+    .landing-main
+      .container
+        .row
+          .col-xs-12.col-sm-10.col-xs-offset-1
+            p
+              | Click2Vox helps you build a click-to-call button that connects any webpage to any of your SIP addresses in seconds.
+            p
+              | No app or plug-in installs for your customers. No complex gateway installs or phone system configuration for you.
+            p
+              | Need to pass information from the webpage to your PBX or navigate an IVR?  Click2Vox has you covered.
+            .row
+              .col-xs-12.col-sm-4
+                .screen-shot-holder
+                  img(src='../images/screenshot-create-button.png')
+                  span Create and customize your call button
+              .col-xs-12.col-sm-4
+                .screen-shot-holder
+                  img(src='../images/screenshot-add-number.png')
+                  span Add a SIP address & place a test call
+              .col-xs-12.col-sm-4
+                .screen-shot-holder
+                  img(src='../images/screenshot-embed-code.png')
+                  span Paste the code in your webpage
+
+    .landing-footer
+      .container
+        .row
+          .col-sm-10.col-xs-offset-1
+            span.title Want to try it now?
+            br
+            div
+              a.btn.btn-info(href='/widget/demo') Create a sample call button
+            hr
+
+            //- include account/call-button.html
+
+            #voxButton_575b3d7e89005411004db935.voxButton(data-button_id='575b3d7e89005411004db935', data-text='click2vox Us Now', data-redirect_url='https://voxbone.com', data-did='883510080408', data-dial_pad='true', data-context='', data-send_digits='', data-caller_id='Click2Vox', data-incompatible_browser_configuration='hide_widget', data-show_frame='false', data-use_default_button_css='false', data-div_css_class_name='', data-button_css_class_name='btn btn-purple')
+            script(src='/click2vox.js')
