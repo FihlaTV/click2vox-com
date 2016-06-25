@@ -148,7 +148,7 @@ var check3Ready = (function() {
              </div>\
              <div class="widget-footer-right">\
                <a href="https://voxbone.com" target="_blank">powered by:</a>\
-             </div>'
+             </div>';
   };
 
   $('.voxButton').append(' \
@@ -218,7 +218,10 @@ var check3Ready = (function() {
       });
     } else {
       if (info.incompatible_browser_configuration === 'hide_widget')
-        $('#voxButton_' + info.button_id).hide();
+        $('div[data-button_id="' + info.button_id + '"]').hide();
+
+      if (isChromeOnHttp())
+        console.log("WebRTC doesn't work in Chrome on HTTP -> https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins");
     };
   };
 
@@ -226,8 +229,14 @@ var check3Ready = (function() {
     return (typeof voxbone.WebRTC.rtcSession.isEstablished === "function") && !voxbone.WebRTC.rtcSession.isEnded();
   };
 
+  function isChromeOnHttp() {
+    var isChrome = !!window.chrome && !!window.chrome.webstore;
+    var isHttp = window.location.protocol === "http:";
+    return isChrome && isHttp;
+  };
+
   function isWebRTCSupported() {
-    return voxbone.WebRTC.isWebRTCSupported();
+    return voxbone.WebRTC.isWebRTCSupported() && !isChromeOnHttp();
   };
 
   function makeCall(did) {
