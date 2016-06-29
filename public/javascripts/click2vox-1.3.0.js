@@ -23,15 +23,12 @@ var check0Ready = (function() {
   info = $(".voxButton").data();
   info.server_url = (info.server_url === undefined) ? 'https://click2vox.com' : info.server_url;
 
-  if (typeof JsSIP === 'undefined')
-    loadScript(info.server_url + "/javascripts/jssip-0.7.9.min-vox.js", check1Ready);
-  else
-    check1Ready();
+  check1Ready();
 });
 
 var check1Ready = (function() {
   if (typeof voxbone === 'undefined')
-    loadScript(info.server_url + "/javascripts/voxbone-0.0.5.js", check2Ready);
+    loadScript(info.server_url + "/voxbone/dist/voxbone-2.0.0-a.min.js", check2Ready);
   else
     check2Ready();
 });
