@@ -5,11 +5,13 @@ block extra_head
     require([
       'angular',
       'jquery',
-      'controllers/widget.list'
+      'controllers/widget.list',
+      'controllers/sip.edit',
     ],
-    function(angular, $, WidgetListController) {
+    function(angular, $, WidgetListController, EditSIPController) {
       angular.module('voxboneApp', [])
-        .controller('WidgetListController', WidgetListController);
+        .controller('WidgetListController', WidgetListController)
+        .controller('EditSIPController', EditSIPController);
 
       angular.bootstrap(document, ['voxboneApp']);
 
@@ -47,6 +49,8 @@ block content
                 h4
                   a(data-toggle="collapse" href="##{group.widgets[0]._id}")
                     #[i.glyphicon.glyphicon-chevron-down] #[span #{group._id}]
+                .group-header-actions
+                  a(href="javascript:;" ng-click='editSIPURI("#{group._id}")') Edit
 
               .sipCollapse.collapse.in(id="#{group.widgets[0]._id}")
                 table.table
@@ -66,3 +70,4 @@ block content
                           #[button.btn.btn-sm.btn-primary.clipboard(widget-code="#{widget.divCode}") Copy Code] #[a.btn.btn-sm.btn-info(href="/widget/#{widget._id}/edit") View / Edit]
 
     include contact-voxbone
+    include ../sip/edit_modal

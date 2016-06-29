@@ -14,6 +14,25 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
         event.trigger.textContent = 'Copy Code';
       }, 2500);
     });
+
+    $scope.init = function () {
+      this.modalEdit = $('#editSIPModal');
+
+      this.modalEdit.on('hidden.bs.modal', function () {
+        $scope.modalEdit.find('input[name="sip_uri"]').val('');
+      });
+    };
+
+    $scope.editSIPURI = function (sipURI) {
+      this.modalEdit.find('input[name="sip_uri"]')
+        .data('original', sipURI)
+        .val(sipURI);
+
+      this.modalEdit.modal('show');
+      return false;
+    };
+
+    $scope.init();
   };
 
   WidgetListController.inject = ['$scope', '$http', '$window'];

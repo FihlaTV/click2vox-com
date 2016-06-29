@@ -76,7 +76,7 @@ router.get('/widgets', utils.isLoggedIn, function (req, res) {
         });
       }
 
-      res.render('account/widget-list', {
+      res.render('account/widgets', {
         title: title,
         widgetsData: result,
         defaultBtnLabel: utils.defaultBtnLabel
