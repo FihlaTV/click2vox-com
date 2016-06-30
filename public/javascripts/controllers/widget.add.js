@@ -94,6 +94,9 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
     $scope.init = function () {
       $scope.wirePluginAndEvents();
 
+      if(!$scope.isWebRTCSupported())
+        return;
+
       voxbone.WebRTC.configuration.post_logs = true;
       voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
       voxbone.WebRTC.customEventHandler = $scope.eventHandlers;
@@ -129,7 +132,7 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
 
     $scope.showCallButton = function () {
       var ibc_value = $scope.widget.incompatible_browser_configuration;
-      return $scope.preview_webrtc_compatible || (ibc_value == 'link_button_to_a_page');
+      return $scope.preview_webrtc_compatible || (ibc_value === 'link_button_to_a_page');
     };
 
     $scope.getHiddenButtonText = function () {
@@ -193,9 +196,12 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
     };
 
     $scope.makeCall = function (did) {
-      if (this.isInCall()) return;
+      // We don't need to actually make the call when creating a widget
+      if (this.preview_webrtc_compatible) return;
 
-      if (!this.preview_webrtc_compatible && (this.widget.incompatible_browser_configuration == 'link_button_to_a_page')) {
+      if (this.widget.incompatible_browser_configuration === 'hide_widget') return;
+
+      if (this.widget.incompatible_browser_configuration === 'link_button_to_a_page') {
         $window.open(this.widget.link_button_to_a_page_value, '_blank');
         return;
       }
@@ -238,6 +244,11 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
     $scope.setTheme = function (theme) {
       if ($scope.widget.button_style != theme)
         $scope.widget.button_style = theme;
+    };
+
+    $scope.discardConfiguration = function (form) {
+      form.$setPristine();
+      $scope.reset();
     };
 
     $scope.saveConfiguration = function () {

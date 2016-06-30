@@ -93,6 +93,9 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
     $scope.init = function () {
       $scope.wirePluginAndEvents();
 
+      if(!$scope.isWebRTCSupported())
+        return;
+
       voxbone.WebRTC.configuration.post_logs = true;
       voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
       voxbone.WebRTC.customEventHandler = $scope.eventHandlers;

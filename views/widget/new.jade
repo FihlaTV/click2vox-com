@@ -55,15 +55,14 @@ block content
       .container
         .row
           .col-md-6.left-col
-            section
-              form
+            form#widget_form(name="widget_form", novalidate)
+              section
                 .boxPanel
                   .form-group
                     label Configuration Name:
                     input.form-control(type="text", name="configuration_name", ng-model="widget.configuration_name" placeholder="i.e. Sales Button" ng-model-options="{ updateOn: 'blur' }")
-            section
-              span.title Button Configuration
-              form
+              section
+                span.title Button Configuration
                 .boxPanel
                   .form-group
                     label Button Label:
@@ -72,8 +71,7 @@ block content
                     label Button Style:
                     button.btn-style-a(ng-cloak ng-click="setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
                     button.btn-style-b(ng-cloak ng-click="setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
-              span.title Call Configuration
-              form#widget_form(name="widget_form", novalidate)
+                span.title Call Configuration
                 .boxPanel
                   .form-group
                     label.control-label SIP URI
@@ -156,9 +154,9 @@ block content
                 .prev-view.light
                   .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
                   .togle-bg-tooltip
-                    #[span.badge(ng-show="showCallButton()" data-toggle='tooltip' data-placement="left" data-html="true" data-width="350" title="You can click the button to make a call and test the service!<br>(once you setup your widget and save the configuration)") ?]
-                  .widget-box#launch_call_div(ng-class="widget.button_style")
-                    button.btn-style.launch_call#launch_call(ng-cloak qtip="You can click the button to make a call and test the service!<br>(once you saved your configuration)" qtip-visible='true') #[span {{widget.button_label || 'Call Sales'}}]
+                    #[span.badge(ng-show="preview_webrtc_compatible" data-toggle='tooltip' data-placement="left" data-html="true" data-width="350" title="You can click the button to make a call and test the service!<br>(once you setup your widget and save the configuration)") ?]
+                  .widget-box#launch_call_div(ng-class="widget.button_style" ng-show="showCallButton()")
+                    button.btn-style.launch_call#launch_call(ng-cloak ng-click="makeCall(#{currentUser.did})" qtip="You can click the button to make a call and test the service!<br>(once you saved your configuration)" qtip-title="Save first to try it!" qtip-disable="!preview_webrtc_compatible") #[span {{widget.button_label || 'Call Sales'}}]
                     .widget-footer-left
                       a(href="https://test.webrtc.org/" target="_blank") Test your setup
                     .widget-footer-right
@@ -183,6 +181,5 @@ block content
                   div(ng-bind="savingError")
 
                 .pull-right
-                  button.btn.btn-default(ng-cloak ng-click='saveConfiguration()' ng-disabled="widget_form.$invalid || savingConfig || widget_form.$pristine || sipDirty") {{submitText}}
-                .clearfix
-                br
+                  button.btn.btn-danger.btn-xs(style='margin-right: 5px;' ng-cloak ng-click='discardConfiguration(widget_form)' ng-disabled="savingConfig || !widget_form.$dirty") Discard Changes
+                  button.btn.btn-success.btn-lg(ng-cloak ng-click='saveConfiguration()' ng-disabled="widget_form.$invalid || savingConfig || widget_form.$pristine || sipDirty") {{submitText}}

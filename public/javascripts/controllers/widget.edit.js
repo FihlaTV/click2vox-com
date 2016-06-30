@@ -1,11 +1,8 @@
 define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
 
   var WidgetEditController = function ($scope, $http, $window, $cookies) {
-    $scope.sipUriLinked = false;
     $scope.preview_webrtc_compatible = true;
     $scope.submitText = 'Save Configuration';
-    $scope.savingConfig = false;
-    $scope.savedSuccessfully = false;
 
     $scope.onClickTab = function (is_preview_webrtc_compatible) {
       $scope.preview_webrtc_compatible = is_preview_webrtc_compatible;
@@ -99,13 +96,16 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
       if (form) {
         form.$setPristine();
         form.$setUntouched();
-      }
+      };
 
       $scope.widget = angular.copy($scope.master);
     };
 
     $scope.init = function () {
       $scope.wirePluginAndEvents();
+
+      if(!$scope.isWebRTCSupported())
+        return;
 
       voxbone.WebRTC.configuration.post_logs = true;
       voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
@@ -115,20 +115,17 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
       });
     };
 
-    // watch for initial widget data
-    $scope.$watch('initData', function () {
-      $scope.widget = angular.extend(
-        {}, $scope.widget, $scope.master,
-        $scope.initData['widget']
-      );
-
+    $scope.loadWidgetData = function () {
+      $scope.savedSuccessfully = false;
+      $scope.widget = angular.extend({}, $scope.widget, $scope.master, $scope.initData['widget']);
       $scope.widget.widget_code = $scope.initData['widgetCode'];
       $scope.did = $scope.initData['did'];
       $scope.currentSip = $scope.initData['currentSip'];
-    });
+    };
 
-    $scope.$watchCollection('widget', function () {
-      $scope.savedSuccessfully = false;
+    // watch for initial widget data
+    $scope.$watch('initData', function () {
+      $scope.loadWidgetData();
     });
 
     $scope.getVoxrtcConfig = function (callback) {
@@ -254,6 +251,11 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
         $scope.widget.button_style = theme;
     };
 
+    $scope.discardConfiguration = function (form) {
+      form.$setPristine();
+      $scope.loadWidgetData();
+    };
+
     $scope.saveConfiguration = function (type) {
       var embedType = (typeof(type) === 'undefined') ? 'div' : type;
 
@@ -297,6 +299,12 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
             $scope.currentSip = $scope.widget.sip_uri;
             $scope.submitText = 'Save Configuration';
             $scope.savingConfig = false;
+
+            $scope.initData['widget'] = angular.copy($scope.widget);
+            $scope.initData['widgetCode'] = $scope.widget.widget_code;
+            $scope.initData['did'] = $scope.did;
+            $scope.initData['currentSip'] = $scope.currentSip;
+            $scope.widget_form.$setPristine();
           },
           function errorCallback(response) {
             var data = response.data;

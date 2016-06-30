@@ -7,7 +7,8 @@ define([
       return {
         restrict: 'A',
         scope: {
-          qtipVisible: '='
+          qtipVisible: '=',
+          qtipDisable: '='
         },
 
         link: function (scope, element, attrs) {
@@ -40,6 +41,12 @@ define([
           if (attrs.qtipVisible) {
             scope.$watch('qtipVisible', function (newValue, oldValue) {
               $(element).qtip('toggle', newValue);
+            });
+          }
+
+          if (attrs.qtipDisable) {
+            scope.$watch('qtipDisable', function (newValue, oldValue) {
+              $(element).qtip('disable', newValue);
             });
           }
         }
