@@ -235,8 +235,9 @@ var check2Ready = (function() {
   function makeCall(did) {
     if (isInCall()) return;
 
-    if (!isWebRTCSupported() && (info.incompatible_browser_configuration === 'link_button_to_a_page') && info.redirect_url) {
-      window.open(info.redirect_url);
+    if (!isWebRTCSupported() && (info.incompatible_browser_configuration === 'link_button_to_a_page')) {
+      var redirect_url = info.redirect_url || 'https://voxbone.com';
+      window.open(redirect_url);
       return;
     };
 

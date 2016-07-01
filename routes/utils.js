@@ -168,7 +168,6 @@ module.exports = {
       script: script,
       id: widget._id,
       label: jsesc(label),
-      redirect_url: widget.link_button_to_a_page || 'https://voxbone.com',
       the_widget: widget
     };
 

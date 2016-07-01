@@ -1,19 +1,16 @@
-.voxButton(data-button_id="#{id}" data-text="#{label}" data-redirect_url="#{redirect_url || ''}" data-did="#{did}"
- data-context="#{the_widget.context || ''}"
- data-send_digits="#{the_widget.send_digits || ''}"
- data-caller_id="#{the_widget.caller_id || ''}"
- data-incompatible_browser_configuration="#{the_widget.incompatible_browser_configuration || ''}"
- data-dial_pad="#{the_widget.dial_pad || ''}"
- data-show_frame="true"
- data-server_url="#{process.env.APP_URL}"
- data-use_default_button_css="true"
- data-div_css_class_name=""
- data-button_css_class_name="#{the_widget.button_style}"
+.voxButton(
+  data-button_id="#{the_widget._id}"
+  data-text="#{label}"
+  data-redirect_url=the_widget.link_button_to_a_page || undefined
+  data-did="#{did}"
+  data-context=the_widget.context || undefined
+  data-send_digits=the_widget.send_digits || undefined
+  data-caller_id=the_widget.caller_id || undefined
+  data-incompatible_browser_configuration=the_widget.incompatible_browser_configuration || undefined
+  data-dial_pad="#{the_widget.dial_pad}"
+  data-show_frame="true"
+  data-server_url="#{process.env.APP_URL}"
+  data-use_default_button_css="true"
+  data-div_css_class_name=the_widget.button_style
 )
 script(src="#{script}")
-
-//- Optionals
-//- data-show_frame="true"
-//- data-server_url="#{process.env.APP_URL}"
-//- data-use_default_button_css="true"
-//- data-div_css_class_name=""
