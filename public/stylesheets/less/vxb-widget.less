@@ -1,5 +1,9 @@
-@import url(//cdnjs.cloudflare.com/ajax/libs/raty/2.7.0/jquery.raty.css);
 @import url(//fonts.googleapis.com/css?family=Open+Sans:400,300,700,400italic);
+
+@color_1: #ccc;
+@color_2: #ffc700;
+@color_3: #deb217;
+@color_4: #c59b08;
 
 .vox-widget-wrapper {
   font-family: 'Open Sans', sans-serif;
@@ -153,8 +157,70 @@
       margin-top:5px;
     }
   }
+  .vw-body .vw-rating {
+    width: 100%;
+  }
+
   .vw-body .vw-rating .vw-stars {
-    padding-bottom:10px;
+    width: 50%;
+    margin: 0 auto;
+    height: 46px;
+    &:not(:checked) {
+      >input {
+        position: absolute;
+        top: -9999px;
+      }
+      >label {
+        float: right;
+        width: 1em;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 24px;
+        color: @color_1;
+        &:before {
+          content: '★';
+        }
+        &:hover {
+          color: @color_3;
+          &~label {
+            color: @color_3;
+          }
+        }
+      }
+    }
+    >input {
+      &:checked {
+        &~label {
+          color: @color_2;
+          &:hover {
+            color: @color_4;
+            &~label {
+              color: @color_4;
+            }
+          }
+        }
+        &+label {
+          &:hover {
+            color: @color_4;
+            &~label {
+              color: @color_4;
+            }
+          }
+        }
+      }
+    }
+    >label {
+      &:hover {
+        &~input {
+          &:checked {
+            &~label {
+              color: @color_4;
+            }
+          }
+        }
+      }
+    }
   }
   .vw-body .btn-style {
     display:inline-block;
