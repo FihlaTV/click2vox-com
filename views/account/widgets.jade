@@ -33,10 +33,11 @@ block content
         p You will only be able to create buttons with a single user-defined SIP URI on a free account. #[a(href="#" data-toggle="modal" data-target="#myModal") Upgrade Now]
 
         .actions-wrap
-          if currentUser.sip_uris.length > 0 && !currentUser.paid
-            #[a.btn.btn-purple(data-toggle="modal" data-target="#myModal") Add SIP URI]
-          else
-            #[a.btn.btn-purple(href="/sip/new") Add SIP URI]
+          if process.env.BYPASS_ADDING_SIP_URI === 'false'
+            if currentUser.sip_uris.length > 0 && !currentUser.paid
+              #[a.btn.btn-purple(data-toggle="modal" data-target="#myModal") Add SIP URI]
+            else
+              #[a.btn.btn-purple(href="/sip/new") Add SIP URI]
 
           #[=" "] #[a.btn.btn-success(href="/widget/new") Add New Button]
 

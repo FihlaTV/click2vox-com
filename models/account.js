@@ -112,6 +112,15 @@ accountSchema.methods.getSipURIs = function () {
   return defaultSips.concat(this.sip_uris);
 };
 
+accountSchema.methods.getSipURIsWithNewSipUri = function () {
+  var sip_uris = this.getSipURIs();
+
+  if (process.env.BYPASS_ADDING_SIP_URI === 'false')
+    sip_uris = sip_uris.concat('Add a new SIP URI')
+
+  return sip_uris;
+};
+
 accountSchema.methods.saveSipURI = function (sipURI) {
   if (this.sip_uris.indexOf(sipURI) === -1) {
     this.sip_uris.push(sipURI);
@@ -126,6 +135,16 @@ accountSchema.methods.removeSipURI = function (sipURI) {
     this.save();
   }
 };
+
+accountSchema.methods.showWizard = function () {
+  var utils = require('../routes/utils');
+
+  if (process.env.BYPASS_ADDING_SIP_URI === 'true')
+    return false;
+
+  return utils.defaultSipUris().length === this.getSipURIs().length;
+};
+
 
 var Account = mongoose.model('Account', accountSchema);
 

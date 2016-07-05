@@ -24,7 +24,7 @@ block extra_head
     });
 
 block content
-  .main.createButton.addSip(class=showWizard ? 'wizard' : '')
+  .main.createButton.addSip(class=currentUser.showWizard() ? 'wizard' : '')
     .header
       .container
         h1 Add a new SIP address
@@ -32,7 +32,7 @@ block content
         p Don't have a SIP URI? You can skip this for now or enter ours: timeivr@sip1vox.voxbone.com.
 
         .row
-          if showWizard
+          if currentUser.showWizard()
             .col-xs-6.col-xs-offset-3
               .sip-steps
                 .step.active

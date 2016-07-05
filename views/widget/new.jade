@@ -43,7 +43,7 @@ block content
 
             #alert-success.alert.alert-success(style="display: none;")
 
-          if showWizard
+          if currentUser.showWizard()
             .col-xs-6.col-xs-offset-3
               .sip-steps
                 .step
@@ -79,7 +79,7 @@ block content
 
                     select.form-control(
                       ng-model="widget.sip_uri" name="sip_uri" required
-                      ng-options="sip for sip in #{JSON.stringify(currentUser.getSipURIs().concat('Add a new SIP URI'))}")
+                      ng-options="sip for sip in #{JSON.stringify(currentUser.getSipURIsWithNewSipUri())}")
                       option(value="") Select a SIP URI
 
                     .error-label(ng-cloak ng-show="widget_form.sip_uri.$touched")

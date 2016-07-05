@@ -25,7 +25,6 @@ router.get('/new', utils.isLoggedIn, function (req, res, next) {
       res.render('widget/new', {
         defaultBtnLabel: utils.defaultBtnLabel,
         userSipUris: req.user.getSipURIs(),
-        showWizard: (widgets.length === 0),
         addedSip: req.query.sip
       });
     });

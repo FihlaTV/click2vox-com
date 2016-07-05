@@ -13,11 +13,10 @@ var utils = require('./utils');
 
 // GET to add a new SIP URI
 router.get('/new', utils.isLoggedIn, function (req, res) {
-  var showWizard = (utils.defaultSipUris().length === req.user.getSipURIs().length);
+  if (process.env.BYPASS_ADDING_SIP_URI === 'true')
+    return res.redirect('/account/widgets');
 
-  res.render('sip/new', {
-    showWizard: showWizard
-  });
+  res.render('sip/new');
 });
 
 // POST to add a new SIP URI
