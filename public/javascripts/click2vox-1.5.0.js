@@ -2,10 +2,11 @@
 // Version - v1.5.0
 
 var info = null;
+var head = document.getElementsByTagName('head')[0];
+var voxButtonElement = document.getElementsByClassName('voxButton')[0];
 
 function loadScript(url, callback) {
   // Adding the script tag to the head as suggested before
-  var head = document.getElementsByTagName('head')[0];
   var script = document.createElement('script');
   script.type = 'text/javascript';
   script.src = url;
@@ -20,7 +21,7 @@ function loadScript(url, callback) {
 }
 
 var check0Ready = (function() {
-  info = $(".voxButton").data();
+  info = voxButtonElement.dataset;
   info.server_url = (info.server_url === undefined) ? 'https://click2vox.com' : info.server_url;
 
   if (typeof voxbone === 'undefined')
@@ -30,17 +31,12 @@ var check0Ready = (function() {
 });
 
 var check1Ready = (function() {
-  $('head')
-    .append($('<link rel="stylesheet" type="text/css" />')
-    .attr('href', info.server_url + '/stylesheets/vxb-widget.css') );
+  head.innerHTML += '<link rel="stylesheet" type="text/css" href="' + info.server_url + '/stylesheets/vxb-widget.css" />';
 
-  if(info.use_default_button_css !== false){
-    $('head')
-      .append($('<link rel="stylesheet" type="text/css" />')
-      .attr('href', info.server_url + '/stylesheets/vxb-button.css') );
-  }
+  if(info.use_default_button_css !== 'false')
+    head.innerHTML += '<link rel="stylesheet" type="text/css" href="' + info.server_url + '/stylesheets/vxb-button.css" />';
 
-  $('.voxButton').append(' \
+  voxButtonElement.innerHTML += ' \
     <audio id="audio-ringback-tone" preload="auto" loop> \
       <source src="https://upload.wikimedia.org/wikipedia/commons/c/cd/US_ringback_tone.ogg" type="audio/ogg"> \
     </audio> \
@@ -137,10 +133,10 @@ var check1Ready = (function() {
         </div> \
       </div> \
     </div> \
-  ');
+  ';
 
   var links = "";
-  if(info.show_frame !== false && info.use_default_button_css !== false) {
+  if(info.show_frame !== 'false' && info.use_default_button_css !== 'false') {
     links = '<div class="widget-footer-left">\
                <a href="https://test.webrtc.org/" target="_blank">Test your setup</a>\
              </div>\
@@ -149,23 +145,32 @@ var check1Ready = (function() {
              </div>';
   };
 
-  $('.voxButton').append(' \
+  voxButtonElement.innerHTML += ' \
     <div id="launch_call_div" class="vxb-widget-box ' + (info.div_css_class_name || "style-b") + '">\
       <button id="launch_call" class="vxb-btn-style ' + (info.button_css_class_name) + '"><span>' +  info.text + '</span></button>\
       ' + links + '\
     </div>\
-  ');
+  ';
 
   function getVoxrtcConfig(callback) {
-    $.get(info.server_url + '/token_config', function (data) {
-      callback(eval('(' + data + ')'));
-    });
+    var request = new XMLHttpRequest();
+    var url = info.server_url + '/token_config';
+
+    request.open('GET', url, true);
+
+    request.onload = function() {
+      if (request.status === 200)
+        callback(eval('(' + request.responseText + ')'));
+    };
+
+    request.send();
   };
 
   function sendPostMessage(action, value){
-    if (typeof value === 'undefined') { value = ''; }
-    var message = { action: action, value: value };
-    postMessage(message, "*");
+    if (typeof value === 'undefined')
+      value = '';
+
+    postMessage({ action: action, value: value }, "*");
   };
 
   var eventHandlers = {
@@ -173,31 +178,38 @@ var check1Ready = (function() {
       if(voxbone.WebRTC.isMuted) return;
       sendPostMessage('setMicVolume', e.localVolume )
     },
+
     'progress': function (e) {
       console.log('Calling...');
       //- sendPostMessage('setCallCalling');
     },
+
     'failed': function (e){
       console.log('Failed to connect: ' + e.cause);
       sendPostMessage('setCallFailed', e.cause.substr(0,11));
     },
+
     'accepted': function (e){
       console.log('Call started');
       sendPostMessage('setInCall');
     },
+
     'ended': function (e){
       console.log('Call ended');
       sendPostMessage('setCallEnded');
     },
+
     'getUserMediaFailed': function (e){
       console.log('Cannot get User Media');
       sendPostMessage('setCallFailedUserMedia');
     },
+
     'getUserMediaAccepted': function(e) {
       sendPostMessage('setCallCalling');
       console.log('local media accepted');
       voxbone.Logger.loginfo("local media accepted");
     },
+
     'authExpired': function (e){
       console.log('Auth Expired!');
       getVoxrtcConfig(function(data) {
@@ -216,7 +228,7 @@ var check1Ready = (function() {
       });
     } else {
       if (info.incompatible_browser_configuration === 'hide_widget')
-        $('div[data-button_id="' + info.button_id + '"]').hide();
+        hideElement('div[data-button_id="' + info.button_id + '"]');
 
       if (isChromeOnHttp())
         console.log("WebRTC doesn't work in Chrome on HTTP -> https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins");
@@ -234,7 +246,7 @@ var check1Ready = (function() {
   };
 
   function isWebRTCSupported() {
-    return voxbone.WebRTC.isWebRTCSupported() && !isChromeOnHttp();
+    return voxbone.WebRTC.isWebRTCSupported(); //&& !isChromeOnHttp();
   };
 
   function makeCall(did) {
@@ -247,18 +259,7 @@ var check1Ready = (function() {
     };
 
     if (isWebRTCSupported()) {
-      $("#vw-title").text("Waiting for User Media");
-      $("#microphone em").removeClass('on').removeClass('off');
-      $("#vw-unable-to-acces-mic").addClass('hidden');
-      $(".vw-animated-dots").removeClass('hidden');
-      $(".vox-widget-wrapper").removeClass('hidden');
-      $("#vw-in-call").removeClass('hidden');
-      $(".vw-rating").addClass('hidden');
-
-      if (info.dial_pad !== false)
-        $("#dialpad").removeClass('hidden');
-      else
-        $("#dialpad").addClass('hidden');
+      resetWidget();
 
       var caller_id = info.caller_id ? info.caller_id : "click2vox";
       voxbone.WebRTC.configuration.uri = (new JsSIP.URI(scheme = "sip", user = (caller_id).replace(/[^a-zA-Z0-9-_]/g, ''), "voxbone.com")).toString();
@@ -278,107 +279,130 @@ var check1Ready = (function() {
     }
   };
 
-  $("#launch_call").click(function(e) {
-    e.preventDefault();
-    makeCall(info.did);
-  });
-
-  $("#hangup_call").click(function(e) {
-    e.preventDefault();
-    voxbone.WebRTC.hangup();
-  });
-
   window.addEventListener('message', function(event) {
-    // console.log(event.data);
     var message = event.data;
 
     switch(message.action) {
+
       case 'setMicVolume':
-        $("#microphone em").removeClass();
-        if (message.value > 0.01) $("#mic1").addClass('on');
-        if (message.value > 0.05) $("#mic2").addClass('on');
-        if (message.value > 0.10) $("#mic3").addClass('on');
-        if (message.value > 0.20) $("#mic4").addClass('on');
-        if (message.value > 0.30) $("#mic5").addClass('peak');
+        clearMicDots();
+        if (message.value > 0.01) setMicDot('1');
+        if (message.value > 0.05) setMicDot('2');
+        if (message.value > 0.10) setMicDot('3');
+        if (message.value > 0.20) setMicDot('4');
+        if (message.value > 0.30) setMicDot('5');
         break;
+
       case 'setCallCalling':
-        $("#vw-title").text("Calling");
         playRingbackTone();
+        setWidgetTitle("Calling");
         break;
+
       case 'setCallFailed':
-        stopRingbackTone();
-        $("#vw-title").text("Call Failed: " + message.value);
-        $(".vw-animated-dots").addClass('hidden');
-        $("#vw-in-call").addClass('hidden');
-        $("#vw-rating-after-message").removeClass('hidden');
+        pauseRingbackTone();
+        setWidgetTitle("Call Failed: " + message.value);
+        hideAnimatedDots();
+        hideElement('.vox-widget-wrapper #vw-in-call');
+        showElement(".vox-widget-wrapper #vw-rating-after-message");
         break;
+
       case 'setInCall':
-        stopRingbackTone();
-        $("#vw-title").text("In Call");
-        $(".vw-animated-dots").removeClass('hidden');
+        pauseRingbackTone();
+        setWidgetTitle("In Call");
+        showAnimatedDots();
         break;
+
       case 'setCallEnded':
-        $("#vw-title").text("Call Ended");
-        $(".vw-animated-dots").addClass('hidden');
-        $("#vw-in-call").addClass('hidden');
-        resetRating();
-        $("#vw-rating").removeClass('hidden');
-        $(".vw-end-call").click();
+        resetWidget();
+        setWidgetTitle("Call Ended");
+        hideAnimatedDots();
+        hideElement('.vox-widget-wrapper #vw-in-call');
+        showElement(".vox-widget-wrapper #vw-rating");
+        callAction('hang_up');
         break;
+
       case 'openWidgetWithoutDialPad':
-        $("#dialpad").addClass('hidden');
-        $("#vw-title").text("Waiting for User Media");
-        $("#microphone em").removeClass('on').removeClass('off');
-        $(".vw-animated-dots").removeClass('hidden');
-        $(".vox-widget-wrapper").removeClass('hidden');
-        $("#vw-in-call").removeClass('hidden');
-        $(".vw-rating").addClass('hidden');
-        $("#vw-unable-to-acces-mic").addClass('hidden');
+        openWidget();
+        hideElement('.vox-widget-wrapper #dialpad');
         break;
+
       case 'openWidget':
-        $("#vw-title").text("Waiting for User Media");
-        $("#microphone em").removeClass('on').removeClass('off');
-        $(".vw-animated-dots").removeClass('hidden');
-        $(".vox-widget-wrapper").removeClass('hidden');
-        $("#vw-in-call").removeClass('hidden');
-        $(".vw-rating").addClass('hidden');
-        $("#vw-unable-to-acces-mic").addClass('hidden');
+        openWidget();
         break;
+
       case 'setCallFailedUserMedia':
-        stopRingbackTone();
-        $("#vw-title").text("Call Failed");
-        $(".vw-animated-dots").addClass('hidden');
-        $("#vw-in-call").addClass('hidden');
-        $("#vw-unable-to-acces-mic").removeClass('hidden');
+        pauseRingbackTone();
+        setWidgetTitle("Call Failed");
+        hideAnimatedDots();
+        hideElement('.vox-widget-wrapper #vw-in-call');
+        showElement(".vox-widget-wrapper #vw-unable-to-acces-mic");
         break;
     };
   });
 
-  $('#send-rating').click(function(e) {
-    e.preventDefault();
+  function clearMicDots(){
+    var micDots = document.querySelectorAll('.vox-widget-wrapper #microphone em');
+    micDots.forEach(x => x.classList = "");
+  };
 
-    var rate = parseInt($("input[name=vxb-rate]:checked").val()) || 0;
-    var comment = $('#rating-message').val();
+  function setMicDot(dot) {
+    var el = document.querySelector('.vox-widget-wrapper #mic' + dot);
+    if (dot === '5')
+      el.classList.add('peak');
+    else
+      el.classList.add('on');
+  };
 
-    if (!rate && !comment) return;
+  function openWidget(){
+    setWidgetTitle("Waiting for User Media");
+    showAnimatedDots();
 
-    var data =  { rate: rate, comment: comment, url: document.URL, token: info.button_id };
-    var message = { action: 'rate', data: data };
+    var micDots = document.querySelectorAll('.vox-widget-wrapper #microphone em');
+    micDots.forEach(x => x.classList = "");
 
-    sendRate(message.data);
+    showElement(".vox-widget-wrapper");
+    showElement(".vox-widget-wrapper #vw-in-call");
+    hideElement('.vox-widget-wrapper .vw-rating');
+    hideElement('.vox-widget-wrapper #vw-unable-to-acces-mic');
+  };
 
-    $("#vw-rating").addClass('hidden');
-    $("#vw-rating-after-message").removeClass('hidden');
-  });
+  function showElement(selector){
+    var el = document.querySelector(selector);
+    el.classList.remove('hidden');
+  };
 
-  function stopRingbackTone(){
-    $("#audio-ringback-tone").trigger('pause');
-    $("#audio-ringback-tone").prop("currentTime",0);
+  function hideElement(selector){
+    var el = document.querySelector(selector);
+    el.classList.add('hidden');
+  };
+
+  function showAnimatedDots(){
+    var dots = document.querySelectorAll('.vox-widget-wrapper .vw-animated-dots');
+    dots.forEach(x => x.classList.remove('hidden'));
+  };
+
+  function hideAnimatedDots(){
+    var dots = document.querySelectorAll('.vox-widget-wrapper .vw-animated-dots');
+    dots.forEach(x => x.classList.add('hidden'));
+  };
+
+  function setWidgetTitle(title){
+    var el = document.querySelector('.vox-widget-wrapper #vw-title');
+    el.innerText = title;
+  };
+
+  function getRingbackTone(){
+    return document.querySelector('.voxButton #audio-ringback-tone');
+  };
+
+  function pauseRingbackTone(){
+    getRingbackTone().pause();
   };
 
   function playRingbackTone(){
-    $("#audio-ringback-tone").prop("currentTime",0);
-    $("#audio-ringback-tone").trigger('play');
+    var audioEl = getRingbackTone();
+    audioEl.currentTime = 0;
+    audioEl.play();
   };
 
   function callAction(message){
@@ -389,12 +413,11 @@ var check1Ready = (function() {
       case 'hang_up':
         voxbone.WebRTC.hangup();
         break;
-      case 'microphone-mute':
-        if (voxbone.WebRTC.isMuted) {
+      case 'microphone_mute':
+        if (voxbone.WebRTC.isMuted)
           voxbone.WebRTC.unmute();
-        } else {
+        else
           voxbone.WebRTC.mute();
-        }
         break;
       case '1':
       case '2':
@@ -414,49 +437,109 @@ var check1Ready = (function() {
   };
 
   function sendRate(data) {
-    $.ajax({
-      type: "POST",
-      url: info.server_url + "/rating",
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8'
-      },
-      crossDomain: true,
-      data: JSON.stringify(data),
-      dataType: 'json',
-      success: function(responseData, status, xhr) {
-        console.log("rating sent!");
-      },
-      error: function(request, status, error) {
-        console.log("rating sending error callback");
-      }
+    var request = new XMLHttpRequest();
+    request.open('POST', info.server_url + "/rating", true);
+    request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+    request.addEventListener("load", function(responseData, status, xhr) {
+      console.log("rating sent!");
     });
+
+    request.addEventListener("error", function(responseData, status, xhr) {
+      console.log("rating sending error callback");
+    });
+
+    request.send(JSON.stringify(data));
   };
 
-  function resetRating() {
-    $('#send-rating').addClass("btn-style-disabled");
-    $('input[name=vxb-rate]').prop('checked', false);
-    $('#rating-message').val('');
+  function resetWidget() {
+    // Reset Widget
+    setWidgetTitle("Waiting for User Media");
+    clearMicDots();
+
+    hideElement(".vox-widget-wrapper #vw-unable-to-acces-mic");
+    hideElement(".vox-widget-wrapper #vw-rating-after-message");
+    hideElement(".vox-widget-wrapper .vw-rating");
+
+    showAnimatedDots();
+    showElement(".vox-widget-wrapper #vw-in-call");
+    showElement(".vox-widget-wrapper");
+
+    if (info.dial_pad !== false)
+      showElement(".vox-widget-wrapper #dialpad");
+    else
+      hideElement(".vox-widget-wrapper #dialpad");
+
+    // Reset Rating
+    document.querySelector('.vox-widget-wrapper #send-rating').classList.add("btn-style-disabled");
+    document.querySelector('.vox-widget-wrapper #rating-message').value = "";
+
+    var starRatingButtons = document.querySelectorAll(".vox-widget-wrapper input[name=vxb-rate]");
+    starRatingButtons.forEach(e => e.checked = false );
   };
 
-  $('input[name=vxb-rate]').click(function(e) {
-    $('#send-rating').removeClass("btn-style-disabled");
-    $('#send-rating').addClass("btn-style");
+  // Start of Button Events
+  //
+  // Click on Make Call button event
+  document.querySelector(".vxb-widget-box #launch_call").addEventListener('click', function (e) {
+    e.preventDefault();
+    makeCall(info.did);
+  });
+  //
+  // End of Button Events
+
+  // Start of Widget Events
+  //
+  // Click on Send Rating button event
+  document.querySelector(".vox-widget-wrapper #send-rating").addEventListener('click', function (e) {
+    e.preventDefault();
+
+    var rate = document.querySelector('.vox-widget-wrapper input[name=vxb-rate]:checked');
+    if (!rate) return;
+
+    var comment = document.querySelector('.vox-widget-wrapper #rating-message');
+    var commentValue = comment ? comment.value : "";
+
+    var data =  { rate: rate.value, comment: commentValue, url: document.URL, token: info.button_id };
+    var message = { action: 'rate', data: data };
+
+    sendRate(message.data);
+
+    hideElement(".vox-widget-wrapper #vw-rating");
+    showElement(".vox-widget-wrapper #vw-rating-after-message");
   });
 
-  $('.vw-dialpad li').click(function(e) {
-    e.preventDefault();
-    callAction(this.textContent);
+  // Click Rating star buttons event
+  var starRatingButtons = document.querySelectorAll(".vox-widget-wrapper input[name=vxb-rate]");
+  Array.prototype.forEach.call(starRatingButtons, function(el, i) {
+    el.addEventListener('click', function (e) {
+      var element = document.querySelector(".vox-widget-wrapper #send-rating");
+      element.classList.add('btn-style');
+      element.classList.remove('btn-style-disabled');
+    });
   });
 
-  $(".vw-end-call").click(function(e) {
+  // Click on Pad buttons event
+  var padButtons = document.querySelectorAll(".vox-widget-wrapper .vw-dialpad li");
+  Array.prototype.forEach.call(padButtons, function(el, i) {
+    el.addEventListener('click', function (e) {
+      e.preventDefault();
+      callAction(this.textContent);
+    });
+  });
+
+  // End call button event
+  document.querySelector(".vox-widget-wrapper .vw-end-call").addEventListener('click', function (e) {
     e.preventDefault();
-    resetRating();
+    resetWidget();
     callAction('hang_up');
   });
 
-  $("#close-screen i").click(function(e) {
+  // Close Widget button event
+  document.querySelector(".vox-widget-wrapper #close-screen i").addEventListener('click', function (e) {
     e.preventDefault();
-    $(".vox-widget-wrapper").addClass('hidden');
+    hideElement(".vox-widget-wrapper");
+
     callAction('hang_up');
 
     // send "no rating"
@@ -465,36 +548,39 @@ var check1Ready = (function() {
     callAction(message);
   });
 
-  $("#full-screen i").click(function(e) {
+  // Open Widget button event
+  document.querySelector(".vox-widget-wrapper #full-screen i").addEventListener('click', function (e) {
     e.preventDefault();
-    $("#vw-body").toggleClass('hidden');
-    $(this).toggleClass('vx-icon-full-screen-on').toggleClass('vx-icon-full-screen-off');
+    hideElement(".vox-widget-wrapper #vw-body");
+
+    this.classList.toggle('vx-icon-full-screen-on');
+    this.classList.toggle('vx-icon-full-screen-off');
   });
 
-  $(".vw-icon.vx-icon-pad").click(function(e) {
+  // Pad button event
+  document.querySelector(".vox-widget-wrapper i.vx-icon-pad").addEventListener('click', function (e) {
     e.preventDefault();
-    $("#dialpad").toggleClass('active');
-    $(".vw-dialpad").toggleClass('active');
+    var element = document.querySelector(".vox-widget-wrapper .vw-dialpad");
+    element.classList.toggle('active');
   });
 
-  $(".vw-icon.vx-icon-mic").click(function(e) {
+  // Mic button event
+  document.querySelector(".vox-widget-wrapper i.vx-icon-mic").addEventListener('click', function (e) {
     e.preventDefault();
-    $("#microphone em").toggleClass('on').toggleClass('off');
-    callAction('microphone-mute');
-  });
 
-  $(".vw-icon.vx-icon-vol").click(function(e) {
-    e.preventDefault();
-    $("#volume em").toggleClass('on').toggleClass('off');
-    callAction('volume-mute');
+    var elements = document.querySelectorAll(".vox-widget-wrapper #microphone em");
+    elements.forEach(e => { e.classList.add('off'); e.classList.remove('on') } );
+    callAction('microphone_mute');
   });
+  //
+  // End of Widget Events
 
   init();
 });
 
 window.onload = function() {
-  if (typeof window.jQuery === 'undefined') {
+  if (typeof window.jQuery === 'undefined')
     loadScript("//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js", check0Ready);
-  } else
+  else
     check0Ready();
 };
