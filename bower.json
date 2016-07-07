@@ -11,11 +11,11 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "1.12.0",
+    "jquery": "1.12.4",
     "bootstrap": "3.3.6",
-    "angular": "1.4.9",
-    "angular-sanitize": "1.4.9",
-    "angular-cookies": "1.4.9",
+    "angular": "1.4.12",
+    "angular-sanitize": "1.4.12",
+    "angular-cookies": "1.4.12",
     "qtip2": "2.2.1",
     "raty": "2.7.0",
     "clipboard": "1.5.5",

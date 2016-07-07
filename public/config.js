@@ -27,11 +27,11 @@ require.config({
   },
   paths: {
     angular: [
-      '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min',
+      '//ajax.googleapis.com/ajax/libs/angularjs/1.4.12/angular.min',
       '/lib/angular/angular.min'
     ],
     'angular-cookies': [
-      '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.min',
+      '//ajax.googleapis.com/ajax/libs/angularjs/1.4.12/angular-cookies.min',
       '/lib/angular-cookies/angular-cookies.min'
     ],
     'angular-recaptcha': [
@@ -39,7 +39,7 @@ require.config({
       '/lib/angular-recaptcha/release/angular-recaptcha.min'
     ],
     'angular-sanitize': [
-      '//ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-sanitize.min',
+      '//ajax.googleapis.com/ajax/libs/angularjs/1.4.12/angular-sanitize.min',
       '/lib/angular-sanitize/angular-sanitize.min'
     ],
     bootstrap: [
