@@ -18,7 +18,15 @@ function loadScript(url, callback) {
 
   // Fire the loading
   head.appendChild(script);
-}
+};
+
+function loadCss(url) {
+  var link = document.createElement("link");
+  link.type = "text/css";
+  link.rel = "stylesheet";
+  link.href = url;
+  document.getElementsByTagName("head")[0].appendChild(link);
+};
 
 var check0Ready = (function() {
   info = voxButtonElement.dataset;
@@ -31,10 +39,10 @@ var check0Ready = (function() {
 });
 
 var check1Ready = (function() {
-  head.innerHTML += '<link rel="stylesheet" type="text/css" href="' + info.server_url + '/stylesheets/vxb-widget.css" />';
+  loadCss(info.server_url + '/stylesheets/vxb-widget.css');
 
   if(info.use_default_button_css !== 'false')
-    head.innerHTML += '<link rel="stylesheet" type="text/css" href="' + info.server_url + '/stylesheets/vxb-button.css" />';
+    loadCss(info.server_url + '/stylesheets/vxb-button.css');
 
   voxButtonElement.innerHTML += ' \
     <audio id="audio-ringback-tone" preload="auto" loop> \
@@ -246,7 +254,7 @@ var check1Ready = (function() {
   };
 
   function isWebRTCSupported() {
-    return voxbone.WebRTC.isWebRTCSupported(); //&& !isChromeOnHttp();
+    return voxbone.WebRTC.isWebRTCSupported() && !isChromeOnHttp();
   };
 
   function makeCall(did) {
@@ -342,7 +350,9 @@ var check1Ready = (function() {
 
   function clearMicDots(){
     var micDots = document.querySelectorAll('.vox-widget-wrapper #microphone em');
-    micDots.forEach(x => x.classList = "");
+    Array.prototype.forEach.call(micDots, function(el, i) {
+      el.classList = "";
+    });
   };
 
   function setMicDot(dot) {
@@ -356,9 +366,6 @@ var check1Ready = (function() {
   function openWidget(){
     setWidgetTitle("Waiting for User Media");
     showAnimatedDots();
-
-    var micDots = document.querySelectorAll('.vox-widget-wrapper #microphone em');
-    micDots.forEach(x => x.classList = "");
 
     showElement(".vox-widget-wrapper");
     showElement(".vox-widget-wrapper #vw-in-call");
@@ -378,12 +385,16 @@ var check1Ready = (function() {
 
   function showAnimatedDots(){
     var dots = document.querySelectorAll('.vox-widget-wrapper .vw-animated-dots');
-    dots.forEach(x => x.classList.remove('hidden'));
+    Array.prototype.forEach.call(dots, function(el, i) {
+      el.classList.remove('hidden');
+    });
   };
 
   function hideAnimatedDots(){
     var dots = document.querySelectorAll('.vox-widget-wrapper .vw-animated-dots');
-    dots.forEach(x => x.classList.add('hidden'));
+    Array.prototype.forEach.call(dots, function(el, i) {
+      el.classList.add('hidden');
+    });
   };
 
   function setWidgetTitle(title){
@@ -475,7 +486,9 @@ var check1Ready = (function() {
     document.querySelector('.vox-widget-wrapper #rating-message').value = "";
 
     var starRatingButtons = document.querySelectorAll(".vox-widget-wrapper input[name=vxb-rate]");
-    starRatingButtons.forEach(e => e.checked = false );
+    Array.prototype.forEach.call(starRatingButtons, function(el, i) {
+      el.checked = false;
+    });
   };
 
   // Start of Button Events
@@ -569,7 +582,11 @@ var check1Ready = (function() {
     e.preventDefault();
 
     var elements = document.querySelectorAll(".vox-widget-wrapper #microphone em");
-    elements.forEach(e => { e.classList.add('off'); e.classList.remove('on') } );
+    Array.prototype.forEach.call(elements, function(el, i) {
+      el.classList.add('off');
+      el.classList.remove('on')
+    });
+
     callAction('microphone_mute');
   });
   //
