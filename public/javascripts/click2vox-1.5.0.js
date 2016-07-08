@@ -33,7 +33,7 @@ var check0Ready = (function() {
   info.server_url = (info.server_url === undefined) ? 'https://click2vox.com' : info.server_url;
 
   if (typeof voxbone === 'undefined')
-    loadScript(info.server_url + "/voxbone/dist/voxbone-2.0.0-a.min.js", check1Ready);
+    loadScript("//d3s8y65reoy6kf.cloudfront.net/voxbone/voxbone-2.0.0-a.min.js", check1Ready);
   else
     check1Ready();
 });
@@ -596,8 +596,5 @@ var check1Ready = (function() {
 });
 
 window.onload = function() {
-  if (typeof window.jQuery === 'undefined')
-    loadScript("//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js", check0Ready);
-  else
-    check0Ready();
+  check0Ready();
 };
