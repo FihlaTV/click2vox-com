@@ -108,16 +108,16 @@ router.post('/edit', utils.isLoggedIn, function (req, res) {
       Widget.update(
         {_account: user._id, sip_uri: original},
         {sip_uri: sipUri},
+        {multi: true},
         function(err, numUpdated) {
           console.log(numUpdated, 'updated documents');
           if (err) {
             result.message = 'Error while updating the registries.';
             return res.status(500).json(result);
-          }
+          } else
+            return success();
         }
       );
-
-      return success();
     }
   });
 });

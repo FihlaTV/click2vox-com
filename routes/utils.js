@@ -43,6 +43,17 @@ module.exports = {
     next(err);
   },
 
+  uuid4: function () {
+    // I leave this approach commented out just for general culture :)
+    // 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    //     var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+    //     return v.toString(16);
+    // });
+
+    function b (a) {return a?(a^Math.random()*16>>a/4).toString(16):([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,b)}
+    return b();
+  },
+
   provisionSIP: function (account, sipUri, callback) {
     var request = require('request');
     var async = require('async');

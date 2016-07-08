@@ -73,6 +73,20 @@ router.get('/widgets', utils.isLoggedIn, function (req, res) {
           entry.widgets.forEach(function (widget) {
             widget.divCode = utils.widgetDivHtmlCode(widget, req.user.did);
           });
+          entry.uuid = utils.uuid4();
+        });
+
+        // we need to push the sip uris that has no widgets associated so far
+        // in order to give to the user the oportunity to edit the sip
+        var currentSips = result.map(function(entry) { return entry._id; });
+        req.user.sip_uris.forEach(function(sipUri) {
+          if (currentSips.indexOf(sipUri) === -1) {
+            result.push({
+              '_id': sipUri,
+              'uuid': utils.uuid4(),
+              'widgets': []
+            });
+          }
         });
       }
 
