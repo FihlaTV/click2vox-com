@@ -154,7 +154,7 @@ var check1Ready = (function() {
   };
 
   voxButtonElement.innerHTML += ' \
-    <div id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
+    <div style="display: none;" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
       <button id="launch_call" class="vxb-btn-style ' + (infoVoxbone.button_css_class_name) + '"><span>' +  infoVoxbone.text + '</span></button>\
       ' + links + '\
     </div>\
@@ -227,6 +227,7 @@ var check1Ready = (function() {
   };
 
   function init() {
+    document.querySelector("#launch_call_div").style.display = "block";
     if (isWebRTCSupported()) {
       voxbone.WebRTC.configuration.post_logs = true;
       voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
