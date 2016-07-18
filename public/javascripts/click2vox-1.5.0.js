@@ -32,6 +32,11 @@ var check0Ready = (function() {
   infoVoxbone = voxButtonElement.dataset;
   infoVoxbone.server_url = (infoVoxbone.server_url === undefined) ? 'https://click2vox.com' : infoVoxbone.server_url;
 
+  loadCss(infoVoxbone.server_url + '/stylesheets/vxb-widget.css');
+
+  if(infoVoxbone.use_default_button_css !== 'false')
+    loadCss(infoVoxbone.server_url + '/stylesheets/vxb-button.css');
+
   if (typeof voxbone === 'undefined')
     loadScript("//cdn.voxbone.com/voxbone/voxbone-2.1.0.min.js", check1Ready);
   else
@@ -39,11 +44,6 @@ var check0Ready = (function() {
 });
 
 var check1Ready = (function() {
-  loadCss(infoVoxbone.server_url + '/stylesheets/vxb-widget.css');
-
-  if(infoVoxbone.use_default_button_css !== 'false')
-    loadCss(infoVoxbone.server_url + '/stylesheets/vxb-button.css');
-
   voxButtonElement.innerHTML += ' \
     <audio id="audio-ringback-tone" preload="auto" loop> \
       <source src="https://upload.wikimedia.org/wikipedia/commons/c/cd/US_ringback_tone.ogg" type="audio/ogg"> \
