@@ -227,7 +227,8 @@ var check1Ready = (function() {
   };
 
   function init() {
-    document.querySelector("#launch_call_div").style.display = "block";
+    setTimeout(function(){ document.querySelector("#launch_call_div").style.display = "block"; }, 500);
+
     if (isWebRTCSupported()) {
       voxbone.WebRTC.configuration.post_logs = true;
       voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
