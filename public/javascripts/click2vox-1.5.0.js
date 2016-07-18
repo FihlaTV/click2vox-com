@@ -329,15 +329,6 @@ var check1Ready = (function() {
         callAction('hang_up');
         break;
 
-      case 'openWidgetWithoutDialPad':
-        openWidget();
-        hideElement('.vox-widget-wrapper #dialpad');
-        break;
-
-      case 'openWidget':
-        openWidget();
-        break;
-
       case 'setCallFailedUserMedia':
         pauseRingbackTone();
         setWidgetTitle("Call Failed");
@@ -361,17 +352,6 @@ var check1Ready = (function() {
       el.classList.add('peak');
     else
       el.classList.add('on');
-  };
-
-  function openWidget(){
-    setWidgetTitle("Waiting for User Media");
-    showAnimatedDots();
-
-    document.querySelector(".vox-widget-wrapper").style.display = "block";
-    showElement(".vox-widget-wrapper");
-    showElement(".vox-widget-wrapper #vw-in-call");
-    hideElement('.vox-widget-wrapper .vw-rating');
-    hideElement('.vox-widget-wrapper #vw-unable-to-acces-mic');
   };
 
   function showElement(selector){
@@ -476,6 +456,7 @@ var check1Ready = (function() {
     showAnimatedDots();
     showElement(".vox-widget-wrapper #vw-in-call");
     showElement(".vox-widget-wrapper");
+    document.querySelector(".vox-widget-wrapper").style.display = "block";
 
     if (info.dial_pad !== false)
       showElement(".vox-widget-wrapper #dialpad");
