@@ -1,7 +1,7 @@
 // Voxbone Click2Vox Widget library
 // Version - v1.5.0
 
-var info = null;
+var infoVoxbone = null;
 var head = document.getElementsByTagName('head')[0];
 var voxButtonElement = document.getElementsByClassName('voxButton')[0];
 
@@ -29,8 +29,8 @@ function loadCss(url) {
 };
 
 var check0Ready = (function() {
-  info = voxButtonElement.dataset;
-  info.server_url = (info.server_url === undefined) ? 'https://click2vox.com' : info.server_url;
+  infoVoxbone = voxButtonElement.dataset;
+  infoVoxbone.server_url = (infoVoxbone.server_url === undefined) ? 'https://click2vox.com' : infoVoxbone.server_url;
 
   if (typeof voxbone === 'undefined')
     loadScript("//cdn.voxbone.com/voxbone/voxbone-2.1.0.min.js", check1Ready);
@@ -39,10 +39,10 @@ var check0Ready = (function() {
 });
 
 var check1Ready = (function() {
-  loadCss(info.server_url + '/stylesheets/vxb-widget.css');
+  loadCss(infoVoxbone.server_url + '/stylesheets/vxb-widget.css');
 
-  if(info.use_default_button_css !== 'false')
-    loadCss(info.server_url + '/stylesheets/vxb-button.css');
+  if(infoVoxbone.use_default_button_css !== 'false')
+    loadCss(infoVoxbone.server_url + '/stylesheets/vxb-button.css');
 
   voxButtonElement.innerHTML += ' \
     <audio id="audio-ringback-tone" preload="auto" loop> \
@@ -144,7 +144,7 @@ var check1Ready = (function() {
   ';
 
   var links = "";
-  if(info.show_frame !== 'false' && info.use_default_button_css !== 'false') {
+  if(infoVoxbone.show_frame !== 'false' && infoVoxbone.use_default_button_css !== 'false') {
     links = '<div class="widget-footer-left">\
                <a href="https://test.webrtc.org/" target="_blank">Test your setup</a>\
              </div>\
@@ -154,15 +154,15 @@ var check1Ready = (function() {
   };
 
   voxButtonElement.innerHTML += ' \
-    <div id="launch_call_div" class="vxb-widget-box ' + (info.div_css_class_name || "style-b") + '">\
-      <button id="launch_call" class="vxb-btn-style ' + (info.button_css_class_name) + '"><span>' +  info.text + '</span></button>\
+    <div id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
+      <button id="launch_call" class="vxb-btn-style ' + (infoVoxbone.button_css_class_name) + '"><span>' +  infoVoxbone.text + '</span></button>\
       ' + links + '\
     </div>\
   ';
 
   function getVoxrtcConfig(callback) {
     var request = new XMLHttpRequest();
-    var url = info.server_url + '/token_config';
+    var url = infoVoxbone.server_url + '/token_config';
 
     request.open('GET', url, true);
 
@@ -235,8 +235,8 @@ var check1Ready = (function() {
         voxbone.WebRTC.init(data);
       });
     } else {
-      if (info.incompatible_browser_configuration === 'hide_widget')
-        hideElement('div[data-button_id="' + info.button_id + '"]');
+      if (infoVoxbone.incompatible_browser_configuration === 'hide_widget')
+        hideElement('div[data-button_id="' + infoVoxbone.button_id + '"]');
 
       if (isChromeOnHttp())
         console.log("WebRTC doesn't work in Chrome on HTTP -> https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins");
@@ -260,8 +260,8 @@ var check1Ready = (function() {
   function makeCall(did) {
     if (isInCall()) return;
 
-    if (!isWebRTCSupported() && (info.incompatible_browser_configuration === 'link_button_to_a_page')) {
-      var redirect_url = info.redirect_url || 'https://voxbone.com';
+    if (!isWebRTCSupported() && (infoVoxbone.incompatible_browser_configuration === 'link_button_to_a_page')) {
+      var redirect_url = infoVoxbone.redirect_url || 'https://voxbone.com';
       window.open(redirect_url);
       return;
     };
@@ -269,15 +269,15 @@ var check1Ready = (function() {
     if (isWebRTCSupported()) {
       resetWidget();
 
-      var caller_id = info.caller_id ? info.caller_id : "click2vox";
+      var caller_id = infoVoxbone.caller_id ? infoVoxbone.caller_id : "click2vox";
       voxbone.WebRTC.configuration.uri = (new JsSIP.URI(scheme = "sip", user = (caller_id).replace(/[^a-zA-Z0-9-_]/g, ''), "voxbone.com")).toString();
 
-      if (info.context)
-        voxbone.WebRTC.context = info.context;
+      if (infoVoxbone.context)
+        voxbone.WebRTC.context = infoVoxbone.context;
 
-      if (info.send_digits) {
-        console.log('Digits to be send: ' + info.send_digits);
-        voxbone.WebRTC.configuration.dialer_string = info.send_digits;
+      if (infoVoxbone.send_digits) {
+        console.log('Digits to be send: ' + infoVoxbone.send_digits);
+        voxbone.WebRTC.configuration.dialer_string = infoVoxbone.send_digits;
       }
 
       voxbone.WebRTC.call(did);
@@ -430,7 +430,7 @@ var check1Ready = (function() {
 
   function sendRate(data) {
     var request = new XMLHttpRequest();
-    request.open('POST', info.server_url + "/rating", true);
+    request.open('POST', infoVoxbone.server_url + "/rating", true);
     request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
 
     request.addEventListener("load", function(responseData, status, xhr) {
@@ -458,7 +458,7 @@ var check1Ready = (function() {
     showElement(".vox-widget-wrapper");
     document.querySelector(".vox-widget-wrapper").style.display = "block";
 
-    if (info.dial_pad !== false)
+    if (infoVoxbone.dial_pad !== false)
       showElement(".vox-widget-wrapper #dialpad");
     else
       hideElement(".vox-widget-wrapper #dialpad");
@@ -478,7 +478,7 @@ var check1Ready = (function() {
   // Click on Make Call button event
   document.querySelector(".vxb-widget-box #launch_call").addEventListener('click', function (e) {
     e.preventDefault();
-    makeCall(info.did);
+    makeCall(infoVoxbone.did);
   });
   //
   // End of Button Events
@@ -495,7 +495,7 @@ var check1Ready = (function() {
     var comment = document.querySelector('.vox-widget-wrapper #rating-message');
     var commentValue = comment ? comment.value : "";
 
-    var data =  { rate: rate.value, comment: commentValue, url: document.URL, token: info.button_id };
+    var data =  { rate: rate.value, comment: commentValue, url: document.URL, token: infoVoxbone.button_id };
     var message = { action: 'rate', data: data };
 
     sendRate(message.data);
