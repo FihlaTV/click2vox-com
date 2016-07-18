@@ -48,7 +48,7 @@ var check1Ready = (function() {
     <audio id="audio-ringback-tone" preload="auto" loop> \
       <source src="https://upload.wikimedia.org/wikipedia/commons/c/cd/US_ringback_tone.ogg" type="audio/ogg"> \
     </audio> \
-    <div class="vox-widget-wrapper hidden"> \
+    <div style="display: none;" class="vox-widget-wrapper hidden"> \
       <div class="vw-main"> \
         <div class="vw-header"> \
           <span class="vw-title" id="vw-title">Starting Call</span> \
@@ -367,6 +367,7 @@ var check1Ready = (function() {
     setWidgetTitle("Waiting for User Media");
     showAnimatedDots();
 
+    document.querySelector(".vox-widget-wrapper").style.display = "block";
     showElement(".vox-widget-wrapper");
     showElement(".vox-widget-wrapper #vw-in-call");
     hideElement('.vox-widget-wrapper .vw-rating');
