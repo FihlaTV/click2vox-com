@@ -33,7 +33,7 @@ var check0Ready = (function() {
   info.server_url = (info.server_url === undefined) ? 'https://click2vox.com' : info.server_url;
 
   if (typeof voxbone === 'undefined')
-    loadScript("//cdn.voxbone.com/voxbone/voxbone-2.0.0-a.min.js", check1Ready);
+    loadScript("//cdn.voxbone.com/voxbone/voxbone-2.1.0.min.js", check1Ready);
   else
     check1Ready();
 });
