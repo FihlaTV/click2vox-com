@@ -88,38 +88,6 @@ app.use('/api', contactRoutes);
 app.use('/sip', sipRoutes);
 app.use('/widget', widgetRoutes);
 
-require('coffee-script/register'); // <-- This dependency is to be removed very soon.
-penguin = require('penguin');
-admin = new penguin.Admin({
-  fileManager: false,
-  indexTitle: 'Click2Vox.com Admin Panel',
-  menu: [
-    [ 'Click2vox.com Home', '/admin' ],
-    [ 'Accounts', '/admin/accounts' ]
-    // [ 'Sections', [
-    //   [ 'Accounts', '/admin/accounts' ],
-      // [ 'Dids', '/admin/dids' ],
-      // [ 'Ratings', '/admin/ratings' ],
-      // [ 'Widgets', '/admin/widgets' ]
-    // ] ]
-  ],
-
-  beforeMiddleware: function(req, res, next) {
-    console.log('beforeMiddleware', req.url, Object.keys(req.$p));
-
-    if(req.isAuthenticated()) {
-      Account.findOne({ email: new RegExp(req.user.email, "i"), admin: true }, {}, function(err, admin_account){
-        if (err || !admin_account)
-          res.redirect('/');
-        return next();
-      });
-    } else {
-      res.redirect('/');
-    }
-  }
-});
-admin.setupApp(app);
-
 // error handlers
 
 // catch 404 and forward to error handler
