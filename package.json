@@ -30,7 +30,7 @@
     "jade": "~1.11.0",
     "jsesc": "^2.2.0",
     "method-override": "~1.0.0",
-    "mongoose": "~3.8.0",
+    "mongoose": "~4.5.5",
     "morgan": "~1.6.1",
     "newrelic": "^1.24.0",
     "nodemon": "^1.9.1",
