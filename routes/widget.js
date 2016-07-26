@@ -84,8 +84,8 @@ router.get('/:id/edit', utils.isLoggedIn, function (req, res, next) {
   },
   function (err, result) {
     if (!result.widget) return utils.objectNotFound(res, req, next);
-    result['defaultBtnLabel'] = utils.defaultBtnLabel;
-    result['widget_code'] = result.widget.generateDivHtmlCode();
+    result.defaultBtnLabel = utils.defaultBtnLabel;
+    result.widget_code = result.widget.generateDivHtmlCode();
     res.render('widget/edit', result);
   });
 });
@@ -97,8 +97,6 @@ router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
     .merge({updated_at: new Date()})
     .permit(PERMITTED_FIELDS);
 
-  console.log(updateData);
-
   var result = { message: "", errors: null };
 
   var successResponse = function (widget) {
@@ -109,6 +107,7 @@ router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
     }
     result.widget_id = widget.id;
     result.widget = widget;
+    result.didToCall = widget.didToCall();
     return res.status(200).json(result);
   };
 
@@ -129,7 +128,6 @@ router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
   }
 
   utils.provisionSIP(currentUser, updateData.sip_uri, function (err) {
-    console.log('Provisioning...');
     if (err) {
       console.log('Error while provisioning demo sip uri: ', err);
       if (updateData.new_sip_uri) currentUser.removeSipURI(updateData.new_sip_uri);
@@ -140,7 +138,7 @@ router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
         .findOneAndUpdate({
           _account: currentUser._id,
           _id: req.params.id
-        }, updateData)
+        }, updateData, {new: true})
         .populate('_account')
         .exec(
           function (err, widget) {

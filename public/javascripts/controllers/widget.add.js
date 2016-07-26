@@ -1,6 +1,14 @@
-define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
+define([
+    'controllers/widget.mixin',
+    'jquery',
+    'clipboard',
+    'bootstrap'
+  ], function (WidgetMixin, $, Clipboard) {
 
-  var WidgetAddController = function ($scope, $http, $window, $cookies) {
+  var WidgetAddController = function ($scope, $http, $window, $controller) {
+    // let's extend from the mixin first of all
+    angular.extend(this, $controller(WidgetMixin, {$scope: $scope}));
+
     $scope.preview_webrtc_compatible = true;
     $scope.submitText = 'Save Configuration';
 
@@ -174,7 +182,7 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
 
       // TODO: pull this DID out, maybe in an ENV VAR
       $('#callVoxbone').click(function () {
-        $scope.makeCall(883510080144);
+        $scope.makeCall(883510080408);
       });
 
       $('.codebox-actions a').click(function (e) {
@@ -193,49 +201,6 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
         console.error('Action:', e.action);
         console.error('Trigger:', e.trigger);
       });
-    };
-
-    $scope.makeCall = function (did) {
-      // We don't need to actually make the call when creating a widget
-      if (this.preview_webrtc_compatible) return;
-
-      if (this.widget.incompatible_browser_configuration === 'hide_widget') return;
-
-      if (this.widget.incompatible_browser_configuration === 'link_button_to_a_page') {
-        $window.open(this.widget.link_button_to_a_page_value, '_blank');
-        return;
-      }
-
-      if ($scope.isWebRTCSupported()) {
-        $("#vw-title").text("Waiting for User Media");
-        $("#microphone em").removeClass('on').removeClass('off');
-        $("#vw-unable-to-acces-mic").addClass('hidden');
-        $(".vw-animated-dots").removeClass('hidden');
-        $(".vox-widget-wrapper").removeClass('hidden');
-        $("#vw-in-call").removeClass('hidden');
-        $(".vw-rating").addClass('hidden');
-
-        if ($scope.widget.dial_pad)
-          $("#dialpad").removeClass('hidden');
-        else
-          $("#dialpad").addClass('hidden');
-
-        var caller_id = $scope.widget.caller_id ? $scope.widget.caller_id : "click2vox";
-        voxbone.WebRTC.configuration.uri = (new JsSIP.URI(scheme = "sip", user = (caller_id).replace(/[^a-zA-Z0-9-_]/g, ''), "voxbone.com")).toString();
-
-        if ($scope.widget.context)
-          voxbone.WebRTC.context = $scope.widget.context;
-
-        if ($scope.widget.send_digits) {
-          console.log('Digits to be send: ' + $scope.widget.send_digits);
-          voxbone.WebRTC.configuration.dialer_string = $scope.widget.send_digits;
-        }
-
-        voxbone.WebRTC.call(did);
-        window.onbeforeunload = function (e) {
-          voxbone.WebRTC.unloadHandler();
-        };
-      }
     };
 
     $scope.reset();
@@ -322,7 +287,7 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
     });
   };
 
-  WidgetAddController.$inject = ['$scope', '$http', '$window'];
+  WidgetAddController.$inject = ['$scope', '$http', '$window', '$controller'];
 
   return WidgetAddController;
 });

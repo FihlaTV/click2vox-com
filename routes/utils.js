@@ -17,8 +17,8 @@ module.exports = {
   defaultBtnLabel: process.env.DEFAULT_BUTTON_LABEL || 'Call Sales',
 
   defaultSipUris: function () {
-    var sip_uris = process.env.DEFAULT_SIP_URIS;
-    return sip_uris.split(',');
+    var demoSips = require('../config/demo-sips.json');
+    return Object.keys(demoSips);
   },
 
   isLoggedIn: function (req, res, next) {
@@ -58,6 +58,12 @@ module.exports = {
     var request = require('request');
     var async = require('async');
     var utils = this;
+
+    // do not provision if is a demo sip uri
+    if (utils.defaultSipUris().indexOf(sipUri) !== -1) {
+      console.log('Jumping provisioning since it is a demo sip uris');
+      return callback();
+    }
 
     var verifySIP = function (done) {
       // step 1 Check if SIP is already linked

@@ -40,7 +40,7 @@ widgetSchema.pre('save', function(next) {
 
 widgetSchema.methods.generateDivHtmlCode = function() {
   var utils = require("../routes/utils.js");
-  return utils.widgetDivHtmlCode(this, this._account.did);
+  return utils.widgetDivHtmlCode(this, this.didToCall());
 };
 
 widgetSchema.methods.generateHtmlCode = function() {
@@ -61,6 +61,18 @@ widgetSchema.methods.generateHtmlCode = function() {
   html += '</div>';
 
   return html;
+};
+
+widgetSchema.methods.didToCall = function () {
+  var utils = require("../routes/utils.js");
+  var defaultSipUris = utils.defaultSipUris();
+
+  if (defaultSipUris.indexOf(this.sip_uri) === -1) {
+    return this._account.did;
+  } else {
+    var demoSips = require('../config/demo-sips.json');
+    return demoSips[this.sip_uri][0];
+  }
 };
 
 var Widget = mongoose.model('Widget', widgetSchema);

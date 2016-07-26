@@ -116,7 +116,7 @@ accountSchema.methods.getSipURIsWithNewSipUri = function () {
   var sip_uris = this.getSipURIs();
 
   if (process.env.BYPASS_ADDING_SIP_URI === 'false')
-    sip_uris = sip_uris.concat('Add a new SIP URI')
+    sip_uris = sip_uris.concat('Add a new SIP URI');
 
   return sip_uris;
 };

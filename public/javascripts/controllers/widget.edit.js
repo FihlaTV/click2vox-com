@@ -1,6 +1,15 @@
-define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
+define([
+    'controllers/widget.mixin',
+    'jquery',
+    'jquery',
+    'clipboard',
+    'bootstrap'
+  ], function (WidgetMixin, $, Clipboard) {
 
-  var WidgetEditController = function ($scope, $http, $window, $cookies) {
+  var WidgetEditController = function ($scope, $http, $window, $controller) {
+    // let's extend from the mixin first of all
+    angular.extend(this, $controller(WidgetMixin, {$scope: $scope}));
+
     $scope.preview_webrtc_compatible = true;
     $scope.submitText = 'Save Configuration';
 
@@ -96,7 +105,7 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
       if (form) {
         form.$setPristine();
         form.$setUntouched();
-      };
+      }
 
       $scope.widget = angular.copy($scope.master);
     };
@@ -116,11 +125,13 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
     };
 
     $scope.loadWidgetData = function () {
+      var data = $scope.initData;
       $scope.savedSuccessfully = false;
-      $scope.widget = angular.extend({}, $scope.widget, $scope.master, $scope.initData['widget']);
-      $scope.widget.widget_code = $scope.initData['widgetCode'];
-      $scope.did = $scope.initData['did'];
-      $scope.currentSip = $scope.initData['currentSip'];
+
+      $scope.widget = angular.extend({}, $scope.widget, $scope.master, data.widget);
+      $scope.widget.widget_code = data.widgetCode;
+      $scope.currentSip = data.currentSip;
+      $scope.did = data.did;
     };
 
     // watch for initial widget data
@@ -182,7 +193,7 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
 
       // TODO: pull this DID out, maybe in an ENV VAR
       $('#callVoxbone').click(function () {
-        $scope.makeCall(883510080144);
+        $scope.makeCall(883510080408);
       });
 
       $('.codebox-actions a').click(function (e) {
@@ -201,46 +212,6 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
         console.error('Action:', e.action);
         console.error('Trigger:', e.trigger);
       });
-    };
-
-    $scope.makeCall = function (did) {
-      if ($scope.isInCall()) return;
-
-      if (!$scope.preview_webrtc_compatible && ($scope.widget.incompatible_browser_configuration == 'link_button_to_a_page')) {
-        $window.open($scope.widget.link_button_to_a_page_value, '_blank');
-        return;
-      }
-
-      if ($scope.isWebRTCSupported()) {
-        $("#vw-title").text("Waiting for User Media");
-        $("#microphone em").removeClass('on').removeClass('off');
-        $("#vw-unable-to-acces-mic").addClass('hidden');
-        $(".vw-animated-dots").removeClass('hidden');
-        $(".vox-widget-wrapper").removeClass('hidden');
-        $("#vw-in-call").removeClass('hidden');
-        $(".vw-rating").addClass('hidden');
-
-        if ($scope.widget.dial_pad)
-          $("#dialpad").removeClass('hidden');
-        else
-          $("#dialpad").addClass('hidden');
-
-        var caller_id = $scope.widget.caller_id ? $scope.widget.caller_id : "click2vox";
-        voxbone.WebRTC.configuration.uri = (new JsSIP.URI(scheme = "sip", user = (caller_id).replace(/[^a-zA-Z0-9-_]/g, ''), "voxbone.com")).toString();
-
-        if ($scope.widget.context)
-          voxbone.WebRTC.context = $scope.widget.context;
-
-        if ($scope.widget.send_digits) {
-          console.log('Digits to be send: ' + $scope.widget.send_digits);
-          voxbone.WebRTC.configuration.dialer_string = $scope.widget.send_digits;
-        }
-
-        voxbone.WebRTC.call(did);
-        window.onbeforeunload = function (e) {
-          voxbone.WebRTC.unloadHandler();
-        };
-      }
     };
 
     $scope.reset();
@@ -270,16 +241,16 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
         caller_id = caller_id.replace(/[^a-zA-Z0-9-_]/g, '');
 
       var data = $scope.widget;
-      data['caller_id'] = caller_id;
-      data['type'] = embedType;
+      data.caller_id = caller_id;
+      data.type = embedType;
 
       var ibc = $scope.widget.incompatible_browser_configuration;
       if (ibc == 'hide_widget')
-        data['hide_widget'] = true;
+        data.hide_widget = true;
       else if (ibc == 'link_button_to_a_page')
-        data['link_button_to_a_page'] = $scope.widget.link_button_to_a_page_value;
+        data.link_button_to_a_page = $scope.widget.link_button_to_a_page_value;
       else if (ibc == 'show_text_html')
-        data['show_text_html'] = $scope.widget.show_text_html_value;
+        data.show_text_html = $scope.widget.show_text_html_value;
 
       var req = {
         method: 'POST',
@@ -300,10 +271,11 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
             $scope.submitText = 'Save Configuration';
             $scope.savingConfig = false;
 
-            $scope.initData['widget'] = angular.copy($scope.widget);
-            $scope.initData['widgetCode'] = $scope.widget.widget_code;
-            $scope.initData['did'] = $scope.did;
-            $scope.initData['currentSip'] = $scope.currentSip;
+            $scope.initData.widget = angular.copy($scope.widget);
+            $scope.initData.widgetCode = $scope.widget.widget_code;
+            $scope.initData.did = response.data.didToCall;
+            $scope.did = response.data.didToCall;
+            $scope.initData.currentSip = $scope.currentSip;
             $scope.widget_form.$setPristine();
           },
           function errorCallback(response) {
@@ -361,7 +333,7 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
     });
   };
 
-  WidgetEditController.$inject = ['$scope', '$http', '$window'];
+  WidgetEditController.$inject = ['$scope', '$http', '$window', '$controller'];
 
   return WidgetEditController;
 });
