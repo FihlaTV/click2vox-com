@@ -86,6 +86,15 @@ mongoimport -h $HOST:$PORT -d $DB_NAME -c accounts -u $DB_USER -p $DB_PASSWORD -
 mongo $HOST:$PORT/$DB_NAME -u $DB_USER -p $DB_PASSWORD
 ```
 
+### Tests Running
+
+* NightWatch (http://nightwatchjs.org/)
+
+- To run the tests first serve the app with `grunt` and in another window run:
+```bash
+grunt nightwatch
+```
+
 ### Resources
 
 * ExpressJS (http://expressjs.com/)

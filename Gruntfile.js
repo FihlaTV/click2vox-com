@@ -51,6 +51,28 @@ module.exports = function (grunt) {
             return true;
         }
       }
+    },
+    nightwatch: {
+      options: {
+        cwd: './'
+      },
+
+      'default' : {},
+
+      browserstack: {
+        argv: {
+          env: 'browserstack'
+        },
+        settings: {
+          silent: true
+        }
+      },
+
+      'all' : {
+        argv: {
+          env: 'default,browserstack'
+        }
+      },
     }
   });
 
@@ -58,6 +80,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-nightwatch');
 
   grunt.registerTask('default', ['concurrent:devel']);
 }

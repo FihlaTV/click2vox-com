@@ -37,3 +37,6 @@ public/lib
 setup_db.sh
 
 .env
+
+# Nightwatch Test Reports
+reports/
