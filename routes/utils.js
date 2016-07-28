@@ -175,7 +175,6 @@ module.exports = {
   },
 
   widgetDivHtmlCode: function (widget, did) {
-    var jsesc = require('jsesc');
     var jade = require('jade');
     var script = process.env.APP_URL + this.click2voxJsFileName;
     var label = widget.button_label || process.env.DEFAULT_BUTTON_LABEL;
@@ -184,7 +183,7 @@ module.exports = {
       did: did,
       script: script,
       id: widget._id,
-      label: jsesc(label),
+      label: label,
       the_widget: widget
     };
 
