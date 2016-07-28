@@ -52,7 +52,7 @@ block content
                     i(class="glyphicon glyphicon-chevron-#{(group.widgets.length === 0) ? 'right': 'down'}")
                     span #{group._id}
                 .group-header-actions
-                  a(href="javascript:;" ng-click='editSIPURI("#{group._id}")') Edit
+                  a(href="#" ng-click='editSIPURI("#{group._id}")') Edit
 
               .sipCollapse.collapse.in(id="#{group.uuid}")
                 if group.widgets.length > 0
