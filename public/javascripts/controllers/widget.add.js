@@ -229,11 +229,11 @@ define([
       data['caller_id'] = caller_id;
 
       var ibc = $scope.widget.incompatible_browser_configuration;
-      if (ibc == 'hide_widget')
+      if (ibc === 'hide_widget')
         data['hide_widget'] = true;
-      else if (ibc == 'link_button_to_a_page')
+      else if (ibc === 'link_button_to_a_page')
         data['link_button_to_a_page'] = $scope.widget.link_button_to_a_page_value;
-      else if (ibc == 'show_text_html')
+      else if (ibc === 'show_text_html')
         data['show_text_html'] = $scope.widget.show_text_html_value;
 
       var req = {

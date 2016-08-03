@@ -156,7 +156,7 @@ block content
                   .togle-bg-tooltip
                     #[span.badge(ng-show="preview_webrtc_compatible" data-toggle='tooltip' data-placement="left" data-html="true" data-width="350" title="You can click the button to make a call and test the service!<br>(once you setup your widget and save the configuration)") ?]
                   .widget-box#launch_call_div(ng-class="widget.button_style" ng-show="showCallButton()")
-                    button.btn-style.launch_call#launch_call(ng-cloak qtip="You can click the button to make a call and test the service!<br>(once you saved your configuration)" qtip-title="Save first to try it!" qtip-disable="!preview_webrtc_compatible") #[span {{widget.button_label || 'Call Sales'}}]
+                    button.btn-style.launch_call#launch_call(ng-cloak qtip="You can click the button to make a call and test the service!<br>(once you saved your configuration)" qtip-title="Save first to try it!" qtip-disable="!isWebRTCSupported() || !preview_webrtc_compatible") #[span {{widget.button_label || 'Call Sales'}}]
                     .widget-footer-left
                       a(href="https://test.webrtc.org/" target="_blank") Test your setup
                     .widget-footer-right
