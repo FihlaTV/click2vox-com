@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
+var moment = require('moment');
 var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt-nodejs');
+var utils = require('../routes/utils');
 var Did = require('./dids');
 
 const ADMIN_DOMAINS = ['agilityfeat.com', 'voxbone.com'];
@@ -45,7 +47,10 @@ var accountSchema = new Schema({
   created_at: Date,
   updated_at: Date,
   company: String,
-  sip_uris: [String]
+  sip_uris: [String],
+  customer_type: String,
+  create_date: String,
+  uri_type: String
 });
 
 accountSchema.pre('save', function (next) {
@@ -53,8 +58,11 @@ accountSchema.pre('save', function (next) {
   now = new Date();
   self.updated_at = now;
 
-  if (!self.created_at)
+  if (!self.created_at) {
     self.created_at = now;
+    self.create_date = moment().format("MM/DD/YY");
+    self.uri_type = 'none';
+  }
 
   Did.findOne({
     assigned: {
@@ -122,23 +130,29 @@ accountSchema.methods.getSipURIsWithNewSipUri = function () {
 };
 
 accountSchema.methods.saveSipURI = function (sipURI) {
-  if (this.sip_uris.indexOf(sipURI) === -1) {
+  if (this.sip_uris.indexOf(sipURI) === -1 && utils.defaultSipUris().indexOf(sipURI) === -1) {
+    this.uri_type = "custom";
     this.sip_uris.push(sipURI);
-    this.save();
+  } else {
+    this.uri_type = "default";
   }
+
+  this.save();
 };
 
 accountSchema.methods.removeSipURI = function (sipURI) {
   var index = this.sip_uris.indexOf(sipURI);
   if (index > -1) {
     this.sip_uris.splice(index, 1);
+
+    if (this.sip_uris.length === 0)
+      this.uri_type = "default";
+
     this.save();
   }
 };
 
 accountSchema.methods.showWizard = function () {
-  var utils = require('../routes/utils');
-
   if (process.env.BYPASS_ADDING_SIP_URI === 'true')
     return false;
 

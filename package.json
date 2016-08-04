@@ -29,6 +29,7 @@
     "grunt-nodemon": "^0.4.2",
     "jade": "~1.11.0",
     "method-override": "~1.0.0",
+    "moment": "^2.14.1",
     "mongoose": "~4.5.5",
     "morgan": "~1.6.1",
     "newrelic": "^1.24.0",

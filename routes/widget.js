@@ -41,7 +41,6 @@ router.post('/new', utils.isLoggedIn, function (req, res, next) {
   // allow new sips if paid user or not sip_uris registered
   if (widgetData.new_sip_uri) {
     if (currentUser.sip_uris.length === 0 || currentUser.paid) {
-      currentUser.saveSipURI(widgetData.new_sip_uri);
       widgetData.sip_uri = widgetData.new_sip_uri;
     } else {
       result.errors = 'To add a new SIP URI you will need to upgrade to a paid account';
@@ -58,6 +57,7 @@ router.post('/new', utils.isLoggedIn, function (req, res, next) {
     } else {
       Widget.create(widgetData, function (err, widget) {
         if (err) throw err;
+        currentUser.saveSipURI(widgetData.sip_uri);
         result['redirect'] = '/widget/' + widget._id + '/edit';
         return res.status(200).json(result);
       });

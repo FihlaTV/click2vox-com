@@ -47,14 +47,8 @@ router.post('/new', utils.isLoggedIn, function (req, res) {
               return res.status(err.httpStatusCode || 500).json(result);
             } else {
               // append the sipURI in is not already there
-              if (account.sip_uris.indexOf(sipUri) === -1) {
-                account.sip_uris.push(sipUri);
-                account.save(function (err) {
-                  if (err) throw err;
-                  return sucessCallback(result);
-                });
-              } else
-                return sucessCallback(result);
+              account.saveSipURI(sipUri);
+              return sucessCallback(result);
             }
           });
       } else {
