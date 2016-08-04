@@ -183,7 +183,7 @@ module.exports = {
       did: did,
       script: script,
       id: widget._id,
-      label: label,
+      label: escape(label),
       the_widget: widget
     };
 

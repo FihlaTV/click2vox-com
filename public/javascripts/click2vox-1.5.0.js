@@ -155,7 +155,7 @@ var check1Ready = (function() {
 
   voxButtonElement.innerHTML += ' \
     <div style="display: none;" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
-      <button id="launch_call" class="vxb-btn-style ' + (infoVoxbone.button_css_class_name) + '"><span>' +  infoVoxbone.text + '</span></button>\
+      <button id="launch_call" class="vxb-btn-style ' + (infoVoxbone.button_css_class_name) + '"><span>' +  unescape(infoVoxbone.text) + '</span></button>\
       ' + links + '\
     </div>\
   ';
