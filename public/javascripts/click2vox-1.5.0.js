@@ -8,7 +8,7 @@ if (voxButtonElement === undefined) {
   voxButtonElement = document.createElement("div");
   voxButtonElement.className = "voxButton";
   voxButtonElement.dataset.use_default_button_css = false;
-  document.body.appendChild(voxButtonElement);
+  // document.body.appendChild(voxButtonElement);
 }
 
 function loadScript(url, callback) {
