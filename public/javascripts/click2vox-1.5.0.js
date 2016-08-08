@@ -480,23 +480,25 @@ var check1Ready = (function() {
     });
   };
 
+  function handleEvent (eventName, selector, callback) {
+    var element = document.querySelector(selector);
+    if (element) element.addEventListener(eventName, callback);
+  };
+
   // Start of Button Events
   //
   // Click on Make Call button event
-  var callButton = document.querySelector(".vxb-widget-box #launch_call")
-  if (callButton) {
-      callButton.addEventListener('click', function (e) {
-      e.preventDefault();
-      makeCall(infoVoxbone.did);
-    });
-  }
+  handleEvent('click', '.vxb-widget-box #launch_call', function (e) {
+    e.preventDefault();
+    makeCall(infoVoxbone.did);
+  });
   //
   // End of Button Events
 
   // Start of Widget Events
   //
   // Click on Send Rating button event
-  document.querySelector(".vox-widget-wrapper #send-rating").addEventListener('click', function (e) {
+  handleEvent('click', '.vox-widget-wrapper #send-rating', function (e) {
     e.preventDefault();
 
     var rate = document.querySelector('.vox-widget-wrapper input[name=vxb-rate]:checked');
@@ -534,14 +536,14 @@ var check1Ready = (function() {
   });
 
   // End call button event
-  document.querySelector(".vox-widget-wrapper .vw-end-call").addEventListener('click', function (e) {
+  handleEvent('click', '.vox-widget-wrapper .vw-end-call', function (e) {
     e.preventDefault();
     resetWidget();
     callAction('hang_up');
   });
 
   // Close Widget button event
-  document.querySelector(".vox-widget-wrapper #close-screen i").addEventListener('click', function (e) {
+  handleEvent('click', '.vox-widget-wrapper #close-screen i', function (e) {
     e.preventDefault();
     hideElement(".vox-widget-wrapper");
 
@@ -554,7 +556,7 @@ var check1Ready = (function() {
   });
 
   // Open Widget button event
-  document.querySelector(".vox-widget-wrapper #full-screen i").addEventListener('click', function (e) {
+  handleEvent('click', '.vox-widget-wrapper #full-screen i', function (e) {
     e.preventDefault();
     hideElement(".vox-widget-wrapper #vw-body");
 
@@ -563,14 +565,14 @@ var check1Ready = (function() {
   });
 
   // Pad button event
-  document.querySelector(".vox-widget-wrapper i.vx-icon-pad").addEventListener('click', function (e) {
+  handleEvent('click', '.vox-widget-wrapper i.vx-icon-pad', function (e) {
     e.preventDefault();
     var element = document.querySelector(".vox-widget-wrapper .vw-dialpad");
     element.classList.toggle('active');
   });
 
   // Mic button event
-  document.querySelector(".vox-widget-wrapper i.vx-icon-mic").addEventListener('click', function (e) {
+  handleEvent('click', '.vox-widget-wrapper i.vx-icon-mic', function (e) {
     e.preventDefault();
 
     var elements = document.querySelectorAll(".vox-widget-wrapper #microphone em");
