@@ -173,8 +173,8 @@ module.exports = function (passport) {
 
   router.get('/token_config', function (req, res) {
     var voxbone = new Voxbone({
-      voxrtcUsername: req.query.voxbone_webrtc_username || process.env.VOXBONE_WEBRTC_USERNAME,
-      voxrtcSecret: req.query.voxbone_webrtc_password || process.env.VOXBONE_WEBRTC_PASSWORD,
+      voxrtcUsername: req.query.username || process.env.VOXBONE_WEBRTC_USERNAME,
+      voxrtcSecret: req.query.secret || process.env.VOXBONE_WEBRTC_PASSWORD,
       voxrtcExpiresInSeconds: 300
     });
 
