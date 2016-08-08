@@ -14,12 +14,14 @@ var async = require('async');
 var crypto = require('crypto');
 var request = require('request');
 
+var Voxbone = require('voxbone-webrtc');
+
 var sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
 
 var utils = require('./utils');
 var emails = require('./emails');
 
-module.exports = function (passport, voxbone) {
+module.exports = function (passport) {
   router.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -170,6 +172,12 @@ module.exports = function (passport, voxbone) {
   });
 
   router.get('/token_config', function (req, res) {
+    var voxbone = new Voxbone({
+      voxrtcUsername: req.query.voxbone_webrtc_username || process.env.VOXBONE_WEBRTC_USERNAME,
+      voxrtcSecret: req.query.voxbone_webrtc_password || process.env.VOXBONE_WEBRTC_PASSWORD,
+      voxrtcExpiresInSeconds: 300
+    });
+
     voxrtc_config = voxbone.generate();
     res.send(voxrtc_config);
   });

@@ -21,14 +21,6 @@ var dbURI = require('./db/configuration');
 
 require('./config/passport')(passport);
 
-//New Voxbone Object used for authentication
-var Voxbone = require('voxbone-webrtc');
-var voxbone = new Voxbone({
-  voxrtcUsername: process.env.VOXBONE_WEBRTC_USERNAME,
-  voxrtcSecret: process.env.VOXBONE_WEBRTC_PASSWORD,
-  voxrtcExpiresInSeconds: 300
-});
-
 var app = express();
 if (process.env.NEW_RELIC_LICENSE_KEY)
   app.locals.newrelic = newrelic;
@@ -82,7 +74,7 @@ var utils = require('./routes/utils');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes(passport, voxbone));
+app.use('/', routes(passport));
 app.use('/account', accountRoutes);
 app.use('/api', contactRoutes);
 app.use('/sip', sipRoutes);

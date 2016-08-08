@@ -168,7 +168,14 @@ var check1Ready = (function() {
 
   function getVoxrtcConfig(callback) {
     var request = new XMLHttpRequest();
-    var url = infoVoxbone.server_url + '/token_config';
+
+    var dict = {
+      username: infoVoxbone.voxbone_webrtc_username || '',
+      secret: infoVoxbone.voxbone_webrtc_password || ''
+    };
+
+    var params = voxbone.Request.param(dict);
+    var url = infoVoxbone.server_url + '/token_config?' + params;
 
     request.open('GET', url, true);
 
