@@ -483,10 +483,13 @@ var check1Ready = (function() {
   // Start of Button Events
   //
   // Click on Make Call button event
-  document.querySelector(".vxb-widget-box #launch_call").addEventListener('click', function (e) {
-    e.preventDefault();
-    makeCall(infoVoxbone.did);
-  });
+  var callButton = document.querySelector(".vxb-widget-box #launch_call")
+  if (typeof callButton !== undefined) {
+      callButton.addEventListener('click', function (e) {
+      e.preventDefault();
+      makeCall(infoVoxbone.did);
+    });
+  }
   //
   // End of Button Events
 
