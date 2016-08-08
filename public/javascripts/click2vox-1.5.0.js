@@ -4,6 +4,11 @@
 var infoVoxbone = null;
 var head = document.getElementsByTagName('head')[0];
 var voxButtonElement = document.getElementsByClassName('voxButton')[0];
+if (voxButtonElement === undefined) {
+  voxButtonElement = document.createElement("div");
+  voxButtonElement.className = "voxButton";
+  voxButtonElement.dataset.use_default_button_css = false;
+}
 
 function loadScript(url, callback) {
   // Adding the script tag to the head as suggested before
