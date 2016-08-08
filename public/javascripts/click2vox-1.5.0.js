@@ -484,7 +484,7 @@ var check1Ready = (function() {
   //
   // Click on Make Call button event
   var callButton = document.querySelector(".vxb-widget-box #launch_call")
-  if (typeof callButton !== undefined) {
+  if (callButton) {
       callButton.addEventListener('click', function (e) {
       e.preventDefault();
       makeCall(infoVoxbone.did);
