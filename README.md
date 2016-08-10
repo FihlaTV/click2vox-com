@@ -94,6 +94,7 @@ mongo $HOST:$PORT/$DB_NAME -u $DB_USER -p $DB_PASSWORD
 ```bash
 grunt nightwatch
 ```
+make sure to have all you environment variables loaded before running `nightwatch`
 
 ### Resources
 

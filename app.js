@@ -25,6 +25,26 @@ var app = express();
 if (process.env.NEW_RELIC_LICENSE_KEY)
   app.locals.newrelic = newrelic;
 
+// overrides the use function to grab the routes
+var oldUse = app.use;
+app._voxPaths = [];
+
+app.use = function () {
+  var _ = require('lodash');
+  var urlBase = arguments[0];
+
+  _.forEach(arguments, function(arg) {
+    if (arg.name === 'router') {
+      app._voxPaths.push({
+        urlBase: urlBase,
+        router: arg
+      });
+    }
+  });
+
+  return oldUse.apply(this, arguments);
+};
+
 // set timeout
 app.use(timeout(process.env.TIMEOUT || '12s'));
 

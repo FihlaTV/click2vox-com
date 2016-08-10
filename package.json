@@ -28,6 +28,7 @@
     "grunt-bower-requirejs": "^2.0.0",
     "grunt-nodemon": "^0.4.2",
     "jade": "~1.11.0",
+    "lodash": "^4.14.2",
     "method-override": "~1.0.0",
     "moment": "^2.14.1",
     "mongoose": "~4.5.5",

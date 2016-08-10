@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 // Here it goes only utility methods
 module.exports = {
 
@@ -188,6 +190,28 @@ module.exports = {
     };
 
     return jade.renderFile('./views/voxbone_widget_div.jade', params);
+  },
+
+  getVoxRoutes: function () {
+    var app = require('../app');
+    var routes = [];
+
+    _.each(app._voxPaths, function(used) {
+      // On each route of the router
+      _.each(used.router.stack, function(stackElement) {
+        if (stackElement.route) {
+          var base = used.urlBase;
+          var path = stackElement.route.path;
+
+          routes.push({
+            method: stackElement.route.stack[0].method,
+            path: (used.urlBase === '/') ? path : (base + path)
+          });
+        }
+      });
+    });
+
+    return routes;
   }
 
 };
