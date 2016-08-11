@@ -73,6 +73,11 @@ module.exports = function (grunt) {
           env: 'default,browserstack'
         }
       },
+    },
+    simplemocha: {
+      all: {
+        src: ['tests/**/*.js']
+      }
     }
   });
 
@@ -81,6 +86,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-nightwatch');
+  grunt.loadNpmTasks('grunt-simple-mocha');
 
   grunt.registerTask('default', ['concurrent:devel']);
 }

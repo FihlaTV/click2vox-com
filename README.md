@@ -96,6 +96,10 @@ grunt nightwatch
 ```
 make sure to have all you environment variables loaded before running `nightwatch`
 
+* Mocha (https://mochajs.org/)
+
+- We have taken the BDD approach (using expect). Use `npm test` command (`grunt simplemocha` alternatively) to run the tests.
+
 ### Resources
 
 * ExpressJS (http://expressjs.com/)

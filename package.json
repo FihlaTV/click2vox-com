@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "postinstall": "bower cache clean && bower install"
+    "postinstall": "bower cache clean && bower install",
+    "test": "grunt simplemocha",
+    "prepush": "npm test"
   },
   "engines": {
     "node": "4.4.7"
@@ -45,6 +47,7 @@
     "voxbone-webrtc": "0.0.9"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "grunt": "^1.0.1",
     "grunt-bower-requirejs": "^2.0.0",
     "grunt-bower-task": "^0.4.0",
@@ -54,7 +57,10 @@
     "grunt-contrib-uglify": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-nightwatch": "^0.5.3",
+    "grunt-simple-mocha": "^0.4.1",
+    "husky": "^0.11.6",
     "jit-grunt": "^0.10.0",
+    "mocha": "^3.0.2",
     "nightwatch": "^0.9.5"
   }
 }
