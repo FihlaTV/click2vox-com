@@ -42,7 +42,7 @@ module.exports = {
   userGravatarUrl: function (res) {
     var crypto = require('crypto');
     var md5_email = crypto.createHash('md5').update(res.locals.currentUser.email).digest("hex");
-    return "https://www.gravatar.com/avatar/" + md5_email + "/?s=20&d=404";
+    return "https://www.gravatar.com/avatar/" + md5_email + "/?s=20&d=mm";
   },
 
   objectNotFound: function (req, res, next) {
