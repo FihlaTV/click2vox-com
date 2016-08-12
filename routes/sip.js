@@ -16,7 +16,7 @@ router.get('/new', utils.isLoggedIn, function (req, res) {
   if (process.env.BYPASS_ADDING_SIP_URI === 'true')
     return res.redirect('/account/widgets');
 
-  res.render('sip/new');
+  res.render('sip/new', { title: title });
 });
 
 // POST to add a new SIP URI

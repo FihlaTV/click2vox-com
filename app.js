@@ -19,6 +19,10 @@ var flash = require('connect-flash');
 var Account = require('./models/account');
 var dbURI = require('./db/configuration');
 
+var pjson = require('./package.json');
+var title = 'Voxbone Widget Generator v' + pjson.version;
+
+
 require('./config/passport')(passport);
 
 var app = express();
@@ -80,8 +84,13 @@ app.use(flash());
 
 // set some default variables to be accessed in views
 app.use(function (req, res, next) {
-  res.locals.authenticated = !!req.user;
   res.locals.currentUser = req.user || {};
+  res.locals.authenticated = !!req.user;
+
+  if(res.locals.authenticated) {
+    res.locals.currentUser.gravatar = utils.userGravatarUrl(res);
+  }
+
   next();
 });
 
@@ -111,6 +120,7 @@ if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
+      title: title,
       message: err.message,
       error: err
     });

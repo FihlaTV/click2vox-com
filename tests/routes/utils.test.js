@@ -88,4 +88,16 @@ describe('Utils module', function() {
     it('should return an object with all the routes registered in the app');
   });
 
+  describe('#userGravatar()', function() {
+    var res = { locals: { currentUser: { email: 'email@server.com' } } };
+    var userGravatarUrl = utils.userGravatarUrl(res);
+
+    it('should return a gravatar url for the current logged in user from his email', function() {
+      var defaultGravatarUrl = encodeURIComponent(process.env.APP_URL + '/images/favicon.ico');
+      var expectedUrl = "https://www.gravatar.com/avatar/a936272820dd1f98ae006db253a43b4e/?s=20&d=" + defaultGravatarUrl;
+      expect(userGravatarUrl).to.be.an('String');
+      expect(userGravatarUrl).be.equal(expectedUrl);
+    });
+  });
+
 });

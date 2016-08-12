@@ -23,7 +23,7 @@ router.get('/edit', utils.isLoggedIn, function (req, res) {
   Account
     .findOne({_id: req.user._id})
     .exec(function (err, user) {
-      res.render('account/edit', { user: user });
+      res.render('account/edit', { title: title, user: user });
     });
 });
 
@@ -37,7 +37,7 @@ router.post('/edit', utils.isLoggedIn, function (req, res) {
       return res.status(400).json(result);
     }
 
-    theAccount.first_name = formData.name;
+    theAccount.first_name = formData.first_name;
     theAccount.company = formData.company;
     theAccount.save(function (err) {
       if (err) throw err;

@@ -4,6 +4,9 @@
 var express = require('express');
 var router = express.Router();
 
+var pjson = require('../package.json');
+var title = 'Voxbone Widget Generator v' + pjson.version;
+
 var async = require('async');
 
 var Account = require('../models/account');
@@ -25,7 +28,8 @@ router.get('/new', utils.isLoggedIn, function (req, res, next) {
       res.render('widget/new', {
         defaultBtnLabel: utils.defaultBtnLabel,
         userSipUris: req.user.getSipURIs(),
-        addedSip: req.query.sip
+        addedSip: req.query.sip,
+        title: title
       });
     });
 });
@@ -86,6 +90,7 @@ router.get('/:id/edit', utils.isLoggedIn, function (req, res, next) {
     if (!result.widget) return utils.objectNotFound(res, req, next);
     result.defaultBtnLabel = utils.defaultBtnLabel;
     result.widget_code = result.widget.generateDivHtmlCode();
+    result.title = title;
     res.render('widget/edit', result);
   });
 });
@@ -166,7 +171,7 @@ router.get('/demo', function (req, res, next) {
       demoSipUris: utils.defaultSipUris(),
       demoSip: demoSip,
       demoUser: account,
-      title: 'Create sample call button'
+      title: title
     });
   };
 
