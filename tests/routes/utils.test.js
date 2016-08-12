@@ -93,8 +93,7 @@ describe('Utils module', function() {
     var userGravatarUrl = utils.userGravatarUrl(res);
 
     it('should return a gravatar url for the current logged in user from his email', function() {
-      var defaultGravatarUrl = encodeURIComponent(process.env.APP_URL + '/images/favicon.ico');
-      var expectedUrl = "https://www.gravatar.com/avatar/a936272820dd1f98ae006db253a43b4e/?s=20&d=" + defaultGravatarUrl;
+      var expectedUrl = "https://www.gravatar.com/avatar/a936272820dd1f98ae006db253a43b4e/?s=20&d=404";
       expect(userGravatarUrl).to.be.an('String');
       expect(userGravatarUrl).be.equal(expectedUrl);
     });

@@ -42,8 +42,7 @@ module.exports = {
   userGravatarUrl: function (res) {
     var crypto = require('crypto');
     var md5_email = crypto.createHash('md5').update(res.locals.currentUser.email).digest("hex");
-    var default_image = encodeURIComponent(process.env.APP_URL  + "/images/favicon.ico");
-    return "https://www.gravatar.com/avatar/" + md5_email + "/?s=20&d=" + default_image;
+    return "https://www.gravatar.com/avatar/" + md5_email + "/?s=20&d=404";
   },
 
   objectNotFound: function (req, res, next) {
