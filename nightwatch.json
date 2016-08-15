@@ -28,6 +28,7 @@
         "enabled" : false,
         "path" : ""
       },
+      "exclude": ["tests/unit"],
       "desiredCapabilities": {
         "browserName": "firefox",
         "javascriptEnabled": true,
@@ -36,6 +37,7 @@
     },
 
     "chrome" : {
+      "exclude": ["tests/unit"],
       "desiredCapabilities": {
         "browserName": "chrome",
         "javascriptEnabled": true,

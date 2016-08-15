@@ -6,7 +6,7 @@
     "start": "node ./bin/www",
     "postinstall": "bower cache clean && bower install",
     "test": "grunt simplemocha",
-    "prepush": "npm test"
+    "prepush": "npm test && grunt nightwatch"
   },
   "engines": {
     "node": "4.4.7"

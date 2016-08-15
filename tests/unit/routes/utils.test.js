@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var utils = require('../../routes/utils');
+var utils = require('../../../routes/utils');
 
 describe('Utils module', function() {
   describe('#apiCredentials', function() {

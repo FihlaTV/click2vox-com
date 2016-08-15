@@ -132,6 +132,8 @@ define([
       $scope.widget.widget_code = data.widgetCode;
       $scope.currentSip = data.currentSip;
       $scope.did = data.did;
+      $scope.widget.link_button_to_a_page_value = $scope.widget.link_button_to_a_page;
+      $scope.widget.show_text_html_value = $scope.widget.show_text_html;
     };
 
     // watch for initial widget data
