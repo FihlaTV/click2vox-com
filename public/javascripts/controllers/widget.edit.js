@@ -220,8 +220,12 @@ define([
     $scope.init();
 
     $scope.setTheme = function (theme) {
-      if ($scope.widget.button_style != theme)
+      if ($scope.widget.button_style !== theme) {
         $scope.widget.button_style = theme;
+
+        $scope.sipDirty = false;
+        $scope.widget_form.$setDirty();
+      }
     };
 
     $scope.discardConfiguration = function (form) {
