@@ -40,3 +40,4 @@ setup_db.sh
 
 # Nightwatch Test Reports
 reports/
+tests/screenshots/

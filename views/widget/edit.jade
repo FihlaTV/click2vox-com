@@ -112,20 +112,20 @@ block content
                     .panel-heading
                       a.collapsed.title-toggle(data-toggle="collapse" data-target="#collapseIncompatileBrowserConfiguration" href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
                     .panel-collapse.collapse#collapseIncompatileBrowserConfiguration
-                      .options-wrap.active
+                      .options-wrap.active.incompatible
                         .form-group
-                          label
+                          label.hide_widget
                             input(type='radio' name='incompatible_browser_configuration' ng-model='widget.incompatible_browser_configuration' value="hide_widget")
                             span.radio-name Hide the widget
                             span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, hide the widget") ?
                         .form-group
-                          label
+                          label.link_button_to_a_page
                             input(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="link_button_to_a_page")
                             span.radio-name Link button to a page
                             span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, specify a URL to go to when the button is clicked") ?
                             input.form-control(http-prefix type="url" name="link_button_to_a_page_value" ng-model="widget.link_button_to_a_page_value" ng-show="widget.incompatible_browser_configuration == 'link_button_to_a_page'" placeholder="i.e. https://mysite.com")
                         .form-group
-                          label
+                          label.show_text_html
                             input(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="show_text_html")
                             span.radio-name Show text/HTML
                             span.badge(data-toggle='tooltip' data-placement="right" title="Instead of showing the button, display the entered HTML ") ?
@@ -191,6 +191,6 @@ block content
 
                 .pull-right
                   button.btn.btn-danger.btn-xs(style='margin-right: 5px;' ng-cloak ng-click='discardConfiguration(widget_form)' ng-disabled="savingConfig || !widget_form.$dirty") Discard Changes
-                  button.btn.btn-success.btn-lg(ng-cloak ng-click='saveConfiguration()' ng-disabled="widget_form.$invalid || savingConfig || widget_form.$pristine || sipDirty") {{submitText}}
+                  button#saveConfig.btn.btn-success.btn-lg(ng-cloak ng-click='saveConfiguration()' ng-disabled="widget_form.$invalid || savingConfig || widget_form.$pristine || sipDirty") {{submitText}}
                 .clearfix
                 br
