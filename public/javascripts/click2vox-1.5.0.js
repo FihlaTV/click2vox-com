@@ -470,6 +470,7 @@ var check1Ready = (function() {
 
     showAnimatedDots();
     showElement(".vox-widget-wrapper #vw-in-call");
+    showElement(".vox-widget-wrapper #vw-body");
     showElement(".vox-widget-wrapper");
     document.querySelector(".vox-widget-wrapper").style.display = "block";
 
@@ -566,7 +567,13 @@ var check1Ready = (function() {
   // Open Widget button event
   handleEvent('click', '.vox-widget-wrapper #full-screen i', function (e) {
     e.preventDefault();
-    hideElement(".vox-widget-wrapper #vw-body");
+
+    var widget_body_selector = ".vox-widget-wrapper #vw-body";
+    if (document.querySelector(widget_body_selector).classList.contains('hidden')) {
+      showElement(widget_body_selector);
+    } else {
+      hideElement(widget_body_selector);
+    }
 
     this.classList.toggle('vx-icon-full-screen-on');
     this.classList.toggle('vx-icon-full-screen-off');
