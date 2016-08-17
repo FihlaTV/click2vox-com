@@ -13,6 +13,7 @@ Create a click to call button from a widget generator
 ### Environment Variables
 
 * `APP_URL`
+* `CDN_URL`
 * `FORCE_HTTPS`
 * `SECRET_KEY` (Defaults to 'xXxXxXxXxX')
 * `MONGOLAB_URI` (Defaults to 'mongodb://localhost/voxboneDB')
@@ -38,7 +39,16 @@ Create a click to call button from a widget generator
 * `DEMO_SIP_URI` (default: 'echo@ivrs')
 * `HONEYBADGER_API_KEY`
 * `HONEYBADGER_ENVIRONMENT` This is used to differentiate the environment of the error in honeybadger dashboard
-
+* `GITHUB_OAUTH2_KEY`
+* `GITHUB_OAUTH2_SECRET_KEY`
+* `GOOGLE_OAUTH2_KEY`
+* `GOOGLE_OAUTH2_SECRET_KEY`
+* `LINKEDIN_OAUTH2_KEY`
+* `LINKEDIN_OAUTH2_SECRET_KEY`
+* `SLACK_CLIENT_ID`
+* `SLACK_CLIENT_SECRET`
+* `WINDOWSLIVE_OAUTH2_KEY`
+* `WINDOWSLIVE_OAUTH2_SECRET_KEY`
 
 ### To Run locally
 

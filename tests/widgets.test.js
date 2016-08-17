@@ -31,14 +31,15 @@ module.exports = {
 
       // let's fill all the inputs to see if it works
       .setValue('input[name="configuration_name"]', 'My_Test_Button')
-      .setValue('input[name="button_label"]', 'Call_this_Test!')
+      .setValue('input[name="button_label"]', 'Call_our\'s_this_Test!')
       .setValue('select[name="sip_uri"]', demoSipUri)
       .click('button.btn-style-b')
 
       // let's set some advanced configurations
       .click('a[href="#collapseAdvancedCallConfiguration"]')
       .setValue('input[name="caller_id"]', 'This_is_the_test_bot')
-      .setValue('input[name="send_digits"]', '123')
+      .setValue('input[name="context"]', '12context34')
+      .setValue('input[name="send_digits"]', '1,2,3,1200ms,4,5,900ms,6,#')
 
       // now for incompatible browsers
       .click('a[href="#collapseIncompatileBrowserConfiguration"]')
@@ -53,14 +54,15 @@ module.exports = {
       .click('button[id="saveConfig"]')
 
       // refresh page
-      .pause(4000)
+      .pause(5000)
 
       // now check values in widget code
-      .assert.containsText('#widget_code pre', escape('Call_this_Test!'))
-      .assert.containsText('#widget_code pre', 'This_is_the_test_bot')
-      .assert.containsText('#widget_code pre', '123')
-      .assert.containsText('#widget_code pre', 'style-b')
-      .assert.containsText('#widget_code pre', 'show_text_html')
+      .assert.containsText('#widget_code pre', 'data-text="' + escape('Call_our\'s_this_Test!') + '"')
+      .assert.containsText('#widget_code pre', 'data-caller_id="This_is_the_test_bot"')
+      .assert.containsText('#widget_code pre', 'data-send_digits="1,2,3,1200ms,4,5,900ms,6,#"')
+      .assert.containsText('#widget_code pre', 'data-context="12context34"')
+      .assert.containsText('#widget_code pre', 'data-div_css_class_name="style-b"')
+      .assert.containsText('#widget_code pre', 'data-incompatible_browser_configuration="show_text_html"')
 
       // time to fill the form and save the button
       .end();

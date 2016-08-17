@@ -23,13 +23,9 @@ block content
 
             h1 Login
 
-            if message && message.trim
-              if error
-                #tokenError.alert.alert-danger
-                  div= message
-              else
-                #tokenSuccess.alert.alert-success
-                  div= message
+            while m = message.shift()
+              #tokenError.alert(class='alert-' + m.type)
+                div= m.message
 
             #alert-user-pass.alert.alert-danger.hidden Incorrect Email or Password, try again.
             #alert-unverified.alert.alert-danger.hidden Unverified account. Please check your inbox to validate your email address.
@@ -39,6 +35,8 @@ block content
                 #[b Note for current Voxbone customers:] your Click2Vox login will not be linked to your existing Voxbone account. We encourage you to create a separate account here for testing purposes. To use your Voxbone account and an existing DID, please visit #[a(href="https://developers.voxbone.com/how-to/setup-webrtc/") view instructions]
 
               .formWrap
+                include social-buttons
+
                 form#login_form(ng-controller="LoginController" ng-init="login.uemail='#{email || ''}'" name="login_form" novalidate)
                   .form-group
                     label.control-label Email

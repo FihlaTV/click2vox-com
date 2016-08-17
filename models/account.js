@@ -47,10 +47,20 @@ var accountSchema = new Schema({
   created_at: Date,
   updated_at: Date,
   company: String,
-  sip_uris: [String],
   customer_type: String,
   create_date: String,
-  uri_type: String
+  uri_type: String,
+  google_id: String,
+  google_token: String,
+  github_id: String,
+  github_token: String,
+  windowslive_token: String,
+  windowslive_id: String,
+  slack_token: String,
+  slack_id: String,
+  linkedin_token: String,
+  linkedin_id: String,
+  sip_uris: [String]
 });
 
 accountSchema.pre('save', function (next) {

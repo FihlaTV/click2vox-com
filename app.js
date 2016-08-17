@@ -13,7 +13,6 @@ var MongoDBStore = require('connect-mongodb-session')(session);
 
 var params = require('strong-params');
 var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
 
 var Account = require('./models/account');
@@ -22,7 +21,7 @@ var dbURI = require('./db/configuration');
 var pjson = require('./package.json');
 var title = 'Voxbone Widget Generator v' + pjson.version;
 
-require('./config/passport')(passport);
+require('./config/auth/passport')(passport);
 
 var app = express();
 if (process.env.NEW_RELIC_LICENSE_KEY)
@@ -107,6 +106,7 @@ app.use(function (req, res, next) {
 var routes = require('./routes/index');
 var contactRoutes = require('./routes/contact');
 var accountRoutes = require('./routes/account');
+var authRoutes = require('./routes/auth');
 var widgetRoutes = require('./routes/widget');
 var sipRoutes = require('./routes/sip');
 var utils = require('./routes/utils');
@@ -116,6 +116,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes(passport));
 app.use('/account', accountRoutes);
 app.use('/api', contactRoutes);
+app.use('/auth', authRoutes);
 app.use('/sip', sipRoutes);
 app.use('/widget', widgetRoutes);
 

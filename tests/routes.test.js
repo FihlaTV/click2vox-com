@@ -12,7 +12,7 @@ module.exports = {
       var path = route.path;
 
       // ignore some routes that need to be treated different
-      if (path.indexOf('*') !== -1 || path.indexOf(':') !== -1) {
+      if (path.indexOf('/callback') !== -1 || path.indexOf('*') !== -1 || path.indexOf(':') !== -1) {
         excludedPaths.push(path);
         return;
       }
