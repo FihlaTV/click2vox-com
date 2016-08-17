@@ -36,6 +36,9 @@ Create a click to call button from a widget generator
 * `DEFAULT_SIP_URIS` (Array flavoured i.e. 'echo@ivrs,digits@ivrs,test@test.voxbone.com')
 * `DEMO_USER_EMAIL` (default: 'demo.widget@click2vox.com') The email that is going to be used to create the user for demo widget.
 * `DEMO_SIP_URI` (default: 'echo@ivrs')
+* `HONEYBADGER_API_KEY`
+* `HONEYBADGER_ENVIRONMENT` This is used to differentiate the environment of the error in honeybadger dashboard
+
 
 ### To Run locally
 

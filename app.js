@@ -22,12 +22,22 @@ var dbURI = require('./db/configuration');
 var pjson = require('./package.json');
 var title = 'Voxbone Widget Generator v' + pjson.version;
 
-
 require('./config/passport')(passport);
 
 var app = express();
 if (process.env.NEW_RELIC_LICENSE_KEY)
   app.locals.newrelic = newrelic;
+
+
+if (process.env.HONEYBADGER_API_KEY) {
+  var Honeybadger = require('honeybadger');
+  Honeybadger.configure({
+    apiKey: process.env.HONEYBADGER_API_KEY
+  });
+
+  app.use(Honeybadger.requestHandler); // Use *before* all other app middleware.
+}
+
 
 // overrides the use function to grab the routes
 var oldUse = app.use;
@@ -108,6 +118,12 @@ app.use('/account', accountRoutes);
 app.use('/api', contactRoutes);
 app.use('/sip', sipRoutes);
 app.use('/widget', widgetRoutes);
+
+
+// this should go *after* all other app middleware but *before* own error handlers
+if (process.env.HONEYBADGER_API_KEY)
+  app.use(Honeybadger.errorHandler);
+
 
 // error handlers
 
