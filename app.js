@@ -9,7 +9,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var MongoDBStore = require('connect-mongodb-session')(session);
+var MongoStore = require('connect-mongo')(session);
 
 var params = require('strong-params');
 var passport = require('passport');
@@ -76,7 +76,7 @@ app.use(params.expressMiddleware());
 
 app.use(cookieParser());
 
-var sessionStore = new MongoDBStore({uri: dbURI, collection: 'sessions'});
+var sessionStore = new MongoStore({ url: dbURI });
 var secret_key = process.env.SECRET_KEY || 'xXxXxXxXxX';
 
 app.use(session({
