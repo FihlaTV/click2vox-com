@@ -158,7 +158,35 @@ router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
         );
     }
   });
+});
 
+router.delete('/:id', utils.isLoggedIn, function(req, res) {
+  var status = 200;
+  var result = {
+    msg: "Button sucessfully deleted!",
+    errors: null
+  };
+
+  Widget
+    .findOneAndRemove({
+      _account: req.user._id,
+      _id: req.params.id
+    }, function(err, widget) {
+      if (!widget) {
+        status = 404;
+        result.msg = "Button not found!";
+      }
+
+      if (err) {
+        status = 500;
+        result = {
+          msg: "Unable to delete the button",
+          errors: err
+        };
+      }
+
+      return res.status(status).json(result);
+    });
 });
 
 router.get('/demo', function (req, res, next) {

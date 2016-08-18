@@ -1,6 +1,6 @@
 define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
 
-  var WidgetListController = function ($scope, $http, $window) {
+  var WidgetListController = function ($scope, $http, $window, $rootScope) {
     var clipboard = new Clipboard('.clipboard', {
       text: function(trigger) {
         return trigger.getAttribute('widget-code');
@@ -14,6 +14,10 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
         event.trigger.textContent = 'Copy Code';
       }, 2500);
     });
+
+    $scope.openDeleteModal = function (widgetID) {
+      $rootScope.$broadcast('openDeleteModal', widgetID);
+    };
 
     $scope.init = function () {
       this.modalEdit = $('#editSIPModal');
@@ -35,7 +39,7 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
     $scope.init();
   };
 
-  WidgetListController.inject = ['$scope', '$http', '$window'];
+  WidgetListController.inject = ['$scope', '$http', '$window', '$rootScope'];
 
   return WidgetListController;
 });

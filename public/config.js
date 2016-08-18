@@ -60,6 +60,7 @@ require.config({
       '/lib/raty/lib/jquery.raty'
     ],
     widget: '/javascripts/widget',
+    domReady: '/lib/domReady/domReady',
     requirejs: '/lib/requirejs/require'
   },
   packages: [

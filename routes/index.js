@@ -182,19 +182,6 @@ module.exports = function (passport) {
     res.send(voxrtc_config);
   });
 
-  router.get('/widget', utils.isLoggedIn, function (req, res, next) {
-    Account
-      .findOne({_id: req.user._id})
-      .exec(function (err, the_account) {
-        res.render('widget', {
-          title: title,
-          did: the_account.did,
-          email: the_account.email,
-          defaultBtnLabel: utils.defaultBtnLabel
-        });
-      });
-  });
-
   router.get('/', utils.redirectToWidgetIfLoggedIn, function (req, res, next) {
     res.render('home', { title: title, email: req.query.email});
   });
