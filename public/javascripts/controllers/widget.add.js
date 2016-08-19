@@ -1,13 +1,12 @@
 define([
-    'controllers/widget.mixin',
     'jquery',
     'clipboard',
     'bootstrap'
-  ], function (WidgetMixin, $, Clipboard) {
+  ], function ($, Clipboard) {
 
   var WidgetAddController = function ($scope, $http, $window, $controller) {
     // let's extend from the mixin first of all
-    angular.extend(this, $controller(WidgetMixin, {$scope: $scope}));
+    // angular.extend(this, $controller(WidgetMixin, {$scope: $scope}));
 
     $scope.preview_webrtc_compatible = true;
     $scope.previewButton = true;

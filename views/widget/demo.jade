@@ -33,7 +33,7 @@ block content
 
   .voxButton#voxButtonPreview(data-div_css_class_name="hidden")
 
-  .main.createButton(ng-controller="WidgetDemoController" ng-init="widget.sip_uri='echo@ivrs'")
+  .main.createButton(ng-controller="WidgetDemoController" ng-init="widget.sip_uri='echo@ivrs'; did = #{demoUser.did};")
     .header
       .container
         .row
@@ -120,89 +120,7 @@ block content
 
           .col-md-6.right-col
             .section
-              span.title Widget Preview in a Browser:
-              ul.nav.nav-tabs(ng-cloak)
-                li(ng-class="{active:previewButton}" ng-click="previewButton = true")
-                  a(data-toggle="tab" href="#") Button #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="TBD") ?]
-                li(ng-class="{active:!previewButton}" ng-click="previewButton = false" ng-show="preview_webrtc_compatible")
-                  a(data-toggle="tab" href="#") Phone #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="TBD") ?]
-                li.pull-right.active(ng-click="previewButton = true; preview_webrtc_compatible = !preview_webrtc_compatible")
-                  a(data-toggle="tab" href="#" style="cursor: pointer;") {{ preview_webrtc_compatible ? "WebRTC Browser View" : "Non-WebRTC Browser View" }}
-
-              .boxPanel.preview
-                .prev-view.light
-                  #widget-preview(ng-show="!previewButton")
-                    .vox-widget-wrapper-preview
-                      .vw-main
-                        .vw-header
-                          span.vw-title#vw-title [Call Status]
-                          .vw-actions
-                            a#full-screen(ng-click="previewFullScreen = !previewFullScreen")
-                              i(ng-class="{'vw-icon  vx-icon-full-screen-on':!previewFullScreen, 'vw-icon  vx-icon-full-screen-off':previewFullScreen}")
-                            a
-                              i.vw-icon.vx-icon-close
-                        .vw-body#vw-body(ng-show="previewFullScreen")
-                          #vw-in-call
-                            .vw-btn-group#vw-btn-group
-                              a(ng-click="previewMute = !previewMute")
-                                i.vw-icon.vx-icon-mic
-                                #microphone.int-sensor
-                                  em#mic5(ng-class="{off:previewMute}")
-                                  em#mic4(ng-class="{off:previewMute}")
-                                  em#mic3(ng-class="{off:previewMute}")
-                                  em#mic2(ng-class="{off:previewMute}")
-                                  em#mic1(ng-class="{off:previewMute}")
-                              a#dialpad(ng-show="widget.dial_pad" ng-class="{active:previewDialpad}" ng-click="previewDialpad = !previewDialpad")
-                                i.vw-icon.vx-icon-pad
-                            a.vw-end-call
-                              i.vw-icon.vx-icon-phone
-                              span End Call
-                            .vw-dialpad#vw-dialpad(ng-show="widget.dial_pad && previewDialpad")
-                              ul
-                                li.vw-tl 1
-                                li 2
-                                li.vw-tr 3
-                                li 4
-                                li 5
-                                li 6
-                                li 7
-                                li 8
-                                li 9
-                                li.vw-bl *
-                                li 0
-                                li.vw-br #
-                          #vw-footer.vw-footer
-                            a(href="https://voxbone.com" target="_blank") powered by:
-                  #button-preview(ng-show="previewButton")
-                    .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
-                    .widget-box#launch_call_div(ng-class="widget.button_style" ng-show="showCallButton()")
-                      button.btn-style.launch_call#launch_call_preview(ng-cloak ng-click="makeCall(#{demoUser.did})" qtip="You can click the button to make a call and test the service!<br>(save your configuration before you test)" qtip-disable="!isWebRTCSupported() || !preview_webrtc_compatible" qtip-title="Try it!") #[span {{widget.button_label || 'Call Sales'}}]
-                      .widget-footer-left
-                        a(href="https://test.webrtc.org/" target="_blank") Test your setup
-                      .widget-footer-right
-                        a(href="https://voxbone.com" target="_blank") powered by:
-                  .togle-bg
-                    a.dark(href="javascript:void(0)" ng-click="widget.background_style = 'dark'")
-                    a.grey(href="javascript:void(0)" ng-click="widget.background_style = 'grey'")
-                    a.light(href="javascript:void(0)" ng-click="widget.background_style = 'light'")
-
-                .prev-code
-                  .title
-                    span Widget Code Snippet
-                      p The following HTML code it is just for demo purposes.
-
-                  .widget-code-wrap
-                    .sample.shadow-z-2#widget_code
-                      pre.noselect(ng-cloak)
-                        {{ widget.demoCode }}
-
-                      .codebox-playground(qtip="Create an account to export your widget code or quickly test with free web testing services like JSFiddle or CodePen" qtip-my="center left" qtip-at="center right")
-                        .btn-jsfiddle
-                          form
-                            a.inactive(href="#") JSFiddle
-                        .btn-jsfiddle
-                          form
-                            a.inactive(href="#") CodePen
+              include preview_widget
 
               div
                 div.ng-cloak(style="color: green" ng-show="widget.createAccountAlert") To try your own WebRTC Call Button please #[a(href="/account/signup") create an Account] #[br] #[br]
