@@ -1,7 +1,7 @@
 extends ../layout
 
 block extra_head
-  link(href="/stylesheets/widget.css", rel="stylesheet")
+  link(href="/stylesheets/vxb-widget.css", rel="stylesheet")
 
 prepend default_nav
   a.login.user-pill.pull-left(href="/") Home
@@ -28,13 +28,12 @@ block content
 
         angular.bootstrap(document, ['voxboneApp']);
 
-        //- now we should load the widget.js script when all is ready
-        require(['widget'], function () {});
+        require(['#{process.env.APP_URL}/click2vox.js']);
     });
 
-  .div#control
+  .voxButton#voxButtonPreview(data-div_css_class_name="hidden")
 
-  .main.createButton
+  .main.createButton(ng-controller="WidgetDemoController" ng-init="widget.sip_uri='echo@ivrs'")
     .header
       .container
         .row
@@ -42,7 +41,7 @@ block content
             h1 Demo WebRTC Click-to-Call Button
             p #[b Questions?] #[a(href="https://click2vox.com/faq" target="_blank") See our Frequently Asked Questions document.]
 
-    .body(ng-controller="WidgetDemoController" ng-init="widget.sip_uri='echo@ivrs'")
+    .body
       .container
         .row
           .col-md-6.left-col
@@ -122,23 +121,66 @@ block content
           .col-md-6.right-col
             .section
               span.title Widget Preview in a Browser:
-              ul.nav.nav-tabs
-                li(ng-click="onClickTab(true)" ng-class="{active:preview_webrtc_compatible}")
-                  a(data-toggle="tab" href="#") WebRTC #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This is how the widget will look like in a WebRTC compatible browser") ?]
-                li(ng-click="onClickTab(false)" ng-class="{active:!preview_webrtc_compatible}")
-                  a(data-toggle="tab" href="#") Non-WebRTC #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This is how the widget will look like in a WebRTC incompatible browser") ?]
+              ul.nav.nav-tabs(ng-cloak)
+                li(ng-class="{active:previewButton}" ng-click="previewButton = true")
+                  a(data-toggle="tab" href="#") Button #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="TBD") ?]
+                li(ng-class="{active:!previewButton}" ng-click="previewButton = false" ng-show="preview_webrtc_compatible")
+                  a(data-toggle="tab" href="#") Phone #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="TBD") ?]
+                li.pull-right.active(ng-click="previewButton = true; preview_webrtc_compatible = !preview_webrtc_compatible")
+                  a(data-toggle="tab" href="#" style="cursor: pointer;") {{ preview_webrtc_compatible ? "WebRTC Browser View" : "Non-WebRTC Browser View" }}
 
               .boxPanel.preview
                 .prev-view.light
-                  .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
-                  .togle-bg-tooltip
-                    #[span.badge(ng-show="showCallButton()" data-toggle='tooltip' data-placement="left" data-html="true" data-width="350" title="You can click the button to make a call and test the service!<br>(once you setup your widget)") ?]
-                  .widget-box#launch_call_div(ng-class="widget.button_style" ng-show="showCallButton()")
-                    button.btn-style.launch_call#launch_call(ng-cloak ng-disabled="!widget.sip_uri" ng-click="makeCall(#{demoUser.did})" qtip="You can click the button to make a call and test the service!<br>(once you select a SIP URI)" qtip-disable="!isWebRTCSupported() || !preview_webrtc_compatible") #[span {{widget.button_label || 'Call Sales'}}]
-                    .widget-footer-left
-                      a(href="https://test.webrtc.org/" target="_blank") Test your setup
-                    .widget-footer-right
-                      a(href="https://voxbone.com" target="_blank") powered by:
+                  #widget-preview(ng-show="!previewButton")
+                    .vox-widget-wrapper-preview
+                      .vw-main
+                        .vw-header
+                          span.vw-title#vw-title [Call Status]
+                          .vw-actions
+                            a#full-screen(ng-click="previewFullScreen = !previewFullScreen")
+                              i(ng-class="{'vw-icon  vx-icon-full-screen-on':!previewFullScreen, 'vw-icon  vx-icon-full-screen-off':previewFullScreen}")
+                            a
+                              i.vw-icon.vx-icon-close
+                        .vw-body#vw-body(ng-show="previewFullScreen")
+                          #vw-in-call
+                            .vw-btn-group#vw-btn-group
+                              a(ng-click="previewMute = !previewMute")
+                                i.vw-icon.vx-icon-mic
+                                #microphone.int-sensor
+                                  em#mic5(ng-class="{off:previewMute}")
+                                  em#mic4(ng-class="{off:previewMute}")
+                                  em#mic3(ng-class="{off:previewMute}")
+                                  em#mic2(ng-class="{off:previewMute}")
+                                  em#mic1(ng-class="{off:previewMute}")
+                              a#dialpad(ng-show="widget.dial_pad" ng-class="{active:previewDialpad}" ng-click="previewDialpad = !previewDialpad")
+                                i.vw-icon.vx-icon-pad
+                            a.vw-end-call
+                              i.vw-icon.vx-icon-phone
+                              span End Call
+                            .vw-dialpad#vw-dialpad(ng-show="widget.dial_pad && previewDialpad")
+                              ul
+                                li.vw-tl 1
+                                li 2
+                                li.vw-tr 3
+                                li 4
+                                li 5
+                                li 6
+                                li 7
+                                li 8
+                                li 9
+                                li.vw-bl *
+                                li 0
+                                li.vw-br #
+                          #vw-footer.vw-footer
+                            a(href="https://voxbone.com" target="_blank") powered by:
+                  #button-preview(ng-show="previewButton")
+                    .not-supported#not-supported-message(ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
+                    .widget-box#launch_call_div(ng-class="widget.button_style" ng-show="showCallButton()")
+                      button.btn-style.launch_call#launch_call_preview(ng-cloak ng-click="makeCall(#{demoUser.did})" qtip="You can click the button to make a call and test the service!<br>(save your configuration before you test)" qtip-disable="!isWebRTCSupported() || !preview_webrtc_compatible" qtip-title="Try it!") #[span {{widget.button_label || 'Call Sales'}}]
+                      .widget-footer-left
+                        a(href="https://test.webrtc.org/" target="_blank") Test your setup
+                      .widget-footer-right
+                        a(href="https://voxbone.com" target="_blank") powered by:
                   .togle-bg
                     a.dark(href="javascript:void(0)" ng-click="widget.background_style = 'dark'")
                     a.grey(href="javascript:void(0)" ng-click="widget.background_style = 'grey'")

@@ -1,7 +1,6 @@
 define([
     'controllers/widget.mixin',
     'jquery',
-    'jquery',
     'clipboard',
     'bootstrap'
   ], function (WidgetMixin, $, Clipboard) {
@@ -11,11 +10,11 @@ define([
     angular.extend(this, $controller(WidgetMixin, {$scope: $scope}));
 
     $scope.preview_webrtc_compatible = true;
+    $scope.previewButton = true;
+    $scope.previewDialpad = true;
+    $scope.previewFullScreen = true;
+    $scope.previewMute = false;
     $scope.submitText = 'Save Configuration';
-
-    $scope.onClickTab = function (is_preview_webrtc_compatible) {
-      $scope.preview_webrtc_compatible = is_preview_webrtc_compatible;
-    };
 
     $scope.master = {
       showWidgetCode: true,
@@ -26,75 +25,6 @@ define([
       show_text_html_value: '<h3>This is a placeholder for your message</h3>',
       incompatible_browser_configuration: 'hide_widget',
       shouldProvision: false
-    };
-
-    $scope.eventHandlers = {
-      'localMediaVolume': function (e) {
-        //- console.log('Microphone Volume ->' + e.localVolume);
-        if (voxbone.WebRTC.isMuted) return;
-
-        $("#microphone em").removeClass();
-        if (e.localVolume > 0.01) $("#mic1").addClass('on');
-        if (e.localVolume > 0.05) $("#mic2").addClass('on');
-        if (e.localVolume > 0.10) $("#mic3").addClass('on');
-        if (e.localVolume > 0.20) $("#mic4").addClass('on');
-        if (e.localVolume > 0.30) $("#mic5").addClass('peak');
-      },
-      'progress': function (e) {
-        console.log('Calling...');
-        $("#vw-title").text("Calling");
-        $("#audio-ringback-tone").trigger('play');
-      },
-      'failed': function (e) {
-        console.log('Failed to connect: ' + e.cause);
-        $("#audio-ringback-tone").trigger('pause');
-
-        if (e.cause.trim().toLowerCase() != 'authentication error')
-          $("#vw-title").text("Call Failed: " + e.cause.substr(0, 11));
-        else
-          $("#vw-title").text("Call Failed: Token Expired");
-
-        $("#vw-in-call").addClass('hidden');
-        $(".vw-animated-dots").addClass('hidden');
-
-        $("#vw-rating-after-message").removeClass('hidden');
-      },
-      'accepted': function (e) {
-        console.log('Call started');
-        $("#audio-ringback-tone").trigger('pause');
-        $("#vw-title").text("In Call");
-        $(".vw-animated-dots").removeClass('hidden');
-        $("#vw-unable-to-acces-mic").addClass('hidden');
-      },
-      'ended': function (e) {
-        console.log('Call ended');
-        $("#audio-ringback-tone").trigger('pause');
-        $("#vw-title").text("Call Ended");
-        $(".vw-animated-dots").addClass('hidden');
-        $("#vw-in-call").addClass('hidden');
-        $("#vw-rating").removeClass('hidden');
-        $(".vw-end-call").click();
-      },
-      'getUserMediaFailed': function (e) {
-        console.log('Cannot get User Media');
-        $("#audio-ringback-tone").trigger('pause');
-        $("#vw-title").text("Call Failed");
-        $(".vw-animated-dots").addClass('hidden');
-        $("#vw-in-call").addClass('hidden');
-        $("#vw-unable-to-acces-mic").removeClass('hidden');
-      },
-      'getUserMediaAccepted': function (e) {
-        console.log('local media accepted');
-        $("#vw-title").text("Calling");
-        $("#audio-ringback-tone").trigger('play');
-        voxbone.Logger.loginfo("local media accepted");
-      },
-      'authExpired': function (e) {
-        console.log('Auth Expired!');
-        $scope.getVoxrtcConfig(function (data) {
-          voxbone.WebRTC.init(data);
-        });
-      }
     };
 
     $scope.prepareHtmlForCodepen = function (data) {
@@ -112,16 +42,6 @@ define([
 
     $scope.init = function () {
       $scope.wirePluginAndEvents();
-
-      if(!$scope.isWebRTCSupported())
-        return;
-
-      voxbone.WebRTC.configuration.post_logs = true;
-      voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
-      voxbone.WebRTC.customEventHandler = $scope.eventHandlers;
-      $scope.getVoxrtcConfig(function (data) {
-        voxbone.WebRTC.init(data);
-      });
     };
 
     $scope.loadWidgetData = function () {
@@ -141,12 +61,6 @@ define([
       $scope.loadWidgetData();
     });
 
-    $scope.getVoxrtcConfig = function (callback) {
-      $.get('/token_config', function (data) {
-        callback(eval('(' + data + ')'));
-      });
-    };
-
     $scope.isWebRTCSupported = function () {
       return voxbone.WebRTC.isWebRTCSupported();
     };
@@ -163,10 +77,6 @@ define([
       case 'show_text_html':
         return $scope.widget.show_text_html_value;
       }
-    };
-
-    $scope.isInCall = function () {
-      return (typeof voxbone.WebRTC.rtcSession.isEstablished === "function") && !voxbone.WebRTC.rtcSession.isEnded();
     };
 
     $scope.wirePluginAndEvents = function () {
@@ -186,16 +96,6 @@ define([
 
       $(".togle-bg a.light").click(function () {
         $(".prev-view").removeClass("black").removeClass("grey").addClass("light");
-      });
-
-      $("#hangup_call").click(function (e) {
-        e.preventDefault();
-        voxbone.WebRTC.hangup();
-      });
-
-      // TODO: pull this DID out, maybe in an ENV VAR
-      $('#callVoxbone').click(function () {
-        $scope.makeCall(883510080408);
       });
 
       $('.codebox-actions a').click(function (e) {

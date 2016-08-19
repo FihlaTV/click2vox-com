@@ -1,9 +1,10 @@
 // Voxbone Click2Vox Widget library
 // Version - v1.5.0
 
-var infoVoxbone = null;
 var head = document.getElementsByTagName('head')[0];
-var voxButtonElement = document.getElementsByClassName('voxButton')[0];
+var infoVoxbone, voxButtonElement;
+
+voxButtonElement = document.getElementsByClassName('voxButton')[0];
 if (voxButtonElement === undefined) {
   voxButtonElement = document.createElement("div");
   voxButtonElement.className = "voxButton";
@@ -272,7 +273,10 @@ var check1Ready = (function() {
     return voxbone.WebRTC.isWebRTCSupported() && !isChromeOnHttp();
   };
 
-  function makeCall(did) {
+  function makeCall() {
+    voxButtonElement = document.getElementsByClassName('voxButton')[0];
+    infoVoxbone = voxButtonElement.dataset;
+
     if (isInCall()) return;
 
     if (!isWebRTCSupported() && (infoVoxbone.incompatible_browser_configuration === 'link_button_to_a_page')) {
@@ -295,7 +299,7 @@ var check1Ready = (function() {
         voxbone.WebRTC.configuration.dialer_string = infoVoxbone.send_digits;
       }
 
-      voxbone.WebRTC.call(did);
+      voxbone.WebRTC.call(infoVoxbone.did);
       window.onbeforeunload = function (e) {
         voxbone.WebRTC.unloadHandler();
       };
@@ -499,7 +503,7 @@ var check1Ready = (function() {
   // Click on Make Call button event
   handleEvent('click', '.vxb-widget-box #launch_call', function (e) {
     e.preventDefault();
-    makeCall(infoVoxbone.did);
+    makeCall();
   });
   //
   // End of Button Events
@@ -604,6 +608,5 @@ var check1Ready = (function() {
   init();
 });
 
-window.onload = function() {
-  check0Ready();
-};
+
+check0Ready();

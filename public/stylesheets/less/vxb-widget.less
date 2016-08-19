@@ -275,6 +275,7 @@
   }
   .vw-body .vw-end-call:hover {
     background:#d0071b;
+    text-decoration: none;
   }
   .vw-body .vw-dialpad {
     display:none;
@@ -369,6 +370,239 @@
     box-shadow:inset 0 1px 1px rgba(0,0,0,0.075);
   }
 }
+
+.vox-widget-wrapper-preview {
+  width: 315px;
+  font-family: 'Open Sans', sans-serif;
+  color: #343c3e;
+  font-weight: normal;
+  z-index:10000;
+  box-sizing:border-box;
+  *, :after, :before {
+    box-sizing:inherit;
+  }
+  a:hover {
+    cursor:pointer;
+  }
+  .vw-main {
+    width: 315px;
+    -webkit-border-top-right-radius:6px;
+    -moz-border-radius-topleft:6px;
+    -moz-border-radius-topright:6px;
+    -webkit-box-shadow:0 0 4px 0 rgba(0,0,0,0.35);
+    -moz-box-shadow:0 0 4px 0 rgba(0,0,0,0.35);
+    box-shadow:0 0 4px 0 rgba(0,0,0,0.35);
+    -webkit-border-top-left-radius:6px;
+    border-top-left-radius:6px;
+    border-top-right-radius:6px;
+    .vw-header {
+      -webkit-border-top-right-radius:6px;
+      -moz-border-radius-topleft:6px;
+      -moz-border-radius-topright:6px;
+      height:46px;
+      background:#eeeef0;
+      border-bottom:1px solid #d3d3d4;
+      -webkit-border-top-left-radius:6px;
+      border-top-left-radius:6px;
+      border-top-right-radius:6px;
+      .vw-title {
+        color:#1671ad;
+        line-height:46px;
+        padding-left:10px;
+        font-size:16px;
+        font-weight:700;
+        text-align:left;
+      }
+      .vw-actions {
+        float:right;
+        text-align:right;
+        padding:0 2.5px;
+        a {
+          display:inline-block;
+          height:46px;
+          width:46px;
+          margin:0 -2.5px;
+          text-align:center;
+          color:#9b9b9b;
+          border-left:1px solid #d3d3d4;
+        }
+        a:last-child {
+          -webkit-border-top-right-radius:6px;
+          -moz-border-radius-topright:6px;
+          border-top-right-radius:6px;
+        }
+        a:hover {
+          background:#e2e2e5;
+        }
+      }
+    }
+    .vw-body {
+      position:relative;
+      min-height:105px;
+      background:#f5f5f7;
+      border-top:1px solid #ffffff;
+      padding:30px;
+      text-align:center;
+      .vw-footer {
+        position:absolute;
+        font-size:9px;
+        bottom:8px;
+        right:8px;
+        a {
+          padding-right:62px;
+          background-image:url(../../images/widget-brand.png);
+          background-size:60px 12.5px;
+          background-position:right center;
+          background-repeat:no-repeat;
+          color:#8b8b8b;
+        }
+      }
+    }
+  }
+  .vw-body .vw-btn-group {
+    float:left;
+    height:40px;
+    a {
+      text-decoration:none;
+      position:relative;
+      background:#9b9b9b;
+      float:left;
+      border-left:1px solid #bcbcbc;
+      padding:0 5px;
+    }
+    a:hover {
+      background:#8f8f8f;
+    }
+    a:first-child {
+      -webkit-border-top-left-radius:4px;
+      -webkit-border-bottom-left-radius:4px;
+      -moz-border-radius-topleft:4px;
+      -moz-border-radius-bottomleft:4px;
+      border-top-left-radius:4px;
+      border-bottom-left-radius:4px;
+    }
+    a:last-child {
+      -webkit-border-top-right-radius:4px;
+      -webkit-border-bottom-right-radius:4px;
+      -moz-border-radius-topright:4px;
+      -moz-border-radius-bottomright:4px;
+      border-top-right-radius:4px;
+      border-bottom-right-radius:4px;
+    }
+    a.active:after {
+      position:absolute;
+      content:"";
+      bottom:-8px;
+      left:50%;
+      width:0;
+      height:0;
+      margin-left:-8px;
+      border-style:solid;
+      border-width:8px 8px 0;
+      border-color:#9b9b9b transparent transparent;
+    }
+  }
+  .vw-body .vw-end-call {
+    float:left;
+    width:140px;
+    height:43px;
+    color:#ffffff;
+    font-weight:700;
+    background:#e20a1f;
+    margin-left:20px;
+    text-align:center;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    i {
+      vertical-align:middle;
+      margin-top:2px;
+    }
+  }
+  .vw-body .vw-end-call:hover {
+    background:#d0071b;
+    cursor:pointer;
+    text-decoration: none;
+  }
+  .vw-body .vw-dialpad {
+    display:inline-block;
+    width:275px;
+    margin:20px 0 0;
+    background:#f9f9fa;
+    border-top:1px solid #cececf;
+    border-left:1px solid #cececf;
+    -webkit-border-radius:6px;
+    -moz-border-radius:6px;
+    border-radius:6px;
+    ul {
+      display:block;
+      padding:0;
+      margin:0;
+      li {
+        float:left;
+        padding:0;
+        margin:0;
+        width:33.333%;
+        height:45px;
+        list-style:none;
+        line-height:45px;
+        border-bottom:1px solid #cececf;
+        border-right:1px solid #cececf;
+        font-weight:700;
+        cursor:pointer;
+      }
+      li:hover {
+        background:#f1f1f1;
+      }
+      li.vw-tl {
+        -webkit-border-top-left-radius:6px;
+        -moz-border-radius-topleft:6px;
+        border-top-left-radius:6px;
+      }
+      li.vw-tr {
+        -webkit-border-top-right-radius:6px;
+        -moz-border-radius-topright:6px;
+        border-top-right-radius:6px;
+      }
+      li.vw-bl {
+        -webkit-border-bottom-left-radius:6px;
+        -moz-border-radius-bottomleft:6px;
+        border-bottom-left-radius:6px;
+      }
+      li.vw-br {
+        -webkit-border-bottom-right-radius:6px;
+        -moz-border-radius-bottomright:6px;
+        border-bottom-right-radius:6px;
+      }
+    }
+  }
+  .vw-body .vw-dialpad.active {
+    display:inline-block;
+  }
+  .int-sensor {
+    display:inline-block;
+    min-width:12px;
+    height:40px;
+    padding:11px 4px 0 2px;
+    em.off, em.peak {
+      background:#ff002a;
+    }
+    em {
+      display:block;
+      width:3px;
+      height:3px;
+      margin:0 0 2px;
+      background:#ffffff;
+      -webkit-border-radius:3px;
+      -moz-border-radius:3px;
+      border-radius:3px;
+    }
+    em.on {
+      background:#00ff2a;
+    }
+  }
+}
+
 .hidden {
   display:none !important;
 }
