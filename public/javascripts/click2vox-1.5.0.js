@@ -51,7 +51,14 @@ var check0Ready = (function() {
 });
 
 var check1Ready = (function() {
-  voxButtonElement.innerHTML += ' \
+
+  var voxBranding = '\
+    <div id="vw-footer" class="vw-footer"> \
+      <a href="https://voxbone.com" target="_blank">powered by:</a> \
+    </div>\
+  ';
+
+  var voxPopup = ' \
     <audio id="audio-ringback-tone" preload="auto" loop> \
       <source src="https://upload.wikimedia.org/wikipedia/commons/c/cd/US_ringback_tone.ogg" type="audio/ogg"> \
     </audio> \
@@ -141,24 +148,44 @@ var check1Ready = (function() {
           </div> \
           <div id="vw-rating-after-message" class="vw-rating hidden"> \
             <p>Thank you for using our service</p> \
-          </div> \
-          <div id="vw-footer" class="vw-footer"> \
-            <a href="https://voxbone.com" target="_blank">powered by:</a> \
-          </div> \
+          </div>\
+  ';
+
+  // showing voxbone branding
+  if (infoVoxbone.show_branding !== 'false')
+    voxPopup += voxBranding;
+
+  // let's close the popup markup
+  voxPopup += '\
         </div> \
       </div> \
     </div> \
   ';
 
-  var links = "";
-  if(infoVoxbone.show_frame !== 'false' && infoVoxbone.use_default_button_css !== 'false') {
-    links = '<div class="widget-footer-left">\
-               <a href="https://test.webrtc.org/" target="_blank">Test your setup</a>\
-             </div>\
-             <div class="widget-footer-right">\
-               <a href="https://voxbone.com" target="_blank">powered by:</a>\
-             </div>';
-  };
+  voxButtonElement.innerHTML += voxPopup;
+
+  var links = '';
+  if (infoVoxbone.test_setup !== 'false')
+    links = '\
+      <div class="widget-footer-left">\
+        <a href="https://test.webrtc.org/" target="_blank">Test your setup</a>\
+      </div>\
+    ';
+
+  if (infoVoxbone.show_branding !== 'false')
+    links += '\
+      <div class="widget-footer-right">\
+        <a href="https://voxbone.com" target="_blank">powered by:</a>\
+      </div> \
+    ';
+
+
+  if (infoVoxbone.show_frame === 'false') {
+    infoVoxbone.div_css_class_name += ' no-frame';
+
+    if (infoVoxbone.show_branding === 'false')
+      infoVoxbone.div_css_class_name += ' no-branding';
+  }
 
   var custom_button_color = '';
   if (infoVoxbone.custom_button_color) {

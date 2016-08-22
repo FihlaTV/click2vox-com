@@ -48,18 +48,18 @@ ul.nav.nav-tabs(ng-cloak)
                   li 0
                   li.vw-br #
             #vw-footer.vw-footer
-              a(href="https://voxbone.com" target="_blank") powered by:
+              a(href="https://voxbone.com" target="_blank" ng-show="widget.show_branding") powered by:
     #button-preview(ng-cloak ng-show="previewButton")
       .hidden-not-supported(ng-show="!showCallButton() && widget.incompatible_browser_configuration === 'hide_widget'")
         p.bg-info.text-center(style="padding: 5px")
           i.glyphicon.glyphicon-exclamation-sign
           span  The button is hidden because of the current config. Check the "Incompatible Browser Configuration" section to set it up.
       .not-supported#not-supported-message(ng-cloak ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
-      .widget-box#launch_call_div(ng-cloak ng-class="widget.button_style" ng-show="showCallButton()")
+      .widget-box#launch_call_div(ng-cloak class="{{widget.button_style}}" ng-class="{'no-frame': !widget.show_frame, 'no-branding': !widget.show_branding}" ng-show="showCallButton()")
         button.btn-style.launch_call#launch_call_preview(ng-style="{'background': widget.button_color, 'border': widget.button_color}" ng-cloak ng-disabled="!widget.sip_uri" ng-click="makeCall()" qtip="You can click the button to make a call and test the service!<br>(save your configuration before you test)" qtip-disable="!isWebRTCSupported() || !preview_webrtc_compatible" qtip-title="Try it!") #[span {{widget.button_label || 'Call Sales'}}]
-        .widget-footer-left
+        .widget-footer-left(ng-show="widget.test_setup")
           a(href="https://test.webrtc.org/" target="_blank") Test your setup
-        .widget-footer-right
+        .widget-footer-right(ng-show="widget.show_branding")
           a(href="https://voxbone.com" target="_blank") powered by:
     .preview-link
       a(ng-cloak href="#" ng-click="previewButton = true; preview_webrtc_compatible = !preview_webrtc_compatible") {{ "Switch to " + (preview_webrtc_compatible ? "non-" : "") + "WebRTC Browser View" }}

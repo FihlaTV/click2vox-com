@@ -20,6 +20,18 @@ var widgetSchema = new Schema({
     type: Boolean,
     default: true
   },
+  show_frame: {
+    type: Boolean,
+    default: true
+  },
+  show_branding: {
+    type: Boolean,
+    default: true
+  },
+  test_setup: {
+    type: Boolean,
+    default: true
+  },
   send_digits: String,
   hide_widget: {
     type: Boolean,

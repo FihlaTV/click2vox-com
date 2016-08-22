@@ -18,7 +18,8 @@ var PERMITTED_FIELDS = [
   'background_style', 'sip_uri', 'caller_id', 'context',
   'dial_pad', 'send_digits', 'hide_widget', 'updated_at',
   'link_button_to_a_page', 'show_text_html',
-  'incompatible_browser_configuration', 'new_sip_uri'
+  'incompatible_browser_configuration', 'new_sip_uri',
+  'show_frame', 'test_setup'
 ];
 
 router.get('/new', utils.isLoggedIn, function (req, res, next) {
@@ -37,10 +38,14 @@ router.get('/new', utils.isLoggedIn, function (req, res, next) {
 router.post('/new', utils.isLoggedIn, function (req, res, next) {
   var currentUser = req.user;
   var params = req.parameters;
+
+  if (currentUser.paid)
+    PERMITTED_FIELDS.push('show_branding');
+
   var widgetData = params.permit(PERMITTED_FIELDS);
 
   var result = { message: "", errors: null };
-  widgetData['_account'] = currentUser._id;
+  widgetData._account = currentUser._id;
 
   // allow new sips if paid user or not sip_uris registered
   if (widgetData.new_sip_uri) {
@@ -62,7 +67,7 @@ router.post('/new', utils.isLoggedIn, function (req, res, next) {
       Widget.create(widgetData, function (err, widget) {
         if (err) throw err;
         currentUser.saveSipURI(widgetData.sip_uri);
-        result['redirect'] = '/widget/' + widget._id + '/edit';
+        result.redirect = '/widget/' + widget._id + '/edit';
         return res.status(200).json(result);
       });
     }
@@ -98,6 +103,10 @@ router.get('/:id/edit', utils.isLoggedIn, function (req, res, next) {
 router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
   var currentUser = req.user;
   var params = req.parameters;
+
+  if (currentUser.paid)
+    PERMITTED_FIELDS.push('show_branding');
+
   var updateData = params
     .merge({updated_at: new Date()})
     .permit(PERMITTED_FIELDS);

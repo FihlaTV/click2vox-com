@@ -64,6 +64,30 @@ block content
                       a(colorpicker colorpicker-position="right" colorpicker-close-on-select ng-model="widget.button_color" ng-cloak) #[span  (or select a Custom Color)]
                     button.btn-style-a(ng-cloak ng-click="setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
                     button.btn-style-b(ng-cloak ng-click="setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+
+                  .panel.panel-default
+                    .panel-heading
+                      a.collapsed.title-toggle(data-toggle="collapse", data-target="#extraConfiguration", href="#extraConfiguration") Extra Configuration
+                    .panel-collapse.collapse#extraConfiguration
+                      .options-wrap.active
+                        .form-group
+                          label
+                            input(type='checkbox' name='show_frame' ng-model='widget.show_frame')
+                            span.radio-name Show frame
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Shows/Hides the background and border of the button") ?
+
+                        .form-group
+                          label
+                            input(type='checkbox' name='test_setup' ng-model='widget.test_setup')
+                            span.radio-name Test user setup
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Place a link to test the users's WebRTC setup") ?
+
+                        .form-group
+                          label
+                            input(type='checkbox' name='show_branding' ng-model='widget.show_branding' disabled="#{currentUser.paid}")
+                            span.radio-name Show branding
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Toggles Voxbone branding from button and popup") ?
+
                 span.title Call Configuration
                 .boxPanel
                   .form-group
