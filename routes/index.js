@@ -360,9 +360,18 @@ module.exports = function (passport) {
     var formData = req.body;
     var result = { message: "", errors: null };
 
+    if (!ObjectId.isValid(req.body.token)) {
+      // 400 Bad Request
+      return res.status(400);
+    }
+
     var searchFor = { _id: new ObjectId(req.body.token) };
 
     Widget.findOne(searchFor, function (err, the_widget) {
+
+      if (!the_widget) {
+        return res.status(404);
+      }
 
       var a_rating = new Rating({
         rate: req.body.rate,
