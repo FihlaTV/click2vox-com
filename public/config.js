@@ -24,6 +24,11 @@ require.config({
         return 'ngSanitize';
       }
     },
+    'angular-bootstrap-colorpicker': {
+      deps: ['angular'], init: function () {
+        return 'colorpicker.module';
+      }
+    },
   },
   paths: {
     angular: [
@@ -41,6 +46,10 @@ require.config({
     'angular-sanitize': [
       '//ajax.googleapis.com/ajax/libs/angularjs/1.4.12/angular-sanitize.min',
       '/lib/angular-sanitize/angular-sanitize.min'
+    ],
+    'angular-bootstrap-colorpicker': [
+      '//cdnjs.cloudflare.com/ajax/libs/angular-bootstrap-colorpicker/3.0.25/js/bootstrap-colorpicker-module.min',
+      '/lib/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min'
     ],
     bootstrap: [
       '//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min',

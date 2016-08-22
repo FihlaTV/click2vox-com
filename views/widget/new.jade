@@ -2,12 +2,14 @@ extends ../layout
 
 block extra_head
   link(href="/stylesheets/vxb-widget.css", rel="stylesheet")
+  link(href="/lib/angular-bootstrap-colorpicker/css/colorpicker.min.css" rel="stylesheet")
 
 block content
   script.
     require([
       'angular',
       'angular-sanitize',
+      'angular-bootstrap-colorpicker',
       'jquery',
       'controllers/widget.add',
       'directives/qtip',
@@ -15,11 +17,11 @@ block content
       'directives/check.allowed.sip'
     ],
     function(
-      angular, ngSanitize, $,
+      angular, ngSanitize, colorPicker, $,
       WidgetAddController, qtipDirective,
       httpPrefixDirective, checkAllowedSip) {
 
-        angular.module('voxboneApp', ['ngSanitize'])
+        angular.module('voxboneApp', ['ngSanitize','colorpicker.module'])
           .directive('qtip', qtipDirective)
           .directive('httpPrefix', httpPrefixDirective)
           .directive('checkAllowedSip', checkAllowedSip)
@@ -67,6 +69,7 @@ block content
                     input.form-control(type="text", name="button_label", ng-model="widget.button_label" value="#{defaultBtnLabel}" placeholder="i.e. #{defaultBtnLabel}")
                   .form-group
                     label Button Style:
+                      a(colorpicker colorpicker-position="right" colorpicker-close-on-select ng-model="widget.button_color" ng-cloak) #[span  (or select a Custom Color)]
                     button.btn-style-a(ng-cloak ng-click="setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
                     button.btn-style-b(ng-cloak ng-click="setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
                 span.title Call Configuration

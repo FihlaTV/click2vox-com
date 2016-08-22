@@ -9,6 +9,7 @@ var widgetSchema = new Schema({
     ref: 'Account'
   },
   configuration_name: String,
+  button_color: String,
   button_label: String,
   button_style: String,
   background_style: String,

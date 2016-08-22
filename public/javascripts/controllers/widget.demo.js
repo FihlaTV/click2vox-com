@@ -97,12 +97,9 @@ define([
     $scope.init();
 
     $scope.setTheme = function (theme) {
+      $scope.widget.button_color = "";
       if ($scope.widget.button_style != theme)
         $scope.widget.button_style = theme;
-    };
-
-    $scope.xaaa = function() {
-      alert('123');
     };
   };
 
