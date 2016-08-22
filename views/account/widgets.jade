@@ -77,7 +77,7 @@ block content
                             button(style="border: #{widget.button_color}; background: #{widget.button_color}" class="btn-#{widget.button_style}")
                               span #{widget.button_label || defaultBtnLabel}
                           td.text-right
-                            #[button.btn.btn-sm.btn-primary.clipboard(widget-code="#{widget.divCode}") Copy Code] #[a.btn.btn-sm.btn-info(href="/widget/#{widget._id}/edit") View / Edit] #[button.deleteButton.btn.btn-sm.btn-warning(ng-click='openDeleteModal("#{widget._id}")') Delete]
+                            #[button.btn.btn-sm.btn-primary.clipboard(widget-code="#{widget.divCode}") Copy Code] #[a.btn.btn-sm.btn-info(href="/widget/#{widget._id}/edit") View / Edit] #[button.deleteButton.btn.btn-sm.btn-danger(ng-click='openDeleteModal("#{widget._id}")') Delete]
 
     include contact-voxbone
     include ../sip/edit_modal

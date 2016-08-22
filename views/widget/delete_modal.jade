@@ -15,5 +15,5 @@
             div(ng-bind="errorMessage" ng-show="errorMessage")
 
       .modal-footer
-        button.btn.btn-purple(ng-bind="confirmText" ng-disabled="submitting" ng-click="deleteWidget()")
-        button.btn(data-dismiss="modal") Cancel
+        button.btn.btn-danger(ng-bind="confirmText" ng-disabled="submitting" ng-click="deleteWidget()")
+        button.btn.btn-success(data-dismiss="modal") Cancel
