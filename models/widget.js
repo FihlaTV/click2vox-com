@@ -32,6 +32,10 @@ var widgetSchema = new Schema({
     type: Boolean,
     default: true
   },
+  rating: {
+    type: Boolean,
+    default: true
+  },
   send_digits: String,
   hide_widget: {
     type: Boolean,

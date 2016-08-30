@@ -376,7 +376,10 @@ var check1Ready = (function() {
         setWidgetTitle("Call Ended");
         hideAnimatedDots();
         hideElement('.vox-widget-wrapper #vw-in-call');
-        showElement(".vox-widget-wrapper #vw-rating");
+        if (infoVoxbone.rating !== "false") {
+          showElement(".vox-widget-wrapper #vw-rating");
+        } else
+          showElement(".vox-widget-wrapper #vw-rating-after-message");
         callAction('hang_up');
         break;
 

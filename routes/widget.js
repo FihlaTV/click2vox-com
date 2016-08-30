@@ -19,7 +19,7 @@ var PERMITTED_FIELDS = [
   'dial_pad', 'send_digits', 'hide_widget', 'updated_at',
   'link_button_to_a_page', 'show_text_html',
   'incompatible_browser_configuration', 'new_sip_uri',
-  'show_frame', 'test_setup'
+  'show_frame', 'test_setup', 'rating'
 ];
 
 router.get('/new', utils.isLoggedIn, function (req, res, next) {
