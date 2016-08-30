@@ -513,7 +513,7 @@ var check1Ready = (function() {
     showElement(".vox-widget-wrapper");
     document.querySelector(".vox-widget-wrapper").style.display = "block";
 
-    if (infoVoxbone.dial_pad !== false)
+    if (infoVoxbone.dial_pad !== "false")
       showElement(".vox-widget-wrapper #dialpad");
     else
       hideElement(".vox-widget-wrapper #dialpad");
