@@ -107,7 +107,8 @@ var routes = require('./routes/index');
 var contactRoutes = require('./routes/contact');
 var accountRoutes = require('./routes/account');
 var authRoutes = require('./routes/auth');
-var widgetRoutes = require('./routes/widget');
+var widgetRoutes = require('./routes/widget').router;
+var portalHandler = require('./routes/widget').portalHandler;
 var sipRoutes = require('./routes/sip');
 var utils = require('./routes/utils');
 
@@ -119,6 +120,7 @@ app.use('/api', contactRoutes);
 app.use('/auth', authRoutes);
 app.use('/sip', sipRoutes);
 app.use('/widget', widgetRoutes);
+app.use('/click2vox', portalHandler);
 
 
 // this should go *after* all other app middleware but *before* own error handlers

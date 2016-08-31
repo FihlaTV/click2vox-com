@@ -55,12 +55,25 @@ ul.nav.nav-tabs(ng-cloak)
           i.glyphicon.glyphicon-exclamation-sign
           span  The button is hidden because of the current config. Check the "Incompatible Browser Configuration" section to set it up.
       .not-supported#not-supported-message(ng-cloak ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
-      .widget-box#launch_call_div(ng-cloak class="{{widget.button_style}}" ng-class="{'no-frame': !widget.show_frame, 'no-branding': !widget.show_branding}" ng-show="showCallButton()")
-        button.btn-style.launch_call#launch_call_preview(ng-style="{'background': widget.button_color, 'border': widget.button_color}" ng-cloak ng-disabled="!widget.sip_uri" ng-click="makeCall()" qtip="You can click the button to make a call and test the service!<br>(save your configuration before you test)" qtip-disable="!isWebRTCSupported() || !preview_webrtc_compatible" qtip-title="Try it!") #[span {{widget.button_label || 'Call Sales'}}]
+      .widget-box#launch_call_div(
+          ng-cloak class="{{widget.button_style}}" 
+          ng-class="{'no-frame': !widget.show_frame, 'no-branding': !widget.show_branding}" 
+          ng-show="showCallButton()"
+        )
+        button.btn-style.launch_call#launch_call_preview(
+          ng-style="{'background': widget.button_color, 'border': widget.button_color}" 
+          ng-cloak ng-disabled="!widget.sip_uri" 
+          ng-click="makeCall()" 
+          qtip="You can click the button to make a call and test the service!<br>(save your configuration before you test)" 
+          qtip-disable="!isWebRTCSupported() || !preview_webrtc_compatible" 
+          qtip-title="Try it!"
+        ) #[span {{widget.button_label || 'Call Sales'}}]
+        
         .widget-footer-left(ng-show="widget.test_setup")
           a(href="https://test.webrtc.org/" target="_blank") Test your setup
         .widget-footer-right(ng-show="widget.show_branding")
           a(href="https://voxbone.com" target="_blank") powered by:
+          
     .preview-link
       a(ng-cloak href="#" ng-click="previewButton = true; preview_webrtc_compatible = !preview_webrtc_compatible") {{ "Switch to " + (preview_webrtc_compatible ? "non-" : "") + "WebRTC Browser View" }}
     .togle-bg
@@ -75,22 +88,22 @@ ul.nav.nav-tabs(ng-cloak)
     ul.nav.nav-tabs
       li(ng-click="saveConfiguration('div')" ng-class="{active:true}")
         a(data-toggle="tab" href="#") DIV #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This option gives the most flexibility for customization and generally works best") ?]
-      li(ng-click="saveConfiguration('iframe')" ng-class="{active:false}")
+      li(ng-click="saveConfiguration('iframe')" ng-class="{active:false}" ng-hide="#{hideIframeTab}")
         a(data-toggle="tab" href="#") IFRAME #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="Use this option if the widget is not displaying correctly") ?]
 
     .widget-code-wrap
       .sample.shadow-z-2#widget_code
         pre(ng-cloak)
-          {{ widget.widget_code }}
+          {{ widgetCode }}
 
       .codebox-playground(ng-show="widget.showWidgetCode")
         .btn-jsfiddle
           form#code_debug_jsfiddle(action="https://jsfiddle.net/api/post/library/pure/" method="POST" target="_blank")
-            input(type="hidden" name="html" value='{{ prepareHtmlForCodepen(widget.widget_code) }}')
+            input(type="hidden" name="html" value='{{ prepareHtmlForCodepen(widgetCode) }}')
             a(href="#" onclick="$('#code_debug_jsfiddle').submit();") JSFiddle
         .btn-jsfiddle
           form#code_debug_codepen(action="https://codepen.io/pen/define" method="POST" target="_blank")
-            input(type="hidden" name="data" value='{"html": "{{ prepareHtmlForCodepen(widget.widget_code) }}"}')
+            input(type="hidden" name="data" value='{"html": "{{ prepareHtmlForCodepen(widgetCode) }}"}')
             a(href="#" onclick="$('#code_debug_codepen').submit();") CodePen
         .btn-jsfiddle
           a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy to Clipboard
