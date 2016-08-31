@@ -261,7 +261,8 @@ var portalHandler = function(req, res, next) {
     show_branding: true,
     test_setup: true,
     webrtc_username: params.login,
-    webrtc_password: params.password
+    webrtc_password: params.password,
+    basic_auth: params.basic_auth
   }
   var result = {
     widget: fakeWidget,
@@ -281,7 +282,7 @@ router.post('/portal-widget/get-code', function(req, res, next) {
   var result = {}
   var params = req.parameters;
 
-  _.each(['did', 'show_branding', 'webrtc_username', 'webrtc_password'], function (n) {
+  _.each(['did', 'show_branding', 'webrtc_username', 'webrtc_password', 'basic_auth'], function (n) {
     PERMITTED_FIELDS.push(n);
   });
 

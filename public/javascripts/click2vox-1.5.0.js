@@ -266,22 +266,32 @@ var check1Ready = (function() {
 
     'authExpired': function (e){
       console.log('Auth Expired!');
+      handleAuth();
+    }
+  };
+
+  function handleAuth() {
+    var basic = (infoVoxbone.basic_auth === 'true');
+    var username = infoVoxbone.voxbone_webrtc_username;
+    var key = infoVoxbone.voxbone_webrtc_password;
+
+    if (basic && username && key) {
+      voxbone.WebRTC.basicAuthInit(username, key);
+    } else {
+      voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
       getVoxrtcConfig(function(data) {
         voxbone.WebRTC.init(data);
       });
     }
-  };
+  }
 
   function init() {
-    setTimeout(function(){ document.querySelector("#launch_call_div").style.display = "block"; }, 500);
+    setTimeout(function() { document.querySelector("#launch_call_div").style.display = "block"; }, 500);
 
     if (isWebRTCSupported()) {
       voxbone.WebRTC.configuration.post_logs = true;
-      voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
       voxbone.WebRTC.customEventHandler = eventHandlers;
-      getVoxrtcConfig(function (data) {
-        voxbone.WebRTC.init(data);
-      });
+      handleAuth();
     } else {
       if (infoVoxbone.incompatible_browser_configuration === 'hide_widget')
         hideElement('div[data-button_id="' + infoVoxbone.button_id + '"]');

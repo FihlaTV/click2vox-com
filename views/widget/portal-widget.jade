@@ -32,7 +32,7 @@ block content
 
   .voxButton#voxButtonPreview(data-div_css_class_name="hidden")
 
-  .main.createButton(ng-controller="EditWidgetController" ng-init="initData={widget: #{JSON.stringify(widget)}, did: #{widget.did}}")
+  .main.createButton(ng-controller="EditWidgetController" ng-init="initData={widget: #{JSON.stringify(widget)}, did: #{widget.did}, widgetCode: ''}")
     .header
       .container
         .row

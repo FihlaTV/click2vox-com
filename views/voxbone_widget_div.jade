@@ -10,7 +10,8 @@
   data-incompatible_browser_configuration=the_widget.incompatible_browser_configuration || undefined
   data-server_url="#{process.env.APP_URL}"
   data-use_default_button_css="true"
-  data-div_css_class_name=the_widget.button_style
+  data-div_css_class_name="#{the_widget.button_style}"
+  data-basic_auth=(the_widget.basic_auth === undefined ? undefined : "#{(the_widget.basic_auth === '1')}")
   data-voxbone_webrtc_username=(the_widget.webrtc_username === undefined ? undefined : "#{the_widget.webrtc_username}")
   data-voxbone_webrtc_password=(the_widget.webrtc_password === undefined ? undefined : "#{the_widget.webrtc_password}")
   data-rating=((the_widget.rating === undefined || the_widget.rating) ? undefined : "#{the_widget.rating}")

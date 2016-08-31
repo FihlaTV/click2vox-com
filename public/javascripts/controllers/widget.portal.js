@@ -14,6 +14,7 @@ define([
     $scope.previewDialpad = true;
     $scope.previewFullScreen = true;
     $scope.previewMute = false;
+    $scope.widgetCode = 'Generating widget code...';
 
     $scope.master = {
       showWidgetCode: true,
@@ -45,7 +46,7 @@ define([
     $scope.loadWidgetData = function () {
       var data = $scope.initData;
       $scope.widget = angular.extend({}, $scope.widget, $scope.master, data.widget);
-      $scope.widgetCode = data.widget;
+      $scope.widgetCode = data.widgetCode;
       $scope.widget.did = $scope.did = data.did;
       $scope.widget.link_button_to_a_page_value = $scope.widget.link_button_to_a_page;
       $scope.widget.show_text_html_value = $scope.widget.show_text_html;
