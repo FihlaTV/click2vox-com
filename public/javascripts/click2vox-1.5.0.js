@@ -285,8 +285,26 @@ var check1Ready = (function() {
     }
   }
 
+  function notifyLoaded() {
+    // NOTE: if we plan to support IE -someday- we need to make sure to
+    // implement this in a way that works for IE.
+    // check this out for reference: http://caniuse.com/#feat=customevent
+    var event = new CustomEvent("click2vox-ready", {
+      "detail": {
+        "infoVoxbone": infoVoxbone,
+        "webrtcSupported": isWebRTCSupported()
+      }
+    });
+
+    // Dispatch/Trigger the event on top of the document
+    document.dispatchEvent(event);
+  }
+
   function init() {
     setTimeout(function() { document.querySelector("#launch_call_div").style.display = "block"; }, 500);
+
+    // let's trigger an event when things are ready
+    notifyLoaded();
 
     if (isWebRTCSupported()) {
       voxbone.WebRTC.configuration.post_logs = true;
