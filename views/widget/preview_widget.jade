@@ -1,9 +1,9 @@
 span.title(ng-cloak) Widget Preview in a {{ (!preview_webrtc_compatible ? "non-" : "") + "WebRTC Browser" }}
 ul.nav.nav-tabs(ng-cloak)
   li(ng-class="{active:previewButton}" ng-click="previewButton = true")
-    a(data-toggle="tab" href="#") Button #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="TBD") ?]
+    a(data-toggle="tab" href="#") Button #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This is what the click-to-call button will look like when the widget code snippet below is used on your website") ?]
   li(ng-class="{active:!previewButton}" ng-click="previewButton = false" ng-show="preview_webrtc_compatible")
-    a(data-toggle="tab" href="#") Phone #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="TBD") ?]
+    a(data-toggle="tab" href="#") Phone #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="Preview of the pop-up call controller that displays once the button is clicked") ?]
 
 .boxPanel.preview
   .prev-view.light
@@ -56,24 +56,24 @@ ul.nav.nav-tabs(ng-cloak)
           span  The button is hidden because of the current config. Check the "Incompatible Browser Configuration" section to set it up.
       .not-supported#not-supported-message(ng-cloak ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
       .widget-box#launch_call_div(
-          ng-cloak class="{{widget.button_style}}" 
-          ng-class="{'no-frame': !widget.show_frame, 'no-branding': !widget.show_branding}" 
+          ng-cloak class="{{widget.button_style}}"
+          ng-class="{'no-frame': !widget.show_frame, 'no-branding': !widget.show_branding}"
           ng-show="showCallButton()"
         )
         button.btn-style.launch_call#launch_call_preview(
-          ng-style="{'background': widget.button_color, 'border': widget.button_color}" 
-          ng-cloak ng-disabled="!widget.sip_uri" 
-          ng-click="makeCall()" 
-          qtip="You can click the button to make a call and test the service!<br>(save your configuration before you test)" 
-          qtip-disable="!isWebRTCSupported() || !preview_webrtc_compatible" 
+          ng-style="{'background': widget.button_color, 'border': widget.button_color}"
+          ng-cloak ng-disabled="!widget.sip_uri"
+          ng-click="makeCall()"
+          qtip="You can click the button to make a call and test the service!<br>(save your configuration before you test)"
+          qtip-disable="!isWebRTCSupported() || !preview_webrtc_compatible"
           qtip-title="Try it!"
         ) #[span {{widget.button_label || 'Call Sales'}}]
-        
+
         .widget-footer-left(ng-show="widget.test_setup")
           a(href="https://test.webrtc.org/" target="_blank") Test your setup
         .widget-footer-right(ng-show="widget.show_branding")
           a(href="https://voxbone.com" target="_blank") powered by:
-          
+
     .preview-link
       a(ng-cloak href="#" ng-click="previewButton = true; preview_webrtc_compatible = !preview_webrtc_compatible") {{ "Switch to " + (preview_webrtc_compatible ? "non-" : "") + "WebRTC Browser View" }}
     .togle-bg
