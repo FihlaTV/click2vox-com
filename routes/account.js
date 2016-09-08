@@ -189,29 +189,37 @@ router.post('/signup', recaptcha.middleware.verify, function (req, res, next) {
 
 router.get('/verify/:token', function (req, res, next) {
   req.logout();
-  req.session.destroy();
+
   Account.findOne({ verifyAccountToken: req.params.token, verifyAccountExpires: { $gt: Date.now() } }, function (err, account) {
     if (account) {
       if (account.verified) {
-        renderLogin(res, "Account verification already completed. Please login", null);
+        return renderLogin(res, "Account verification already completed. Please login", null);
       } else {
         account.verified = true;
         account.save(function (err) {
-          renderLogin(res, "Account verification successful. Please login", null);
+          return renderLogin(res, "Account verification successful. Please login", null);
         });
       }
     } else {
-      renderLogin(res, "Account verification token is invalid or has expired.", "TokenInvalidOrExpired");
+      return renderLogin(res, "Account verification token is invalid or has expired.", "TokenInvalidOrExpired");
     }
   });
-});
 
-function renderLogin(res, message, error) {
-  return res.render('login', {
-    title: title,
-    error: error,
-    message: message
-  });
-}
+  function renderLogin(res, message, error) {
+    var errorMessage = {
+      error: error,
+      type: (error ? 'danger' : 'success'),
+      message: message
+    };
+
+    req.flash('loginMessage', errorMessage);
+
+    return res.render('login', {
+      title: title,
+      error: error,
+      message: req.flash('loginMessage')
+    });
+  }
+});
 
 module.exports = router;
