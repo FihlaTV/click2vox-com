@@ -14,13 +14,13 @@ define([
     $scope.previewFullScreen = true;
     $scope.previewMute = false;
     $scope.submitText = 'Save Configuration';
+    $scope.widgetCode = 'You must setup you widget and save your configuration to get the button embed code. Select from the SIP URI field the Echo Service (echo@ivrs), Digits Service (digits@ivrs) or one of your SIP URIs to create the button';
 
     $scope.master = {
       showWidgetCode: false,
       dial_pad: true,
       button_style: 'style-a',
       background_style: 'dark',
-      widgetCode: 'You must setup you widget and save your configuration to get the button embed code. Select from the SIP URI field the Echo Service (echo@ivrs), Digits Service (digits@ivrs) or one of your SIP URIs to create the button',
       show_text_html_value: '<h3>This is a placeholder for your message</h3>',
       incompatible_browser_configuration: 'hide_widget',
       show_frame: true,

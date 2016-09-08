@@ -28,7 +28,7 @@ define([
     };
 
     $scope.prepareHtmlForCodepen = function (data) {
-      return data.replace(/"/g, "'");
+      return (data ? data.replace(/"/g, "'") : '');
     };
 
     $scope.reset = function (form) {
