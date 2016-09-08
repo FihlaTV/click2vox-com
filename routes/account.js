@@ -110,7 +110,8 @@ router.get('/signup', recaptcha.middleware.render, function (req, res, next) {
     email: req.query.email,
     temp_password: req.query.password,
     captcha: req.recaptcha,
-    reference: req.param('ref')
+    reference: req.param('ref'),
+    referrer: req.headers.referrer || req.headers.referer || ''
   });
 });
 
@@ -161,6 +162,7 @@ router.post('/signup', recaptcha.middleware.verify, function (req, res, next) {
     theAccount.company = formData.company;
     theAccount.temporary = false;
     theAccount.reference = formData.reference;
+    theAccount.referrer = formData.referrer;
 
     theAccount.save(function (err) {
       if (err) {
