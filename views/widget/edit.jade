@@ -84,7 +84,8 @@ block content
 
                         .form-group
                           label
-                            input(type='checkbox' name='show_branding' ng-model='widget.show_branding' disabled="#{currentUser.paid}")
+                            - var showBranding = !currentUser.paid;
+                            input(type='checkbox' name='show_branding' ng-model='widget.show_branding' disabled=showBranding)
                             span.radio-name Show branding
                             span.badge(data-toggle='tooltip' data-placement="right" title="Toggles Voxbone branding from button and popup") ?
 
