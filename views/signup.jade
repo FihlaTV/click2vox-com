@@ -48,10 +48,15 @@ block content
                 form#create_account(ng-controller="SignUpController" name="create_account" ng-init="account.uemail='#{email || ''}'" novalidate)
                   input.form-control(type="hidden" id="ureference" name="ureference" ng-model="account.ureference" ng-init="account.ureference='#{reference || ''}'")
                   .form-group
-                    label.control-label Name
-                    input.form-control(type="text" id="uname" name="uname" ng-model="account.uname" required)
-                    .error-label(ng-show="create_account.$submitted || create_account.uname.$touched")
-                      .ng-hide(ng-show="create_account.uname.$error.required") Please enter your name
+                    label.control-label First Name
+                    input.form-control(type="text" id="ufirstname" name="ufirstname" ng-model="account.ufirstname" required)
+                    .error-label(ng-show="create_account.$submitted || create_account.ufirstname.$touched")
+                      .ng-hide(ng-show="create_account.ufirstname.$error.required") Please enter your first name
+                  .form-group
+                    label.control-label Last Name
+                    input.form-control(type="text" id="ulastname" name="ulastname" ng-model="account.ulastname" required)
+                    .error-label(ng-show="create_account.$submitted || create_account.ulastname.$touched")
+                      .ng-hide(ng-show="create_account.ulastname.$error.required") Please enter your last name
                   .form-group
                     label.control-label Company
                     input.form-control(type="text" id="ucompany" name="ucompany" ng-model="account.ucompany")

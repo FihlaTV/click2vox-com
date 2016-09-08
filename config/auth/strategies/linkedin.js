@@ -8,7 +8,6 @@ module.exports = function(Account, passport) {
       scope: ['r_basicprofile', 'r_emailaddress']
     },
     function(token, refreshToken, profile, done) {
-
       if(typeof(profile.emails) === 'undefined'){
         var errorMessage = { error: 'missing-email', type: 'danger', message: 'We cannot retrieve your email from LinkedIn. Please fix this in your LinkedIn settings page.' };
         return done(null, false, req.flash('loginMessage', errorMessage));
@@ -34,7 +33,8 @@ module.exports = function(Account, passport) {
                 temporary: false,
                 linkedin_token: token,
                 linkedin_id: profile.id,
-                first_name: profile.displayName,
+                first_name: profile.name.givenName,
+                last_name: profile.name.familyName
               }
             );
 

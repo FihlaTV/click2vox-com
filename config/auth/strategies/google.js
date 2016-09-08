@@ -32,7 +32,8 @@ module.exports = function(Account, passport) {
                 temporary: false,
                 google_token: token,
                 google_id: profile.id,
-                first_name: profile.displayName,
+                first_name: profile.name.givenName,
+                last_name: profile.name.familyName
               }
             );
 

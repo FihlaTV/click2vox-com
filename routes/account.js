@@ -38,6 +38,7 @@ router.post('/edit', utils.isLoggedIn, function (req, res) {
     }
 
     theAccount.first_name = formData.first_name;
+    theAccount.last_name = formData.last_name;
     theAccount.company = formData.company;
     theAccount.save(function (err) {
       if (err) throw err;
@@ -155,7 +156,8 @@ router.post('/signup', recaptcha.middleware.verify, function (req, res, next) {
     result.errors = false;
 
     theAccount.password = theAccount.generateHash(formData.password);
-    theAccount.first_name = formData.name;
+    theAccount.first_name = formData.first_name;
+    theAccount.last_name = formData.last_name;
     theAccount.company = formData.company;
     theAccount.temporary = false;
     theAccount.reference = formData.reference;

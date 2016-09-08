@@ -20,6 +20,10 @@ var accountSchema = new Schema({
     type: String,
     required: true
   },
+  last_name: {
+    type: String,
+    required: true
+  },
   temporary: {
     type: Boolean,
     default: true
@@ -108,6 +112,10 @@ accountSchema.methods.validPassword = function (password) {
 accountSchema.methods.isAdmin = function () {
   var domain = this.email.replace(/.*@/, "");
   return ADMIN_DOMAINS.indexOf(domain) > -1;
+};
+
+accountSchema.methods.getFullName = function () {
+  return this.first_name + ' ' + this.last_name;
 };
 
 accountSchema.methods.getSipURIs = function () {

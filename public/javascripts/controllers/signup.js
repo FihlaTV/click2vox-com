@@ -27,7 +27,8 @@ define(['angular', 'jquery'], function (angular, $) {
         },
         data: {
           reference: $scope.account.ureference || "",
-          name: $scope.account.uname,
+          first_name: $scope.account.ufirstname,
+          last_name: $scope.account.ulastname,
           email: $scope.account.uemail,
           company: $scope.account.ucompany,
           temporary_password: $scope.account.temporary_password,

@@ -33,7 +33,8 @@ module.exports = function(Account, passport) {
                 temporary: false,
                 windowslive_token: token,
                 windowslive_id: profile.id,
-                first_name: profile.displayName,
+                first_name: profile.name.givenName,
+                last_name: profile.name.familyName
               }
             );
 

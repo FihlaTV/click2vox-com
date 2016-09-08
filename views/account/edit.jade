@@ -26,10 +26,15 @@ block content
               .formWrap
                 form#editProfile(name="editProfile" novalidate)
                   .form-group
-                    label.control-label Name
+                    label.control-label First Name
                     input.form-control(type="text" id="first_name" name="first_name" ng-model="account.first_name" required)
-                    .error-label(ng-show="editProfile.$submitted || editProfile.name.$touched")
-                      div.ng-hide(ng-show="editProfile.name.$error.required") Please enter your name
+                    .error-label(ng-show="editProfile.$submitted || editProfile.first_name.$touched")
+                      div.ng-hide(ng-show="editProfile.first_name.$error.required") Please enter your first name
+                  .form-group
+                    label.control-label Last Name
+                    input.form-control(type="text" id="last_name" name="last_name" ng-model="account.last_name" required)
+                    .error-label(ng-show="editProfile.$submitted || editProfile.last_name.$touched")
+                      div.ng-hide(ng-show="editProfile.last_name.$error.required") Please enter your last name
                   .form-group
                     label.control-label Company
                     input.form-control(type="text" id="company" name="company" ng-model="account.company")

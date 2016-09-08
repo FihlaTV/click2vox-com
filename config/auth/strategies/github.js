@@ -8,7 +8,6 @@ module.exports = function(Account, passport) {
       passReqToCallback: true
     },
     function(req, token, refreshToken, profile, done) {
-
       if(typeof(profile.emails) === 'undefined'){
         var errorMessage = { error: 'missing-email', type: 'danger', message: 'We cannot retrieve your email from Github. Please fix this in your Github settings page.' };
         return done(null, false, req.flash('loginMessage', errorMessage));
@@ -27,13 +26,15 @@ module.exports = function(Account, passport) {
               return done(null, account);
             });
           } else {
+            var names = profile.displayName.split(' ');
             var theAccount = new Account(
               {
                 email: profile.emails[0].value,
                 temporary: false,
                 github_token: token,
                 github_id: profile.id,
-                first_name: profile.displayName,
+                first_name: names[0],
+                last_name: names[names.length - 1]
               }
             );
 
