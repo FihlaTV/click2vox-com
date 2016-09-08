@@ -22,7 +22,7 @@ var accountSchema = new Schema({
   },
   last_name: {
     type: String,
-    required: true
+    required: false
   },
   temporary: {
     type: Boolean,
