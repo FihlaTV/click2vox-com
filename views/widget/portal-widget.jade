@@ -86,7 +86,8 @@ block content
                           label
                             input(type='checkbox' name='show_branding' ng-model='widget.show_branding')
                             span.radio-name Show branding
-                            span.badge(data-toggle='tooltip' data-placement="right" title="Toggles Voxbone branding from button and popup") ?
+                            a(href="mailto:workshop@voxbone.com?subject=%5BCLICK2VOX%5D%20About%20Removing%20Branding" target='_blank')
+                              span.badge(data-toggle='tooltip' data-placement="right" title="Toggles Voxbone branding from button and popup. Click to contact us to have this removed") ?
 
                 span.title Call Configuration
                 .boxPanel
@@ -115,7 +116,7 @@ block content
                           label(for="btn-context")
                             input(type="checkbox" name="rating" ng-model="widget.rating")
                             span &nbsp;Ask for rating after the call ends
-                            span.badge(data-toggle='tooltip' data-placement="right" title="Ask the user/caller to rate after the call ends") ?  
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Ask the user/caller to rate after the call ends") ?
                   .panel.panel-default
                     .panel-heading
                       a.collapsed.title-toggle(data-toggle="collapse" data-target="#collapseIncompatileBrowserConfiguration" href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
