@@ -165,24 +165,26 @@ var check1Ready = (function() {
   voxButtonElement.innerHTML += voxPopup;
 
   var links = '';
-  if (infoVoxbone.test_setup !== 'false')
-    links = '\
-      <div class="widget-footer-left">\
-        <a href="https://test.webrtc.org/" target="_blank">Test your setup</a>\
-      </div>\
-    ';
+  var show_frame = infoVoxbone.show_frame !== 'false';
 
-  if (infoVoxbone.show_branding !== 'false')
-    links += '\
-      <div class="widget-footer-right">\
-        <a href="https://voxbone.com" target="_blank">powered by:</a>\
-      </div> \
-    ';
+  if (show_frame) {
+    if (infoVoxbone.test_setup !== 'false') {
+      links = '\
+        <div class="widget-footer-left">\
+          <a href="https://test.webrtc.org/" target="_blank">Test your setup</a>\
+        </div>\
+      ';
+    }
 
-
-  if (infoVoxbone.show_frame === 'false') {
+    if (infoVoxbone.show_branding !== 'false') {
+      links += '\
+        <div class="widget-footer-right">\
+          <a href="https://voxbone.com" target="_blank">powered by:</a>\
+        </div> \
+      ';
+    }
+  } else {
     infoVoxbone.div_css_class_name += ' no-frame';
-
     if (infoVoxbone.show_branding === 'false')
       infoVoxbone.div_css_class_name += ' no-branding';
   }
