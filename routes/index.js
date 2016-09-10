@@ -143,12 +143,18 @@ module.exports = function (passport) {
       if (err) return console.log('Error:', err);
 
       if (account === false) {
-        result = { message: "Email or password incorrect", errors: err, email: formData.email };
+        result = {
+          message: "Email or password incorrect", errors: err,
+          email: formData.email, flash: req.flash('loginMessage')
+        };
         console.log("Entered incorrect authentication, response should be: 401");
-        console.log(result);
         return res.status(401).json(result);
       } else if (!account.verified) {
-        result = { message: "Unverified account:", email: formData.email };
+        result = {
+          message: "Unverified account:",
+          email: formData.email,
+          flash: req.flash('loginMessage')
+        };
         console.log(result);
         return res.status(403).json(result);
       } else {
