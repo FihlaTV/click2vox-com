@@ -35,8 +35,10 @@ block content
                 #[b Note for current Voxbone customers:] your Click2Vox login will not be linked to your existing Voxbone account. We encourage you to create a separate account here for testing purposes. To use your Voxbone account and an existing DID, please visit #[a(href="https://developers.voxbone.com/how-to/setup-webrtc/") view instructions]
 
               .formWrap
+                h4.text-center Login with Google, Github, Windows Live or LinkedIn
                 include social-buttons
 
+                h4.text-center or enter your details below
                 form#login_form(ng-controller="LoginController" ng-init="login.uemail='#{email || ''}'" name="login_form" novalidate)
                   .form-group
                     label.control-label Email

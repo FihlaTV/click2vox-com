@@ -43,8 +43,10 @@ block content
                 #[b Note for current Voxbone customers:] your Click2Vox login will not be linked to your existing Voxbone account. To use your Voxbone account and an existing DID, please visit #[a(href="https://developers.voxbone.com/how-to/setup-webrtc/") view instructions]
 
               .formWrap
+                h4.text-center Login with Google, Github, Windows Live or LinkedIn
                 include social-buttons
 
+                h4.text-center or enter your details below to create a new account
                 form#create_account(ng-controller="SignUpController" name="create_account" ng-init="account.uemail='#{email || ''}'" novalidate)
                   input.form-control(type="hidden" id="ureference" name="ureference" ng-model="account.ureference" ng-init="account.ureference='#{reference || ''}'")
                   input.form-control(type="hidden" id="ureferrer" name="ureferrer" ng-model="account.ureferrer" ng-init="account.ureferrer='#{referrer || ''}'")
