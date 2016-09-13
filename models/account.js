@@ -75,7 +75,7 @@ accountSchema.pre('save', function (next) {
 
   if (!self.created_at) {
     self.created_at = now;
-    self.create_date = moment().format("MM/DD/YY");
+    self.create_date = moment().format("DD/MM/YYYY");
     self.uri_type = 'none';
   }
 
