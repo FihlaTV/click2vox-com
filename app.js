@@ -93,6 +93,13 @@ app.use(flash());
 
 // set some default variables to be accessed in views
 app.use(function (req, res, next) {
+  if (!req.cookies.referrer_url) {
+    var referrer_url = req.headers.referer || req.headers.referrer;
+    if (referrer_url)
+      res.cookie('referrer_url', referrer_url, { maxAge: 900000 });
+    console.log('Cookie referrer_url: ', req.cookies.referrer_url);
+  }
+
   res.locals.currentUser = req.user || {};
   res.locals.authenticated = !!req.user;
 
