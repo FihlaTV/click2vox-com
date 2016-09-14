@@ -2,7 +2,7 @@ extends ../layout
 
 block extra_head
   link(href="/stylesheets/vxb-widget.css", rel="stylesheet")
-
+  link(href="/lib/angular-bootstrap-colorpicker/css/colorpicker.min.css" rel="stylesheet")
 prepend default_nav
   a.login.user-pill.pull-left(href="/") Home
 
@@ -11,17 +11,18 @@ block content
     require([
       'angular',
       'angular-sanitize',
+      'angular-bootstrap-colorpicker',
       'jquery',
       'controllers/widget.demo',
       'directives/qtip',
       'directives/http.prefix'
     ],
     function(
-      angular, ngSanitize, $,
+      angular, ngSanitize, colorPicker, $,
       WidgetDemoController, qtipDirective,
       httpPrefixDirective) {
 
-        angular.module('voxboneApp', ['ngSanitize'])
+        angular.module('voxboneApp', ['ngSanitize','colorpicker.module'])
           .directive('qtip', qtipDirective)
           .directive('httpPrefix', httpPrefixDirective)
           .controller('WidgetDemoController', WidgetDemoController);
@@ -62,8 +63,34 @@ block content
                     input.form-control(type="text", name="button_label", ng-model="widget.button_label" value="#{defaultBtnLabel}" placeholder="i.e. #{defaultBtnLabel}")
                   .form-group
                     label Button Style:
+                      a(colorpicker colorpicker-position="right" colorpicker-close-on-select ng-model="widget.button_color" ng-cloak) #[span  (or select a Custom Color)]
                     button.btn-style-a(ng-cloak ng-click="setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
                     button.btn-style-b(ng-cloak ng-click="setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+
+                  .panel.panel-default
+                    .panel-heading
+                      a.collapsed.title-toggle(data-toggle="collapse", data-target="#extraConfiguration", href="#extraConfiguration") Extra Configuration
+                    .panel-collapse.collapse#extraConfiguration
+                      .options-wrap.active
+                        .form-group
+                          label
+                            input(type='checkbox' name='show_frame' ng-model='widget.show_frame')
+                            span.radio-name Show frame
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Shows/Hides the background and border of the button") ?
+
+                        .form-group
+                          label
+                            input(type='checkbox' name='test_setup' ng-model='widget.test_setup')
+                            span.radio-name Test user setup
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Place a link to test the users's WebRTC setup") ?
+
+                        .form-group
+                          label
+                            input(type='checkbox' name='show_branding' ng-model='widget.show_branding')
+                            span.radio-name Show branding
+                            a(href="mailto:workshop@voxbone.com?subject=%5BCLICK2VOX%5D%20About%20Removing%20Branding" target='_blank')
+                              span.badge(data-toggle='tooltip' data-placement="right" title="Toggles Voxbone branding from button and popup. Click to contact us to have this removed") ?
+
               span.title Call Configuration
               form#widget_form(name="widget_form", novalidate)
                 .boxPanel
