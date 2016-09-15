@@ -97,7 +97,7 @@ app.use(function (req, res, next) {
     var referrer_url = req.headers.referer || req.headers.referrer;
     if (referrer_url)
       res.cookie('referrer_url', referrer_url, { maxAge: 900000 });
-    console.log('Cookie referrer_url: ', req.cookies.referrer_url);
+    console.log('Cookie referrer_url: ', referrer_url);
   }
 
   res.locals.currentUser = req.user || {};
