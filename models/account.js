@@ -65,7 +65,8 @@ var accountSchema = new Schema({
   linkedin_token: String,
   linkedin_id: String,
   sip_uris: [String],
-  referrer: String
+  referrer: String,
+  upgrade_request: Boolean
 });
 
 accountSchema.pre('save', function (next) {

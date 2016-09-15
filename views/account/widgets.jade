@@ -33,22 +33,22 @@ block extra_head
     });
 
 block content
-  .main.buttonList
+  .main.buttonList(ng-controller="WidgetListController")
     .header
       .container
         h1 Click2Vox Buttons
-        p You will only be able to create buttons with a single user-defined SIP URI on a free account. #[a(href="#" data-toggle="modal" data-target="#myModal") Upgrade Now]
-
+        if !currentUser.paid && !currentUser.upgrade_request
+          p#upgrade_request Your trial account is authorized to create a single user-defined SIP URI and 5 simultaneous calls. #[a(href="#" ng-click='openRequestUpgradeModal(false)') Request a free upgrade]
         .actions-wrap
           if process.env.BYPASS_ADDING_SIP_URI === 'false'
             if currentUser.sip_uris.length > 0 && !currentUser.paid
-              #[a.btn.btn-purple(data-toggle="modal" data-target="#myModal") Add SIP URI]
+              #[a.btn.btn-purple(ng-click='openRequestUpgradeModal(#{!!currentUser.upgrade_request})') Add SIP URI]
             else
               #[a.btn.btn-purple(href="/sip/new") Add SIP URI]
 
           #[=" "] #[a.btn.btn-success(href="/widget/new") Add New Button]
 
-    .body(ng-controller="WidgetListController")
+    .body
       .container
         .row
           - each group in widgetsData

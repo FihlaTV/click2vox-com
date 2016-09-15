@@ -19,6 +19,25 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
       $rootScope.$broadcast('openDeleteModal', widgetID);
     };
 
+    $scope.openRequestUpgradeModal = function (isUpgradeAlreadyRequested) {
+      $scope.dialog = $('#myModal');
+      $scope.dialog.modal('show');
+
+      if (!isUpgradeAlreadyRequested) {
+        var req = {
+          method: 'POST',
+          url: '/account/upgrade_request'
+        };
+
+        $http(req)
+          .then(function successCallback(response) {
+            $("#upgrade_request").hide();
+          }, function errorCallback(response) {
+            console.log('Error: ', response.data);
+          });
+      }
+    };
+
     $scope.init = function () {
       this.modalEdit = $('#editSIPModal');
 

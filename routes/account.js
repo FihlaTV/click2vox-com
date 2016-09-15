@@ -52,6 +52,20 @@ router.post('/edit', utils.isLoggedIn, function (req, res) {
 });
 // ---- edit profile ----
 
+router.post('/upgrade_request', utils.isLoggedIn, function (req, res) {
+  var result = { errors: true };
+
+  var conditions = {_id: req.user._id};
+  var update = { upgrade_request: true };
+  var cb = function (err) {
+    if (err) throw err;
+    result.errors = false;
+    res.status(200).json(result);
+  };
+
+  Account.findOneAndUpdate(conditions, update, cb);
+});
+
 router.get('/widgets', utils.isLoggedIn, function (req, res) {
   Widget
     .aggregate([
