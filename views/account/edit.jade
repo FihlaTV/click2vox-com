@@ -41,4 +41,7 @@ block content
                   .form-group
                     label.control-label Email address
                     input.form-control(type="text" ng-model="account.email" disabled)
+                  .form-group.hidden
+                    label.control-label Amount of SIP URIs allowed
+                    input.form-control(type="text" ng-model="account.sip_uris_limit" disabled)
                   button.btn.btn-default#save(ng-disabled="editProfile.$invalid" ng-click="saveProfile(account)") Save Profile

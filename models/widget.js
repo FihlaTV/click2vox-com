@@ -45,7 +45,9 @@ var widgetSchema = new Schema({
   link_button_to_a_page: String,
   incompatible_browser_configuration: String,
   created_at: Date,
-  updated_at: Date
+  updated_at: Date,
+  did: Number,
+  didId: Number
 });
 
 widgetSchema.pre('save', function(next) {
@@ -83,9 +85,10 @@ widgetSchema.methods.generateHtmlCode = function() {
 widgetSchema.methods.didToCall = function () {
   var utils = require("../routes/utils.js");
   var defaultSipUris = utils.defaultSipUris();
+  var self = this;
 
   if (defaultSipUris.indexOf(this.sip_uri) === -1) {
-    return this._account.did;
+    return (this.did) ? this.did : this._account.did;
   } else {
     var demoSips = require('../config/demo-sips.json');
     return demoSips[this.sip_uri][0];

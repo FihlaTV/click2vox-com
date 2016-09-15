@@ -41,15 +41,19 @@ block content
           p#upgrade_request Your trial account is authorized to create a single user-defined SIP URI and 5 simultaneous calls. #[a(href="#" ng-click='openRequestUpgradeModal(false)') Request a free upgrade]
         .actions-wrap
           if process.env.BYPASS_ADDING_SIP_URI === 'false'
-            if currentUser.sip_uris.length > 0 && !currentUser.paid
+            if currentUser.sipsLimitReached()
               #[a.btn.btn-purple(ng-click='openRequestUpgradeModal(#{!!currentUser.upgrade_request})') Add SIP URI]
             else
               #[a.btn.btn-purple(href="/sip/new") Add SIP URI]
-
           #[=" "] #[a.btn.btn-success(href="/widget/new") Add New Button]
 
     .body
       .container
+
+        while m = messages.shift()
+          .alert(class='alert-' + m.type)
+            div= m.message
+
         .row
           - each group in widgetsData
             .col-xs-12

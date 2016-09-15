@@ -105,7 +105,7 @@ block content
                       div(ng-show="widget_form.sip_uri.$error.required") SIP URI required
 
                   .form-group(ng-cloak ng-show="widget.sip_uri == 'Add a new SIP URI'")
-                    if currentUser.sip_uris.length == 0 || currentUser.paid && false
+                    if !currentUser.sipsLimitReached()
                       label.control-label Enter a new SIP URI
                       input.form-control(type="text" name="new_sip_uri" ng-model="widget.new_sip_uri" ng-pattern="/^[^@]+@[^@]+$/" placeholder="i.e. echo@ivrs" check-allowed-sip)
 

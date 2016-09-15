@@ -13,14 +13,23 @@ var utils = require('./utils');
 
 // GET to add a new SIP URI
 router.get('/new', utils.isLoggedIn, function (req, res) {
-  if (process.env.BYPASS_ADDING_SIP_URI === 'true' || req.user.sip_uris.length > 0)
+  if (req.user.sipsLimitReached()) {
+    req.flash(
+      'messages', {
+        type: 'danger',
+        message: 'You have reached the limit of allowed sip uris per user'
+      });
     return res.redirect('/account/widgets');
+  }
 
   res.render('sip/new', { title: title });
 });
 
 // POST to add a new SIP URI
 router.post('/new', utils.isLoggedIn, function (req, res) {
+  if (req.user.sipsLimitReached())
+    return res.send('Limit reached');
+
   var sipUri = req.body.sip_uri;
   var result = {};
 

@@ -66,6 +66,10 @@ var accountSchema = new Schema({
   linkedin_id: String,
   sip_uris: [String],
   referrer: String,
+  sip_uris_limit: {
+    type: Number,
+    default: 1
+  },
   upgrade_request: Boolean
 });
 
@@ -143,7 +147,7 @@ accountSchema.methods.getSipURIs = function () {
 accountSchema.methods.getSipURIsWithNewSipUri = function () {
   var sip_uris = this.getSipURIs();
 
-  if (process.env.BYPASS_ADDING_SIP_URI === 'false')
+  if (process.env.BYPASS_ADDING_SIP_URI === 'false' && !this.sipsLimitReached())
     sip_uris = sip_uris.concat('Add a new SIP URI');
 
   return sip_uris;
@@ -179,6 +183,51 @@ accountSchema.methods.showWizard = function () {
   return utils.defaultSipUris().length === this.getSipURIs().length;
 };
 
+accountSchema.methods.sipsLimitReached = function () {
+  return (this.sip_uris.length >= this.sip_uris_limit);
+};
+
+accountSchema.methods.getDidFor = function (sipUri, callback) {
+  var self = this;
+
+  if (utils.defaultSipUris().indexOf(sipUri) > -1) {
+    var demoSips = require('../config/demo-sips.json');
+    var data = demoSips[sipUri];
+    return callback({
+      did: data[0], didId: data[1] });
+  }
+
+  Did
+    .findOne({sip_uri: sipUri, assigned: true})
+    .exec(function (err, foundDid) {
+      if (foundDid) {
+        return callback(foundDid);
+      }
+      else {
+        // if limit has been reached and this was not found return
+        // the registered when the account was created
+        if (self.sipsLimitReached())
+          return callback({ did: self.did, didId: self.didId });
+        else {
+          Did.findOne({
+            assigned: { $ne: true }
+          }, function (err, foundDid) {
+            if (foundDid) {
+              foundDid.assigned = true;
+              foundDid.sip_uri = sipUri;
+              foundDid.save(function (err, doc, numAffected) {
+                return callback(doc);
+              });
+            } else {
+              // maybe we should throw this error below when no DIDs available
+              // throw new Error('NoDIDsAvailable');
+              return callback({ did: self.did, didId: self.didId });
+            }
+          })
+        }
+      }
+    });
+}
 
 var Account = mongoose.model('Account', accountSchema);
 

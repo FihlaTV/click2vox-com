@@ -87,7 +87,14 @@ router.get('/widgets', utils.isLoggedIn, function (req, res) {
       if (result.length > 0) {
         result.forEach(function(entry) {
           entry.widgets.forEach(function (widget) {
-            widget.divCode = utils.widgetDivHtmlCode(widget, req.user.did);
+            if (!widget.did) {
+              req.user.getDidFor(widget.sip_uri, function (foundDid) {
+                widget.divCode = utils.widgetDivHtmlCode(widget, foundDid.did);
+              });
+            } else {
+              widget.divCode = utils.widgetDivHtmlCode(widget, widget.did);
+            }
+
           });
           entry.uuid = utils.uuid4();
         });
@@ -109,7 +116,8 @@ router.get('/widgets', utils.isLoggedIn, function (req, res) {
       res.render('account/widgets', {
         title: title,
         widgetsData: result,
-        defaultBtnLabel: utils.defaultBtnLabel
+        defaultBtnLabel: utils.defaultBtnLabel,
+        messages: req.flash('messages') || []
       });
     });
 });

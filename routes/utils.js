@@ -66,6 +66,11 @@ module.exports = {
     var request = require('request');
     var async = require('async');
     var utils = this;
+    var myDid;
+
+    account.getDidFor(sipUri, function (foundDid) {
+      myDid = foundDid;
+    });
 
     // do not provision if is a demo sip uri
     if (utils.defaultSipUris().indexOf(sipUri) !== -1) {
@@ -105,7 +110,7 @@ module.exports = {
     var createVoiceURI = function (account, voiceUriId, done) {
       // Step 2: create voiceUri for the given sip uri
       var postData = {
-        "didIds": [account.didId],
+        "didIds": [myDid.didId],
         "voiceUriId": voiceUriId
       };
 

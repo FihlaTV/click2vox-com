@@ -50,7 +50,7 @@ router.post('/new', utils.isLoggedIn, function (req, res, next) {
 
   // allow new sips if paid user or not sip_uris registered
   if (widgetData.new_sip_uri) {
-    if (currentUser.sip_uris.length === 0 || currentUser.paid) {
+    if (!currentUser.sipsLimitReached()) {
       widgetData.sip_uri = widgetData.new_sip_uri;
     } else {
       result.errors = 'To add a new SIP URI you will need to upgrade to a paid account';
@@ -65,11 +65,16 @@ router.post('/new', utils.isLoggedIn, function (req, res, next) {
       result.errors = 'An error occurred while saving your SIP URI. Please try again';
       return res.status(err.httpStatusCode || 500).json(result);
     } else {
-      Widget.create(widgetData, function (err, widget) {
-        if (err) throw err;
-        currentUser.saveSipURI(widgetData.sip_uri);
-        result.redirect = '/widget/' + widget._id + '/edit';
-        return res.status(200).json(result);
+      req.user.getDidFor(widgetData.sip_uri, function (foundDid) {
+        widgetData.did = foundDid.did;
+        widgetData.didId = foundDid.didId;
+
+        Widget.create(widgetData, function (err, widget) {
+          if (err) throw err;
+          currentUser.saveSipURI(widgetData.sip_uri);
+          result.redirect = '/widget/' + widget._id + '/edit';
+          return res.status(200).json(result);
+        });
       });
     }
   });
@@ -133,7 +138,7 @@ router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
 
   // allow new sips if paid user or not sip_uris registered
   if (updateData.new_sip_uri) {
-    if (currentUser.sip_uris.length === 0 || currentUser.paid) {
+    if (currentUser.sipsLimitReached()) {
       currentUser.saveSipURI(updateData.new_sip_uri);
       updateData.sip_uri = updateData.new_sip_uri;
     } else {
@@ -149,23 +154,29 @@ router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
       return errorResponse(
         'An error occurred while provisioning your SIP URI. Please try again', err.httpStatusCode);
     } else {
-      Widget
-        .findOneAndUpdate({
-          _account: currentUser._id,
-          _id: req.params.id
-        }, updateData, {new: true})
-        .populate('_account')
-        .exec(
-          function (err, widget) {
-            if (err) {
-              return errorResponse(
-                'An error occurred while saving your button. Please try again', err.httpStatusCode);
-            } else {
-              result.message = 'Success';
-              return successResponse(widget);
+      currentUser.getDidFor(updateData.sip_uri, function (foundDid) {
+        updateData.did = foundDid.did;
+        updateData.didId = foundDid.didId;
+
+        Widget
+          .findOneAndUpdate({
+            _account: currentUser._id,
+            _id: req.params.id
+          }, updateData, {new: true})
+          .populate('_account')
+          .exec(
+            function (err, widget) {
+              if (err) {
+                console.log('Error saving widget', err);
+                return errorResponse(
+                  'An error occurred while saving your button. Please try again', err.httpStatusCode);
+              } else {
+                result.message = 'Success';
+                return successResponse(widget);
+              }
             }
-          }
-        );
+          );
+      });
     }
   });
 });
