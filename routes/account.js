@@ -55,8 +55,11 @@ router.post('/edit', utils.isLoggedIn, function (req, res) {
 router.post('/upgrade_request', utils.isLoggedIn, function (req, res) {
   var result = { errors: true };
 
+  var upgrade_request_timestamp = new Date();
+  upgrade_request_timestamp.setHours(upgrade_request_timestamp.getHours() + 12);
+
   var conditions = {_id: req.user._id};
-  var update = { upgrade_request: true };
+  var update = { upgrade_request: true, upgrade_request_timestamp: upgrade_request_timestamp };
   var cb = function (err) {
     if (err) throw err;
     result.errors = false;

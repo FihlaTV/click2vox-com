@@ -31,7 +31,7 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
 
         $http(req)
           .then(function successCallback(response) {
-            $("#upgrade_request").hide();
+            // $("#upgrade_request").hide();
           }, function errorCallback(response) {
             console.log('Error: ', response.data);
           });

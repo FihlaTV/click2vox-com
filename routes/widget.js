@@ -20,7 +20,7 @@ var PERMITTED_FIELDS = [
   'dial_pad', 'send_digits', 'hide_widget', 'updated_at',
   'link_button_to_a_page', 'show_text_html',
   'incompatible_browser_configuration', 'new_sip_uri',
-  'show_frame', 'test_setup', 'rating'
+  'show_frame', 'test_setup', 'rating', 'show_branding'
 ];
 
 router.get('/new', utils.isLoggedIn, function (req, res, next) {
@@ -39,9 +39,6 @@ router.get('/new', utils.isLoggedIn, function (req, res, next) {
 router.post('/new', utils.isLoggedIn, function (req, res, next) {
   var currentUser = req.user;
   var params = req.parameters;
-
-  if (currentUser.paid)
-    PERMITTED_FIELDS.push('show_branding');
 
   var widgetData = params.permit(PERMITTED_FIELDS);
 
@@ -109,9 +106,6 @@ router.get('/:id/edit', utils.isLoggedIn, function (req, res, next) {
 router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
   var currentUser = req.user;
   var params = req.parameters;
-
-  if (currentUser.paid)
-    PERMITTED_FIELDS.push('show_branding');
 
   var updateData = params
     .merge({updated_at: new Date()})

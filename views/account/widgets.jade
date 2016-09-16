@@ -37,8 +37,11 @@ block content
     .header
       .container
         h1 Click2Vox Buttons
-        if !currentUser.paid && !currentUser.upgrade_request
+        if !currentUser.upgrade_request && currentUser.sip_uris.length == 0
           p#upgrade_request Your trial account is authorized to create a single user-defined SIP URI and 5 simultaneous calls. #[a(href="#" ng-click='openRequestUpgradeModal(false)') Request a free upgrade]
+        else
+          p#upgrade_request You currently have #{currentUser.sip_uris.length} SIP URI’s for up to 5 simultaneous calls per account. #[a(href="#" ng-click='openRequestUpgradeModal(false)') Request an upgrade] if you need more
+
         .actions-wrap
           if process.env.BYPASS_ADDING_SIP_URI === 'false'
             if currentUser.sipsLimitReached()

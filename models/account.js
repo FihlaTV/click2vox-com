@@ -36,10 +36,6 @@ var accountSchema = new Schema({
     type: Boolean,
     default: false
   },
-  paid: {
-    type: Boolean,
-    default: false
-  },
   did: Number,
   didId: Number,
   forgotten_pasword: String,
@@ -70,7 +66,8 @@ var accountSchema = new Schema({
     type: Number,
     default: 1
   },
-  upgrade_request: Boolean
+  upgrade_request: Boolean,
+  upgrade_request_timestamp: Date
 });
 
 accountSchema.pre('save', function (next) {
@@ -184,7 +181,12 @@ accountSchema.methods.showWizard = function () {
 };
 
 accountSchema.methods.sipsLimitReached = function () {
-  return (this.sip_uris.length >= this.sip_uris_limit);
+  var current_limit = this.sip_uris_limit;
+
+  if (current_limit === 1 && this.upgrade_request_timestamp && this.upgrade_request_timestamp <= new Date())
+    current_limit = 5;
+
+  return (this.sip_uris.length >= current_limit);
 };
 
 accountSchema.methods.getDidFor = function (sipUri, callback) {
