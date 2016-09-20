@@ -69,9 +69,15 @@ block content
                     input.form-control(type="text", name="button_label", ng-model="widget.button_label" value="#{defaultBtnLabel}" placeholder="i.e. #{defaultBtnLabel}")
                   .form-group
                     label Button Style:
-                      a(colorpicker colorpicker-position="right" colorpicker-close-on-select ng-model="widget.button_color" ng-cloak) #[span  (or select a Custom Color)]
-                    button.btn-style-a(ng-cloak ng-click="setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
-                    button.btn-style-b(ng-cloak ng-click="setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                    .button-text
+                      button.btn-style-a(ng-cloak ng-click="setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                      div(ng-cloak) Blue Theme
+                    .button-text
+                      button.btn-style-b(ng-cloak ng-click="setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                      div(ng-cloak) Purple Theme
+                    .button-text
+                      button.btn-style-c(ng-cloak ng-click="setCustomTheme()" colorpicker colorpicker-position="right" ng-model="widget.button_color" ng-style="{'background': widget.button_color ? widget.button_color : tempButtonColor }") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                      div(ng-cloak) Custom Theme
 
                   .panel.panel-default
                     .panel-heading
@@ -79,10 +85,13 @@ block content
                     .panel-collapse.collapse#extraConfiguration
                       .options-wrap.active
                         .form-group
-                          label
-                            input(type='checkbox' name='show_frame' ng-model='widget.show_frame')
-                            span.radio-name Show frame
-                            span.badge(data-toggle='tooltip' data-placement="right" title="Shows/Hides the background and border of the button") ?
+                          div(style="display:inline-block;")
+                            label
+                              input(type='checkbox' name='show_frame' ng-model='widget.show_frame')
+                              span.radio-name Show frame
+                              span.badge(data-toggle='tooltip' data-placement="right" title="Shows/Hides the background and border of the button") ?                            
+                          div(style="display:inline-block;")
+                            span(style="margin-left:20px" ng-show='widget.show_frame') Pick frame color #[i.glyphicon.glyphicon-tint(aria-hidden='true' colorpicker colorpicker-position="right" ng-model="widget.frame_color" style="cursor: pointer" ng-style="{'color': widget.frame_color || 'black'}")]                 
 
                         .form-group
                           label

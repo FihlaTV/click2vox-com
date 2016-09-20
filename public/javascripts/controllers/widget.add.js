@@ -15,11 +15,15 @@ define([
     $scope.previewMute = false;
     $scope.submitText = 'Save Configuration';
     $scope.widgetCode = 'You must setup you widget and save your configuration to get the button embed code. Select from the SIP URI field the Echo Service (echo@ivrs), Digits Service (digits@ivrs) or one of your SIP URIs to create the button';
+    $scope.tempButtonColor = "";
+    $scope.tempFrameColor = "";
 
     $scope.master = {
       showWidgetCode: false,
       dial_pad: true,
       button_style: 'style-a',
+      frame_color: '',
+      button_color: '',
       background_style: 'dark',
       show_text_html_value: '<h3>This is a placeholder for your message</h3>',
       incompatible_browser_configuration: 'hide_widget',
@@ -109,10 +113,22 @@ define([
     $scope.reset();
     $scope.init();
 
+    
     $scope.setTheme = function (theme) {
+      if($scope.widget.frame_color)
+        $scope.tempFrameColor = $scope.widget.frame_color;
+      if($scope.widget.button_color)
+        $scope.tempButtonColor = $scope.widget.button_color; 
+
+      $scope.widget.frame_color = "";
       $scope.widget.button_color = "";
       if ($scope.widget.button_style != theme)
         $scope.widget.button_style = theme;
+    };
+
+    $scope.setCustomTheme = function() {
+      $scope.tempFrameColor ? $scope.widget.frame_color = $scope.tempFrameColor : $scope.widget.frame_color = "black";
+      $scope.widget.button_color = $scope.tempButtonColor;
     };
 
     $scope.discardConfiguration = function (form) {

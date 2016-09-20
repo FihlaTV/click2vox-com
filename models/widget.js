@@ -10,6 +10,7 @@ var widgetSchema = new Schema({
   },
   configuration_name: String,
   button_color: String,
+  frame_color: String,
   button_label: String,
   button_style: String,
   background_style: String,

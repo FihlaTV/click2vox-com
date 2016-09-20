@@ -15,6 +15,8 @@ define([
     $scope.previewFullScreen = true;
     $scope.previewMute = false;
     $scope.submitText = 'Save Configuration';
+    $scope.tempButtonColor = "";
+    $scope.tempFrameColor = "";
 
     $scope.master = {
       showWidgetCode: true,
@@ -83,15 +85,27 @@ define([
     $scope.init();
 
     $scope.setTheme = function (theme) {
+      if($scope.widget.frame_color)
+        $scope.tempFrameColor = $scope.widget.frame_color;
+      if($scope.widget.button_color)
+        $scope.tempButtonColor = $scope.widget.button_color; 
+
+      $scope.widget.frame_color = "";
       $scope.widget.button_color = "";
       if ($scope.widget.button_style !== theme) {
         $scope.widget.button_style = theme;
-
         $scope.sipDirty = false;
         $scope.widget_form.$setDirty();
       }
     };
 
+    $scope.setCustomTheme = function() {
+      if($scope.tempFrameColor)
+        $scope.widget.frame_color = $scope.tempFrameColor;
+      if($scope.tempButtonColor)
+        $scope.widget.button_color = $scope.tempButtonColor;
+    };
+ 
     $scope.discardConfiguration = function (form) {
       form.$setPristine();
       $scope.loadWidgetData();

@@ -194,8 +194,13 @@ var check1Ready = (function() {
     custom_button_color = 'style="border: ' + infoVoxbone.custom_button_color + '; background: ' + infoVoxbone.custom_button_color + '"';
   }
 
+  var custom_frame_color = '';
+  if (infoVoxbone.custom_frame_color) {
+    custom_frame_color = "background:"+ infoVoxbone.custom_frame_color;
+  }
+
   voxButtonElement.innerHTML += ' \
-    <div style="display: none;" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
+    <div style="display: none;'+custom_frame_color+'" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
       <button id="launch_call" ' + custom_button_color + ' class="vxb-btn-style ' + (infoVoxbone.button_css_class_name) + '"><span>' +  unescape(infoVoxbone.text) + '</span></button>\
       ' + links + '\
     </div>\
