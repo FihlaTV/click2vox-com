@@ -44,10 +44,7 @@ block content
 
         .actions-wrap
           if process.env.BYPASS_ADDING_SIP_URI === 'false'
-            if currentUser.sipsLimitReached()
-              #[a.btn.btn-purple(ng-click='openRequestUpgradeModal(#{!!currentUser.upgrade_request})') Add SIP URI]
-            else
-              #[a.btn.btn-purple(href="/sip/new") Add SIP URI]
+            #[a.btn.btn-purple(href="/sip/new") Add SIP URI]
           #[=" "] #[a.btn.btn-success(href="/widget/new") Add New Button]
 
     .body
@@ -55,7 +52,8 @@ block content
 
         while m = messages.shift()
           .alert(class='alert-' + m.type)
-            div= m.message
+            div= m.message 
+              #[a(href="#" ng-click='openRequestUpgradeModal(false)')  Request More]
 
         .row
           - each group in widgetsData

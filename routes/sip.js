@@ -17,7 +17,7 @@ router.get('/new', utils.isLoggedIn, function (req, res) {
     req.flash(
       'messages', {
         type: 'danger',
-        message: 'You have reached the limit of allowed sip uris per user'
+        message: 'You have reached the limit of allowed SIP URIs per user.'
       });
     return res.redirect('/account/widgets');
   }
