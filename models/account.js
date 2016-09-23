@@ -47,6 +47,7 @@ var accountSchema = new Schema({
   created_at: Date,
   updated_at: Date,
   company: String,
+  phone: String,
   customer_type: String,
   create_date: String,
   uri_type: String,

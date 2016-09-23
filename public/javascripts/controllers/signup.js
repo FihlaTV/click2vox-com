@@ -31,6 +31,7 @@ define(['angular', 'jquery'], function (angular, $) {
           last_name: $scope.account.ulastname,
           email: $scope.account.uemail,
           company: $scope.account.ucompany,
+          phone: $scope.account.uphone,
           temporary_password: $scope.account.temporary_password,
           password: $scope.account.upassword,
           confirmation: $scope.account.confirmation,

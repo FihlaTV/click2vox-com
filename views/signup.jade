@@ -63,6 +63,9 @@ block content
                     label.control-label Company
                     input.form-control(type="text" id="ucompany" name="ucompany" ng-model="account.ucompany")
                   .form-group
+                    label.control-label Phone Number (optional)
+                    input.form-control(type="text" id="uphone" name="uphone" ng-model="account.uphone")
+                  .form-group
                     label.control-label Email address
                     input.form-control(type="text" id="uemail" name="uemail" ng-model="account.uemail" required)
                     .error-label(ng-show="create_account.$submitted || create_account.uemail.$touched")

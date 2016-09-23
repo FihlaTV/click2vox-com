@@ -40,6 +40,7 @@ router.post('/edit', utils.isLoggedIn, function (req, res) {
     theAccount.first_name = formData.first_name;
     theAccount.last_name = formData.last_name;
     theAccount.company = formData.company;
+    theAccount.phone = formData.phone;
     theAccount.save(function (err) {
       if (err) throw err;
 
@@ -184,6 +185,7 @@ router.post('/signup', recaptcha.middleware.verify, function (req, res, next) {
     theAccount.first_name = formData.first_name;
     theAccount.last_name = formData.last_name;
     theAccount.company = formData.company;
+    theAccount.phone = formData.phone;
     theAccount.temporary = false;
     theAccount.reference = formData.reference;
     theAccount.referrer = req.cookies.referrer_url || 'no-referer';
