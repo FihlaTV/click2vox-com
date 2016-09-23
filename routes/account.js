@@ -18,6 +18,11 @@ var Widget = require('../models/widget');
 var utils = require('./utils');
 var emails = require('./emails');
 
+var PERMITTED_FIELDS = [
+  'first_name', 'last_name','company', 'phone', 'password',
+  'confirmation', 'email', 'reference'
+];
+
 // GET edit user profile
 router.get('/edit', utils.isLoggedIn, function (req, res) {
   Account
@@ -28,7 +33,8 @@ router.get('/edit', utils.isLoggedIn, function (req, res) {
 });
 
 router.post('/edit', utils.isLoggedIn, function (req, res) {
-  var formData = req.body;
+  var req_parameters = req.parameters;
+  var formData = req_parameters.permit(PERMITTED_FIELDS);
   var result = { message: "Succesfully saved", errors: true };
 
   Account.findOne({_id: req.user._id}, function (err, theAccount) {
@@ -142,7 +148,8 @@ router.get('/signup', recaptcha.middleware.render, function (req, res, next) {
 
 // POST /signup fetch the account with that email, set the new password and temporary to false.
 router.post('/signup', recaptcha.middleware.verify, function (req, res, next) {
-  var formData = req.body;
+  var req_parameters = req.parameters;
+  var formData = req_parameters.permit(PERMITTED_FIELDS);
   var result = { message: "", errors: true, redirect: "", email: formData.email };
 
   // making some validations no matter if account exists or not
