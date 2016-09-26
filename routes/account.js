@@ -212,7 +212,7 @@ router.post('/signup', recaptcha.middleware.verify, function (req, res, next) {
 
       if (result.verified) {
         req.logIn(theAccount, function (err) {
-          result.redirect = "/sip/new";
+          result.redirect = theAccount.sip_uris.length === 0 ? "/sip/new/" : "/account/widgets/";
           res.status(200).json(result);
         });
       } else {
