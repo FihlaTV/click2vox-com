@@ -10,14 +10,18 @@
   margin: 5px 0;
   background: #f2dede;
   color: #a94442;
-  font-size: 85%;
   line-height: 20px;
   .rounded(3px);
 }
 
 .success-label {
+  display: block;
+  padding: 0 4px;
+  margin: 5px 0;
+  background: lighten(#5cb85c, 30%);
   color: green;
-  padding: 10px;
+  line-height: 20px;
+  .rounded(3px);
 }
 
 /*Checkbox*/
@@ -26,12 +30,12 @@
   label {
     padding-left: 2px;
   }
-  
+
   label::before {
     background: #dbe1e5;
     border-color: #8a9399;
   }
-  
+
   input[type="checkbox"]:checked + label::after {
     color: @vx-purple;
   }

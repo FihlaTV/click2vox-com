@@ -45,12 +45,11 @@ router.post('/new', utils.isLoggedIn, function (req, res, next) {
   var result = { message: "", errors: null };
   widgetData._account = currentUser._id;
 
-  // allow new sips if paid user or not sip_uris registered
   if (widgetData.new_sip_uri) {
     if (!currentUser.sipsLimitReached()) {
       widgetData.sip_uri = widgetData.new_sip_uri;
     } else {
-      result.errors = 'To add a new SIP URI you will need to upgrade to a paid account';
+      result.errors = 'To add a new SIP URI you will need to upgrade your account';
       return res.status(401).json(result);
     }
   }
@@ -130,14 +129,13 @@ router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
     return res.status(status || 500).json(result);
   };
 
-  // allow new sips if paid user or not sip_uris registered
   if (updateData.new_sip_uri) {
-    if (currentUser.sipsLimitReached()) {
+    if (!currentUser.sipsLimitReached()) {
       currentUser.saveSipURI(updateData.new_sip_uri);
       updateData.sip_uri = updateData.new_sip_uri;
     } else {
       return errorResponse(
-        'To add a new SIP URI you will need to upgrade to a paid account', 401);
+        'To add a new SIP URI you will need to upgrade your account', 401);
     }
   }
 

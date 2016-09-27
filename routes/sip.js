@@ -125,5 +125,4 @@ router.post('/edit', utils.isLoggedIn, function (req, res) {
   });
 });
 
-
 module.exports = router;

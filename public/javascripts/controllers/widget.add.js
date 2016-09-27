@@ -113,12 +113,11 @@ define([
     $scope.reset();
     $scope.init();
 
-    
     $scope.setTheme = function (theme) {
       if($scope.widget.frame_color)
         $scope.tempFrameColor = $scope.widget.frame_color;
       if($scope.widget.button_color)
-        $scope.tempButtonColor = $scope.widget.button_color; 
+        $scope.tempButtonColor = $scope.widget.button_color;
 
       $scope.widget.frame_color = "";
       $scope.widget.button_color = "";
@@ -140,6 +139,8 @@ define([
       console.log("--> Saving configuration...");
       $scope.submitText = 'Saving...';
       $scope.savingConfig = true;
+      $scope.savedSuccessfully = false;
+      $scope.widget_form.cannotValidateSipUri = null;
 
       var caller_id = $scope.widget.caller_id;
       if (caller_id)

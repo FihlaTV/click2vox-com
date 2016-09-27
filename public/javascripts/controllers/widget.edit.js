@@ -88,7 +88,7 @@ define([
       if($scope.widget.frame_color)
         $scope.tempFrameColor = $scope.widget.frame_color;
       if($scope.widget.button_color)
-        $scope.tempButtonColor = $scope.widget.button_color; 
+        $scope.tempButtonColor = $scope.widget.button_color;
 
       $scope.widget.frame_color = "";
       $scope.widget.button_color = "";
@@ -105,7 +105,7 @@ define([
       if($scope.tempButtonColor)
         $scope.widget.button_color = $scope.tempButtonColor;
     };
- 
+
     $scope.discardConfiguration = function (form) {
       form.$setPristine();
       $scope.loadWidgetData();
@@ -119,6 +119,8 @@ define([
 
       $scope.submitText = 'Loading...';
       $scope.savingConfig = true;
+      $scope.savedSuccessfully = false;
+      $scope.widget_form.cannotValidateSipUri = null;
 
       var caller_id = $scope.widget.caller_id;
       if (caller_id)

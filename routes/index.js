@@ -255,7 +255,6 @@ module.exports = function (passport) {
         sendgrid.send(email, function (err, json) {
           req.flash('success', 'Success! Your password has been changed.');
           done(err);
-          // console.log(json);
         });
       }
     ], function (err) {

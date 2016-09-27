@@ -36,8 +36,6 @@ var accountSchema = new Schema({
     type: Boolean,
     default: false
   },
-  did: Number,
-  didId: Number,
   forgotten_pasword: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
@@ -82,27 +80,7 @@ accountSchema.pre('save', function (next) {
     self.uri_type = 'none';
   }
 
-  Did.findOne({
-    assigned: {
-      $ne: true
-    }
-  }, function (err, foundDid) {
-    if (err) {
-      next(err);
-    } else if (!self.did || !self.didId) {
-      if (foundDid) {
-        self.did = foundDid.did;
-        self.didId = foundDid.didId;
-        foundDid.assigned = true;
-        foundDid.save();
-        next();
-      } else {
-        next(new Error('NoDIDsAvailable'));
-      }
-    } else {
-      next();
-    }
-  });
+  next();
 });
 
 accountSchema.methods.generateHash = function (password) {
@@ -210,7 +188,7 @@ accountSchema.methods.getDidFor = function (sipUri, callback) {
         // if limit has been reached and this was not found return
         // the registered when the account was created
         if (self.sipsLimitReached())
-          return callback({ did: self.did, didId: self.didId });
+          return callback({ did: '', didId: '' });
         else {
           Did.findOne({
             assigned: { $ne: true }
@@ -224,7 +202,7 @@ accountSchema.methods.getDidFor = function (sipUri, callback) {
             } else {
               // maybe we should throw this error below when no DIDs available
               // throw new Error('NoDIDsAvailable');
-              return callback({ did: self.did, didId: self.didId });
+              return callback({ did: '', didId: '' });
             }
           })
         }

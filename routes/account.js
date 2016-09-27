@@ -199,13 +199,9 @@ router.post('/signup', recaptcha.middleware.verify, function (req, res, next) {
 
     theAccount.save(function (err) {
       if (err) {
-        if (err.message != 'NoDIDsAvailable')
-          throw err;
-        else {
-          console.log('*** NoDIDsAvailable ***');
-          result.message = "Cannot signup at the moment (No DIDs Available)";
-          return res.status(400).json(result);
-        }
+        // throw err;
+        result.message = "err.message";
+        return res.status(400).json(result);
       }
 
       result.verified = theAccount.verified;
