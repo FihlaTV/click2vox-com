@@ -59,6 +59,8 @@ var accountSchema = new Schema({
   slack_id: String,
   linkedin_token: String,
   linkedin_id: String,
+  voxbone_token: String,
+  voxbone_id: String,
   sip_uris: [String],
   referrer: String,
   sip_uris_limit: {

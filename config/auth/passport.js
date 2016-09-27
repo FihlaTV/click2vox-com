@@ -5,6 +5,7 @@ module.exports = function(passport) {
   require('./strategies/google')(Account, passport);
   require('./strategies/linkedin')(Account, passport);
   require('./strategies/windowslive')(Account, passport);
+  require('./strategies/voxbone')(Account, passport);
   require('./strategies/local-login')(Account, passport);
 
   passport.serializeUser(function(account, done) {

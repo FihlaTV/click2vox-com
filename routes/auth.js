@@ -23,4 +23,7 @@ router.get('/linkedin/callback', passport.authenticate('linkedin', callbackRedir
 router.get('/windowslive', passport.authenticate('windowslive', { scope: ['wl.signin', 'wl.emails'] }));
 router.get('/windowslive/callback', passport.authenticate('windowslive', callbackRedirects));
 
+router.get('/voxbone', passport.authenticate('voxbone', { scope: [] }));
+router.get('/voxbone/callback', passport.authenticate('voxbone', callbackRedirects));
+
 module.exports = router;
