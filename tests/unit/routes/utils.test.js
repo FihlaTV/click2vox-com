@@ -32,6 +32,18 @@ describe('Utils module', function() {
     });
   });
 
+  describe('#defaultDemoSipObject()', function() {
+    var defaultDemoSipObject = utils.defaultDemoSipObject();
+
+    it('should return an object with 3 keys', function() {
+      expect(defaultDemoSipObject).to.be.an('Object');
+      expect(Object.keys(defaultDemoSipObject)).have.length(3);
+      expect(defaultDemoSipObject.demoSip).to.be.a('String');
+      expect(defaultDemoSipObject.demoDidId).to.be.a('Number');
+      expect(defaultDemoSipObject.demoDid).to.be.a('Number');
+    });
+  });
+
   describe('#isLoggedIn()', function() {
     // pending to complete tests
     it('should redirect to `/` if user is not logged in');

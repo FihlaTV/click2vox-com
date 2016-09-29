@@ -204,13 +204,14 @@ router.delete('/:id', utils.isLoggedIn, function(req, res) {
 
 router.get('/demo', function (req, res, next) {
   var demoEmail = process.env.DEMO_USER_EMAIL || 'demo.widget@click2vox.com';
-  var demoSip = process.env.DEMO_SIP_URI || 'echo@ivrs';
+  var demoSipObject = utils.defaultDemoSipObject();
 
   var renderResponse = function (account) {
     res.render('widget/demo', {
       defaultBtnLabel: utils.defaultBtnLabel,
-      demoSipUris: utils.defaultSipUris(),
-      demoSip: demoSip,
+      demoSipUris: [demoSipObject.demoSip],
+      demoDid: demoSipObject.demoDid,
+      demoDidId: demoSipObject.demoDidId,
       demoUser: account,
       title: title
     });
@@ -225,7 +226,8 @@ router.get('/demo', function (req, res, next) {
         email: demoEmail,
         verified: true,
         temporary: false,
-        first_name: 'Demo User'
+        first_name: 'Demo',
+        last_name: 'User'
       });
       account.save();
 

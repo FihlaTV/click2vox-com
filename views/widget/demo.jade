@@ -34,7 +34,7 @@ block content
 
   .voxButton#voxButtonPreview(data-div_css_class_name="hidden")
 
-  .main.createButton(ng-controller="WidgetDemoController" ng-init="widget.sip_uri='echo@ivrs'; did = #{demoUser.did};")
+  .main.createButton(ng-controller="WidgetDemoController" ng-init="widget.sip_uri='#{demoSipUris[0]}'; did = #{demoDid};")
     .header
       .container
         .row
@@ -83,7 +83,7 @@ block content
                             label
                               input(type='checkbox' name='show_frame' ng-model='widget.show_frame')
                               span.radio-name Show frame
-                              span.badge(data-toggle='tooltip' data-placement="right" title="Shows/Hides the background and border of the button") ?                            
+                              span.badge(data-toggle='tooltip' data-placement="right" title="Shows/Hides the background and border of the button") ?
                           div(style="display:inline-block;")
                             span(style="margin-left:20px" ng-show='widget.show_frame') Pick frame color #[i.glyphicon.glyphicon-tint(aria-hidden='true' colorpicker colorpicker-position="right" ng-model="widget.frame_color" style="cursor: pointer" ng-style="{'color': widget.frame_color || 'black'}")]
 

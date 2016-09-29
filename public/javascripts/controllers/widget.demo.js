@@ -14,7 +14,7 @@ define([
     $scope.previewDialpad = true;
     $scope.previewFullScreen = true;
     $scope.previewMute = false;
-    $scope.widgetCode = '<div id="voxButton_574774ad1ce40fbf62562a22" data-button_id="574774ad1ce40fbf62562a22" data-text="Call Me!" data-redirect_url="https://voxbone.com" data-did="883510080144" data-dial_pad="true" data-context="context" data-send_digits="1,1200ms,2,1200ms,3,1200ms" data-caller_id="my_caller_id" data-incompatible_browser_configuration="link_button_to_a_page" data-show_frame="true" data-server_url="https://click2vox.com/" data-use_default_button_css="true" data-button_css_class_name="style-b" class="voxButton"></div><script src="https://click2vox.com/click2vox.js"></script>';
+    $scope.widgetCode = '<div id="voxButton_574774ad1ce40fbf62562a22" data-button_id="574774ad1ce40fbf62562a22" data-text="Call Me!" data-redirect_url="https://voxbone.com" data-did="883510080361" data-dial_pad="true" data-context="context" data-send_digits="1,1200ms,2,1200ms,3,1200ms" data-caller_id="my_caller_id" data-incompatible_browser_configuration="link_button_to_a_page" data-show_frame="true" data-server_url="https://click2vox.com/" data-use_default_button_css="true" data-button_css_class_name="style-b" class="voxButton"></div><script src="https://click2vox.com/click2vox.js"></script>';
     $scope.tempButtonColor = "";
     $scope.tempFrameColor = "";
 
@@ -105,7 +105,7 @@ define([
       if($scope.widget.frame_color)
         $scope.tempFrameColor = $scope.widget.frame_color;
       if($scope.widget.button_color)
-        $scope.tempButtonColor = $scope.widget.button_color; 
+        $scope.tempButtonColor = $scope.widget.button_color;
 
       $scope.widget.frame_color = "";
       $scope.widget.button_color = "";
@@ -117,7 +117,6 @@ define([
       $scope.tempFrameColor ? $scope.widget.frame_color = $scope.tempFrameColor : $scope.widget.frame_color = "black";
       $scope.widget.button_color = $scope.tempButtonColor;
     };
-    
   };
 
   WidgetDemoController.$inject = ['$scope', '$http', '$window', '$controller'];

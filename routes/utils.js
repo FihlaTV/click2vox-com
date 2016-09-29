@@ -23,6 +23,14 @@ module.exports = {
     return Object.keys(demoSips);
   },
 
+  defaultDemoSipObject: function () {
+    var demoSips = require('../config/demo-sips.json');
+    var demoSip = Object.keys(demoSips)[0];
+    var demoDid = demoSips[demoSip][0];
+    var demoDidId =  demoSips[demoSip][1];
+    return { demoSip: demoSip, demoDid: demoDid, demoDidId: demoDidId };
+  },
+
   isLoggedIn: function (req, res, next) {
     if (req.isAuthenticated())
       return next();
