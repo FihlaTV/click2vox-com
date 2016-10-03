@@ -5,7 +5,7 @@ var bcrypt = require('bcrypt-nodejs');
 var utils = require('../routes/utils');
 var Did = require('./dids');
 
-const ADMIN_DOMAINS = ['agilityfeat.com', 'voxbone.com'];
+var ADMIN_DOMAINS = ['agilityfeat.com', 'voxbone.com'];
 
 var accountSchema = new Schema({
   email: {
@@ -214,7 +214,7 @@ accountSchema.methods.getDidFor = function (sipUri, callback) {
               // throw new Error('NoDIDsAvailable');
               return callback({ did: '', didId: '' });
             }
-          })
+          });
         }
       }
     });

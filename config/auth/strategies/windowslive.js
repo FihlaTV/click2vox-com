@@ -12,7 +12,7 @@ module.exports = function(Account, passport) {
         if(typeof(profile.emails) === 'undefined'){
           var errorMessage = { error: 'missing-email', type: 'danger', message: 'We cannot retrieve your email from Windows Live. Please fix this in your Windows Live settings page.' };
           return done(null, false, req.flash('loginMessage', errorMessage));
-        };
+        }
 
         Account.findOne({ $or: [ { windowslive_id: profile.id }, { email: profile.emails[0].value } ] }, function(err, account) {
           if (err)

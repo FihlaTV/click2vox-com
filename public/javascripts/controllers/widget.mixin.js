@@ -10,7 +10,7 @@ define([
         var redirect_url = $scope.widget.link_button_to_a_page_value || 'https://voxbone.com';
         window.open(redirect_url);
         return;
-      };
+      }
 
       var voxButtonElement = document.getElementById('voxButtonPreview');
 

@@ -13,7 +13,7 @@ define(['jquery', 'bootstrap'], function (jQuery) {
       $('#editSIPModal').on('hidden.bs.modal', function () {
         $scope.reset();
       });
-    },
+    };
 
     $scope.reset();
     $scope.bindEvents();

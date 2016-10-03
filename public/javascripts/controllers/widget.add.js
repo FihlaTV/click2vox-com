@@ -126,7 +126,7 @@ define([
     };
 
     $scope.setCustomTheme = function() {
-      $scope.tempFrameColor ? $scope.widget.frame_color = $scope.tempFrameColor : $scope.widget.frame_color = "black";
+      $scope.widget.frame_color = $scope.tempFrameColor ? $scope.tempFrameColor : "black";
       $scope.widget.button_color = $scope.tempButtonColor;
     };
 
@@ -147,15 +147,15 @@ define([
         caller_id = caller_id.replace(/[^a-zA-Z0-9-_]/g, '');
 
       var data = $scope.widget;
-      data['caller_id'] = caller_id;
+      data.caller_id = caller_id;
 
       var ibc = $scope.widget.incompatible_browser_configuration;
       if (ibc === 'hide_widget')
-        data['hide_widget'] = true;
+        data.hide_widget = true;
       else if (ibc === 'link_button_to_a_page')
-        data['link_button_to_a_page'] = $scope.widget.link_button_to_a_page_value;
+        data.link_button_to_a_page = $scope.widget.link_button_to_a_page_value;
       else if (ibc === 'show_text_html')
-        data['show_text_html'] = $scope.widget.show_text_html_value;
+        data.show_text_html = $scope.widget.show_text_html_value;
 
       var req = {
         method: 'POST',

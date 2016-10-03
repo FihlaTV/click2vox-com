@@ -263,7 +263,7 @@ var portalHandler = function(req, res, next) {
 
   // check if required params are present
   var reqCheck = _.filter(required, function(n) {
-    return params[n] !== undefined
+    return (params[n] !== undefined);
   });
 
   if (reqCheck.length < 4)
@@ -280,7 +280,8 @@ var portalHandler = function(req, res, next) {
     webrtc_username: params.login,
     webrtc_password: params.password,
     basic_auth: params.basic_auth
-  }
+  };
+
   var result = {
     widget: fakeWidget,
     params: params,
@@ -296,7 +297,7 @@ var portalHandler = function(req, res, next) {
 router.get('/portal-widget', portalHandler);
 
 router.post('/portal-widget/get-code', function(req, res, next) {
-  var result = {}
+  var result = {};
   var params = req.parameters;
 
   _.each(['did', 'show_branding', 'webrtc_username', 'webrtc_password', 'basic_auth'], function (n) {

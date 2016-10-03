@@ -11,7 +11,7 @@ module.exports = function(Account, passport) {
       if(typeof(profile.emails) === 'undefined'){
         var errorMessage = { error: 'missing-email', type: 'danger', message: 'We cannot retrieve your email from LinkedIn. Please fix this in your LinkedIn settings page.' };
         return done(null, false, req.flash('loginMessage', errorMessage));
-      };
+      }
 
       process.nextTick(function() {
         Account.findOne({ $or: [ { linkedin_id: profile.id }, { email: profile.emails[0].value } ] }, function(err, account) {

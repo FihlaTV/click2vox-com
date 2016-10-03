@@ -25,7 +25,7 @@ function loadScript(url, callback) {
 
   // Fire the loading
   head.appendChild(script);
-};
+}
 
 function loadCss(url) {
   var link = document.createElement("link");
@@ -33,7 +33,7 @@ function loadCss(url) {
   link.rel = "stylesheet";
   link.href = url;
   document.getElementsByTagName("head")[0].appendChild(link);
-};
+}
 
 var check0Ready = (function() {
   infoVoxbone = voxButtonElement.dataset;
@@ -221,23 +221,26 @@ var check1Ready = (function() {
 
     request.onload = function() {
       if (request.status === 200)
+        /*jshint evil:true*/
+        /*We are skipping this because its unlikely to have code injection
+        issues since we are bringing the response from the backend*/
         callback(eval('(' + request.responseText + ')'));
     };
 
     request.send();
-  };
+  }
 
   function sendPostMessage(action, value){
     if (typeof value === 'undefined')
       value = '';
 
     postMessage({ action: action, value: value }, "*");
-  };
+  }
 
   var eventHandlers = {
     'localMediaVolume': function (e) {
       if(voxbone.WebRTC.isMuted) return;
-      sendPostMessage('setMicVolume', e.localVolume )
+      sendPostMessage('setMicVolume', e.localVolume );
     },
 
     'progress': function (e) {
@@ -336,22 +339,22 @@ var check1Ready = (function() {
 
       if (isChromeOnHttp())
         console.log("WebRTC doesn't work in Chrome on HTTP -> https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins");
-    };
-  };
+    }
+  }
 
   function isInCall() {
     return (typeof voxbone.WebRTC.rtcSession.isEstablished === "function") && !voxbone.WebRTC.rtcSession.isEnded();
-  };
+  }
 
   function isChromeOnHttp() {
     var isChrome = !!window.chrome && !!window.chrome.webstore;
     var isHttp = window.location.protocol === "http:";
     return isChrome && isHttp;
-  };
+  }
 
   function isWebRTCSupported() {
     return voxbone.WebRTC.isWebRTCSupported() && !isChromeOnHttp();
-  };
+  }
 
   function makeCall() {
     voxButtonElement = document.getElementsByClassName('voxButton')[0];
@@ -363,7 +366,7 @@ var check1Ready = (function() {
       var redirect_url = infoVoxbone.redirect_url || 'https://voxbone.com';
       window.open(redirect_url);
       return;
-    };
+    }
 
     if (isWebRTCSupported()) {
       resetWidget();
@@ -384,7 +387,7 @@ var check1Ready = (function() {
         voxbone.WebRTC.unloadHandler();
       };
     }
-  };
+  }
 
   window.addEventListener('message', function(event) {
     var message = event.data;
@@ -438,7 +441,7 @@ var check1Ready = (function() {
         hideElement('.vox-widget-wrapper #vw-in-call');
         showElement(".vox-widget-wrapper #vw-unable-to-acces-mic");
         break;
-    };
+    }
   });
 
   function clearMicDots(){
@@ -446,7 +449,7 @@ var check1Ready = (function() {
     Array.prototype.forEach.call(micDots, function(el, i) {
       el.classList = "";
     });
-  };
+  }
 
   function setMicDot(dot) {
     var el = document.querySelector('.vox-widget-wrapper #mic' + dot);
@@ -454,53 +457,53 @@ var check1Ready = (function() {
       el.classList.add('peak');
     else
       el.classList.add('on');
-  };
+  }
 
   function showElement(selector){
     var el = document.querySelector(selector);
     el.classList.remove('hidden');
-  };
+  }
 
   function hideElement(selector){
     var el = document.querySelector(selector);
     el.classList.add('hidden');
-  };
+  }
 
   function showAnimatedDots(){
     var dots = document.querySelectorAll('.vox-widget-wrapper .vw-animated-dots');
     Array.prototype.forEach.call(dots, function(el, i) {
       el.classList.remove('hidden');
     });
-  };
+  }
 
   function hideAnimatedDots(){
     var dots = document.querySelectorAll('.vox-widget-wrapper .vw-animated-dots');
     Array.prototype.forEach.call(dots, function(el, i) {
       el.classList.add('hidden');
     });
-  };
+  }
 
   function setWidgetTitle(title){
     var el = document.querySelector('.vox-widget-wrapper #vw-title');
     el.innerText = title;
-  };
+  }
 
   function getRingbackTone(){
     return document.querySelector('.voxButton #audio-ringback-tone');
-  };
+  }
 
   function pauseRingbackTone(){
     getRingbackTone().pause();
-  };
+  }
 
   function playRingbackTone(){
     var audioEl = getRingbackTone();
     audioEl.currentTime = 0;
     audioEl.play();
-  };
+  }
 
   function callAction(message){
-    if (!(typeof voxbone.WebRTC.rtcSession.isEstablished === "function") || voxbone.WebRTC.rtcSession.isEnded())
+    if (typeof voxbone.WebRTC.rtcSession.isEstablished !== "function" || voxbone.WebRTC.rtcSession.isEnded())
       return;
 
     switch(message) {
@@ -528,7 +531,7 @@ var check1Ready = (function() {
         voxbone.WebRTC.sendDTMF(message);
         break;
     }
-  };
+  }
 
   function sendRate(data) {
     var request = new XMLHttpRequest();
@@ -544,7 +547,7 @@ var check1Ready = (function() {
     });
 
     request.send(JSON.stringify(data));
-  };
+  }
 
   function resetWidget() {
     // Reset Widget
@@ -574,12 +577,12 @@ var check1Ready = (function() {
     Array.prototype.forEach.call(starRatingButtons, function(el, i) {
       el.checked = false;
     });
-  };
+  }
 
   function handleEvent (eventName, selector, callback) {
     var element = document.querySelector(selector);
     if (element) element.addEventListener(eventName, callback);
-  };
+  }
 
   // Start of Button Events
   //
@@ -680,7 +683,7 @@ var check1Ready = (function() {
     var elements = document.querySelectorAll(".vox-widget-wrapper #microphone em");
     Array.prototype.forEach.call(elements, function(el, i) {
       el.classList.add('off');
-      el.classList.remove('on')
+      el.classList.remove('on');
     });
 
     callAction('microphone_mute');

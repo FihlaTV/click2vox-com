@@ -8,16 +8,17 @@ module.exports = function(Account, passport) {
     },
     function(req, email, password, done) {
       Account.findOne({ 'email' : email, 'temporary': false }, function(err, account) {
+        var errorMessage;
         if (err){
-          var errorMessage = { error: 'generic-error', type: 'danger', message: err };
+          errorMessage = { error: 'generic-error', type: 'danger', message: err };
           return done(req.flash('loginMessage', errorMessage));
         }
         if (!account){
-          var errorMessage = { error: 'account-not-found', type: 'danger', message: 'Account not found' };
+          errorMessage = { error: 'account-not-found', type: 'danger', message: 'Account not found' };
           return done(null, false, req.flash('loginMessage', errorMessage));
         }
         if (!account.validPassword(password)){
-          var errorMessage = { error: 'wrong-password', type: 'danger', message: 'Wrong password. Try again' };
+          errorMessage = { error: 'wrong-password', type: 'danger', message: 'Wrong password. Try again' };
           return done(null, false, req.flash('loginMessage', errorMessage));
         }
         return done(null, account);

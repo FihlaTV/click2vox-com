@@ -114,7 +114,7 @@ define([
     };
 
     $scope.setCustomTheme = function() {
-      $scope.tempFrameColor ? $scope.widget.frame_color = $scope.tempFrameColor : $scope.widget.frame_color = "black";
+      $scope.widget.frame_color = $scope.tempFrameColor ? $scope.tempFrameColor : "black";
       $scope.widget.button_color = $scope.tempButtonColor;
     };
   };

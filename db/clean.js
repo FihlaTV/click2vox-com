@@ -12,7 +12,7 @@ while (cursor.hasNext()) {
   db.accounts_not_used.save(record);
 
   // recover unused did/didId pair from unused account
-  var did_to_recover = db.dids.findOneAndUpdate({ didId: record.didId, did: record.did }, { $set:{ assigned: false } }, { upsert: true })
+  var did_to_recover = db.dids.findOneAndUpdate({ didId: record.didId, did: record.did }, { $set:{ assigned: false } }, { upsert: true });
 }
 
 // Deletes the unused accounts
@@ -36,7 +36,7 @@ while (cursor_dids.hasNext()) {
 
   var did_updated = db.dids.save(record);
   var did_fixed = db.dids_fixed.save(record);
-};
+}
 
 //Fixing dids
 db.dids.update(

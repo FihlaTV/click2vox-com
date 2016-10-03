@@ -10,7 +10,7 @@ OAuth2Strategy.prototype.userProfile = function(accessToken, done) {
 
     // Flattening the response to a single object
     for(var i = 0; i < rawUserProfile.attributes.length; i++){
-      for(x in rawUserProfile.attributes[i]){
+      for(var x in rawUserProfile.attributes[i]){
         profile[x] = rawUserProfile.attributes[i][x];
       }
     }
@@ -31,7 +31,7 @@ module.exports = function(Account, passport) {
       if(typeof(profile.email) === 'undefined'){
         var errorMessage = { error: 'missing-email', type: 'danger', message: 'We cannot retrieve your email from Voxbone' };
         return done(null, false, req.flash('loginMessage', errorMessage));
-      };
+      }
 
       process.nextTick(function() {
         Account.findOne({ $or: [ { voxbone_id: profile.id }, { email: profile.email } ] }, function(err, account) {

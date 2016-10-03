@@ -24,6 +24,10 @@ module.exports = function (grunt) {
         options: {
           nospawn: true
         }
+      },
+      jshintt: {
+        files: ['<%= jshint.files %>'],
+        tasks: ['jshint']
       }
     },
     nodemon: {
@@ -78,6 +82,27 @@ module.exports = function (grunt) {
       all: {
         src: ['tests/unit/**/*.js']
       }
+    },
+    jshint: {
+      files: [
+          '*.js',
+          'config/**/*.js',
+          'db/**/*.js',
+          'models/**/*.js',
+          'public/config.js',
+          'public/javascripts/controllers/*.js',
+          'public/javascripts/directives/*.js',
+          'public/javascripts/click2vox-1.5.0.js',
+          'routes/**/*.js',
+          'tests/**/*.js',
+          'views/**/*.js'
+        ],
+      options: {
+        globals: {
+          jQuery: true
+        },
+        multistr: true
+      }
     }
   });
 
@@ -87,6 +112,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-nightwatch');
   grunt.loadNpmTasks('grunt-simple-mocha');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   grunt.registerTask('default', ['concurrent:devel']);
-}
+};

@@ -66,7 +66,7 @@ module.exports = {
     //     return v.toString(16);
     // });
 
-    function b (a) {return a?(a^Math.random()*16>>a/4).toString(16):([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,b)}
+    function b (a) {return a?(a^Math.random()*16>>a/4).toString(16):([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,b);}
     return b();
   },
 
@@ -161,9 +161,9 @@ module.exports = {
           }
 
           var responseBody = JSON.parse(body);
-          if (responseBody['httpStatusCode'])
+          if (responseBody.httpStatusCode)
             done({
-              httpStatusCode: responseBody['httpStatusCode'],
+              httpStatusCode: responseBody.httpStatusCode,
               comeback_errors: responseBody.errors[0],
               message: "Could not create the voice uri for SIP URI: " + sipUri + " and user: " + account.email + ". Probably already exists. View previous logs for more details."
             });
