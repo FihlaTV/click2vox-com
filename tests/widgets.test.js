@@ -15,15 +15,8 @@ module.exports = {
       .setValue('input[name="uemail"]', demoEmail)
       .setValue('input[name="upassword"]', demoPassword)
       .click('button#login')
-
-      // NOTE: we need to make sure that env var
-      // BYPASS_ADDING_SIP_URI is equal to 'false'
-      // otherwise the bahaviour here would be different
-
-      // this should take us to the "Add new sip uri" screen
       .pause(1000)
-      .assert.containsText('body', 'Add a new SIP Address')
-      .click('button.skip-sip')
+      .url(browser.launchUrl + '/widget/new')
 
       // now we should be in "create new Button" screen
       .pause(1000)
@@ -64,9 +57,15 @@ module.exports = {
       .assert.containsText('#widget_code pre', 'data-div_css_class_name="style-b"')
       .assert.containsText('#widget_code pre', 'data-incompatible_browser_configuration="show_text_html"')
 
-      // time to fill the form and save the button
+      //redirect to widgets lits and delete button
+      .url(browser.launchUrl + "/account/widgets")
+      .click('.deleteButton')
+      .pause(500)
+      .keys(['\uE004'])
+      .keys(['\uE004'])
+      .keys(['\uE006'])
+      .pause(3000)
+      .assert.elementNotPresent('td>button')
       .end();
-
-      // TODO: delete the demo button created with this test
   }
 };
