@@ -43,37 +43,49 @@ router.post('/new', utils.isLoggedIn, function (req, res, next) {
   var widgetData = params.permit(PERMITTED_FIELDS);
 
   var result = { message: "", errors: null };
-  widgetData._account = currentUser._id;
 
-  if (widgetData.new_sip_uri) {
-    if (!currentUser.sipsLimitReached()) {
-      widgetData.sip_uri = widgetData.new_sip_uri;
+  currentUser.buttonsLimitReachedForSipUri(widgetData.sip_uri, function(limitReached){
+    if(!limitReached){
+      saveButton();
     } else {
-      result.errors = 'To add a new SIP URI you will need to upgrade your account';
+      result.errors = 'You can only assign up to 5 buttons to this SIP URI, please delete one and try again or select a different SIP URI.';
       return res.status(401).json(result);
     }
-  }
-
-  utils.provisionSIP(currentUser, widgetData.sip_uri, function (err) {
-    if (err) {
-      console.log('Error while provisioning demo sip uri: ', err);
-      if (widgetData.new_sip_uri) currentUser.removeSipURI(widgetData.new_sip_uri);
-      result.errors = 'An error occurred while saving your SIP URI. Please try again';
-      return res.status(err.httpStatusCode || 500).json(result);
-    } else {
-      req.user.getDidFor(widgetData.sip_uri, function (foundDid) {
-        widgetData.did = foundDid.did;
-        widgetData.didId = foundDid.didId;
-
-        Widget.create(widgetData, function (err, widget) {
-          if (err) throw err;
-          currentUser.saveSipURI(widgetData.sip_uri);
-          result.redirect = '/widget/' + widget._id + '/edit';
-          return res.status(200).json(result);
-        });
-      });
-    }
   });
+
+  var saveButton = function () {
+    widgetData._account = currentUser._id;
+
+    if (widgetData.new_sip_uri) {
+      if (!currentUser.sipsLimitReached()) {
+        widgetData.sip_uri = widgetData.new_sip_uri;
+      } else {
+        result.errors = 'To add a new SIP URI you will need to upgrade your account';
+        return res.status(401).json(result);
+      }
+    }
+
+    utils.provisionSIP(currentUser, widgetData.sip_uri, function (err) {
+      if (err) {
+        console.log('Error while provisioning demo sip uri: ', err);
+        if (widgetData.new_sip_uri) currentUser.removeSipURI(widgetData.new_sip_uri);
+        result.errors = 'An error occurred while saving your SIP URI. Please try again';
+        return res.status(err.httpStatusCode || 500).json(result);
+      } else {
+        req.user.getDidFor(widgetData.sip_uri, function (foundDid) {
+          widgetData.did = foundDid.did;
+          widgetData.didId = foundDid.didId;
+
+          Widget.create(widgetData, function (err, widget) {
+            if (err) throw err;
+            currentUser.saveSipURI(widgetData.sip_uri);
+            result.redirect = '/widget/' + widget._id + '/edit';
+            return res.status(200).json(result);
+          });
+        });
+      }
+    });
+  }
 });
 
 router.get('/:id/edit', utils.isLoggedIn, function (req, res, next) {
