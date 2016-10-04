@@ -61,6 +61,8 @@ module.exports = {
       .url(browser.launchUrl + "/account/widgets")
       .click('.deleteButton')
       .pause(500)
+
+      //hits 'tab' twice and then hits 'enter', to confirm widget deletion on modal
       .keys(['\uE004'])
       .keys(['\uE004'])
       .keys(['\uE006'])
