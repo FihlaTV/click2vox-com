@@ -199,12 +199,23 @@ var check1Ready = (function() {
     custom_frame_color = "background:"+ infoVoxbone.custom_frame_color;
   }
 
-  voxButtonElement.innerHTML += ' \
+  if (!isWebRTCSupported() && infoVoxbone.incompatible_browser_configuration === 'show_text_html') {
+    voxButtonElement.innerHTML += ' \
+    <div style="display: none;'+custom_frame_color+'" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
+      <span>' +  unescape(infoVoxbone.text_html) + '</span>\
+    </div>\
+  ';
+  }
+  else if (!isWebRTCSupported() && infoVoxbone.incompatible_browser_configuration === 'hide_widget')
+    hideElement('div[data-button_id="' + infoVoxbone.button_id + '"]');
+  else {
+    voxButtonElement.innerHTML += ' \
     <div style="display: none;'+custom_frame_color+'" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
       <button id="launch_call" ' + custom_button_color + ' class="vxb-btn-style ' + (infoVoxbone.button_css_class_name) + '"><span>' +  unescape(infoVoxbone.text) + '</span></button>\
       ' + links + '\
     </div>\
   ';
+  }
 
   function getVoxrtcConfig(callback) {
     var request = new XMLHttpRequest();
@@ -334,9 +345,6 @@ var check1Ready = (function() {
       voxbone.WebRTC.customEventHandler = eventHandlers;
       handleAuth();
     } else {
-      if (infoVoxbone.incompatible_browser_configuration === 'hide_widget')
-        hideElement('div[data-button_id="' + infoVoxbone.button_id + '"]');
-
       if (isChromeOnHttp())
         console.log("WebRTC doesn't work in Chrome on HTTP -> https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins");
     }
