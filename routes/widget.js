@@ -85,7 +85,7 @@ router.post('/new', utils.isLoggedIn, function (req, res, next) {
         });
       }
     });
-  }
+  };
 });
 
 router.get('/:id/edit', utils.isLoggedIn, function (req, res, next) {

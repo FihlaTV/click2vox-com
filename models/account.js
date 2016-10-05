@@ -176,7 +176,7 @@ accountSchema.methods.buttonsLimitReachedForSipUri = function (sipUri, callback)
       .find({_account: this._id, sip_uri:sipUri}, function (err, result) {
         callback(result.length >= process.env.BUTTONS_PER_SIP_URI_LIMIT);
       });
-}
+};
 
 accountSchema.methods.getDidFor = function (sipUri, callback) {
   var self = this;
