@@ -226,6 +226,20 @@ accountSchema.methods.getDidFor = function(sipUri, callback) {
     });
 };
 
+accountSchema.statics.updateSipUrisLimit = function(callback) {
+  Account.update({
+      "sip_uris_limit": 1,
+      "upgrade_request_timestamp": { $lte: new Date() },
+      "upgrade_request": true
+    }, {
+      $set: { sip_uris_limit: 5 }
+    }, {
+      "multi": true
+    },
+    callback
+  );
+};
+
 var Account = mongoose.model('Account', accountSchema);
 
 module.exports = Account;
