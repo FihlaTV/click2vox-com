@@ -71,7 +71,7 @@ var accountSchema = new Schema({
   upgrade_request_timestamp: Date
 });
 
-accountSchema.pre('save', function (next) {
+accountSchema.pre('save', function(next) {
   self = this;
   now = new Date();
   self.updated_at = now;
@@ -85,24 +85,24 @@ accountSchema.pre('save', function (next) {
   next();
 });
 
-accountSchema.methods.generateHash = function (password) {
+accountSchema.methods.generateHash = function(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
-accountSchema.methods.validPassword = function (password) {
+accountSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 };
 
-accountSchema.methods.isAdmin = function () {
+accountSchema.methods.isAdmin = function() {
   var domain = this.email.replace(/.*@/, "");
   return ADMIN_DOMAINS.indexOf(domain) > -1;
 };
 
-accountSchema.methods.getFullName = function () {
+accountSchema.methods.getFullName = function() {
   return this.first_name + ' ' + this.last_name;
 };
 
-accountSchema.methods.getSipURIs = function () {
+accountSchema.methods.getSipURIs = function() {
   var Widget = require('./widget');
   var defaultSips = require('../routes/utils').defaultSipUris();
   var account = this;
@@ -111,9 +111,11 @@ accountSchema.methods.getSipURIs = function () {
   // and get the sips that are store on those widgets
   if (this.sip_uris.length === 0) {
     Widget
-      .distinct('sip_uri', {_account: this._id})
-      .exec(function (err, sips) {
-        var diff = sips.filter(function (x) {return defaultSips.indexOf(x) < 0; });
+      .distinct('sip_uri', { _account: this._id })
+      .exec(function(err, sips) {
+        var diff = sips.filter(function(x) {
+          return defaultSips.indexOf(x) < 0;
+        });
         account.sip_uris = diff;
         account.save();
       });
@@ -122,7 +124,7 @@ accountSchema.methods.getSipURIs = function () {
   return defaultSips.concat(this.sip_uris);
 };
 
-accountSchema.methods.getSipURIsWithNewSipUri = function () {
+accountSchema.methods.getSipURIsWithNewSipUri = function() {
   var sip_uris = this.getSipURIs();
 
   if (process.env.BYPASS_ADDING_SIP_URI === 'false' && !this.sipsLimitReached())
@@ -131,18 +133,21 @@ accountSchema.methods.getSipURIsWithNewSipUri = function () {
   return sip_uris;
 };
 
-accountSchema.methods.saveSipURI = function (sipURI) {
-  if (this.sip_uris.indexOf(sipURI) === -1 && utils.defaultSipUris().indexOf(sipURI) === -1) {
+accountSchema.methods.saveSipURI = function(sipURI) {
+
+  if (utils.defaultSipUris().indexOf(sipURI) === -1) {
     this.uri_type = "custom";
-    this.sip_uris.push(sipURI);
-  } else {
+    if (this.sip_uris.indexOf(sipURI) === -1) {
+      this.sip_uris.push(sipURI);
+    }
+  } else if (this.sip_uris.length === 0) {
     this.uri_type = "default";
   }
 
   this.save();
 };
 
-accountSchema.methods.removeSipURI = function (sipURI) {
+accountSchema.methods.removeSipURI = function(sipURI) {
   var index = this.sip_uris.indexOf(sipURI);
   if (index > -1) {
     this.sip_uris.splice(index, 1);
@@ -154,14 +159,14 @@ accountSchema.methods.removeSipURI = function (sipURI) {
   }
 };
 
-accountSchema.methods.showWizard = function () {
+accountSchema.methods.showWizard = function() {
   if (process.env.BYPASS_ADDING_SIP_URI === 'true')
     return false;
 
   return utils.defaultSipUris().length === this.getSipURIs().length;
 };
 
-accountSchema.methods.sipsLimitReached = function () {
+accountSchema.methods.sipsLimitReached = function() {
   var current_limit = this.sip_uris_limit;
 
   if (current_limit === 1 && this.upgrade_request_timestamp && this.upgrade_request_timestamp <= new Date())
@@ -170,31 +175,32 @@ accountSchema.methods.sipsLimitReached = function () {
   return (this.sip_uris.length >= current_limit);
 };
 
-accountSchema.methods.buttonsLimitReachedForSipUri = function (sipUri, callback) {
+accountSchema.methods.buttonsLimitReachedForSipUri = function(sipUri, callback) {
   var Widget = require('./widget');
-    Widget
-      .find({_account: this._id, sip_uri:sipUri}, function (err, result) {
-        callback(result.length >= process.env.BUTTONS_PER_SIP_URI_LIMIT);
-      });
+  Widget
+    .find({ _account: this._id, sip_uri: sipUri }, function(err, result) {
+      callback(result.length >= process.env.BUTTONS_PER_SIP_URI_LIMIT);
+    });
 };
 
-accountSchema.methods.getDidFor = function (sipUri, callback) {
+accountSchema.methods.getDidFor = function(sipUri, callback) {
   var self = this;
 
   if (utils.defaultSipUris().indexOf(sipUri) > -1) {
     var demoSips = require('../config/demo-sips.json');
     var data = demoSips[sipUri];
     return callback({
-      did: data[0], didId: data[1] });
+      did: data[0],
+      didId: data[1]
+    });
   }
 
   Did
-    .findOne({sip_uri: sipUri, assigned: true})
-    .exec(function (err, foundDid) {
+    .findOne({ sip_uri: sipUri, assigned: true })
+    .exec(function(err, foundDid) {
       if (foundDid) {
         return callback(foundDid);
-      }
-      else {
+      } else {
         // if limit has been reached and this was not found return
         // the registered when the account was created
         if (self.sipsLimitReached())
@@ -202,11 +208,11 @@ accountSchema.methods.getDidFor = function (sipUri, callback) {
         else {
           Did.findOne({
             assigned: { $ne: true }
-          }, function (err, foundDid) {
+          }, function(err, foundDid) {
             if (foundDid) {
               foundDid.assigned = true;
               foundDid.sip_uri = sipUri;
-              foundDid.save(function (err, doc, numAffected) {
+              foundDid.save(function(err, doc, numAffected) {
                 return callback(doc);
               });
             } else {
