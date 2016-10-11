@@ -58,17 +58,36 @@ describe('Account schema', function() {
     });
 
     describe('setting a custom SIP URI', function() {
-      var account = new Account(default_account_values);
+      describe('from scratch', function() {
+        var account = new Account(default_account_values);
 
-      account.saveSipURI('custom_sip@uri.com');
+        account.saveSipURI('custom_sip@uri.com');
 
-      it('should set the uri_type as custom', function() {
-        expect(account.uri_type).be.equal('custom');
+        it('should set the uri_type as custom', function() {
+          expect(account.uri_type).be.equal('custom');
+        });
+
+        it('should add it to the list of sip uris', function() {
+          expect(account.sip_uris).to.contain('custom_sip@uri.com');
+          expect(account.sip_uris).to.have.length(1);
+        });
       });
 
-      it('should add it to the list of sip uris', function() {
-        expect(account.sip_uris).to.contain('custom_sip@uri.com');
-        expect(account.sip_uris).to.have.length(1);
+      describe('with an existing custom SIP URI', function() {
+        var account = new Account(default_account_values);
+        account.sip_uris = ['sip@custom.ca.ar'];
+        account.uri_type = 'custom';
+
+        account.saveSipURI('custom_sip2@uri.com');
+
+        it('should set the uri_type as custom', function() {
+          expect(account.uri_type).be.equal('custom');
+        });
+
+        it('should add it to the list of sip uris', function() {
+          expect(account.sip_uris).to.contain('custom_sip2@uri.com', 'sip@custom.ca.ar');
+          expect(account.sip_uris).to.have.length(2);
+        });
       });
     });
   });
