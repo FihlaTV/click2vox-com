@@ -231,7 +231,7 @@ body {
   color: #15a9c7;
 }
 .register-content form {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 .register-content form label {
   margin-bottom: 2px;
@@ -240,6 +240,43 @@ body {
   display: block;
   margin-top: 30px;
   margin-bottom: 30px;
+}
+.register-content .sub-header {
+  text-align: center;
+  font-size: 1.200em;
+  font-weight: normal;
+}
+.oauth-wrap {
+  text-align: center;
+  font-weight: normal;
+  padding-top: 30px;
+  padding-bottom: 10px;
+}
+.oauth-wrap h4 {
+  margin-bottom: 10px;
+}
+.oauth-wrap a {
+  font-size: 0.8em;
+  display: inline-block;
+  width: 55px;
+  height: 55px;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  padding-top: 9px;
+  padding-bottom: 9px;
+  background: #791e75;
+  border-color: #791e75;
+  color: #ffffff;
+  border-radius: 6px;
+}
+.oauth-wrap a:hover {
+  background: #651961;
+  text-decoration: none;
+  color: #ffffff;
+}
+.oauth-wrap a .fa {
+  font-size: 25px;
 }
 .home-wrap {
   background: url(../images/the-workshop-bgctc7.jpg) no-repeat right center fixed;
