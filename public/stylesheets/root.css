@@ -4,6 +4,10 @@ Google Web Fonts
 @import 'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i';
 @import 'https://fonts.googleapis.com/css?family=Lato:100,300,300i,400,400i,700,700i';
 /* ================================================
+Font Awesome
+================================================ */
+@import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css';
+/* ================================================
 Plugin Css
 ================================================ */
 /* Bootstrap */
@@ -12,6 +16,7 @@ Plugin Css
 Main Css
 ================================================ */
 /* Main Css Codes */
+@import "widget.css";
 .text-center {
   text-align: center;
 }
@@ -27,6 +32,7 @@ body {
   font-family: 'Open Sans', sans-serif;
   font-size: 15px;
   font-weight: 300;
+  color: #55595c;
 }
 .container {
   width: 100%;
@@ -170,11 +176,17 @@ body {
 }
 .btn-purple {
   background-color: #791e75;
-  border-color: #791e75;
+  border: 1px solid #791e75;
   color: #ffffff;
 }
 .btn-purple:hover {
   background-color: #6b1a67;
+}
+.tooltip-action {
+  color: #207fbf;
+}
+.tooltip-action.ta-white {
+  color: #ffffff;
 }
 .modal {
   display: flex;
@@ -201,35 +213,41 @@ body {
   font-weight: 300;
   line-height: 1;
 }
-/* App Sections */
-.register-content {
+.panel-content {
   background-color: rgba(64, 62, 57, 0.7);
   color: #fff;
   margin-bottom: 0;
   font-weight: 100;
   padding: 20px 25px;
 }
-.register-content .reg-header {
+.panel-content hr {
+  border-color: #ffffff;
+}
+.panel-content .panel-header {
   text-align: center;
 }
-.register-content .reg-header h4 {
+.panel-content .panel-header h4 {
   font-size: 2.333em;
   font-weight: 300;
 }
-.register-content .reg-header strong {
+.panel-content .panel-header strong {
   font-weight: 700;
 }
-.register-content .reg-header span,
-.register-content .reg-header strong {
+.panel-content .panel-header span,
+.panel-content .panel-header strong {
   display: inline;
   font-size: 0.933em;
 }
-.register-content a {
+.panel-content a {
   color: #fff;
 }
-.register-content a:hover {
+.panel-content a:hover {
   color: #15a9c7;
 }
+.panel-content .panel-body {
+  padding-top: 50px;
+}
+/* App Sections */
 .register-content form {
   margin-top: 20px;
 }
@@ -420,6 +438,49 @@ body {
   width: 100%;
   max-width: 230px;
   margin: 0 10px 20px;
+}
+.button-page .form-group label {
+  margin-bottom: 2px;
+  display: block;
+}
+.button-page .form-group.inline-btn button {
+  margin-right: 10px;
+}
+.button-page .form-header {
+  display: block;
+  margin-top: 35px;
+  margin-bottom: 10px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.button-page .expand-block {
+  padding: 0.5rem 0;
+  margin: 15px 0;
+  border-radius: 0.25rem;
+  background: #ffffff;
+  color: #55595c;
+}
+.button-page .expand-block .head {
+  line-height: 1.25;
+  display: block;
+  padding: 0 0.75rem 2px;
+  color: #791e75;
+}
+.button-page .expand-block .form-group {
+  display: none;
+  margin: 0 0.75rem 5px;
+}
+.button-page .expand-block .form-group input[type="radio"],
+.button-page .expand-block .form-group input[type="checkbox"] {
+  margin-right: 5px;
+}
+.button-page .expand-block.open-block .form-group {
+  display: block;
+}
+.button-page .expand-block.open-block .head {
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.15);
 }
 /* Widget Style */
 /* Responsive Style */
