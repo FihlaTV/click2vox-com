@@ -1,74 +1,94 @@
-doctype html
-html(lang='en')
-  head
-    if process.env.NEW_RELIC_LICENSE_KEY
-      != newrelic.getBrowserTimingHeader()
+extends layout
+block content
+  .site-wrapper-inner.home-wrap
+    .container
+      .row.banner-content
+        .col-xs-8
 
-    meta(charset='utf-8')
-    meta(http-equiv='X-UA-Compatible', content='IE=edge')
-    meta(name='viewport', content='width=device-width, initial-scale=1')
+          h1 NO WEB DEVELOPMENT NEEDED
+          h2 HD calling to any SIP address straight from any website
+          p.
+            Click2Vox helps you build a click-to-call button that connects any webpage to any of your SIP addresses in seconds.
+            No app or plug-in installs for your customers. No complex gateway installs or phone system configuration for you.
+            Need to pass information from the webpage to your PBX or navigate an IVR? Click2Vox has you covered.
 
-    title= title
 
-    link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css", rel="stylesheet")
-    link(href="/stylesheets/root.css", rel="stylesheet")
+  .home-setup(id="setup")
+    .container
+      .row
+        .col-xs-12
+          h3 Setup Click-to-Call
+            span  in 3 Easy Steps
 
-    include tracking-scripts/google
-    include tracking-scripts/hotjar
+      .row
+        .col-md-4
+          .setup-grid.setup-inside-block
+            img(alt="Icon2" src="../../images/icon2.png")
+            h5 Create
+            p Create and customize your call button
 
-  body
-    .landing-hero
-      .container
-        nav.navbar
-          .navbar-header
-            a.navbar-brand(href='#', style='background-image: url("../images/navbar-brand.png")')
-            span.subBrand
-              | Click2Vox
-              sup β
-          .pull-right
-            a.login.user-pill.pull-left(href='/login') Login
-            a.login.user-pill.pull-left(href='/account/signup') Create account
-      .call-to-action
-        span HD calling to any SIP address straight from any website
-        br
-        span.block No web development needed
-        br
-        a.btn.btn-default.btn-purple(href='/account/signup') Create Account
-    .landing-main
-      .container
+        .col-md-4
+          .setup-grid.setup-inside-block
+            img(alt="Icon3" src="../../images/iconM.png")
+            h5 Add
+            p Add a SIP address &amp; place a test call
+
+        .col-md-4
+          .setup-grid.setup-inside-block
+            img(alt="Icon1" src="../../images/icon1.png")
+            h5 Embed
+            p Paste the code in your webpage
+
+  .contact(id="contact")
+    .container
+      .padding-contact
+
         .row
-          .col-xs-12.col-sm-10.col-xs-offset-1
-            p
-              | Click2Vox helps you build a click-to-call button that connects any webpage to any of your SIP addresses in seconds.
-            p
-              | No app or plug-in installs for your customers. No complex gateway installs or phone system configuration for you.
-            p
-              | Need to pass information from the webpage to your PBX or navigate an IVR?  Click2Vox has you covered.
-            .row
-              .col-xs-12.col-sm-4
-                .screen-shot-holder
-                  img(src='../images/screenshot-create-button.png')
-                  span Create and customize your call button
-              .col-xs-12.col-sm-4
-                .screen-shot-holder
-                  img(src='../images/screenshot-add-number.png')
-                  span Add a SIP address & place a test call
-              .col-xs-12.col-sm-4
-                .screen-shot-holder
-                  img(src='../images/screenshot-embed-code.png')
-                  span Paste the code in your webpage
 
-    .landing-footer
-      .container
-        .row
-          .col-sm-10.col-xs-offset-1
-            span.title Want to try it now?
-            br
-            div
-              a.btn.btn-info(href='/widget/demo') Create a sample call button
-            hr
+          .col-md-4.address
+            h3 Address
+            address
+              |535 Mission St
+              br
+              |San Francisco
+              br
+              |CA 94105
+              br
+              |USA #[span Tel: +1 415 520 505]
+              span
+                a(href=
+              "https://www.voxbone.com/" target="_blank")
+                  img(alt="" src="../../images/voxbone-logo.png")
 
-            //- include account/call-button.html
+          .col-md-4.links
+            h3 Links
+            ul.links
+              li
+                a(href="https://www.voxbone.com/" target="blank") Voxbone Website
+              li
+                a(href="http://blog.voxbone.com/" target="blank") Voxbone Blog
+              li
+                a(href="https://developers.voxbone.com/" target="blank") Voxbone Developers Platform
+              li
+                a(href="https://www.linkedin.com/company/voxbone" target="blank") Follow us on LinkedIn
+              li
+                a(href="https://plus.google.com/+VoxboneSA/posts" target="blank") Follow us on Google+
+              li
+                a(href="https://twitter.com/voxbone" target="blank") Follow us on Twitter
+              li
+                a(href="https://www.facebook.com/VoxboneSA" target="blank") Follow us on Facebook
 
-            #voxButton_575b3d7e89005411004db935.voxButton(data-button_id='575b3d7e89005411004db935', data-text='click2vox Us Now', data-redirect_url='https://voxbone.com', data-did='883510080408', data-dial_pad='true', data-context='', data-send_digits='', data-caller_id='Click2Vox', data-incompatible_browser_configuration='hide_widget', data-show_frame='false', data-use_default_button_css='false', data-div_css_class_name='', data-button_css_class_name='btn btn-purple')
-            script(src='/click2vox.js')
+          .col-md-4.newsletter
+            h3 Stay in touch
+            form
+              .form-group
+                label(for="exampleInputName2") Name
+                input.form-control(id="exampleInputName2" placeholder="Name" type="text")
+              .form-group
+                label(for="exampleInputEmail4") Email
+                input.form-control(id="exampleInputEmail4" placeholder="email@example.com" type="email")
+              button.btn.btn-default(type="submit") Sign up for Newsletter
+
+      .footer
+        p © 2016 Voxbone SA/NV | #[a(href="" target="_blank")] Acceptable Use Policy | #[a(href="" target="_blank")] Privacy Policy | #[a(href="" target="_blank")] Cookie Policy
+

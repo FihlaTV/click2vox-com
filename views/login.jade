@@ -1,9 +1,5 @@
 extends layout
 
-block default_nav
-  a.login.user-pill.pull-left(href="/") Home
-  a.login.user-pill.pull-left(href="/account/signup") Create account
-
 block extra_head
   script.
     require(
@@ -15,47 +11,77 @@ block extra_head
       });
 
 block content
-  .main.registerPage
-    .body
-      .container
-        .row
-          .col-sm-12
+  .site-wrapper-inner.home-wrap
+    .container
+      .row
+        .col-xs-5
+          while m = message.shift()
+            #tokenError.alert(class='alert-' + m.type)
+              div= m.message
 
-            h1 Login
+          #alert-user-pass.alert.alert-danger.hidden Incorrect Email or Password, try again.
+          #alert-unverified.alert.alert-danger.hidden Unverified account. Please check your inbox to validate your email address.
 
-            while m = message.shift()
-              #tokenError.alert(class='alert-' + m.type)
-                div= m.message
+          .register-content
+            .reg-header
+              h4 Login
+              strong
+                | Note for current Voxbone customers:
+              span your Click2Vox login will not be linked to your existing Voxbone account. We encourage you to create a separate account here for testing purposes. To use your Voxbone account and an existing DID, please visit #[a(href="https://developers.voxbone.com/how-to/setup-webrtc/") view instructions]
 
-            #alert-user-pass.alert.alert-danger.hidden Incorrect Email or Password, try again.
-            #alert-unverified.alert.alert-danger.hidden Unverified account. Please check your inbox to validate your email address.
-
-            #form_container
-              p.
-                #[b Note for current Voxbone customers: ]  you can login with your Voxbone portal account. The WebRTC widgets and services created on click2vox.com are indepedant of your Voxbone account, DIDs, and trunk configuration. To add WebRTC to an existing DID, please view our instructions #[a(href="https://developers.voxbone.com/how-to/setup-webrtc/") here]
-
-              .formWrap
-                h4.text-center Login with:
-                include social-buttons
-
-                h4.text-center or enter your details below
-                form#login_form(ng-controller="LoginController" ng-init="login.uemail='#{email || ''}'" name="login_form" novalidate)
-                  .form-group
-                    label.control-label Email
-                    input.form-control(type="email" id="uemail" name="uemail" ng-model="login.uemail" required)
-                    .ng-cloak(ng-show="login_form.$submitted || login_form.uemail.$touched")
-                      .error-label(ng-show="login_form.uemail.$error.required") Email is required
-                    .ng-cloak(ng-show="login_form.uemail.$dirty && login_form.uemail.$invalid")
-                      .error-label(ng-show="login_form.uemail.$error.email") Email is invalid
-                  .form-group
-                    label.control-label Password
-                    input.form-control(type="password", id="upassword", name="upassword", ng-model="login.upassword", required)
-                    .ng-cloak(ng-show="login_form.$submitted || login_form.upassword.$touched")
-                      .error-label(ng-show="login_form.upassword.$error.required") Password is required
-
-                  button.btn.btn-default#login(ng-disabled="login_form.$invalid" ng-click="login.processForm()") Login
+            .oauth-wrap
+              h4.sub-header Login With:
+              p.social-buttons
+                a(href="/auth/voxbone" class="vxb-button")
+                  img(src="/images/voxbone-x.png" width="25px" height="25px")
+                  span
+                    voxbone
                   br
-                  a(href="/forgot") Forgot your password?
+                  span.btn-txt Voxbone
+
+                a(href="/auth/google" class="google-button")
+                  span.fa.fa-google-plus
+                    google
                   br
-                  a(href="/signup") Sign up here
+                  span.btn-txt Google
+
+                a(href="/auth/github" class="git-button")
+                  span.fa.fa-github
+                    github
                   br
+                  span.btn-txt Github
+
+                a(href="/auth/windowslive" class="live-button")
+                  span.fa.fa-windows
+                    windowslive
+                  br
+                  span.btn-txt Live
+
+                a(href="/auth/linkedin" class="LI-button")
+                  span.fa.fa-linkedin
+                    linkedin
+                  br
+                  span.btn-txt LinkedIn
+
+            h4.sub-header or enter your details below:
+
+            form#login_form(ng-controller="LoginController" name="login_form" novalidate ng-init="login.uemail='#{email || ''}'")
+              .form-group
+                  label.control-label Email
+                  input.form-control(type="email" id="uemail" name="uemail" ng-model="login.uemail" required)
+                  .ng-cloak(ng-show="login_form.$submitted || login_form.uemail.$touched")
+                    .error-label(ng-show="login_form.uemail.$error.required") Email is required
+                  .ng-cloak(ng-show="login_form.uemail.$dirty && login_form.uemail.$invalid")
+                    .error-label(ng-show="login_form.uemail.$error.email") Email is invalid
+              .form-group
+                label.control-label Password
+                input.form-control(type="password", id="upassword", name="upassword", ng-model="login.upassword", required)
+                .ng-cloak(ng-show="login_form.$submitted || login_form.upassword.$touched")
+                  .error-label(ng-show="login_form.upassword.$error.required") Password is required
+
+              a.btn.btn-default-custom#login(ng-disabled="login_form.$invalid" ng-click="login.processForm()") Login
+              span
+                a(href="/forgot") Forgot your password?
+                br
+                a(href="/signup") Sign up here
+

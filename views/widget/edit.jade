@@ -30,73 +30,94 @@ block content
         require(['#{process.env.APP_URL}/click2vox.js']);
     });
 
-  .container
-    .row
-      .col-sm-12.col-md-12.col-xl-10.offset-xl-1
+  .site-wrapper-inner.home-wrap
+    .container
+      .row
+        .col-sm-12.col-md-12.col-xl-10.offset-xl-1
 
-        .panel-content.button-page
+          .panel-content.button-page
 
-          .panel-header
-            h4 Edit a WebRTC Click-to-Call Button
-            span
-              a(href="#") See our Frequently Asked Questions document.
-            hr
+            .panel-header
+              h4 Edit a WebRTC Click-to-Call Button
+              span
+                a(href="#") See our Frequently Asked Questions document.
+              hr
 
-          .panel-body
-            .row
-              .col-sm-12.col-lg-6
-                .form-group
-                  label(for="config-name") Configuration Name
-                  input.form-control#config-name(placeholder="i.e. Sales Button" type="text")
+            .panel-body
+              .row
+                .col-sm-12.col-lg-6
+                  .form-group
+                    label(for="config-name") Configuration Name
+                    input.form-control#config-name(placeholder="i.e. Sales Button" type="text")
 
-                  span.form-header Button Configuration
-                    .form-group
-                      label(for="config-label") Button Label
-                      input.form-control#config-name(placeholder="i.e. Call Sales" type="text")
+                    span.form-header Button Configuration
+                      .form-group
+                        label(for="config-label") Button Label
+                        input.form-control(type="text", name="button_label", ng-model="widget.button_label" value="#{defaultBtnLabel}" placeholder="i.e. #{defaultBtnLabel}")
 
 
-                    .form-group.inline-btn
-                      label Button Style
-                      button(type="submit" class="btn btn-lg btn-info") Click-to-call
-                      button(type="submit" class="btn btn-lg btn-purple") Click-to-call
+                      .form-group.inline-btn
+                        label Button Style
+                        .button-text
+                          button.btn-style-a(ng-cloak ng-click="setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                          div(ng-cloak) Blue Theme
+                        .button-text
+                          button.btn-style-b(ng-cloak ng-click="setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                          div(ng-cloak) Purple Theme
+                        .button-text
+                          button.btn-style-c(ng-cloak ng-click="setCustomTheme()" colorpicker colorpicker-position="right" ng-model="widget.button_color" ng-style="{'background': widget.button_color ? widget.button_color : tempButtonColor }") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                          div(ng-cloak) Custom Theme
 
-                  span.form-header Call Configuration
-                    .form-group
-                      label(for="config-label") SIP URI #[i.fa.fa-question-circle.tooltip-action.ta-white(aria-hidden="true")]
+                    span.form-header Call Configuration
+                      .form-group
+                        label(for="config-label") SIP URI #[i.fa.fa-question-circle.tooltip-action.ta-white(aria-hidden="true")]
 
-                      select.form-control
-                        option Select a SIP URI
-                        option Option
-                        option Option
-                        option Option
+                        select.form-control
+                          option Select a SIP URI
+                          option Option
+                          option Option
+                          option Option
 
-                      .expand-block.open-block
-                        span.head Advanced Call Configuration
+                        .expand-block.open-block
+                          span.head Advanced Call Configuration
 
-                        .form-group
-                          label(for="") Caller Id #[i.fa.fa-question-circle.tooltip-action(aria-hidden="true")]
-                          input.form-control(id="" placeholder="i.e. ClickVox_Demo" type="text")
+                          .form-group
+                            label(for="") Caller Id #[i.fa.fa-question-circle.tooltip-action(aria-hidden="true")]
+                            input.form-control(id="" placeholder="i.e. ClickVox_Demo" type="text")
 
-                        .form-group
-                          label(for="") Context #[i.fa.fa-question-circle.tooltip-action( aria-hidden="true")]
-                          input.form-control(id="" type="text")
+                          .form-group
+                            label(for="") Context #[i.fa.fa-question-circle.tooltip-action( aria-hidden="true")]
+                            input.form-control(id="" type="text")
 
-                        .form-group
-                          label(for="check01") #[input(type="checkbox" id="check01")] DTMF Dial Pad #[i.fa.fa-question-circle.tooltip-action(aria-hidden="true")]
+                          .form-group
+                            label(for="check01") #[input(type="checkbox" id="check01")] DTMF Dial Pad #[i.fa.fa-question-circle.tooltip-action(aria-hidden="true")]
 
-                        .form-group
-                          label(for="") Send Digits #[i.fa.fa-question-circle.tooltip-action( aria-hidden="true")]
-                          input.form-control(id="" type="text")
+                          .form-group
+                            label(for="") Send Digits #[i.fa.fa-question-circle.tooltip-action( aria-hidden="true")]
+                            input.form-control(id="" type="text")
 
-                      .expand-block.open-block
-                        span.head Incompatible Browser Configuration
-                        .form-group
-                          label(for="radio01") #[input(type="radio" id="radio01")] Hide the Widget #[i.fa.fa-question-circle.tooltip-action(aria-hidden="true")]
-                        .form-group
-                          label(for="radio02") #[input(type="radio" id="radio02")] Link button to a page #[i.fa.fa-question-circle.tooltip-action( aria-hidden="true")]
-                        .form-group
-                          label(for="radio03") #[input(type="radio" id="radio03")] Show text-HTML #[i.fa.fa-question-circle.tooltip-action(aria-hidden="true")]
+                        .expand-block.open-block
+                          span.head Incompatible Browser Configuration
+                          .form-group
+                            label(for="radio01") #[input(type="radio" id="radio01")] Hide the Widget #[i.fa.fa-question-circle.tooltip-action(aria-hidden="true")]
+                          .form-group
+                            label(for="radio02") #[input(type="radio" id="radio02")] Link button to a page #[i.fa.fa-question-circle.tooltip-action( aria-hidden="true")]
+                          .form-group
+                            label(for="radio03") #[input(type="radio" id="radio03")] Show text-HTML #[i.fa.fa-question-circle.tooltip-action(aria-hidden="true")]
 
-              .col-sm-12.col-lg-6
-                |right
+                .col-sm-12.col-lg-6
+                  .section
+                    include preview_widget
+
+                    div(ng-cloak)
+                      .error-label(ng-show="widget_form.cannotValidateSipUri")
+                        div {{ widget_form.cannotValidateSipUri || 'SIP URI cannot be validated. Please, try again'}}
+
+                      .success-label(ng-show="savedSuccessfully") Your configuration has been saved successfully!
+
+                      .pull-right
+                        button.btn.btn-danger.btn-xs(style='margin-right: 5px;' ng-cloak ng-click='discardConfiguration(widget_form)' ng-disabled="savingConfig || !widget_form.$dirty") Discard Changes
+                        button#saveConfig.btn.btn-success.btn-lg(ng-cloak ng-click='saveConfiguration()' ng-disabled="widget_form.$invalid || savingConfig || widget_form.$pristine || sipDirty") {{submitText}}
+                      .clearfix
+                      br
 
