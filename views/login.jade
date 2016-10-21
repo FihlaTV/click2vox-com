@@ -26,42 +26,12 @@ block content
             .panel-header
               h4 Login
               strong
-                | Note for current Voxbone customers:
+                | Note for current Voxbone customers:&nbsp;
               span your Click2Vox login will not be linked to your existing Voxbone account. We encourage you to create a separate account here for testing purposes. To use your Voxbone account and an existing DID, please visit #[a(href="https://developers.voxbone.com/how-to/setup-webrtc/") view instructions]
 
             .oauth-wrap
               h4.sub-header Login With:
-              p.social-buttons
-                a(href="/auth/voxbone" class="vxb-button")
-                  img(src="/images/voxbone-x.png" width="25px" height="25px")
-                  span
-                    voxbone
-                  br
-                  span.btn-txt Voxbone
-
-                a(href="/auth/google" class="google-button")
-                  span.fa.fa-google-plus
-                    google
-                  br
-                  span.btn-txt Google
-
-                a(href="/auth/github" class="git-button")
-                  span.fa.fa-github
-                    github
-                  br
-                  span.btn-txt Github
-
-                a(href="/auth/windowslive" class="live-button")
-                  span.fa.fa-windows
-                    windowslive
-                  br
-                  span.btn-txt Live
-
-                a(href="/auth/linkedin" class="LI-button")
-                  span.fa.fa-linkedin
-                    linkedin
-                  br
-                  span.btn-txt LinkedIn
+              include social-buttons
 
             h4.sub-header or enter your details below:
 

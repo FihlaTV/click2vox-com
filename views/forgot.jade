@@ -46,27 +46,27 @@ block content
     .body
       .container
         .row
-          .col-sm-12
+          .col-sm-12.site-wrapper-inner
+            .panel-content
+              h1 Forgot Password
 
-            h1 Forgot Password
+              if message
+                #tokenError.alert.alert-danger
+                  div= message
+              #errormsg.alert.alert-danger(style="display: none;")
+              #successmsg.alert.alert-success(style="display: none;")
 
-            if message
-              #tokenError.alert.alert-danger
-                div= message
-            #errormsg.alert.alert-danger(style="display: none;")
-            #successmsg.alert.alert-success(style="display: none;")
+              #form_container
+                .formWrap
+                  form#forgot_form(ng-controller="ForgotController" ng-init="forgot.uemail='#{email || ''}'" name="forgot_form" novalidate)
+                    .form-group
+                      label.control-label Email
+                      input.form-control(type="email" id="uemail" name="uemail" ng-model="forgot.uemail" required)
+                      .error-label(ng-cloak ng-show="forgot_form.$submitted || forgot_form.uemail.$touched")
+                        div(ng-show="forgot_form.uemail.$error.required") Email is required
+                      .error-label(ng-cloak ng-show="forgot_form.uemail.$dirty && forgot_form.uemail.$invalid")
+                        div(ng-show="forgot_form.uemail.$error.email") Email is invalid
 
-            #form_container
-              .formWrap
-                form#forgot_form(ng-controller="ForgotController" ng-init="forgot.uemail='#{email || ''}'" name="forgot_form" novalidate)
-                  .form-group
-                    label.control-label Email
-                    input.form-control(type="email" id="uemail" name="uemail" ng-model="forgot.uemail" required)
-                    .error-label(ng-cloak ng-show="forgot_form.$submitted || forgot_form.uemail.$touched")
-                      div(ng-show="forgot_form.uemail.$error.required") Email is required
-                    .error-label(ng-cloak ng-show="forgot_form.uemail.$dirty && forgot_form.uemail.$invalid")
-                      div(ng-show="forgot_form.uemail.$error.email") Email is invalid
-
-                  button.btn.btn-default#forgot(ng-disabled="forgot_form.$invalid || submitting" ng-click="processForm()") Reset Password
-                  br
-                  a(href="/")
+                    button.btn.btn-default#forgot(ng-disabled="forgot_form.$invalid || submitting" ng-click="processForm()") Reset Password
+                    br
+                    a(href="/")
