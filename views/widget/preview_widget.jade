@@ -1,11 +1,11 @@
-span.title(ng-cloak) Widget Preview in a {{ (!preview_webrtc_compatible ? "non-" : "") + "WebRTC Browser" }}
+span(ng-cloak) Widget Preview in a {{ (!preview_webrtc_compatible ? "non-" : "") + "WebRTC Browser" }}
 ul.nav.nav-tabs(ng-cloak)
   li(ng-class="{active:previewButton}" ng-click="previewButton = true")
     a(data-toggle="tab" href="#") Button #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This is what the click-to-call button will look like when the widget code snippet below is used on your website") ?]
   li(ng-class="{active:!previewButton}" ng-click="previewButton = false" ng-show="preview_webrtc_compatible")
     a(data-toggle="tab" href="#") Phone #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="Preview of the pop-up call controller that displays once the button is clicked") ?]
 
-.boxPanel.preview
+.preview
   .prev-view.light
     #widget-preview(ng-cloak ng-show="!previewButton")
       .vox-widget-wrapper-preview
@@ -83,9 +83,9 @@ ul.nav.nav-tabs(ng-cloak)
       a.light(href="javascript:void(0)" ng-click="widget.background_style = 'light'")
 
   .prev-code
-    .title
+    .form-header
       span Widget Code Snippet
-        p Paste the following HTML code into your website or give it a try using on
+    p Paste the following HTML code into your website or give it a try using on
     ul.nav.nav-tabs
       li(ng-click="saveConfiguration('div')" ng-class="{active:true}")
         a(data-toggle="tab" href="#") DIV #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This option gives the most flexibility for customization and generally works best") ?]
