@@ -1,4 +1,5 @@
-span(ng-cloak) Widget Preview in a {{ (!preview_webrtc_compatible ? "non-" : "") + "WebRTC Browser" }}
+.form-group
+  span.preview-title(ng-cloak) Widget Preview in a {{ (!preview_webrtc_compatible ? "non-" : "") + "WebRTC Browser" }}
 ul.nav.nav-tabs(ng-cloak)
   li(ng-class="{active:previewButton}" ng-click="previewButton = true")
     a(data-toggle="tab" href="#") Button #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This is what the click-to-call button will look like when the widget code snippet below is used on your website") ?]
