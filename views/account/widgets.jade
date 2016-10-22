@@ -46,8 +46,10 @@ block content
             center.header
               span.large Click2Vox Buttons
               br
-              span You will only be able to create buttons with a single user-defined SIP URI on a free account.
-                a(href="#")  Upgrade Now
+              if !currentUser.upgrade_request && currentUser.sip_uris.length == 0
+                p#upgrade_request Your trial account is authorized to create a single user-defined SIP URI and 5 simultaneous calls. #[a(href="#" ng-click='openRequestUpgradeModal(false)') Request a free upgrade]
+              else
+                p#upgrade_request You currently have #{currentUser.sip_uris.length} SIP URI’s for up to 5 simultaneous calls per account. #[a(href="#" ng-click='openRequestUpgradeModal(false)') Request an upgrade] if you need more
 
             center
               a.btn.btn-default-custom.add-btn(href="/sip/new") Add SIP URI
@@ -77,7 +79,9 @@ block content
                         .col-xs-4.text-right
                           a.clipboard(href="" widget-code="#{widget.divCode}") Copy Code
                           a(href="/widget/#{widget._id}/edit") View/Edit
+                          a(href="" ng-click='openDeleteModal("#{widget._id}")') Delete
                 hr
 
-    //- include contact-voxbone
+    include contact-voxbone
     include ../sip/edit_modal
+    include ../widget/delete_modal
