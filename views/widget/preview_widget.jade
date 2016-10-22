@@ -87,7 +87,7 @@ ul.nav.nav-tabs(ng-cloak)
     .form-header
       span Widget Code Snippet
     p Paste the following HTML code into your website or give it a try using on
-    ul.nav.nav-tabs
+    ul.nav.nav-tabs(ng-cloak)
       li(ng-click="saveConfiguration('div')" ng-class="{active:true}")
         a(data-toggle="tab" href="#") DIV #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This option gives the most flexibility for customization and generally works best") ?]
       li(ng-click="saveConfiguration('iframe')" ng-class="{active:false}" ng-hide="#{hideIframeTab}")
