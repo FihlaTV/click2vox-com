@@ -58,8 +58,9 @@ block content
 
             each group in widgetsData
               .toggle-extra
-                a(data-toggle="collapse" id="flip" href="##{group.uuid}" class="#{(group.widgets.length === 0) ? 'collapsed': ''}")
+                a(data-toggle="collapse" href="##{group.uuid}" class="#{(group.widgets.length === 0) ? 'collapsed': ''}")
                     span #{group._id}
+                    i#flip(class="glyphicon glyphicon-chevron-#{(group.widgets.length === 0) ? 'right': 'down'}")
                 a.pull-right(href="#" ng-click='editSIPURI("#{group._id}")') Edit
 
                 if group.widgets.length > 0
