@@ -75,7 +75,7 @@ block content
                           button.btn(style="border: #{widget.button_color}; background: #{widget.button_color}" class="btn-#{widget.button_style}")
                             span #{widget.button_label || defaultBtnLabel}
                         .col-xs-4.text-right
-                          a(widget-code="#{widget.divCode}") Copy Code
+                          a.clipboard(href="" widget-code="#{widget.divCode}") Copy Code
                           a(href="/widget/#{widget._id}/edit") View/Edit
                 hr
 
