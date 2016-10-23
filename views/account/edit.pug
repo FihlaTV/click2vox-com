@@ -14,7 +14,7 @@ block content
   - var userData = JSON.stringify(currentUser)
 
   .main.registerPage
-    .body(ng-controller="EditController" ng-init="initData={account: ${userData}}")
+    .body(ng-controller="EditController" ng-init=`initData={account: ${userData}}`)
       .site-wrapper-inner.home-wrap
         .container
           .row

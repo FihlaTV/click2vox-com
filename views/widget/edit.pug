@@ -25,7 +25,8 @@ block extra_head
 
         angular.bootstrap(document, ['voxboneApp']);
 
-        //require(['#{process.env.APP_URL}/click2vox.js']);
+        alert(`${process.env.APP_URL}/click2vox.js`);
+        require([`${process.env.APP_URL}/click2vox.js`]);
     });
 
 block content
