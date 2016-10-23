@@ -1,9 +1,5 @@
 extends layout
 
-block default_nav
-  a.login.user-pill.pull-left(href="/") Home
-  a.login.user-pill.pull-left(href="/login") Login
-
 block extra_head
   script(src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer)
 
@@ -90,11 +86,11 @@ block content
                       .ng-hide(ng-show="create_account.confirmation.$error.pwmatch") Password confirmation does not match
 
                   .form-group.text-center
-                    .captcha(ng-model="account.recaptcha" vc-recaptcha key='"#{process.env.GOOGLE_RECAPTCHA_SITE_KEY}"' on-create="setWidgetId(widgetId)")
+                    .captcha(ng-model="account.recaptcha" vc-recaptcha key=`"${process.env.GOOGLE_RECAPTCHA_SITE_KEY}"` on-create="setWidgetId(widgetId)")
 
                   .form-group
                     label.control-label
-                      span You must accept our #[a(href="#{process.env.APP_URL}/docs/click2vox-aup.pdf") User Policy]
+                      span You must accept our #[a(href=`${process.env.APP_URL}/docs/click2vox-aup.pdf`) User Policy]
                       span &nbsp;
                       input(type="checkbox" id="uaup" name="uaup" ng-model="account.uaup" required)
 
