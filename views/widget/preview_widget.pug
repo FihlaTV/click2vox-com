@@ -1,0 +1,111 @@
+.form-group
+  span.preview-title(ng-cloak) Widget Preview in a {{ (!preview_webrtc_compatible ? "non-" : "") + "WebRTC Browser" }}
+ul.nav.nav-tabs(ng-cloak)
+  li(ng-class="{active:previewButton}" ng-click="previewButton = true")
+    a(data-toggle="tab" href="#") Button #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This is what the click-to-call button will look like when the widget code snippet below is used on your website") ?]
+  li(ng-class="{active:!previewButton}" ng-click="previewButton = false" ng-show="preview_webrtc_compatible")
+    a(data-toggle="tab" href="#") Phone #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="Preview of the pop-up call controller that displays once the button is clicked") ?]
+
+.preview
+  .prev-view.light
+    #widget-preview(ng-cloak ng-show="!previewButton")
+      .vox-widget-wrapper-preview
+        .vw-main
+          .vw-header
+            span.vw-title#vw-title [Call Status]
+            .vw-actions
+              a#full-screen(ng-click="previewFullScreen = !previewFullScreen")
+                i(ng-class="{'vw-icon  vx-icon-full-screen-on':!previewFullScreen, 'vw-icon  vx-icon-full-screen-off':previewFullScreen}")
+              a
+                i.vw-icon.vx-icon-close
+          .vw-body#vw-body(ng-show="previewFullScreen")
+            #vw-in-call
+              .vw-btn-group#vw-btn-group
+                a(ng-click="previewMute = !previewMute")
+                  i.vw-icon.vx-icon-mic
+                  #microphone.int-sensor
+                    em#mic5(ng-class="{off:previewMute}")
+                    em#mic4(ng-class="{off:previewMute}")
+                    em#mic3(ng-class="{off:previewMute}")
+                    em#mic2(ng-class="{off:previewMute}")
+                    em#mic1(ng-class="{off:previewMute}")
+                a#dialpad(ng-show="widget.dial_pad" ng-class="{active:previewDialpad}" ng-click="previewDialpad = !previewDialpad")
+                  i.vw-icon.vx-icon-pad
+              a.vw-end-call
+                i.vw-icon.vx-icon-phone
+                span End Call
+              .vw-dialpad#vw-dialpad(ng-show="widget.dial_pad && previewDialpad")
+                ul
+                  li.vw-tl 1
+                  li 2
+                  li.vw-tr 3
+                  li 4
+                  li 5
+                  li 6
+                  li 7
+                  li 8
+                  li 9
+                  li.vw-bl *
+                  li 0
+                  li.vw-br #
+            #vw-footer.vw-footer
+              a(href="https://voxbone.com" target="_blank" ng-show="widget.show_branding") powered by:
+    #button-preview(ng-cloak ng-show="previewButton")
+      .hidden-not-supported(ng-show="!showCallButton() && widget.incompatible_browser_configuration === 'hide_widget'")
+        p.bg-info.text-center(style="padding: 5px")
+          i.glyphicon.glyphicon-exclamation-sign
+          span  The button is hidden because of the current config. Check the "Incompatible Browser Configuration" section to set it up.
+      .not-supported#not-supported-message(ng-cloak ng-show="!showCallButton()" ng-bind-html="getHiddenButtonText()")
+      .widget-box#launch_call_div(
+          ng-cloak class="{{widget.button_style}}"
+          ng-class="{'no-frame': !widget.show_frame, 'no-branding': !widget.show_branding}"
+          ng-style="{'background': widget.frame_color}"
+          ng-show="showCallButton()"
+        )
+        button.btn-style.launch_call#launch_call_preview(
+          ng-style="{'background': widget.button_color, 'border': widget.button_color}"
+          ng-cloak ng-disabled="!widget.sip_uri"
+          ng-click="makeCall()"
+          qtip="You can click the button to make a call and test the service!<br>(save your configuration before you test)"
+          qtip-disable="!isWebRTCSupported() || !preview_webrtc_compatible"
+          qtip-title="Try it!"
+        ) #[span {{widget.button_label || 'Call Sales'}}]
+
+        .widget-footer-left(ng-show="widget.test_setup")
+          a(href="https://test.webrtc.org/" target="_blank") Test your setup
+        .widget-footer-right(ng-show="widget.show_branding")
+          a(href="https://voxbone.com" target="_blank") powered by:
+
+    .preview-link
+      a(ng-cloak href="#" ng-click="previewButton = true; preview_webrtc_compatible = !preview_webrtc_compatible") {{ "Switch to " + (preview_webrtc_compatible ? "non-" : "") + "WebRTC Browser View" }}
+    .togle-bg
+      a.dark(href="javascript:void(0)" ng-click="widget.background_style = 'dark'")
+      a.grey(href="javascript:void(0)" ng-click="widget.background_style = 'grey'")
+      a.light(href="javascript:void(0)" ng-click="widget.background_style = 'light'")
+
+  .prev-code
+    .form-header
+      span Widget Code Snippet
+    p Paste the following HTML code into your website or give it a try using on
+    ul.nav.nav-tabs(ng-cloak)
+      li(ng-click="saveConfiguration('div')" ng-class="{active:true}")
+        a(data-toggle="tab" href="#") DIV #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This option gives the most flexibility for customization and generally works best") ?]
+      li(ng-click="saveConfiguration('iframe')" ng-class="{active:false}" ng-hide="#{hideIframeTab}")
+        a(data-toggle="tab" href="#") IFRAME #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="Use this option if the widget is not displaying correctly") ?]
+
+    .widget-code-wrap
+      .sample.shadow-z-2#widget_code
+        pre(ng-cloak)
+          | {{ widgetCode }}
+
+      .codebox-playground(ng-show="widget.showWidgetCode")
+        .btn-jsfiddle
+          form#code_debug_jsfiddle(action="https://jsfiddle.net/api/post/library/pure/" method="POST" target="_blank")
+            input(type="hidden" name="html" value='{{ prepareHtmlForCodepen(widgetCode) }}')
+            a(href="#" onclick="$('#code_debug_jsfiddle').submit();") JSFiddle
+        .btn-jsfiddle
+          form#code_debug_codepen(action="https://codepen.io/pen/define" method="POST" target="_blank")
+            input(type="hidden" name="data" value='{"html": "{{ prepareHtmlForCodepen(widgetCode) }}"}')
+            a(href="#" onclick="$('#code_debug_codepen').submit();") CodePen
+        .btn-jsfiddle
+          a(id="clipboard_copy" href="#" data-clipboard-target="#widget_code") Copy to Clipboard

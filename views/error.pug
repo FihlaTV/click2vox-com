@@ -1,0 +1,15 @@
+extends layout
+
+block extra_head
+  script.
+    require(['bootstrap']);
+
+block content
+
+  .main.registerPage.errorPageRaised
+    .row
+      .col-xs-12
+        #tokenError.alert.alert-danger
+          h1= message
+          h2= error.status
+        pre #{error.stack}

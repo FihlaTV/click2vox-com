@@ -1,0 +1,224 @@
+doctype html
+html(lang='en', ng-app="voxboneApp")
+  head
+    if process.env.NEW_RELIC_LICENSE_KEY
+      != newrelic.getBrowserTimingHeader()
+
+    title= title
+
+    link(rel="apple-touch-icon" href="")
+    link(rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico")
+
+    link(href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css", rel="stylesheet")
+    link(href="/stylesheets/root.css", rel="stylesheet")
+
+    script(src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
+    script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js' )
+    script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.12/angular.min.js")
+
+    script(src="/javascripts/jssip-0.7.9.min-vox.js")
+    script(src="/javascripts/voxbone-0.0.5.js")
+
+    script.
+      function sendPostMessage(action, value){
+        if (typeof value === 'undefined') { value = ''; }
+        var message = { action: action, value: value };
+        parent.postMessage(message, "*");
+      };
+
+      var app = angular.module('voxboneApp', [])
+        .controller('VoxboneWidgetController', ['$scope', '$http', '$window', function($scope, $http, $window){
+
+          $scope.master = { };
+
+          $scope.eventHandlers = {
+            'localMediaVolume': function (e) {
+              if(voxbone.WebRTC.isMuted) return;
+              sendPostMessage('setMicVolume', e.localVolume )
+            },
+            'progress': function (e) {
+              console.log('Calling...');
+              //- sendPostMessage('setCallCalling');
+            },
+            'failed': function (e){
+              console.log('Failed to connect: ' + e.cause);
+              sendPostMessage('setCallFailed', e.cause.substr(0,11));
+            },
+            'accepted': function (e){
+              console.log('Call started');
+              sendPostMessage('setInCall');
+            },
+            'ended': function (e){
+              console.log('Call ended');
+              sendPostMessage('setCallEnded');
+            },
+            'getUserMediaFailed': function (e){
+              console.log('Cannot get User Media');
+              sendPostMessage('setCallFailedUserMedia');
+            },
+            'getUserMediaAccepted': function(e) {
+              sendPostMessage('setCallCalling');
+              console.log('local media accepted');
+              voxbone.Logger.loginfo("local media accepted");
+            },
+            'authExpired': function (e){
+              console.log('Auth Expired!');
+              $scope.getVoxrtcConfig(function(data) {
+                voxbone.WebRTC.init(data);
+              });
+            }
+          };
+
+          $scope.getVoxrtcConfig = function (callback) {
+            $.get('/token_config', function(data){
+              eval("var token_config = " + data);
+              callback(token_config);
+            });
+          }
+
+          $scope.init = function () {
+            voxbone.WebRTC.configuration.post_logs = true;
+            voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
+            voxbone.WebRTC.customEventHandler = $scope.eventHandlers;
+
+            var caller_id = "#{the_widget.caller_id}" ? "#{the_widget.caller_id}" : "click2vox";
+            voxbone.WebRTC.configuration.uri = (new JsSIP.URI(scheme="sip", user=(caller_id).replace(/[^a-zA-Z0-9-_]/g, ''), "voxbone.com")).toString();
+
+            if("#{the_widget.context}")
+              voxbone.WebRTC.context = "#{the_widget.context}";
+
+            if("#{the_widget.send_digits}") {
+              console.log("Digits sent: #{the_widget.send_digits}");
+              voxbone.WebRTC.configuration.dialer_string = "#{the_widget.send_digits}";
+            }
+
+            voxbone.WebRTC.init(#{voxrtc_config});
+          };
+
+          $scope.send_voxbone_interaction = function (message){
+            if (!(typeof voxbone.WebRTC.rtcSession.isEstablished === "function") || voxbone.WebRTC.rtcSession.isEnded())
+              return;
+
+            switch(message) {
+              case 'hang_up':
+                voxbone.WebRTC.hangup();
+                break;
+              case 'microphone-mute':
+                if (voxbone.WebRTC.isMuted)
+                  voxbone.WebRTC.unmute();
+                else
+                  voxbone.WebRTC.mute();
+                break;
+              case '1':
+              case '2':
+              case '3':
+              case '4':
+              case '5':
+              case '6':
+              case '7':
+              case '8':
+              case '9':
+              case '0':
+              case '*':
+              case '#':
+                voxbone.WebRTC.sendDTMF(message);
+                break;
+            }
+          };
+
+          $window.addEventListener('message', function(event) {
+            //- console.log(event.data);
+            var message = event.data;
+
+            if (message.action &&  message.action == 'rate')
+              $scope.sendRate(message.data);
+            else
+              $scope.send_voxbone_interaction(event.data);
+          });
+
+          $scope.sendRate = function (data) {
+            var req = {
+              method: 'POST',
+              url: '/rating',
+              headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+              },
+              data: {
+                rate: data.rate,
+                comment: data.comment,
+                url: data.url,
+                token: "#{the_widget._id}"
+              }
+            };
+
+            $http(req)
+              .then(function successCallback(response) {
+                console.log("rating sent!");
+              }, function errorCallback() {
+                console.log("rating sending error callback");
+              });
+          };
+
+          $scope.isWebRTCSupported = function () {
+            return voxbone.WebRTC.isWebRTCSupported();
+          }
+
+          $scope.showCallButton = function () {
+            return $scope.isWebRTCSupported() || "#{the_widget.link_button_to_a_page}";
+          }
+
+          $scope.isInCall = function () {
+            return (typeof voxbone.WebRTC.rtcSession.isEstablished === "function") && !voxbone.WebRTC.rtcSession.isEnded();
+          }
+
+          $scope.makeCall = function () {
+            if(!$scope.isWebRTCSupported()){
+              console.log("WebRTC is NOT supported!");
+
+              if(#{the_widget.hide_widget})
+                return;
+              else if("#{the_widget.link_button_to_a_page}")
+                $window.open("#{the_widget.link_button_to_a_page}",'_blank');
+
+            } else{
+
+                if ($scope.isInCall())
+                  return;
+
+                if(#{the_widget.dial_pad})
+                  sendPostMessage('openWidget');
+                else
+                  sendPostMessage('openWidgetWithoutDialPad');
+
+                voxbone.WebRTC.call('#{did}');
+                window.onbeforeunload = function(e){
+                  voxbone.WebRTC.unloadHandler();
+                }
+            }
+          };
+
+          $scope.init();
+        }]);
+
+    script.
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', '#{process.env.GOOGLE_ANALYTICS_ID}', 'auto');
+      ga('send', 'pageview');
+
+  body
+    .main
+      .body(ng-controller="VoxboneWidgetController")
+        .not-supported#not-supported-message(ng-show="!showCallButton()")
+            !{the_widget.show_text_html}
+        .widget-box(class="#{ the_widget.button_style || 'style-b' }" ng-show="showCallButton()")
+          button.btn-style#launch_call(ng-click="makeCall()") #[span #{ the_widget.button_label || 'Call Now!' }]
+          if(the_widget.test_setup)
+            .widget-footer-left
+              a(href="https://test.webrtc.org/" target="_blank") Test your setup
+          if(the_widget.show_branding)
+            .widget-footer-right
+              a(href="https://voxbone.com" target="_blank") powered by:

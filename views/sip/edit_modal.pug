@@ -1,0 +1,20 @@
+.modal.editSIPModal#editSIPModal(tabindex="-1" role="dialog" aria-labelledby="editSIPModalLabel" ng-controller="EditSIPController")
+  .modal.custom-modal.fade.in
+    .modal-dialog.custom-modal-dialog(role="document")
+      .modal-content.custom-modal-content.edit-sip
+        .modal-header.custom-modal-header
+          button.close(type="button" data-dismiss="modal" aria-label="Close")
+            span(aria-hidden="true") ×
+          h4.modal-title.custom-modal-title(id="myModalLabel") Edit SIP URI
+        .modal-body.custom-modal-body
+          form(name="sipEditForm")
+            .form-group
+              label(for="exampleInputName2") SIP URI
+              input.form-control(type="text" placeholder="timeivr@sipvox1.voxbone.com" name="sip_uri" ng-model="sip_uri" ng-pattern="/^[^@]+@[^@]+$/" required)
+          .alert.alert-success(ng-bind="successMessage" ng-show="successMessage")
+          .error-label
+            div(ng-bind="errorMessage" ng-show="errorMessage")
+            div(ng-show="sipEditForm.sip_uri.$error.pattern") SIP URI must be valid i.e: user@ivrs.voxbone.com
+        .modal-footer.custom-modal-footer
+          button.btn.btn-default-custom(ng-bind="submitText" ng-disabled="!sipChanged || saving || sipEditForm.$invalid" ng-click="saveSipURI()") Save SIP URI
+          button.btn.btn-default-custom(data-dismiss="modal") Cancel
