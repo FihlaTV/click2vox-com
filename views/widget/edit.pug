@@ -25,8 +25,7 @@ block extra_head
 
         angular.bootstrap(document, ['voxboneApp']);
 
-        alert(`${process.env.APP_URL}/click2vox.js`);
-        require([`${process.env.APP_URL}/click2vox.js`]);
+        require(['#{process.env.APP_URL}/click2vox.js']);
     });
 
 block content
@@ -55,7 +54,7 @@ block content
                   .form-header Button Configuration
                   .form-group
                     label Button Label:
-                    input.form-control(type="text", name="button_label", ng-model="widget.button_label" value="#{defaultBtnLabel}" placeholder="i.e. #{defaultBtnLabel}")
+                    input.form-control(type="text", name="button_label", ng-model="widget.button_label" value=`${defaultBtnLabel}` placeholder=`i.e. ${defaultBtnLabel}`)
                   .form-group
                     label Button Style:
                     .buttons
