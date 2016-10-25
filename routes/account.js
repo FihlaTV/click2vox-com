@@ -89,6 +89,7 @@ router.get('/widgets', utils.isLoggedIn, function (req, res) {
           button_style: "$button_style",
           configuration_name: "$configuration_name",
           sip_uri: '$sip_uri',
+          did: '$did',
           _id: '$_id'
         }}
       }},
@@ -104,7 +105,6 @@ router.get('/widgets', utils.isLoggedIn, function (req, res) {
             } else {
               widget.divCode = utils.widgetDivHtmlCode(widget, widget.did);
             }
-
           });
           entry.uuid = utils.uuid4();
         });
