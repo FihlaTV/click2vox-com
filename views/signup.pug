@@ -47,8 +47,8 @@ block content
                   include social-buttons
 
                 h4.text-center or enter your details below to create a new account
-                form#create_account(ng-controller="SignUpController" name="create_account" ng-init="account.uemail='#{email || ''}'" novalidate)
-                  input.form-control(type="hidden" id="ureference" name="ureference" ng-model="account.ureference" ng-init="account.ureference='#{reference || ''}'")
+                form#create_account(ng-controller="SignUpController" name="create_account" ng-init=`account.uemail='${email || ''}'` novalidate)
+                  input.form-control(type="hidden" id="ureference" name="ureference" ng-model="account.ureference" ng-init=`account.ureference='${reference || ''}'`)
                   .form-group
                     label.control-label First Name
                     input.form-control(type="text" id="ufirstname" name="ufirstname" ng-model="account.ufirstname" required)
