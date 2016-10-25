@@ -1,5 +1,13 @@
 extends layout
 
+block default_nav
+  .collapse.navbar-toggleable-sm.pull-right(id="bd-main-nav")
+    ul.nav.navbar-nav
+      li.nav-item
+        a.nav-item.nav-link(href="/") Home
+      li.nav-item
+        a.nav-item.nav-link(href='/account/login') Login
+
 block extra_head
   script(src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer)
 
