@@ -58,13 +58,13 @@ html(lang='en')
                 li.nav-item
                   a.nav-item.nav-link(href="/logout") Logout
           else
-            //- Collect the nav links, forms, and other content for toggling
-            .collapse.navbar-toggleable-sm.pull-right(id="bd-main-nav")
-              ul.nav.navbar-nav
-                li.nav-item
-                  a.nav-item.nav-link(href="/login") Login
-                li.nav-item
-                  a.nav-item.nav-link(href='/account/signup') Create Account
+            block default_nav
+              .collapse.navbar-toggleable-sm.pull-right(id="bd-main-nav")
+                ul.nav.navbar-nav
+                  li.nav-item
+                    a.nav-item.nav-link(href="/login") Login
+                  li.nav-item
+                    a.nav-item.nav-link(href='/account/signup') Create Account
 
       block content
 
