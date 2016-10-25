@@ -47,7 +47,7 @@ block content
       .site-wrapper-inner.home-wrap
         .container
           .row
-            .col-sm-6
+            .col-sm-12.col-md-7.col-lg-6
               .panel-content
                 h1 Forgot Password
 
@@ -68,6 +68,6 @@ block content
                         .error-label(ng-cloak ng-show="forgot_form.uemail.$dirty && forgot_form.uemail.$invalid")
                           div(ng-show="forgot_form.uemail.$error.email") Email is invalid
 
-                      button.btn.btn-default#forgot(ng-disabled="forgot_form.$invalid || submitting" ng-click="processForm()") Reset Password
+                      button.btn.btn-block.btn-default-custom#forgot(ng-disabled="forgot_form.$invalid || submitting" ng-click="processForm()") Reset Password
                       br
                       a(href="/")

@@ -37,7 +37,7 @@ block content
       .site-wrapper-inner.home-wrap
         .container
           .row
-            .col-sm-6
+            .col-sm-12.col-md-7.col-lg-6
               .panel-content
                 .panel-header
                   h4 Create Account
@@ -102,6 +102,6 @@ block content
                       span &nbsp;
                       input(type="checkbox" id="uaup" name="uaup" ng-model="account.uaup" required)
 
-                  button.btn.btn-default#create(ng-disabled="create_account.$invalid" ng-click="processForm()") Create Account
+                  button.btn.btn-block.btn-default-custom#create(ng-disabled="create_account.$invalid" ng-click="processForm()") Create Account
                   br
                   p Already have a Click2Vox account? #[a(href="../login") Login here]
