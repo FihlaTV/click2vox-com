@@ -22,7 +22,7 @@ block content
   .site-wrapper-inner.home-wrap
     .container
       .row
-        .col-sm-12.col-md-7.col-lg-
+        .col-sm-12.col-md-7.col-lg-6
           while m = message.shift()
             #tokenError.alert(class='alert-' + m.type)
               div= m.message
@@ -38,28 +38,27 @@ block content
               span you can login with your Voxbone portal account. The WebRTC widgets and services created on click2vox.com are indepedant of your Voxbone account, DIDs, and trunk configuration. To add WebRTC to an existing DID, please view our instructions: #[a(href="https://developers.voxbone.com/how-to/setup-webrtc/") view instructions]
 
             .oauth-wrap
-              h4.sub-header Login With:
               include social-buttons
-
-            h4.sub-header or enter your details below:
-
-            form#login_form(ng-controller="LoginController" name="login_form" novalidate ng-init="login.uemail='#{email || ''}'")
-              .form-group
-                  label.control-label Email
-                  input.form-control(type="email" id="uemail" name="uemail" ng-model="login.uemail" required)
-                  .ng-cloak(ng-show="login_form.$submitted || login_form.uemail.$touched")
-                    .error-label(ng-show="login_form.uemail.$error.required") Email is required
-                  .ng-cloak(ng-show="login_form.uemail.$dirty && login_form.uemail.$invalid")
-                    .error-label(ng-show="login_form.uemail.$error.email") Email is invalid
-              .form-group
-                label.control-label Password
-                input.form-control(type="password", id="upassword", name="upassword", ng-model="login.upassword", required)
-                .ng-cloak(ng-show="login_form.$submitted || login_form.upassword.$touched")
-                  .error-label(ng-show="login_form.upassword.$error.required") Password is required
-              .form-group
-                a.btn.btn-block.btn-default-custom#login(ng-disabled="login_form.$invalid" ng-click="login.processForm()") Login
-                span
-              a(href="/forgot") Forgot your password?
-              br
-              a(href="/signup") Sign up here
+  
+            .register-content
+  
+              form#login_form(ng-controller="LoginController" name="login_form" novalidate ng-init="login.uemail='#{email || ''}'")
+                .form-group
+                    label.control-label Email
+                    input.form-control(type="email" id="uemail" name="uemail" placeholder="Name" ng-model="login.uemail" required)
+                    .ng-cloak(ng-show="login_form.$submitted || login_form.uemail.$touched")
+                      .error-label(ng-show="login_form.uemail.$error.required") Email is required
+                    .ng-cloak(ng-show="login_form.uemail.$dirty && login_form.uemail.$invalid")
+                      .error-label(ng-show="login_form.uemail.$error.email") Email is invalid
+                .form-group
+                  label.control-label Password
+                  input.form-control(type="password", id="upassword", name="upassword", placeholder="email@example.com", ng-model="login.upassword", required)
+                  .ng-cloak(ng-show="login_form.$submitted || login_form.upassword.$touched")
+                    .error-label(ng-show="login_form.upassword.$error.required") Password is required
+                .form-group
+                  a.btn.btn-block.btn-default-custom#login(ng-disabled="login_form.$invalid" ng-click="login.processForm()") Login
+                  span
+                a(href="/forgot") Forgot your password?
+                br
+                a(href="/signup") Sign up here
 

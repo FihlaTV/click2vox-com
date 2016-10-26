@@ -44,27 +44,30 @@ html(lang='en')
           //- Brand and toggle get grouped for better mobile display
           .navbar-header
             button(class="navbar-toggler pull-right hidden-md-up" type="button" data-toggle="collapse" data-target="#bd-main-nav" aria-controls="bd-main-nav" aria-expanded="false" aria-label="Toggle navigation") ☰
-            img(alt="logo" src="../../images/LogoClick")
-          if authenticated
-            //- Collect the nav links, forms, and other content for toggling
-            .collapse.navbar-toggleable-sm.pull-right(id="bd-main-nav")
-              ul.nav.navbar-nav
-                li.nav-item
-                  a.nav-item.nav-link(href="/") Home
-                li.nav-item
-                  a.nav-item.nav-link(href="/account/widgets") Buttons
-                li.nav-item
-                  a.nav-item.nav-link(href="/account/edit") Profile
-                li.nav-item
-                  a.nav-item.nav-link(href="/logout") Logout
-          else
-            block default_nav
+            
+            a.nav-brand(href="/")
+              img(alt="logo" src="../../images/LogoClick")
+          
+            if authenticated
+              //- Collect the nav links, forms, and other content for toggling
               .collapse.navbar-toggleable-sm.pull-right(id="bd-main-nav")
                 ul.nav.navbar-nav
                   li.nav-item
-                    a.nav-item.nav-link(href="/login") Login
+                    a.nav-item.nav-link(href="/") Home
                   li.nav-item
-                    a.nav-item.nav-link(href='/account/signup') Create Account
+                    a.nav-item.nav-link(href="/account/widgets") Buttons
+                  li.nav-item
+                    a.nav-item.nav-link(href="/account/edit") Profile
+                  li.nav-item
+                    a.nav-item.nav-link(href="/logout") Logout
+            else
+              block default_nav
+                .collapse.navbar-toggleable-sm.pull-right(id="bd-main-nav")
+                  ul.nav.navbar-nav
+                    li.nav-item
+                      a.nav-item.nav-link(href="/login") Login
+                    li.nav-item
+                      a.nav-item.nav-link(href='/account/signup') Create Account
 
       block content
 

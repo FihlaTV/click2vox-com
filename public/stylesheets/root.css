@@ -121,9 +121,6 @@ body {
 .padding-contact .links li a:hover {
   color: #15a9c7;
 }
-.padding-contact .newsletter form {
-  max-width: 190px;
-}
 .padding-contact .newsletter form .btn {
   width: 100%;
 }
@@ -227,7 +224,7 @@ body {
   color: #fff;
   margin-bottom: 0;
   font-weight: 100;
-  padding: 20px 25px;
+  padding: 20px 25px 35px;
 }
 .panel-content hr {
   border-color: #ffffff;
@@ -274,16 +271,21 @@ body {
   margin-top: 30px;
   margin-bottom: 30px;
 }
+.register-content form p {
+  margin: 0;
+}
 .register-content .sub-header {
   text-align: center;
   font-size: 1.200em;
   font-weight: normal;
 }
+.register-content .captcha {
+  margin: 1px 0;
+}
 .oauth-wrap {
   text-align: center;
   font-weight: normal;
   padding-top: 30px;
-  padding-bottom: 10px;
 }
 .oauth-wrap h4 {
   margin-bottom: 10px;
@@ -299,15 +301,15 @@ body {
   vertical-align: middle;
   padding-top: 9px;
   padding-bottom: 9px;
-  background: #791e75;
-  border-color: #791e75;
-  color: #ffffff;
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #791e75;
   border-radius: 6px;
 }
 .oauth-wrap a:hover {
-  background: #651961;
+  background: #f2f2f2;
   text-decoration: none;
-  color: #ffffff;
+  color: #791e75;
 }
 .oauth-wrap a .fa {
   font-size: 25px;
@@ -385,6 +387,7 @@ body {
 }
 .banner-content h2,
 .banner-content p {
+  color: #001e22;
   font-size: 1.8em;
   font-family: 'Lato', sans-serif;
   background: rgba(255, 255, 255, 0.8);
@@ -394,7 +397,9 @@ body {
   line-height: 1.4;
 }
 .banner-content p {
-  font-size: 1.2em;
+  font-size: 1.1em;
+  line-height: 1.8;
+  text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.5);
 }
 .home-setup {
   padding: 115px 0;
@@ -403,6 +408,7 @@ body {
   text-align: center;
 }
 .home-setup h3 {
+  margin-bottom: 70px;
   padding: 25px 0;
   font-size: 38px;
   font-weight: 800;
@@ -422,7 +428,7 @@ body {
 }
 .home-setup .setup-grid {
   background: #1b8dc3;
-  padding: 50px 0;
+  padding: 50px 0 0;
 }
 .home-setup h5 {
   font-family: 'Open Sans', sans-serif;
@@ -439,6 +445,7 @@ body {
   font-size: 16px;
   margin-top: 10px;
   line-height: 1.5;
+  font-weight: normal;
 }
 .edit-sip .modal-body .form-group label {
   margin-bottom: 5px;
@@ -1536,11 +1543,6 @@ pre {
 /* Large Devices, Wide Screens */
 /* Medium Devices, Desktops */
 /* Small Devices, Tablets */
-@media only screen and (max-width: 768px) {
-  .padding-contact .newsletter form {
-    max-width: none;
-  }
-}
 /* Extra Small Devices, Phones */
 @media only screen and (max-width: 480px) {
   .banner-content h1 {
