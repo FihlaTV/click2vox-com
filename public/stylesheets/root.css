@@ -56,6 +56,10 @@ body {
   padding-top: 15px;
   padding-bottom: 15px;
 }
+.navbar-inverse .navbar-nav > li {
+  margin-left: 15px;
+  margin-right: 15px;
+}
 .navbar-inverse .navbar-nav > li > a {
   color: #ffffff;
   font-size: 18px;
@@ -259,6 +263,23 @@ body {
 .panel-collapse span {
   margin-left: 5px;
 }
+.badge {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+  background: #207fbf;
+  font-weight: bold;
+}
+.tooltip > .tooltip-inner {
+  background: #207fbf;
+  font-weight: 300;
+  margin-left: 5px;
+}
 /* App Sections */
 .register-content form {
   margin-top: 20px;
@@ -281,6 +302,9 @@ body {
 }
 .register-content .captcha {
   margin: 1px 0;
+}
+.register-content.forgot-pass form .btn {
+  margin-bottom: 0;
 }
 .oauth-wrap {
   text-align: center;
@@ -309,7 +333,7 @@ body {
 .oauth-wrap a:hover {
   background: #f2f2f2;
   text-decoration: none;
-  color: #791e75;
+  color: #ffffff;
 }
 .oauth-wrap a .fa {
   font-size: 25px;
@@ -446,6 +470,16 @@ body {
   margin-top: 10px;
   line-height: 1.5;
   font-weight: normal;
+}
+.add-sip {
+  padding-top: 0 !important;
+}
+.add-sip .button-wrap {
+  text-align: center;
+  padding-top: 5px;
+}
+.add-sip .button-wrap button {
+  margin: 0 10px;
 }
 .edit-sip .modal-body .form-group label {
   margin-bottom: 5px;
