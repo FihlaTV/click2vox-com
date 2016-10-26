@@ -18,37 +18,40 @@ block content
       .site-wrapper-inner.home-wrap
         .container
           .row
-            .col-sm-6
+            .col-sm-12.col-md-7.col-lg-6
               .panel-content
-                h1 Edit your profile
 
-                #alert.alert(style="display: none;")
+                .panel-header
+                  h4 Edit your profile
+                  span You can change your personal information and settings here.
+  
+                  #alert.alert(style="display: none;")
 
-                #form_container
-                  p You can change your personal information and settings here.
-
-                  .formWrap
-                    form#editProfile(name="editProfile" novalidate)
-                      .form-group
-                        label.control-label First Name
-                        input.form-control(type="text" id="first_name" name="first_name" ng-model="account.first_name" required)
-                        .error-label(ng-show="editProfile.$submitted || editProfile.first_name.$touched")
-                          div.ng-hide(ng-show="editProfile.first_name.$error.required") Please enter your first name
-                      .form-group
-                        label.control-label Last Name
-                        input.form-control(type="text" id="last_name" name="last_name" ng-model="account.last_name" required)
-                        .error-label(ng-show="editProfile.$submitted || editProfile.last_name.$touched")
-                          div.ng-hide(ng-show="editProfile.last_name.$error.required") Please enter your last name
-                      .form-group
-                        label.control-label Company
-                        input.form-control(type="text" id="company" name="company" ng-model="account.company")
-                      .form-group
-                        label.control-label Phone Number (optional)
-                        input.form-control(type="text" id="phone" name="phone" ng-model="account.phone")
-                      .form-group
-                        label.control-label Email address
-                        input.form-control(type="text" ng-model="account.email" disabled)
-                      .form-group.hidden
-                        label.control-label Amount of SIP URIs allowed
-                        input.form-control(type="text" ng-model="account.sip_uris_limit" disabled)
-                      button.btn.btn-default#save(ng-disabled="editProfile.$invalid" ng-click="saveProfile(account)") Save Profile
+                .register-content
+                  #form_container
+  
+                    .formWrap
+                      form#editProfile(name="editProfile" novalidate)
+                        .form-group
+                          label.control-label First Name
+                          input.form-control(type="text" id="first_name" name="first_name" ng-model="account.first_name" required)
+                          .error-label(ng-show="editProfile.$submitted || editProfile.first_name.$touched")
+                            div.ng-hide(ng-show="editProfile.first_name.$error.required") Please enter your first name
+                        .form-group
+                          label.control-label Last Name
+                          input.form-control(type="text" id="last_name" name="last_name" ng-model="account.last_name" required)
+                          .error-label(ng-show="editProfile.$submitted || editProfile.last_name.$touched")
+                            div.ng-hide(ng-show="editProfile.last_name.$error.required") Please enter your last name
+                        .form-group
+                          label.control-label Company
+                          input.form-control(type="text" id="company" name="company" ng-model="account.company")
+                        .form-group
+                          label.control-label Phone Number (optional)
+                          input.form-control(type="text" id="phone" name="phone" ng-model="account.phone")
+                        .form-group
+                          label.control-label Email address
+                          input.form-control(type="text" ng-model="account.email" disabled)
+                        .form-group.hidden
+                          label.control-label Amount of SIP URIs allowed
+                          input.form-control(type="text" ng-model="account.sip_uris_limit" disabled)
+                        button.btn.btn-block.btn-default-custom#save(ng-disabled="editProfile.$invalid" ng-click="saveProfile(account)") Save Profile
