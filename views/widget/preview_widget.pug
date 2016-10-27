@@ -1,10 +1,10 @@
 .form-group
   span.preview-title(ng-cloak) Widget Preview in a {{ (!preview_webrtc_compatible ? "non-" : "") + "WebRTC Browser" }}
-ul.nav.nav-tabs(ng-cloak)
-  li(ng-class="{active:previewButton}" ng-click="previewButton = true")
-    a(data-toggle="tab" href="#") Button #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This is what the click-to-call button will look like when the widget code snippet below is used on your website") ?]
-  li(ng-class="{active:!previewButton}" ng-click="previewButton = false" ng-show="preview_webrtc_compatible")
-    a(data-toggle="tab" href="#") Phone #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="Preview of the pop-up call controller that displays once the button is clicked") ?]
+ul.nav.nav-tabs(ng-cloak role="tablist")
+  li.nav-item(ng-class="{active:previewButton}" ng-click="previewButton = true")
+    a.nav-link(data-toggle="tab" href="#" role="tab") Button #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This is what the click-to-call button will look like when the widget code snippet below is used on your website") ?]
+  li.nav-item(ng-class="{active:!previewButton}" ng-click="previewButton = false" ng-show="preview_webrtc_compatible")
+    a.nav-link(data-toggle="tab" href="#" role="tab") Phone #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="Preview of the pop-up call controller that displays once the button is clicked") ?]
 
 .preview
   .prev-view.light
@@ -87,11 +87,11 @@ ul.nav.nav-tabs(ng-cloak)
     .form-header
       span Widget Code Snippet
     p Paste the following HTML code into your website or give it a try using on
-    ul.nav.nav-tabs(ng-cloak)
-      li(ng-click="saveConfiguration('div')" ng-class="{active:true}")
-        a(data-toggle="tab" href="#") DIV #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This option gives the most flexibility for customization and generally works best") ?]
-      li(ng-click="saveConfiguration('iframe')" ng-class="{active:false}" ng-hide="#{hideIframeTab}")
-        a(data-toggle="tab" href="#") IFRAME #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="Use this option if the widget is not displaying correctly") ?]
+    ul.nav.nav-tabs(ng-cloak role="tablist")
+      li.nav-item(ng-click="saveConfiguration('div')" ng-class="{active:true}")
+        a.nav-link(data-toggle="tab" href="#" role="tab") DIV #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This option gives the most flexibility for customization and generally works best") ?]
+      li.nav-item(ng-click="saveConfiguration('iframe')" ng-class="{active:false}" ng-hide="#{hideIframeTab}")
+        a.nav-link(data-toggle="tab" href="#" role="tab") IFRAME #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="Use this option if the widget is not displaying correctly") ?]
 
     .widget-code-wrap
       .sample.shadow-z-2#widget_code

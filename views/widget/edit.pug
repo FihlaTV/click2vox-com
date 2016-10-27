@@ -70,7 +70,7 @@ block content
 
                   .panel.panel-default
                     .panel-heading
-                      a.collapsed.title-toggle.expand-block.collapse-block(data-toggle="collapse", data-target="#extraConfiguration", href="#extraConfiguration") Extra Configuration
+                      a.collapsed.title-toggle.collapse-block(data-toggle="collapse", data-target="#extraConfiguration", href="#extraConfiguration") Extra Configuration
                     .panel-collapse.collapse#extraConfiguration
                       .options-wrap.active
                         .form-group
@@ -80,7 +80,7 @@ block content
                               span.radio-name Show frame
                               span.badge(data-toggle='tooltip' data-placement="right" title="Shows/Hides the background and border of the button") ?
                           div(style="display:inline-block;")
-                            span(style="margin-left:20px" ng-show='widget.show_frame') Pick frame color #[i.glyphicon.glyphicon-tint(aria-hidden='true' colorpicker colorpicker-position="right" ng-model="widget.frame_color" style="cursor: pointer" ng-style="{'color': widget.frame_color || 'black'}")]
+                            span(style="margin-left:20px" ng-show='widget.show_frame') Pick frame color #[i.fa.fa-tint(aria-hidden='true' colorpicker colorpicker-position="right" ng-model="widget.frame_color" style="cursor: pointer" ng-style="{'color': widget.frame_color || 'black'}")]
 
                         .form-group
                           label
@@ -121,7 +121,7 @@ block content
 
                   .panel.panel-default
                     .panel-heading
-                      a.collapsed.title-toggle.expand-block.open-block(data-toggle="collapse", data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
+                      a.collapsed.title-toggle(data-toggle="collapse", data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
                     .panel-collapse.collapse#collapseAdvancedCallConfiguration
                       .options-wrap.active
                         .form-group
@@ -147,7 +147,7 @@ block content
                             span.badge(data-toggle='tooltip' data-placement="right" title="Ask the user/caller to rate after the call ends") ?
                   .panel.panel-default
                     .panel-heading
-                      a.collapsed.title-toggle.expand-block.open-block(data-toggle="collapse" data-target="#collapseIncompatileBrowserConfiguration" href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
+                      a.collapsed.title-toggle(data-toggle="collapse" data-target="#collapseIncompatileBrowserConfiguration" href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
                     .panel-collapse.collapse#collapseIncompatileBrowserConfiguration
                       .options-wrap.active.incompatible
                         .form-group
@@ -179,7 +179,7 @@ block content
                     .success-label(ng-show="savedSuccessfully") Your configuration has been saved successfully!
 
                     .pull-right
-                      button.btn.btn-danger.btn-xs(style='margin-right: 5px;' ng-cloak ng-click='discardConfiguration(widget_form)' ng-disabled="savingConfig || !widget_form.$dirty") Discard Changes
-                      button#saveConfig.btn.btn-success.btn-lg(ng-cloak ng-click='saveConfiguration()' ng-disabled="widget_form.$invalid || savingConfig || widget_form.$pristine || sipDirty") {{submitText}}
+                      button.btn.btn-primary.btn-xs(style='margin-right: 5px;' ng-cloak ng-click='discardConfiguration(widget_form)' ng-disabled="savingConfig || !widget_form.$dirty") Discard Changes
+                      button#saveConfig.btn.btn-primary.btn-lg(ng-cloak ng-click='saveConfiguration()' ng-disabled="widget_form.$invalid || savingConfig || widget_form.$pristine || sipDirty") {{submitText}}
                     .clearfix
                     br
