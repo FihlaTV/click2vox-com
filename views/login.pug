@@ -39,20 +39,20 @@ block content
 
             .oauth-wrap
               include social-buttons
-  
+
             .register-content
-  
+
               form#login_form(ng-controller="LoginController" name="login_form" novalidate ng-init="login.uemail='#{email || ''}'")
                 .form-group
                     label.control-label Email
-                    input.form-control(type="email" id="uemail" name="uemail" placeholder="Name" ng-model="login.uemail" required)
+                    input.form-control(type="email" id="uemail" name="uemail" placeholder="email@example.com" ng-model="login.uemail" required)
                     .ng-cloak(ng-show="login_form.$submitted || login_form.uemail.$touched")
                       .error-label(ng-show="login_form.uemail.$error.required") Email is required
                     .ng-cloak(ng-show="login_form.uemail.$dirty && login_form.uemail.$invalid")
                       .error-label(ng-show="login_form.uemail.$error.email") Email is invalid
                 .form-group
                   label.control-label Password
-                  input.form-control(type="password", id="upassword", name="upassword", placeholder="email@example.com", ng-model="login.upassword", required)
+                  input.form-control(type="password", id="upassword", name="upassword", ng-model="login.upassword", required)
                   .ng-cloak(ng-show="login_form.$submitted || login_form.upassword.$touched")
                     .error-label(ng-show="login_form.upassword.$error.required") Password is required
                 .form-group

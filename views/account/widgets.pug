@@ -43,7 +43,7 @@ block content
       .row
         .col-xs-12
           .touch
-            center.header
+            .header
               span.large Click2Vox Buttons
               br
               if !currentUser.upgrade_request && currentUser.sip_uris.length == 0
@@ -64,7 +64,7 @@ block content
                 a.pull-right(href="#" ng-click=`editSIPURI("${group._id}")`) Edit
 
                 if group.widgets.length > 0
-                  .toggle-content.sipCollapse.collapse.in(id="#{group.uuid}" style="display: block")
+                  .toggle-content.sipCollapse.collapse.in(id=`${group.uuid}` style="display: block")
                     .row.tc-header
                       .col-xs-4 Configuration Name
                       .col-xs-4.text-center Button Preview
