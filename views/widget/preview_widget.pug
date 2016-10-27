@@ -90,7 +90,7 @@ ul.nav.nav-tabs(ng-cloak role="tablist")
     ul.nav.nav-tabs(ng-cloak role="tablist")
       li.nav-item(ng-click="saveConfiguration('div')" ng-class="{active:true}")
         a.nav-link(data-toggle="tab" href="#" role="tab") DIV #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="This option gives the most flexibility for customization and generally works best") ?]
-      li.nav-item(ng-click="saveConfiguration('iframe')" ng-class="{active:false}" ng-hide="#{hideIframeTab}")
+      li.nav-item(ng-click="saveConfiguration('iframe')" ng-class="{active:false}" ng-hide=`${hideIframeTab}`)
         a.nav-link(data-toggle="tab" href="#" role="tab") IFRAME #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" data-width="350" title="Use this option if the widget is not displaying correctly") ?]
 
     .widget-code-wrap
