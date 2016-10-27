@@ -24,30 +24,30 @@ block content
                 .panel-header
                   h4 Edit your profile
                   span You can change your personal information and settings here.
-  
+
                   #alert.alert(style="display: none;")
 
                 .register-content
                   #form_container
-  
+
                     .formWrap
                       form#editProfile(name="editProfile" novalidate)
                         .form-group
                           label.control-label First Name
-                          input.form-control(type="text" id="first_name" name="first_name" ng-model="account.first_name" required)
+                          input.form-control(type="text" id="first_name" name="first_name" ng-model="account.first_name" required placeholder="i.e. John")
                           .error-label(ng-show="editProfile.$submitted || editProfile.first_name.$touched")
                             div.ng-hide(ng-show="editProfile.first_name.$error.required") Please enter your first name
                         .form-group
                           label.control-label Last Name
-                          input.form-control(type="text" id="last_name" name="last_name" ng-model="account.last_name" required)
+                          input.form-control(type="text" id="last_name" name="last_name" ng-model="account.last_name" required placeholder="i.e. Doe")
                           .error-label(ng-show="editProfile.$submitted || editProfile.last_name.$touched")
                             div.ng-hide(ng-show="editProfile.last_name.$error.required") Please enter your last name
                         .form-group
                           label.control-label Company
-                          input.form-control(type="text" id="company" name="company" ng-model="account.company")
+                          input.form-control(type="text" id="company" name="company" ng-model="account.company" placeholder="i.e. My Company")
                         .form-group
                           label.control-label Phone Number (optional)
-                          input.form-control(type="text" id="phone" name="phone" ng-model="account.phone")
+                          input.form-control(type="text" id="phone" name="phone" ng-model="account.phone" placeholder="i.e. +1-555-555-5555")
                         .form-group
                           label.control-label Email address
                           input.form-control(type="text" ng-model="account.email" disabled)
