@@ -24,7 +24,7 @@ block extra_head
 
       $(document).on('hide.bs.collapse show.bs.collapse', '.sipCollapse', function() {
         var trigger = $('[data-toggle="collapse"][href="#' + $(this).attr('id') + '"]');
-        trigger.find('i').toggleClass('glyphicon-chevron-down glyphicon-chevron-right');
+        trigger.find('i').toggleClass('fa-chevron-down fa-chevron-right');
         $('#'+$(this).attr('id')).toggle();
       });
 
@@ -60,7 +60,7 @@ block content
               .toggle-extra
                 a(data-toggle="collapse" href=`#${group.uuid}` class=`${(group.widgets.length === 0) ? 'collapsed': ''}`)
                     span #{group._id}
-                    i#flip(class=`glyphicon glyphicon-chevron-${(group.widgets.length === 0) ? 'right': 'down'}`)
+                    i#flip(class=`fa fa-chevron-${(group.widgets.length === 0) ? 'right': 'down'}`)
                 a.pull-right(href="#" ng-click=`editSIPURI("${group._id}")`) Edit
 
                 if group.widgets.length > 0
