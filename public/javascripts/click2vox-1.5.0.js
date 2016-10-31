@@ -469,12 +469,14 @@ var check1Ready = (function() {
 
   function showElement(selector){
     var el = document.querySelector(selector);
-    el.classList.remove('hidden');
+    if (el)
+      el.classList.remove('hidden');
   }
 
   function hideElement(selector){
     var el = document.querySelector(selector);
-    el.classList.add('hidden');
+    if (el)
+      el.classList.add('hidden');
   }
 
   function showAnimatedDots(){
