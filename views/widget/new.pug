@@ -35,7 +35,7 @@ block content
 
       .main.createButton.panel-content.button-page(class=showWizard ? 'wizard' : '' ng-controller="WidgetAddController" ng-init=`widget.sip_uri='${addedSip}'`)
         .panel-header
-          h1 Create a WebRTC Click-to-Call Button
+          h1.panel-title Create a WebRTC Click-to-Call Button
           p #[b Questions?] #[a(href="https://click2vox.com/faq" target="_blank") See our Frequently Asked Questions document.]
 
           #alert-success.alert.alert-warning.ng-cloak(ng-show="!isWebRTCSupported()") #[i.glyphicon.glyphicon-exclamation-sign] You are using a browser that does not support WebRTC. You can configure and preview your buttons, but you will not be able to place test calls. Please use Chrome or Firefox for maximum functionality.

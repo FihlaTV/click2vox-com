@@ -53,7 +53,7 @@ block content
                 .oauth-wrap
 
                   include social-buttons
-                
+
                 .register-content
                   form#create_account(ng-controller="SignUpController" name="create_account" ng-init=`account.uemail='${email || ''}'` novalidate)
                     input.form-control(type="hidden" id="ureference" name="ureference" ng-model="account.ureference" ng-init=`account.ureference='${reference || ''}'`)
@@ -80,7 +80,7 @@ block content
                         .ng-hide(ng-show="create_account.uemail.$error.required") Email is required
                     .form-group
                       label.control-label Password
-                      input.form-control(type="password" id="upassword" name="upassword" ng-model="account.upassword" required password-strength="account.upassword")
+                      input.form-control(type="password" id="upassword" name="upassword" placeholder="Your password" ng-model="account.upassword" required password-strength="account.upassword")
                       .progress.passwordStrength.ng-hide(ng-show="create_account.upassword.$dirty")
                         .progress-bar(role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: {{strength_percent}}%;" class="{{strength_class}}")
                           span Strength: {{strength}}!
@@ -89,18 +89,18 @@ block content
                         .ng-hide(ng-show="create_account.upassword.$error.minlength") Password must be at least 8 characters in length
                     .form-group
                       label.control-label Confirm Password
-                      input.form-control(type="password" id="confirmation" name="confirmation" ng-model="account.confirmation" required pw-check="upassword")
+                      input.form-control(type="password" id="confirmation" name="confirmation" placeholder="Repeat your password" ng-model="account.confirmation" required pw-check="upassword")
                       .error-label(ng-show="create_account.$submitted || create_account.confirmation.$touched")
                         .ng-hide(ng-show="create_account.confirmation.$error.pwmatch") Password confirmation does not match
-  
+
                     .form-group
                       .captcha(ng-model="account.recaptcha" vc-recaptcha key=`"${process.env.GOOGLE_RECAPTCHA_SITE_KEY}"` on-create="setWidgetId(widgetId)")
-  
+
                     .form-group
                       label.control-label
                         span You must accept our #[a(href=`${process.env.APP_URL}/docs/click2vox-aup.pdf`) User Policy]
                         span &nbsp;
                         input(type="checkbox" id="uaup" name="uaup" ng-model="account.uaup" required)
-  
+
                     button.btn.btn-block.btn-default-custom#create(ng-disabled="create_account.$invalid" ng-click="processForm()") Create Account
                     p Already have a Click2Vox account? #[a(href="../login") Login here]

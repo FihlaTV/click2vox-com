@@ -35,14 +35,14 @@ block content
                 .panel-content
 
                   .panel-header
-                    h1 Add a new SIP address
+                    h1.panel-title Add a new SIP address
                     span Enter the SIP URI you would like to use for your button. Your free account allows you to use one SIP URI at a time but you can request for an upgrade. Don't have a SIP URI? You can skip this for now.
                     hr
 
                   .panel-body.add-sip
                     form(name="sip_form" novalidate)
                       .form-group
-                        label SIP URI
+                        label SIP URI &nbsp;
                           span.badge(data-toggle='tooltip' data-placement="top right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Enter any valid SIP URI.") ?
                         input.form-control(type="text" name="sip_uri", ng-model="sip.uri" ng-pattern="/^[^@]+@[^@]+$/" check-allowed-sip auto-focus required placeholder="i.e. sip@domain.com")
                         div(style='color: green')

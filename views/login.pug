@@ -52,7 +52,7 @@ block content
                       .error-label(ng-show="login_form.uemail.$error.email") Email is invalid
                 .form-group
                   label.control-label Password
-                  input.form-control(type="password", id="upassword", name="upassword", ng-model="login.upassword", required)
+                  input.form-control(type="password", id="upassword", name="upassword", placeholder="Your password" ng-model="login.upassword", required)
                   .ng-cloak(ng-show="login_form.$submitted || login_form.upassword.$touched")
                     .error-label(ng-show="login_form.upassword.$error.required") Password is required
                 .form-group
