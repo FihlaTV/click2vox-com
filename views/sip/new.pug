@@ -25,7 +25,7 @@ block extra_head
 
 block content
     .header
-        .main.createButton.addSip(class=currentUser.showWizard() ? 'wizard' : '')
+      .main.createButton.addSip(class=currentUser.showWizard() ? 'wizard' : '')
     .body(ng-controller='AddSIPController' ng-init="init()")
       .site-wrapper-inner.home-wrap
         .container
@@ -38,6 +38,15 @@ block content
                     h1.panel-title Add a new SIP address
                     span Enter the SIP URI you would like to use for your button. Your free account allows you to use one SIP URI at a time but you can request for an upgrade. Don't have a SIP URI? You can skip this for now.
                     hr
+
+                    .row.first-step
+                      if currentUser.showWizard()
+                        .sip-steps
+                          .step.active
+                            span Add your SIP URI
+                          .step.right
+                            span Add WebRTC Call Button
+
 
                   .panel-body.add-sip
                     form(name="sip_form" novalidate)
