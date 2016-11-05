@@ -53,14 +53,14 @@ block content
             .col-sm-12.col-lg-6
               form#widget_form(name="widget_form", novalidate)
                 .form-group
-                  label Configuration Name:
+                  label Configuration Name
                   input.form-control(type="text", name="configuration_name", ng-model="widget.configuration_name" placeholder="i.e. Sales Button")
                 .form-header Button Configuration
                 .form-group
-                  label Button Label:
+                  label Button Label
                   input.form-control(type="text", name="button_label", ng-model="widget.button_label" value=`${defaultBtnLabel}` placeholder=`i.e. ${defaultBtnLabel}`)
                 .form-group
-                  label Button Style:
+                  label Button Style
                   .buttons
                     .button-text
                       button.btn-style-a(ng-cloak ng-click="setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
