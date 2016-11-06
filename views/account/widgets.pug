@@ -75,7 +75,7 @@ block content
                       .row
                         .col-xs-4 #{widget.configuration_name}
                         .col-xs-4.text-center
-                          button.btn(style=`border: ${widget.button_color}; background: ${widget.button_color}` class=`btn-${widget.button_style}`)
+                          button.btn.btn-preview(style=`border: ${widget.button_color}; background: ${widget.button_color}` class=`btn-${widget.button_style}`)
                             span #{widget.button_label || defaultBtnLabel}
                         .col-xs-4.text-right
                           a.clipboard(href="" widget-code=`${widget.divCode}`) Copy Code
