@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+require('mongoose-long')(mongoose);
+
 var Schema = mongoose.Schema;
 var pjson = require('../package.json');
 var version = pjson.version.split('.').join('');
@@ -47,7 +49,7 @@ var widgetSchema = new Schema({
   incompatible_browser_configuration: String,
   created_at: Date,
   updated_at: Date,
-  did: Number,
+  did: Schema.Types.Long,
   didId: Number
 });
 

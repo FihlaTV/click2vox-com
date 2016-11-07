@@ -201,13 +201,13 @@ accountSchema.methods.getDidFor = function(sipUri, callback) {
       if (foundDid) {
         return callback(foundDid);
       } else {
-        // if limit has been reached and this was not found return
-        // the registered when the account was created
-        if (self.sipsLimitReached())
-          return callback({ did: '', didId: '' });
-        else {
+        if (self.sipsLimitReached()) {
+          // if limit has been reached and this was not found return
+          // the registered when the account was created
+          return callback(null);
+        } else {
           Did.findOne({
-            assigned: { $ne: true }
+            assigned: false
           }, function(err, foundDid) {
             if (foundDid) {
               foundDid.assigned = true;
@@ -216,9 +216,7 @@ accountSchema.methods.getDidFor = function(sipUri, callback) {
                 return callback(doc);
               });
             } else {
-              // maybe we should throw this error below when no DIDs available
-              // throw new Error('NoDIDsAvailable');
-              return callback({ did: '', didId: '' });
+              return callback(null);
             }
           });
         }

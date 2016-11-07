@@ -18,75 +18,89 @@ module.exports = {
 
   defaultBtnLabel: process.env.DEFAULT_BUTTON_LABEL || 'Call Sales',
 
-  defaultSipUris: function () {
+  defaultSipUris: function() {
     var demoSips = require('../config/demo-sips.json');
     return Object.keys(demoSips);
   },
 
-  defaultDemoSipObject: function () {
+  defaultDemoSipObject: function() {
     var demoSips = require('../config/demo-sips.json');
     var demoSip = Object.keys(demoSips)[0];
     var demoDid = demoSips[demoSip][0];
-    var demoDidId =  demoSips[demoSip][1];
+    var demoDidId = demoSips[demoSip][1];
     return { demoSip: demoSip, demoDid: demoDid, demoDidId: demoDidId };
   },
 
-  isLoggedIn: function (req, res, next) {
+  isLoggedIn: function(req, res, next) {
     if (req.isAuthenticated())
       return next();
     res.redirect('/');
   },
 
-  redirectToWidgetIfLoggedIn: function (req, res, next) {
+  redirectToWidgetIfLoggedIn: function(req, res, next) {
     if (req.isAuthenticated())
       return res.redirect('/account/widgets');
     return next();
   },
 
-  accountLoggedIn: function (req) {
+  accountLoggedIn: function(req) {
     return req.isAuthenticated();
   },
 
-  userGravatarUrl: function (res) {
+  userGravatarUrl: function(res) {
     var crypto = require('crypto');
     var md5_email = crypto.createHash('md5').update(res.locals.currentUser.email).digest("hex");
     return "https://www.gravatar.com/avatar/" + md5_email + "/?s=20&d=mm";
   },
 
-  objectNotFound: function (req, res, next) {
+  objectNotFound: function(req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
   },
 
-  uuid4: function () {
+  uuid4: function() {
     // I leave this approach commented out just for general culture :)
     // 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     //     var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
     //     return v.toString(16);
     // });
 
-    function b (a) {return a?(a^Math.random()*16>>a/4).toString(16):([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,b);}
+    function b(a) {
+      return a ? (a ^ Math.random() * 16 >> a / 4).toString(16) : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, b);
+    }
     return b();
   },
 
-  provisionSIP: function (account, sipUri, callback) {
+  provisionSIP: function(account, sipUri, callback) {
     var request = require('request');
     var async = require('async');
     var utils = this;
-    var myDid;
 
-    account.getDidFor(sipUri, function (foundDid) {
-      myDid = foundDid;
-    });
+    var checkIfDefaultSipUri = function(done) {
+      // step 0 Do not provision if is a static/demo SIP URI
+      if (utils.defaultSipUris().indexOf(sipUri) !== -1) {
+        console.log('Jumping provisioning since (' + sipUri + ') is part of static/demo SIP URIs');
+        return callback();
+      }
+      done(null);
+    };
 
-    // do not provision if is a demo sip uri
-    if (utils.defaultSipUris().indexOf(sipUri) !== -1) {
-      console.log('Jumping provisioning since it is a demo sip uris');
-      return callback();
-    }
+    var getDid = function(done) {
+      account.getDidFor(sipUri, function(foundDid) {
+        if (foundDid) {
+          done(null, foundDid);
+        } else {
+          done({
+            httpStatusCode: 500,
+            comeback_errors: "No DIDs available",
+            message: "No DIDs available"
+          });
+        }
+      });
+    };
 
-    var verifySIP = function (done) {
+    var verifySIP = function(myDid, done) {
       // step 1 Check if SIP is already linked
       // if so, return the corresponding VoiceUriId
 
@@ -96,13 +110,13 @@ module.exports = {
           auth: utils.apiCredentials,
           headers: utils.jsonHeaders
         },
-        function (err, response, body) {
+        function(err, response, body) {
 
           if (err) return done(err);
 
           var responseBody = JSON.parse(body);
           var voiceUris = responseBody.voiceUris;
-          var voiceUri = voiceUris.filter(function (vu) {
+          var voiceUri = voiceUris.filter(function(vu) {
             return vu.uri == sipUri;
           });
 
@@ -110,12 +124,12 @@ module.exports = {
           if (voiceUri[0])
             voiceUriId = voiceUri[0].voiceUriId;
 
-          done(err, account, voiceUriId);
+          done(err, myDid, account, voiceUriId);
         }
       );
     };
 
-    var createVoiceURI = function (account, voiceUriId, done) {
+    var createVoiceURI = function(myDid, account, voiceUriId, done) {
       // Step 2: create voiceUri for the given sip uri
       var postData = {
         "didIds": [myDid.didId],
@@ -146,7 +160,7 @@ module.exports = {
           headers: utils.jsonHeaders,
           body: JSON.stringify(putData)
         },
-        function (err, response, body) {
+        function(err, response, body) {
           if (err) {
             if (err.code === 'ETIMEDOUT' || err.connect === true)
               done({
@@ -173,7 +187,7 @@ module.exports = {
       );
     };
 
-    var linkVoiceWithSIP = function (postData, done) {
+    var linkVoiceWithSIP = function(postData, done) {
       // Step 3 link the voice uri id
       var url = "https://api.voxbone.com/ws-voxbone/services/rest/configuration/configuration";
       request.post(url, {
@@ -181,21 +195,20 @@ module.exports = {
           headers: utils.jsonHeaders,
           body: JSON.stringify(postData)
         },
-        function (err, response, body) {
+        function(err, response, body) {
           done(err);
         }
       );
     };
 
     async.waterfall([
-        verifySIP, createVoiceURI,
-        linkVoiceWithSIP
+        checkIfDefaultSipUri, getDid, verifySIP, createVoiceURI, linkVoiceWithSIP
       ],
       callback
     );
   },
 
-  widgetDivHtmlCode: function (widget, did) {
+  widgetDivHtmlCode: function(widget, did) {
     var jade = require('jade');
     var script = process.env.APP_URL + this.click2voxJsFileName;
     var label = widget.button_label || process.env.DEFAULT_BUTTON_LABEL;
@@ -211,7 +224,7 @@ module.exports = {
     return jade.renderFile('./views/voxbone_widget_div.jade', params);
   },
 
-  getVoxRoutes: function () {
+  getVoxRoutes: function() {
     var app = require('../app');
     var routes = [];
 
