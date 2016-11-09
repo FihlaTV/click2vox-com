@@ -42,7 +42,7 @@ block content
 
             .register-content
 
-              form#login_form(ng-controller="LoginController" name="login_form" novalidate ng-init="login.uemail='#{email || ''}'")
+              form#login_form(ng-controller="LoginController" name="login_form" novalidate ng-init=`login.uemail='${email || ''}'`)
                 .form-group
                     label.control-label Email
                     input.form-control(type="email" id="uemail" name="uemail" placeholder="email@example.com" ng-model="login.uemail" required)

@@ -25,6 +25,8 @@ html(lang='en')
     script(src="/config.js")
 
     script.
+      require(['bootstrap']);
+
       jQuery(document).ready(function($) {
           $(".scroll").click(function(event){
               event.preventDefault();
@@ -44,10 +46,10 @@ html(lang='en')
           //- Brand and toggle get grouped for better mobile display
           .navbar-header
             button(class="navbar-toggler pull-right hidden-md-up" type="button" data-toggle="collapse" data-target="#bd-main-nav" aria-controls="bd-main-nav" aria-expanded="false" aria-label="Toggle navigation") ☰
-            
+
             a.nav-brand(href="/")
               img(alt="logo" src="../../images/LogoClick")
-          
+
             if authenticated
               //- Collect the nav links, forms, and other content for toggling
               .collapse.navbar-toggleable-sm.pull-right(id="bd-main-nav")
