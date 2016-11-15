@@ -30,6 +30,7 @@ module.exports = {
 
       // let's set some advanced configurations
       .click('a[href="#collapseAdvancedCallConfiguration"]')
+      .pause(1000)
       .setValue('input[name="caller_id"]', 'This_is_the_test_bot')
       .setValue('input[name="context"]', '12context34')
       .setValue('input[name="send_digits"]', '1,2,3,1200ms,4,5,900ms,6,#')
@@ -60,7 +61,7 @@ module.exports = {
       //redirect to widgets lits and delete button
       .url(browser.launchUrl + "/account/widgets")
       .click('.deleteButton')
-      .pause(500)
+      .pause(1500)
 
       //hits 'tab' twice and then hits 'enter', to confirm widget deletion on modal
       .keys(['\uE004'])

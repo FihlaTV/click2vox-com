@@ -17,14 +17,14 @@ module.exports = {
       .clearValue('input[name=phone]')
       .setValue('input[name=first_name]', 'Demo')
       .setValue('input[name=last_name]', 'User')
-      .setValue('input[name=company]', 'AgilityFeat')
+      .setValue('input[name=company]', 'Voxbone')
       .setValue('input[name=phone]', '+5412345678')
       .click('button[id="save"]')
       .waitForElementVisible('body', 1000)
       .assert.containsText('#alert', 'Your profile has been saved succesfully')
       .assert.value("form#editProfile input[name=first_name]", "Demo")
       .assert.value("form#editProfile input[name=last_name]", "User")
-      .assert.value("form#editProfile input[name=company]", "AgilityFeat")
+      .assert.value("form#editProfile input[name=company]", "Voxbone")
       .assert.value("form#editProfile input[name=phone]", "+5412345678")
       .end();
   },
