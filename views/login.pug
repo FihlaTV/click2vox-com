@@ -56,7 +56,7 @@ block content
                   .ng-cloak(ng-show="login_form.$submitted || login_form.upassword.$touched")
                     .error-label(ng-show="login_form.upassword.$error.required") Password is required
                 .form-group
-                  a.btn.btn-block.btn-default-custom#login(ng-disabled="login_form.$invalid" ng-click="login.processForm()") Login
+                  button.btn.btn-block.btn-default-custom#login(ng-disabled="login_form.$invalid" ng-click="login.processForm()") Login
                   span
                 a(href="/forgot") Forgot your password?
                 br

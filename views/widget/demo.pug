@@ -102,7 +102,7 @@ block content
 
                       select.form-control(ng-model="widget.sip_uri" ng-options=`sip for sip in ${JSON.stringify(demoSipUris)}` name="sip_uri" required disabled)
                         option(value="") Select a SIP URI
-                      div(style="color: green")
+                      div.try-own
                         div To try your own SIP URI please #[a(href="/account/signup") create an account]
 
                   .panel.panel-default
@@ -158,7 +158,7 @@ block content
                   include preview_widget
 
                   div
-                    div.ng-cloak(style="color: green" ng-show="widget.createAccountAlert") To try your own WebRTC Call Button please #[a(href="/account/signup") create an Account] #[br] #[br]
+                    div.ng-cloak.try-own(ng-show="widget.createAccountAlert") To try your own WebRTC Call Button please #[a(href="/account/signup") create an Account] #[br] #[br]
                     .pull-right
                       button.btn.btn-default(ng-click='widget.createAccountAlert=true' ng-disabled="widget_form.$invalid || !widget.sip_uri" ) Save Configuration
                     .clearfix
