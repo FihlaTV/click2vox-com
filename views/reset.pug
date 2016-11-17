@@ -42,28 +42,31 @@ block content
 
   .main.registerPage
     .body
-      .container
-        .row
-          .col-sm-12
+      .site-wrapper-inner.home-wrap
+        .container
+          .row
+            .col-sm-12.col-md-10.col-lg-8.col-xl-6
+              .panel-content
+                .panel-header
 
-            h1 Reset Password
+                  h1 Reset Password
 
-            #alert.alert.alert-danger(style="display: none;")
+                  #alert.alert.alert-danger(style="display: none;")
 
-            #form_container
-              .formWrap
-                form#reset_form(name="reset_form" novalidate ng-controller="ResetController")
-                  .form-group
-                    label.control-label New Password
-                    input.form-control(type="password" id="upassword" name="upassword" ng-model="resetpass.upassword" required ng-minlength="8")
-                    .error-label(ng-cloak ng-show="reset_form.$submitted || reset_form.upassword.$touched")
-                      div(ng-show="reset_form.upassword.$error.minlength") Password must be at least 8 characters in length
-                      div(ng-show="reset_form.upassword.$error.required") Password is required
-                  .form-group
-                    label.control-label Confirm Password
-                    input.form-control(type="password" id="confirmation" name="confirmation" ng-model="resetpass.confirmation" required pw-check="upassword")
-                    .error-label(ng-cloak ng-show="reset_form.$submitted || reset_form.confirmation.$touched")
-                      div(ng-show="reset_form.confirmation.$error.required") Confirmation is required
-                      div(ng-show="reset_form.confirmation.$error.pwmatch") Password confirmation does not match
+                  #form_container
+                    .formWrap
+                      form#reset_form(name="reset_form" novalidate ng-controller="ResetController")
+                        .form-group
+                          label.control-label New Password
+                          input.form-control(type="password" id="upassword" name="upassword" ng-model="resetpass.upassword" required ng-minlength="8")
+                          .error-label(ng-cloak ng-show="reset_form.$submitted || reset_form.upassword.$touched")
+                            div(ng-show="reset_form.upassword.$error.minlength") Password must be at least 8 characters in length
+                            div(ng-show="reset_form.upassword.$error.required") Password is required
+                        .form-group
+                          label.control-label Confirm Password
+                          input.form-control(type="password" id="confirmation" name="confirmation" ng-model="resetpass.confirmation" required pw-check="upassword")
+                          .error-label(ng-cloak ng-show="reset_form.$submitted || reset_form.confirmation.$touched")
+                            div(ng-show="reset_form.confirmation.$error.required") Confirmation is required
+                            div(ng-show="reset_form.confirmation.$error.pwmatch") Password confirmation does not match
 
-                  button.btn.btn-default#reset(ng-disabled="reset_form.$invalid" ng-click="processForm()") Update Password
+                        button.btn-block.btn-default-custom#reset(ng-disabled="reset_form.$invalid" ng-click="processForm()") Update Password

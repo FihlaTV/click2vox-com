@@ -53,16 +53,16 @@ block content
                   h4 Forgot Password
 
                 .register-content.forgot-pass
-                
+
                   if message
                     #tokenError.alert.alert-danger
                       div= message
                   #errormsg.alert.alert-danger(style="display: none;")
                   #successmsg.alert.alert-success(style="display: none;")
-  
+
                   #form_container
                     .formWrap
-                      form#forgot_form(ng-controller="ForgotController" ng-init="forgot.uemail='#{email || ''}'" name="forgot_form" novalidate)
+                      form#forgot_form(ng-controller="ForgotController" ng-init=`forgot.uemail='${email || ''}'` name="forgot_form" novalidate)
                         .form-group
                           label.control-label Email
                           input.form-control(type="email" id="uemail" name="uemail" placeholder="email@example.com" ng-model="forgot.uemail" required)
@@ -70,7 +70,7 @@ block content
                             div(ng-show="forgot_form.uemail.$error.required") Email is required
                           .error-label(ng-cloak ng-show="forgot_form.uemail.$dirty && forgot_form.uemail.$invalid")
                             div(ng-show="forgot_form.uemail.$error.email") Email is invalid
-  
+
                         button.btn.btn-block.btn-default-custom#forgot(ng-disabled="forgot_form.$invalid || submitting" ng-click="processForm()") Reset Password
                         br
                         a(href="/")
