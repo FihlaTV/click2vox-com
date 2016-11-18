@@ -1,5 +1,5 @@
 // Voxbone Click2Vox Widget library
-// Version - v1.5.0
+// Version - v2.0.0
 
 var head = document.getElementsByTagName('head')[0];
 var infoVoxbone, voxButtonElement;
@@ -335,8 +335,11 @@ var check1Ready = (function() {
   }
 
   function init() {
-    setTimeout(function() { document.querySelector("#launch_call_div").style.display = "block"; }, 500);
-
+    setTimeout(function() {
+      var el = document.querySelector("#launch_call_div");
+      if (el)
+        el.style.display = "block";
+    }, 500);
     // let's trigger an event when things are ready
     notifyLoaded();
 
