@@ -92,7 +92,7 @@ module.exports = function (grunt) {
           'public/config.js',
           'public/javascripts/controllers/*.js',
           'public/javascripts/directives/*.js',
-          'public/javascripts/click2vox-1.5.0.js',
+          'public/javascripts/click2vox-2.0.0.js',
           'routes/**/*.js',
           'tests/**/*.js',
           'views/**/*.js'
