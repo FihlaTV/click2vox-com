@@ -1,0 +1,17 @@
+.modal.fade.add-new-modal#myModal(tabindex="-1" role="dialog")
+  .modal.custom-modal.fade.in
+    .modal-dialog.custom-modal-dialog(role="document")
+      .modal-content.custom-modal-content.edit-sip
+        .modal-header.custom-modal-header
+          button.close(type="button" data-dismiss="modal" aria-label="Close")
+            span(aria-hidden="true") ×
+          h4.modal-title.custom-modal-title(id="myModalLabel") Upgrade
+        .modal-body.custom-modal-body
+          p #[strong Thanks!]
+          p We will review your request and get back to you soon.
+          p #[strong Can’t wait?]
+          p Please contact us using one of the buttons below.
+        .modal-footer.custom-modal-footer
+          button.btn.btn-default-custom(type="button" id="callVoxbone") Click to Call Us
+          a(href="mailto:workshop@voxbone.com?subject=%5BCLICK2VOX%5D%20About%20Upgrading")
+            button.btn.btn-default-custom(type="button") Click to Email Us

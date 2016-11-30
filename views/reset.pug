@@ -1,0 +1,72 @@
+extends layout
+
+block extra_head
+  script.
+    require([
+        'angular', 'jquery',
+        'directives/password.check'
+      ], function (angular, $, passwordCheckDirective) {
+        var resetPasswordApp = angular.module('voxboneApp', []);
+
+        resetPasswordApp.controller('ResetController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
+          $scope.processForm = function () {
+            var req = {
+              method: 'POST',
+              url: '/reset/#{token}',
+              headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+              },
+              data: {
+                password: $scope.resetpass.upassword,
+                confirmation: $scope.resetpass.confirmation
+              }
+            };
+
+            $http(req)
+              .then(function successCallback (response) {
+                $window.location.href = response.data.redirect;
+              }, function errorCallback (response) {
+                $("#alert")
+                  .html("Confirmation doesn't match, try again.")
+                  .css("display", "block");
+              });
+          }
+        }
+      ]);
+
+      resetPasswordApp.directive('pwCheck', passwordCheckDirective);
+      angular.bootstrap(document, ['voxboneApp']);
+    });
+
+block content
+
+  .main.registerPage
+    .body
+      .site-wrapper-inner.home-wrap
+        .container
+          .row
+            .col-sm-12.col-md-10.col-lg-8.col-xl-6
+              .panel-content
+                .panel-header
+
+                  h1 Reset Password
+
+                  #alert.alert.alert-danger(style="display: none;")
+
+                  #form_container
+                    .formWrap
+                      form#reset_form(name="reset_form" novalidate ng-controller="ResetController")
+                        .form-group
+                          label.control-label New Password
+                          input.form-control(type="password" id="upassword" name="upassword" ng-model="resetpass.upassword" required ng-minlength="8")
+                          .error-label(ng-cloak ng-show="reset_form.$submitted || reset_form.upassword.$touched")
+                            div(ng-show="reset_form.upassword.$error.minlength") Password must be at least 8 characters in length
+                            div(ng-show="reset_form.upassword.$error.required") Password is required
+                        .form-group
+                          label.control-label Confirm Password
+                          input.form-control(type="password" id="confirmation" name="confirmation" ng-model="resetpass.confirmation" required pw-check="upassword")
+                          .error-label(ng-cloak ng-show="reset_form.$submitted || reset_form.confirmation.$touched")
+                            div(ng-show="reset_form.confirmation.$error.required") Confirmation is required
+                            div(ng-show="reset_form.confirmation.$error.pwmatch") Password confirmation does not match
+
+                        button.btn-block.btn-default-custom#reset(ng-disabled="reset_form.$invalid" ng-click="processForm()") Update Password

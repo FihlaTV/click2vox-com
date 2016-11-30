@@ -3,8 +3,8 @@ module.exports = {
     browser
       .url(browser.launchUrl + "/login")
       .waitForElementVisible('body', 1000)
-      .assert.title('Voxbone Widget Generator v1.5.0')
-      .assert.containsText('body', 'Click2Vox')
+      .assert.title('Voxbone Widget Generator v2.0.0')
+      .assert.containsText('body', 'click2vox')
       .setValue('input[name=uemail]', 'demo.widget@click2vox.com')
       .setValue('input[name=upassword]', 'password')
       .click('button[id="login"]')

@@ -1,0 +1,82 @@
+.register-content {
+  
+  .reg-header {
+  }
+
+  form {
+    margin-top: 20px;
+    
+    label {
+      margin-bottom: 2px;
+    }
+    
+    .btn {
+      display: block;
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }     
+  
+    p {
+      margin: 0;
+    }
+  }
+
+  .sub-header {
+    text-align: center;
+    font-size: 1.200em;
+    font-weight: normal;
+  }
+
+  .captcha {
+  
+    margin: 1px 0;  
+  
+  }
+  
+  &.forgot-pass {
+    form {
+      .btn {
+        margin-bottom: 0;
+      }
+    }     
+  }
+}
+
+
+
+.oauth-wrap {
+  text-align: center;
+  font-weight: normal;
+  padding-top: 30px;
+  
+  h4 {
+    margin-bottom: 10px;
+  }  
+  
+  a {
+    font-size: 0.8em;
+    display: inline-block;
+    width: 55px;
+    height: 55px;
+    margin-bottom: 10px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    padding-top: 9px;
+    padding-bottom: 9px;
+    background: @color-white;
+    border-color: @color-white;
+    color: @color-purple;
+    border-radius: 6px;    
+    
+    &:hover {
+      background: darken(@color-white, 5%);
+      text-decoration: none;
+      color: @color-white;
+    }
+    
+    .fa {
+      font-size: 25px;
+    }    
+  }
+}

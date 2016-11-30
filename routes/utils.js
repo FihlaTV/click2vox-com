@@ -208,8 +208,8 @@ module.exports = {
     );
   },
 
-  widgetDivHtmlCode: function(widget, did) {
-    var jade = require('jade');
+  widgetDivHtmlCode: function (widget, did) {
+    var pug = require('pug');
     var script = process.env.APP_URL + this.click2voxJsFileName;
     var label = widget.button_label || process.env.DEFAULT_BUTTON_LABEL;
 
@@ -221,7 +221,7 @@ module.exports = {
       the_widget: widget
     };
 
-    return jade.renderFile('./views/voxbone_widget_div.jade', params);
+    return pug.renderFile('./views/voxbone_widget_div.pug', params);
   },
 
   getVoxRoutes: function() {

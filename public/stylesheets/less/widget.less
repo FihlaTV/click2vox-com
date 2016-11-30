@@ -1,6 +1,6 @@
 /*Btn Widget Stuff*/
 .btn-widget(@btn-color){
-  max-width: 100%;
+  max-width: 300px !important;
   min-width: 140px;
   display: inline-block;
 
@@ -13,8 +13,6 @@
   line-height: 1.4;
   font-weight: 700;
   color: #ffffff;
-
-  white-space: nowrap;
   vertical-align: middle;
   touch-action: manipulation;
   cursor: pointer;
@@ -36,8 +34,10 @@
   box-shadow: 0 1px 1px rgba(0,0,0,0.16);
 
   span{
-    display: block;
-    width: 100%;
+    display: block !important;
+    word-wrap: break-word !important;
+    white-space: normal !important;
+    max-width: 100% !important;
     padding: 10px 12px 12px;
     border-top:1px solid rgba(255, 255, 255, 0.10);
     text-shadow: 0px -1px #07619E;
@@ -59,32 +59,19 @@
   .btn-widget(#92168e);
 }
 .btn-style-c{
-  .btn-widget(rgba(25,41,209,1));
-  border: 1px solid grey;
-  background: rgba(25,41,209,1);
-  background: -moz-linear-gradient(-45deg, rgba(25,41,209,1) 0%, rgba(28,89,3,1) 50%, rgba(231,56,39,1) 100%);
-  background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(25,41,209,1)), color-stop(50%, rgba(28,89,3,1)), color-stop(100%, rgba(231,56,39,1)));
-  background: -webkit-linear-gradient(-45deg, rgba(25,41,209,1) 0%, rgba(28,89,3,1) 50%, rgba(231,56,39,1) 100%);
-  background: -o-linear-gradient(-45deg, rgba(25,41,209,1) 0%, rgba(28,89,3,1) 50%, rgba(231,56,39,1) 100%);
-  background: -ms-linear-gradient(-45deg, rgba(25,41,209,1) 0%, rgba(28,89,3,1) 50%, rgba(231,56,39,1) 100%);
-  background: linear-gradient(135deg, rgba(25,41,209,1) 0%, rgba(28,89,3,1) 50%, rgba(231,56,39,1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1929d1', endColorstr='#e73827', GradientType=1 );
-  &:hover{
-  background: rgba(21,34,178,1);
-  background: -moz-linear-gradient(-45deg, rgba(21,34,178,1) 0%, rgba(23,74,3,1) 50%, rgba(207,38,23,1) 100%);
-  background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(21,34,178,1)), color-stop(50%, rgba(23,74,3,1)), color-stop(100%, rgba(207,38,23,1)));
-  background: -webkit-linear-gradient(-45deg, rgba(21,34,178,1) 0%, rgba(23,74,3,1) 50%, rgba(207,38,23,1) 100%);
-  background: -o-linear-gradient(-45deg, rgba(21,34,178,1) 0%, rgba(23,74,3,1) 50%, rgba(207,38,23,1) 100%);
-  background: -ms-linear-gradient(-45deg, rgba(21,34,178,1) 0%, rgba(23,74,3,1) 50%, rgba(207,38,23,1) 100%);
-  background: linear-gradient(135deg, rgba(21,34,178,1) 0%, rgba(23,74,3,1) 50%, rgba(207,38,23,1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1522b2', endColorstr='#cf2617', GradientType=1 );
-  }
+  .btn-widget(grey);
 }
 .button-text{
   display:inline-block;
   text-align:center;
+  margin-right: 5px;
+  margin-left: 5px;
+  margin-bottom: 20px;
 }
 
+.buttons {
+  text-align: center;
+}
 
 .widget-box{
   position: relative;
@@ -167,4 +154,11 @@
 
 .btn-style-disabled {
   cursor: not-allowed !important;
+}
+
+.btn-preview {
+  min-width: 130px !important;
+  max-width: 300px !important;
+  height: auto !important;
+  width: auto !important;
 }

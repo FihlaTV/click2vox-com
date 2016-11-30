@@ -1,0 +1,64 @@
+.button-page {
+
+  .form-group {
+
+    label {
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    &.inline-btn {
+
+      button {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .form-header {
+    display: block;
+    margin-top: 35px;
+    margin-bottom: 10px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid rgba(255, 255, 255, .2);
+  }
+
+  .expand-block {
+    padding: 0.5rem 0;
+    margin: 15px 0;
+    border-radius: 0.25rem;
+    background: @color-white;
+    color: @font-color;
+
+    .head {
+      line-height: 1.25;
+      display: block;
+      padding: 0 0.75rem 2px;
+      color: @color-purple;
+
+    }
+
+    .form-group {
+      display: none;
+      margin:0 0.75rem 5px;
+
+      input[type="radio"],
+      input[type="checkbox"]{
+        margin-right: 5px;
+      }
+    }
+
+    &.open-block {
+
+      .form-group {
+        display: block
+      }
+
+      .head {
+        margin-bottom: 10px;
+        padding-bottom:8px;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+}

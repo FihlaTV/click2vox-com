@@ -1,0 +1,74 @@
+doctype html
+html(lang='en')
+  head
+    if process.env.NEW_RELIC_LICENSE_KEY
+      != newrelic.getBrowserTimingHeader()
+
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    meta(content="The Workshop Click-to-Call" name="keywords")
+    title= title
+
+    link(href="/stylesheets/root.css", rel="stylesheet")
+    link(href="//cdnjs.cloudflare.com/ajax/libs/raty/2.7.0/jquery.raty.min.css", rel="stylesheet")
+    link(href="//cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.css", rel="stylesheet")
+
+    script(src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js" async)
+    script(src="//cdn.voxbone.com/voxbone/voxbone-2.1.min.js")
+
+    script(src="/lib/jquery/dist/jquery.min.js")
+    script(src="/javascripts/directives/move-top.js")
+
+    script(src="/lib/requirejs/require.js")
+    script(src="/config.js")
+
+    script.
+      require(['bootstrap']);
+
+      jQuery(document).ready(function($) {
+          $(".scroll").click(function(event){
+              event.preventDefault();
+              $('html,body').animate({scrollTop:$(this.hash).offset().top},2000);
+          });
+      });
+
+    include tracking-scripts/google
+    include tracking-scripts/hotjar
+
+    block extra_head
+
+  body
+    .site-wrapper
+      nav.navbar.navbar-inverse.navbar-fixed-top
+        .container
+          //- Brand and toggle get grouped for better mobile display
+          .navbar-header
+            button(class="navbar-toggler pull-right hidden-md-up" type="button" data-toggle="collapse" data-target="#bd-main-nav" aria-controls="bd-main-nav" aria-expanded="false" aria-label="Toggle navigation") ☰
+
+            a.nav-brand(href="https://www.voxbone.com")
+              img(alt="logo" src="../../images/LogoClick")
+
+            if authenticated
+              //- Collect the nav links, forms, and other content for toggling
+              .collapse.navbar-toggleable-sm.pull-right(id="bd-main-nav")
+                ul.nav.navbar-nav
+                  li.nav-item
+                    a.nav-item.nav-link(href="/") Home
+                  li.nav-item
+                    a.nav-item.nav-link(href="/account/widgets") Buttons
+                  li.nav-item
+                    a.nav-item.nav-link(href="/account/edit") Profile
+                  li.nav-item
+                    a.nav-item.nav-link(href="/logout") Logout
+            else
+              block default_nav
+                .collapse.navbar-toggleable-sm.pull-right(id="bd-main-nav")
+                  ul.nav.navbar-nav
+                    li.nav-item
+                      a.nav-item.nav-link(href="/login") Login
+                    li.nav-item
+                      a.nav-item.nav-link(href='/account/signup') Create Account
+
+      block content
+

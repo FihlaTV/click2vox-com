@@ -1,0 +1,165 @@
+extends ../layout
+
+block extra_head
+  link(href="/stylesheets/vxb-widget.css", rel="stylesheet")
+  link(href="/lib/angular-bootstrap-colorpicker/css/colorpicker.min.css" rel="stylesheet")
+
+block content
+  script.
+    require([
+      'angular',
+      'angular-sanitize',
+      'angular-bootstrap-colorpicker',
+      'jquery',
+      'controllers/widget.demo',
+      'directives/qtip',
+      'directives/http.prefix'
+    ],
+    function(
+      angular, ngSanitize, colorPicker, $,
+      WidgetDemoController, qtipDirective,
+      httpPrefixDirective) {
+
+        angular.module('voxboneApp', ['ngSanitize','colorpicker.module'])
+          .directive('qtip', qtipDirective)
+          .directive('httpPrefix', httpPrefixDirective)
+          .controller('WidgetDemoController', WidgetDemoController);
+
+        angular.bootstrap(document, ['voxboneApp']);
+
+        require(['#{process.env.APP_URL}/click2vox.js']);
+    });
+  .site-wrapper-inner.home-wrap
+    .container
+      .voxButton#voxButtonPreview(data-div_css_class_name="hidden")
+
+      .main.createButton.panel-content.button-page(ng-controller="WidgetDemoController" ng-init=`widget.sip_uri='${demoSipUris[0]}'; did = ${demoDid};`)
+        .header
+          .container
+            .row
+              .col-xs-12
+                h1 Demo WebRTC Click-to-Call Button
+                p #[b Questions?] #[a(href="https://click2vox.com/faq" target="_blank") See our Frequently Asked Questions document.]
+
+                #alert-success.alert.alert-warning.ng-cloak(ng-show="!isWebRTCSupported()") #[i.glyphicon.glyphicon-exclamation-sign] You are using a browser that does not support WebRTC. You can configure and preview your buttons, but you will not be able to place test calls. Please use Chrome or Firefox for maximum functionality.
+        hr
+        .panel-body(ng-class="{newButton: !isWebRTCSupported()}")
+          .container
+            .row
+              .col-md-6.left-col
+                form#widget_form(name="widget_form" novalidate)
+                  .form-group
+                    label Configuration Name
+                    input.form-control(type="text" name="configuration_name" ng-model="widget.configuration_name" placeholder="i.e. Sales Button")
+
+                  .form-header Button Configuration
+                  .form-group
+                    label Button Label
+                    input.form-control(type="text", name="button_label", ng-model="widget.button_label" value=`${defaultBtnLabel}` placeholder=`i.e. ${defaultBtnLabel}`)
+                  .form-group
+                    label Button Style
+                    .buttons
+                      .button-text
+                        button.btn-style-a(ng-cloak ng-click="setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                        div(ng-cloak) Blue Theme
+                      .button-text
+                        button.btn-style-b(ng-cloak ng-click="setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                        div(ng-cloak) Purple Theme
+                      .button-text
+                        button.btn-style-c(ng-cloak ng-click="setCustomTheme()" colorpicker colorpicker-position="right" ng-model="widget.button_color" ng-style="{'background': widget.button_color ? widget.button_color : tempButtonColor }") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                        div(ng-cloak) Custom Theme
+
+                  .panel.panel-default
+                    .panel-heading
+                      a.collapsed.title-toggle.collapse-block(data-toggle="collapse", data-target="#extraConfiguration", href="#extraConfiguration") Extra Configuration
+                    .panel-collapse.collapse#extraConfiguration
+                      .options-wrap.active
+                        .form-group
+                          div(style="display:inline-block;")
+                            input(type='checkbox' name='show_frame' ng-model='widget.show_frame')
+                            span.radio-name Show frame
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Shows/Hides the background and border of the button") ?
+                          div(style="display:inline-block;")
+                            span(style="margin-left:20px" ng-show='widget.show_frame') Pick frame color #[i.fa.fa-tint(aria-hidden='true' colorpicker colorpicker-position="right" ng-model="widget.frame_color" style="cursor: pointer" ng-style="{'color': widget.frame_color || 'black'}")]
+
+                        .form-group
+                          label
+                            input(type='checkbox' name='test_setup' ng-model='widget.test_setup')
+                            span.radio-name Test user setup
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Place a link to test the users's WebRTC setup") ?
+
+                        .form-group
+                          label
+                            input(type='checkbox' name='show_branding' ng-model='widget.show_branding')
+                            span.radio-name Show branding
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Toggles Voxbone branding from button and popup") ?
+
+                  .form-header Call Configuration
+
+                  .form-group
+                    label.control-label SIP URI
+                      span.badge(data-toggle='tooltip' data-placement="right" title="This is the SIP address where inbound traffic from your Click2Vox button will be directed. Select one of yours SIP URIs or use one of our diagnostic URIs – echo@ivrs or digits@ivrs") ?
+
+                      select.form-control(ng-model="widget.sip_uri" ng-options=`sip for sip in ${JSON.stringify(demoSipUris)}` name="sip_uri" required disabled)
+                        option(value="") Select a SIP URI
+                      div.try-own
+                        div To try your own SIP URI please #[a(href="/account/signup") create an account]
+
+                  .panel.panel-default
+                    .panel-heading
+                      a.collapsed.title-toggle(data-toggle="collapse", data-target="#collapseAdvancedCallConfiguration",href="#collapseAdvancedCallConfiguration") Advanced Call Configuration
+                    .panel-collapse.collapse#collapseAdvancedCallConfiguration
+                      .options-wrap.active
+                        .form-group
+                          label(for="btn-context") Caller ID
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Enter the Caller ID that you would like sent with your Click2Vox widget calls (Only valid URI characters will be sent)") ?
+                          input.form-control(type="text" name="caller_id" ng-model="widget.caller_id" value="click2vox" placeholder="i.e. click2vox_demo")
+                        .form-group
+                          label(for="btn-context") Context
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Send custom data to your SIP server using the X-Voxbone-Context header. Make sure to configure your SIP server to process this header.") ?
+                          input.form-control(type="text" name="context" ng-model="widget.context")
+                        .form-group
+                          label(for="btn-context")
+                            input(type="checkbox" name="dial_pad" ng-model="widget.dial_pad")
+                            span &nbsp;DTMF Dial Pad
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Display a dialpad to allow your users to enter DTMF digits during a call.") ?
+                        .form-group
+                          label(for="btn-context") Send Digits #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" title="Automatically send DTMF digit(s) after a call is connected. This is useful for automatically navigating IVRs or entering access codes for a conference bridge. Digits should use the following format: <br><br>1,2,3,1200ms,4,5,900ms,6,#<br><br>This string will generate 1 2 3, wait 1200 milliseconds, enter 4, 5, wait 900 milliseconds then enter 6, #") ?]
+                          input.form-control(type="text" name="send_digits" ng-model="widget.send_digits")
+                        .form-group
+                          label(for="btn-context")
+                            input(type="checkbox" name="rating" ng-model="widget.rating")
+                            span &nbsp;Ask for rating after the call ends
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Ask the user/caller to rate after the call ends") ?
+                  .panel.panel-default
+                    .panel-heading
+                      a.collapsed.title-toggle(data-toggle="collapse" data-target="#collapseIncompatileBrowserConfiguration" href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
+                    .panel-collapse.collapse#collapseIncompatileBrowserConfiguration
+                      .options-wrap.active.incompatible
+                        .form-group
+                          label.hide_widget
+                            input(type='radio' name='incompatible_browser_configuration' ng-model='widget.incompatible_browser_configuration' value="hide_widget")
+                            span.radio-name Hide the widget
+                            span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, hide the widget") ?
+                        .form-group
+                          label.link_button_to_a_page
+                            input(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="link_button_to_a_page")
+                            span.radio-name Link button to a page
+                            span.badge(data-toggle='tooltip' data-placement="right" title="If the visitor’s browser does not support WebRTC, specify a URL to go to when the button is clicked") ?
+                            input.form-control(http-prefix type="url" name="link_button_to_a_page_value" ng-model="widget.link_button_to_a_page_value" ng-show="widget.incompatible_browser_configuration == 'link_button_to_a_page'" placeholder="i.e. https://mysite.com")
+                        .form-group
+                          label.show_text_html
+                            input(type='radio' name='incompatible_browser_configuration' ng-model="widget.incompatible_browser_configuration" value="show_text_html")
+                            span.radio-name Show text/HTML
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Instead of showing the button, display the entered HTML ") ?
+                            textarea.form-control(type="text" name="show_text_html_value", placeholder="Enter text or HTML" ng-show="widget.incompatible_browser_configuration == 'show_text_html'" ng-bind-html="widget.show_text_html_value" ng-model="widget.show_text_html_value")
+              .col-md-6.right-col
+                .section
+                  include preview_widget
+
+                  div
+                    div.ng-cloak.try-own(ng-show="widget.createAccountAlert") To try your own WebRTC Call Button please #[a(href="/account/signup") create an Account] #[br] #[br]
+                    .pull-right
+                      button.btn.btn-default(ng-click='widget.createAccountAlert=true' ng-disabled="widget_form.$invalid || !widget.sip_uri" ) Save Configuration
+                    .clearfix
+                    br

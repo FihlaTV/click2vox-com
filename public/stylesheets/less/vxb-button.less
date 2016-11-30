@@ -21,11 +21,15 @@
   font-weight:400;
 }
 
-.btn-style-a span,.btn-style-b span,.vxb-widget-box.style-a .vxb-btn-style span,.vxb-widget-box.style-b .vxb-btn-style span {
+.btn-style-a span,.btn-style-b span,.btn-style-c span,
+.vxb-widget-box.style-a .vxb-btn-style span,
+.vxb-widget-box.style-b .vxb-btn-style span,
+.vxb-widget-box.style-c .vxb-btn-style span{
   text-shadow:0 -1px #07619e;
   font-family: 'Open Sans', sans-serif;
   font-weight: bold;
-  max-width: 90%;
+  display: block;
+  word-wrap: break-word !important;
 }
 .btn-style-a {
   -moz-border-radius:4px;
@@ -46,7 +50,6 @@
   box-shadow:0 1px 1px rgba(0,0,0,.16);
   color:@color4;
   cursor:pointer;
-  display:inline-block;
   font-size:14px;
   font-weight:700;
   line-height:1.4;
@@ -57,7 +60,6 @@
   text-decoration:none;
   touch-action:manipulation;
   vertical-align:middle;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   span {
@@ -65,12 +67,10 @@
     -webkit-border-radius:4px;
     border-radius:4px;
     border-top:1px solid rgba(255,255,255,.1);
-    display:inline-block;
     overflow:hidden;
     padding: 10px 12px 12px;
     text-overflow:ellipsis;
     vertical-align:top;
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -101,7 +101,6 @@
   box-shadow:0 1px 1px rgba(0,0,0,.16);
   color:@color4;
   cursor:pointer;
-  display:inline-block;
   font-size:14px;
   font-weight:700;
   line-height:1.4;
@@ -112,7 +111,6 @@
   text-decoration:none;
   touch-action:manipulation;
   vertical-align:middle;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   span {
@@ -120,12 +118,10 @@
     -webkit-border-radius:4px;
     border-radius:4px;
     border-top:1px solid rgba(255,255,255,.1);
-    display:inline-block;
     overflow:hidden;
     padding:10px 12px 12px;
     text-overflow:ellipsis;
     vertical-align:top;
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -138,8 +134,7 @@
   }
 }
 .vxb-widget-box {
-  max-width: 200px;
-  max-height: 200px;
+  max-width: 350px;
   -moz-border-radius:6px;
   -webkit-border-radius:6px;
   border-radius:6px;
@@ -169,7 +164,6 @@
     }
   }
   .vxb-btn-style {
-    display:inline-block;
     padding-left:10px;
     padding-right:10px;
     text-align:center;
@@ -212,7 +206,6 @@
     box-shadow:0 1px 1px rgba(0,0,0,.16);
     color:@color4;
     cursor:pointer;
-    display:inline-block;
     font-size:14px;
     font-weight:700;
     line-height:1.4;
@@ -223,7 +216,6 @@
     text-decoration:none;
     touch-action:manipulation;
     vertical-align:middle;
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     span {
@@ -231,12 +223,10 @@
       -webkit-border-radius:4px;
       border-radius:4px;
       border-top:1px solid rgba(255,255,255,.1);
-      display:inline-block;
       overflow:hidden;
       padding:10px 12px 12px;
       text-overflow:ellipsis;
       vertical-align:top;
-      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -273,7 +263,6 @@
     box-shadow:0 1px 1px rgba(0,0,0,.16);
     color:@color4;
     cursor:pointer;
-    display:inline-block;
     font-size:14px;
     font-weight:700;
     line-height:1.4;
@@ -284,7 +273,6 @@
     text-decoration:none;
     touch-action:manipulation;
     vertical-align:middle;
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     span {
@@ -292,12 +280,10 @@
       -webkit-border-radius:4px;
       border-radius:4px;
       border-top:1px solid rgba(255,255,255,.1);
-      display:inline-block;
       overflow:hidden;
       padding:10px 12px 12px;
       text-overflow:ellipsis;
       vertical-align:top;
-      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }

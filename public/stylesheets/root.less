@@ -1,58 +1,56 @@
 /* ================================================
 Google Web Fonts
 ================================================ */
-/* Istok Web */
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,400italic);
+@import 'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i';
+@import 'https://fonts.googleapis.com/css?family=Lato:100,300,300i,400,400i,700,700i';
 
-/* === Icons === */
-/* Font Awesome */
-@import url('plugin/font-awesome/font-awesome.min.css');
+/* ================================================
+Font Awesome
+================================================ */
+@import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css';
+
+/* ================================================
+Plugin Css
+================================================ */
+/* Bootstrap */
+@import "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css";
+@import "less_ui/plugins/bootstrap-flex.css";
+
 
 /* ================================================
 Main Css
 ================================================ */
-/* Bootstrap Main Css File (unedited) */
-//@import '~/boostrap/less/boostrap';
 
-/* Shortcuts Css Codes */
-@import "less/mixing";
+/* Main Css Codes */
+@import "less_ui/main/_fonts";
+@import "less_ui/main/_colors";
+@import "less_ui/main/_base";
+
+
+/* Modules */
+@import "less_ui/modules/_header";
+@import "less_ui/modules/_footer";
+@import "less_ui/modules/_buttons";
+@import "less_ui/modules/_tool-tip";
+@import "less_ui/modules/_custom-modal";
+@import "less_ui/modules/_panel";
+@import "less_ui/modules/_tootlip";
+
+/* App Sections */
+@import "less_ui/pages/_register";
+@import "less_ui/pages/_home";
+@import "less_ui/pages/_sip";
+@import "less_ui/pages/_button-page";
 
 /* Main Css Codes */
 @import "less/mixing";
-@import "less/colors";
-@import "less/form";
-@import "less/btn";
-@import "less/fonts";
-@import "less/base";
-@import "less/header";
 @import "less/custom";
-@import "less/components";
-
-/* App Sections */
-@import "less/registerPage";
+/* @import "less/addSip"; (added to new ui) */
 @import "less/createButton";
 @import "less/buttonList";
-@import "less/addNewModal";
-@import "less/addSip";
-@import "less/landingPage";
-@import "less/loginPage";
-
 
 /* Widget Style */
 @import "less/widget";
 
 /* Responsive Style */
-@import "less/responsive";
-
-/* ================================================
-Plugin Css
-================================================ */
-
-/* Awesome Bootstrap Checkbox */
-@import url('plugin/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css');
-
-/* Bootstrap Select */
-@import url('plugin/bootstrap-select/bootstrap-select.css');
-
-/* Bootstrap Toggle */
-@import url('plugin/bootstrap-toggle/bootstrap-toggle.min.css');
+@import "less_ui/modules/_responsive";

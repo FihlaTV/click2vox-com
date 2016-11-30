@@ -1,0 +1,18 @@
+.modal#deleteWidgetModal(tabindex="-1" role="dialog" aria-labelledby="deleteWidgetLabel" ng-controller="DeleteWidgetController")
+  .modal.custom-modal.fade.in
+    .modal-dialog.custom-modal-dialog(role="document")
+      .modal-content.custom-modal-content.edit-sip
+        .modal-header.custom-modal-header
+          button.close(type="button" data-dismiss="modal" aria-label="Close")
+            span(aria-hidden="true") ×
+          h4.modal-title.custom-modal-title(id="myModalLabel") Delete this button?
+        .modal-body.custom-modal-body
+          p Are you sure you would like to delete this button? You will not be able to undo this operation!
+          .alert.alert-success(ng-bind="successMessage" ng-show="successMessage")
+          .error-label
+            div(ng-bind="errorMessage" ng-show="errorMessage")
+        .modal-footer.custom-modal-footer
+          button.btn.btn-default-custom(ng-bind="confirmText" ng-disabled="submitting" ng-click="deleteWidget()")
+          button.btn.btn-default-custom(data-dismiss="modal") Cancel
+
+
