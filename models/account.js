@@ -201,25 +201,19 @@ accountSchema.methods.getDidFor = function(sipUri, callback) {
       if (foundDid) {
         return callback(foundDid);
       } else {
-        if (self.sipsLimitReached()) {
-          // if limit has been reached and this was not found return
-          // the registered when the account was created
-          return callback(null);
-        } else {
-          Did.findOne({
-            assigned: false
-          }, function(err, foundDid) {
-            if (foundDid) {
-              foundDid.assigned = true;
-              foundDid.sip_uri = sipUri;
-              foundDid.save(function(err, doc, numAffected) {
-                return callback(doc);
-              });
-            } else {
-              return callback(null);
-            }
-          });
-        }
+        Did.findOne({
+          assigned: false
+        }, function(err, foundDid) {
+          if (foundDid) {
+            foundDid.assigned = true;
+            foundDid.sip_uri = sipUri;
+            foundDid.save(function(err, doc, numAffected) {
+              return callback(doc);
+            });
+          } else {
+            return callback(null);
+          }
+        });
       }
     });
 };
