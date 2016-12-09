@@ -46,7 +46,7 @@ html(lang='en')
           .navbar-header
             button(class="navbar-toggler pull-right hidden-md-up" type="button" data-toggle="collapse" data-target="#bd-main-nav" aria-controls="bd-main-nav" aria-expanded="false" aria-label="Toggle navigation") ☰
 
-            a.nav-brand(href="https://click2vox.com")
+            a.nav-brand(href=process.env.APP_URL)
               img(alt="logo" src="../../images/LogoClick")
 
             if authenticated
@@ -54,7 +54,7 @@ html(lang='en')
               .collapse.navbar-toggleable-sm.pull-right(id="bd-main-nav")
                 ul.nav.navbar-nav
                   li.nav-item
-                    a.nav-item.nav-link(href="/") Home
+                    a.nav-item.nav-link(href=process.env.APP_URL) Home
                   li.nav-item
                     a.nav-item.nav-link(href="/account/widgets") Buttons
                   li.nav-item
@@ -71,4 +71,3 @@ html(lang='en')
                       a.nav-item.nav-link(href='/account/signup') Create Account
 
       block content
-

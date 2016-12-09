@@ -127,7 +127,7 @@ module.exports = function (passport) {
     res.send(voxrtc_config);
   });
 
-  router.get('/', utils.redirectToWidgetIfLoggedIn, function (req, res, next) {
+  router.get('/', utils.isLoggedIn, function (req, res, next) {
     res.render('home', { title: title, email: req.query.email});
   });
 

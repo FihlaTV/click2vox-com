@@ -34,7 +34,7 @@ module.exports = {
   isLoggedIn: function(req, res, next) {
     if (req.isAuthenticated())
       return next();
-    res.redirect('/');
+    res.render('home');
   },
 
   redirectToWidgetIfLoggedIn: function(req, res, next) {
