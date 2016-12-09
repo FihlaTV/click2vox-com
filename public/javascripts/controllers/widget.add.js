@@ -14,7 +14,7 @@ define([
     $scope.previewFullScreen = true;
     $scope.previewMute = false;
     $scope.submitText = 'Save Configuration';
-    $scope.widgetCode = 'You must setup you widget and save your configuration to get the button embed code. Select from the SIP URI field the Echo Service (echo@ivrs), Digits Service (digits@ivrs) or one of your SIP URIs to create the button';
+    $scope.widgetCode = 'You must setup your widget and save your configuration to get the button embed code. Select from the SIP URI field the Echo Service (echo@ivrs), Digits Service (digits@ivrs) or one of your SIP URIs to create the button';
     $scope.tempButtonColor = "";
     $scope.tempFrameColor = "";
 
