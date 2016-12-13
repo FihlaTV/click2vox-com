@@ -172,7 +172,9 @@
       }
       color: @font-color;
       position: relative;
-      padding: 45px 60px 45px;
+      vertical-align: middle;
+      padding: 45px 10% 45px;
+      align-content: center;
       .border-radius(5px, 0, 0, 0);
       border-bottom: 1px solid @border-grey;
       &.dark{
@@ -229,6 +231,9 @@
           opacity: .65;
         }
       }
+    }
+    .ng-binding-footer{
+      font-size: ~"calc(6px + 0.7vw)";
     }
     .prev-code{
       padding: 20px;

@@ -374,8 +374,8 @@
 }
 
 .vox-widget-wrapper-preview {
-  margin:0 auto;
-  width: 315px;
+  margin:inherit;
+  width: inherit;
   font-family: 'Open Sans', sans-serif;
   color: #343c3e;
   font-weight: normal;
@@ -388,7 +388,7 @@
     cursor:pointer;
   }
   .vw-main {
-    width: 315px;
+    width:inherit;
     -webkit-border-top-right-radius:6px;
     -moz-border-radius-topleft:6px;
     -moz-border-radius-topright:6px;
@@ -404,6 +404,7 @@
       -moz-border-radius-topright:6px;
       height:46px;
       background:#eeeef0;
+      text-align: left;
       border-bottom:1px solid #d3d3d4;
       -webkit-border-top-left-radius:6px;
       border-top-left-radius:6px;
@@ -444,7 +445,7 @@
       min-height:105px;
       background:#f5f5f7;
       border-top:1px solid #ffffff;
-      padding:30px;
+      padding:5%;
       text-align:center;
       .vw-footer {
         position:absolute;
@@ -465,7 +466,8 @@
   }
   .vw-body .vw-btn-group {
     float:left;
-    height:40px;
+    height:0px;
+    width: 100px;
     a {
       text-decoration:none;
       position:relative;
@@ -484,6 +486,7 @@
       -moz-border-radius-bottomleft:4px;
       border-top-left-radius:4px;
       border-bottom-left-radius:4px;
+      padding: 1.2%;
     }
     a:last-child {
       -webkit-border-top-right-radius:4px;
@@ -507,14 +510,17 @@
     }
   }
   .vw-body .vw-end-call {
+    font-size: ~"calc(8.5px + 0.5vw)";
     float:left;
-    width:140px;
-    height:43px;
+    width:45%;
+    height:46px;
+    padding-right: 5%;
     color:#ffffff;
     font-weight:700;
     background:#e20a1f;
-    margin-left:20px;
+    margin-left:42%;
     text-align:center;
+    vertical-align: middle;
     -webkit-border-radius:4px;
     -moz-border-radius:4px;
     border-radius:4px;
@@ -530,8 +536,8 @@
   }
   .vw-body .vw-dialpad {
     display:inline-block;
-    width:275px;
-    margin:20px 0 0;
+    width:75%;
+    margin:5%;
     background:#f9f9fa;
     border-top:1px solid #cececf;
     border-left:1px solid #cececf;
@@ -605,6 +611,9 @@
       background:#00ff2a;
     }
   }
+  .ng-binding{
+    font-size:~"calc(8px + 0.5vw)";
+  }
 }
 
 .hidden {
@@ -644,7 +653,7 @@
 }
 .vw-icon.vx-icon-pad {
   width:30px;
-  height:40px;
+  height:42px;
   background-position:-8px -230px;
 }
 .vw-icon.vx-icon-phone {

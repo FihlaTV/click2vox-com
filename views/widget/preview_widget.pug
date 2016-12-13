@@ -77,7 +77,7 @@ ul.nav.nav-tabs(ng-cloak role="tablist")
           a(href="https://voxbone.com" target="_blank") powered by:
 
     .preview-link
-      a(ng-cloak href="#" ng-click="previewButton = true; preview_webrtc_compatible = !preview_webrtc_compatible") {{ "Switch to " + (preview_webrtc_compatible ? "non-" : "") + "WebRTC Browser View" }}
+      a(ng-cloak href="#" ng-click="previewButton = true; preview_webrtc_compatible = !preview_webrtc_compatible" class="ng-binding-footer") {{ "Switch to " + (preview_webrtc_compatible ? "non-" : "") + "WebRTC Browser View" }}
     .togle-bg
       a.dark(href="javascript:void(0)" ng-click="widget.background_style = 'dark'")
       a.grey(href="javascript:void(0)" ng-click="widget.background_style = 'grey'")
