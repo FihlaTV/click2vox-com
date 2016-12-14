@@ -31,7 +31,7 @@ block content
     });
   .site-wrapper-inner.home-wrap
     .container
-      .voxButton#voxButtonPreview(data-div_css_class_name="hidden")
+      .voxButton#voxButtonPreview(data-server_url=process.env.APP_URL data-div_css_class_name="hidden")
 
       .main.createButton.panel-content.button-page(ng-controller="WidgetDemoController" ng-init=`widget.sip_uri='${demoSipUris[0]}'; did = ${demoDid};`)
         .header
@@ -44,9 +44,8 @@ block content
                 #alert-success.alert.alert-warning.ng-cloak(ng-show="!isWebRTCSupported()") #[i.glyphicon.glyphicon-exclamation-sign] You are using a browser that does not support WebRTC. You can configure and preview your buttons, but you will not be able to place test calls. Please use Chrome or Firefox for maximum functionality.
         hr
         .panel-body(ng-class="{newButton: !isWebRTCSupported()}")
-          .container
             .row
-              .col-md-6.left-col
+              .col-sm-12.col-lg-6
                 form#widget_form(name="widget_form" novalidate)
                   .form-group
                     label Configuration Name
@@ -153,7 +152,7 @@ block content
                             span.radio-name Show text/HTML
                             span.badge(data-toggle='tooltip' data-placement="right" title="Instead of showing the button, display the entered HTML ") ?
                             textarea.form-control(type="text" name="show_text_html_value", placeholder="Enter text or HTML" ng-show="widget.incompatible_browser_configuration == 'show_text_html'" ng-bind-html="widget.show_text_html_value" ng-model="widget.show_text_html_value")
-              .col-md-6.right-col
+              .col-sm-12.col-lg-6
                 .section
                   include preview_widget
 

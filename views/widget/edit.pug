@@ -31,7 +31,7 @@ block extra_head
 block content
   .site-wrapper-inner.home-wrap
     .container
-      .voxButton#voxButtonPreview(data-div_css_class_name="hidden")
+      .voxButton#voxButtonPreview(data-server_url=process.env.APP_URL data-div_css_class_name="hidden")
 
       .main.createButton.panel-content.button-page(ng-controller="EditWidgetController" ng-init=`initData={widget: ${JSON.stringify(widget)}, did: ${widget.didToCall()}, widgetCode: '${widget_code}', currentSip: '${widget.sip_uri}'}`)
         .panel-header
