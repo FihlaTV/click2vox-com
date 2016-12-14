@@ -16,7 +16,11 @@ define([
 
       var didToCall = (typeof did === 'undefined') ? $scope.did : did;
       voxButtonElement.dataset.did = didToCall;
-
+      voxButtonElement.dataset.rating = $scope.widget.rating;
+      voxButtonElement.dataset.caller_id = $scope.widget.caller_id;
+      voxButtonElement.dataset.context = $scope.widget.context;
+      voxButtonElement.dataset.dial_pad = $scope.widget.dial_pad ;
+      voxButtonElement.dataset.send_digits = $scope.widget.send_digits;
       var launch_call_button = document.getElementById('launch_call');
       if (launch_call_button)
         launch_call_button.click();
