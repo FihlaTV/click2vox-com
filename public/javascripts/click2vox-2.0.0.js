@@ -415,7 +415,8 @@ var check1Ready = (function() {
         break;
 
       case 'setCallCalling':
-        playRingbackTone();
+        if (infoVoxbone.ringback !== 'false')
+          playRingbackTone();
         setWidgetTitle("Calling");
         break;
 

@@ -29,7 +29,9 @@ define([
       incompatible_browser_configuration: 'hide_widget',
       show_frame: true,
       show_branding: true,
-      test_setup: true
+      test_setup: true,
+      rating: true,
+      ringback: true
     };
 
     $scope.reset = function (form) {

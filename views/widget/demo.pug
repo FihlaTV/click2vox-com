@@ -130,6 +130,11 @@ block content
                             input(type="checkbox" name="rating" ng-model="widget.rating")
                             span &nbsp;Ask for rating after the call ends
                             span.badge(data-toggle='tooltip' data-placement="right" title="Ask the user/caller to rate after the call ends") ?
+                        .form-group
+                          label(for="btn-context")
+                            input(type="checkbox" name="ringback" ng-model="widget.ringback")
+                            span &nbsp;Ringback tone
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Hear a ring while the call connects") ?
                   .panel.panel-default
                     .panel-heading
                       a.collapsed.title-toggle(data-toggle="collapse" data-target="#collapseIncompatileBrowserConfiguration" href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration

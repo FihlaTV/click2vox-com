@@ -143,6 +143,16 @@ block content
                       .form-group
                         label(for="btn-context") Send Digits #[span.badge(data-toggle='tooltip' data-placement="right" data-html="true" title="Automatically send DTMF digit(s) after a call is connected. This is useful for automatically navigating IVRs or entering access codes for a conference bridge. Digits should use the following format: <br><br>1,2,3,1200ms,4,5,900ms,6,#<br><br>This string will generate 1 2 3, wait 1200 milliseconds, enter 4, 5, wait 900 milliseconds then enter 6, #") ?]
                         input.form-control(type="text" name="send_digits" ng-model="widget.send_digits" placeholder="i.e. 1,2,3,1200ms,4,5,900ms,6,#")
+                      .form-group
+                        label(for="btn-context")
+                          input(type="checkbox" name="rating" ng-model="widget.rating")
+                          span &nbsp;Ask for rating after the call ends
+                          span.badge(data-toggle='tooltip' data-placement="right" title="Ask the user/caller to rate after the call ends") ?
+                      .form-group
+                        label(for="btn-context")
+                          input(type="checkbox" name="ringback" ng-model="widget.ringback")
+                          span &nbsp;Ringback tone
+                          span.badge(data-toggle='tooltip' data-placement="right" title="Hear a ring while the call connects") ?
                 .panel.panel-default
                   .panel-heading
                     a.collapsed.title-toggle(data-toggle="collapse" data-target="#collapseIncompatileBrowserConfiguration" href="#collapseIncompatileBrowserConfiguration") Incompatible Browser Configuration
