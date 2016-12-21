@@ -59,6 +59,10 @@ module.exports = {
     next(err);
   },
 
+  error404: function(res) {
+    return res.status(404).render('error404');
+  },
+
   uuid4: function() {
     // I leave this approach commented out just for general culture :)
     // 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
