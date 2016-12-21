@@ -43,7 +43,7 @@ define(['jquery', 'bootstrap'], function (jQuery) {
             'Content-Type': 'application/json; charset=utf-8'
           },
           data: {
-            sip_uri: $scope.sip_uri,
+            sip_uri: $scope.sip_uri.replace('sip:','').trim(),
             original: originalSip
           }
         };
