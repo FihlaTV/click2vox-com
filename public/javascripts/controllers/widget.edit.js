@@ -17,6 +17,7 @@ define([
     $scope.submitText = 'Save Configuration';
     $scope.tempButtonColor = "";
     $scope.tempFrameColor = "";
+    $scope.widgetNotSaved = "Save the configuration to see the updated code snippet.";
 
     $scope.master = {
       showWidgetCode: true,
@@ -190,6 +191,14 @@ define([
     $scope.$watchCollection('widget', function () {
       $scope.savingError = false;
 
+      //Hide code snippet on settings change
+      if ($scope.widgetCode !== $scope.widgetNotSaved) {
+        if ((!$scope.savingConfig && $scope.widget_form.$dirty)) {
+          $scope.master.showWidgetCode = false;
+          $scope.widgetCode = $scope.widgetNotSaved;
+        }
+
+      }
       // TODO: convert this into a separate directive
       // right now this is really ugly
       if ($scope.widget.sip_uri === 'Add a new SIP URI') {
