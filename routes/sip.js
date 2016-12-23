@@ -35,7 +35,7 @@ router.post('/new', utils.isLoggedIn, function (req, res) {
 
   var sucessCallback = function (result) {
     result.redirect_to = (req.user.sip_uris.length === 0) ?
-      '/widget/new?sip=' + sipUri :
+      '/widget/new?sip=' + encodeURIComponent(sipUri) :
       '/account/widgets';
     result.message = 'Success';
     return res.status(200).json(result);
