@@ -264,8 +264,8 @@ module.exports = function (passport) {
         if (!the_widget || err) {
           var result = { message: "Widget not found", errors: null };
           return res.status(404).json(result);
-        } else if (the_widget && the_widget._account && the_widget._account.did) {
-          res.render('voxbone_widget_iframe', { layout: false, title: title, did: the_widget._account.did, the_widget: the_widget });
+        } else if (the_widget && the_widget.did) {
+          res.render('voxbone_widget_iframe', { layout: false, title: title, did: the_widget.did, the_widget: the_widget });
         }
 
         res.end("");

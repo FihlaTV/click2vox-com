@@ -92,7 +92,9 @@ html(lang='en', ng-app="voxboneApp")
               voxbone.WebRTC.configuration.dialer_string = "#{the_widget.send_digits}";
             }
 
-            voxbone.WebRTC.init(#{voxrtc_config});
+            $scope.getVoxrtcConfig(function(token_config) {
+              voxbone.WebRTC.init(token_config);
+            });
           };
 
           $scope.send_voxbone_interaction = function (message){
@@ -213,8 +215,8 @@ html(lang='en', ng-app="voxboneApp")
     .main
       .body(ng-controller="VoxboneWidgetController")
         .not-supported#not-supported-message(ng-show="!showCallButton()")
-            !{the_widget.show_text_html}
-        .widget-box(class="#{ the_widget.button_style || 'style-b' }" ng-show="showCallButton()")
+        span !{the_widget.show_text_html}
+        .widget-box(class=`${ the_widget.button_style || 'style-b' }` ng-show="showCallButton()")
           button.btn-style#launch_call(ng-click="makeCall()") #[span #{ the_widget.button_label || 'Call Now!' }]
           if(the_widget.test_setup)
             .widget-footer-left
