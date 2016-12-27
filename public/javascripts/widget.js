@@ -221,11 +221,6 @@ var checkReady = (function() {
       e.preventDefault();
       $(".vox-widget-wrapper").addClass('hidden');
       callAction('hang_up');
-
-      // send "no rating"
-      var data =  { rate: 0, comment: 'Closed Without Rating', url: document.URL };
-      var message = { action: 'rate', data: data };
-      callAction(message);
     });
 
     $("#full-screen i").click(function(e) {
