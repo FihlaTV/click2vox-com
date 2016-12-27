@@ -15,13 +15,7 @@ function loadScript(url, callback)
   head.appendChild(script);
 }
 
-var check1Ready = (function() {
-  loadScript("//cdnjs.cloudflare.com/ajax/libs/raty/2.7.0/jquery.raty.min.js", check2Ready);
-});
-
-var check2Ready = (function() {
-  console.log("jQuery & Raty are loaded");
-
+var checkReady = (function() {
   // Disabling this in order not to wait the whole set of pings to proxies be done.
   // $(document).ready(function () {
     $('#control').append(' \
@@ -87,23 +81,6 @@ var check2Ready = (function() {
                 </ul> \
               </div> \
             </div> \
-            <div id="vw-rating" class="vw-rating hidden"> \
-              <form name="rating"> \
-                <div id="vw-rating-question" class="vw-question">How was the quality of your call?</div> \
-                <div id="vw-rating-stars" class="vw-stars"></div> \
-                <div id="vw-rating-message" class="vw-message">Any additional feedback? \
-                  <input type="text" name="rating-message" id="rating-message" placeholder="Optional"" class="form-control"> \
-                </div> \
-                <div id="vw-rating-button" class="vw-button"> \
-                  <button class="btn-style btn-style-disabled" id="send-rating"> \
-                    <span>Send</span> \
-                  </button> \
-                </div> \
-              </form> \
-            </div> \
-            <div id="vw-rating-after-message" class="vw-rating hidden"> \
-              <p>Thank you for using our service</p> \
-            </div> \
             <div id="vw-footer" class="vw-footer"> \
               <a href="https://voxbone.com" target="_blank">powered by:</a> \
             </div> \
@@ -134,7 +111,6 @@ var check2Ready = (function() {
           $("#vw-title").text("Call Failed: " + message.value);
           $(".vw-animated-dots").addClass('hidden');
           $("#vw-in-call").addClass('hidden');
-          $("#vw-rating-after-message").removeClass('hidden');
           break;
         case 'setInCall':
           stopRingbackTone();
@@ -145,8 +121,6 @@ var check2Ready = (function() {
           $("#vw-title").text("Call Ended");
           $(".vw-animated-dots").addClass('hidden');
           $("#vw-in-call").addClass('hidden');
-          resetRating();
-          $("#vw-rating").removeClass('hidden');
           $(".vw-end-call").click();
           break;
         case 'openWidgetWithoutDialPad':
@@ -156,7 +130,6 @@ var check2Ready = (function() {
           $(".vw-animated-dots").removeClass('hidden');
           $(".vox-widget-wrapper").removeClass('hidden');
           $("#vw-in-call").removeClass('hidden');
-          $(".vw-rating").addClass('hidden');
           $("#vw-unable-to-acces-mic").addClass('hidden');
           break;
         case 'openWidget':
@@ -165,7 +138,6 @@ var check2Ready = (function() {
           $(".vw-animated-dots").removeClass('hidden');
           $(".vox-widget-wrapper").removeClass('hidden');
           $("#vw-in-call").removeClass('hidden');
-          $(".vw-rating").addClass('hidden');
           $("#vw-unable-to-acces-mic").addClass('hidden');
           break;
         case 'setCallFailedUserMedia':
@@ -176,23 +148,6 @@ var check2Ready = (function() {
           $("#vw-unable-to-acces-mic").removeClass('hidden');
           break;
       };
-    });
-
-    $('#send-rating').click(function(e) {
-      e.preventDefault();
-
-      var rate = $('#vw-rating-stars').raty('score');
-      var comment = $('#rating-message').val();
-
-      if (!rate && !comment) return;
-
-      var data =  { rate: rate, comment: comment, url: document.URL };
-      var message = { action: 'rate', data: data };
-
-      callAction(message);
-
-      $("#vw-rating").addClass('hidden');
-      $("#vw-rating-after-message").removeClass('hidden');
     });
 
     function stopRingbackTone(){
@@ -252,21 +207,6 @@ var check2Ready = (function() {
       };
     };
 
-    function resetRating() {
-      $('#send-rating').addClass("btn-style-disabled");
-      $('#vw-rating-stars').raty('cancel');
-      $('#rating-message').val('');
-    };
-
-    $('#vw-rating-stars').raty({
-      starType  : 'i',
-      click     : function(score, evt) {
-        // alert("Score: " + score);
-        $('#send-rating').removeClass("btn-style-disabled");
-        $('#send-rating').addClass("btn-style");
-      }
-    });
-
     $('.vw-dialpad li').click(function(e) {
       e.preventDefault();
       callAction(this.textContent);
@@ -274,7 +214,6 @@ var check2Ready = (function() {
 
     $(".vw-end-call").click(function(e) {
       e.preventDefault();
-      resetRating();
       callAction('hang_up');
     });
 
@@ -317,6 +256,6 @@ var check2Ready = (function() {
 });
 
 if (typeof jQuery === 'undefined')
-  loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js", check1Ready);
+  loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js", checkReady);
 else
-  check1Ready();
+  checkReady();
