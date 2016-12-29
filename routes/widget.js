@@ -318,6 +318,22 @@ router.post('/portal-widget/get-code', function(req, res, next) {
   }
 });
 
+router.post('/portal-widget/get-html', function(req, res, next){
+  var result = {};
+  var widget = req.parameters;
+
+  try {
+    result.widget_code = utils.widgetSecureDivHTML(widget, widget.did);
+    console.log(result);
+    res.render('widget/widget_html', result);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      msg: 'Something went wrong while generating code!', err: e
+    });
+  }
+});
+
 /* This is used for the project sip2webrtc. We need to get the id of
 the widget linked to a specific sipuri in order to render its iframe*/
 router.get('/get-id', function (req, res) {

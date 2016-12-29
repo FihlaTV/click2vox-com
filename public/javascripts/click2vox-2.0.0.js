@@ -364,7 +364,7 @@ var check1Ready = (function() {
   }
 
   function isWebRTCSupported() {
-    return voxbone.WebRTC.isWebRTCSupported() && !isChromeOnHttp();
+    return voxbone.WebRTC.isWebRTCSupported();
   }
 
   function makeCall() {
@@ -603,7 +603,14 @@ var check1Ready = (function() {
   // Click on Make Call button event
   handleEvent('click', '.vxb-widget-box #launch_call', function (e) {
     e.preventDefault();
-    makeCall();
+    if(!isChromeOnHttp()){
+      makeCall();
+    } else {
+      var buttonData = document.querySelector('.voxButton');
+      // console.log(buttonData.dataset);
+      console.log(infoVoxbone.server_url);
+      openPopup('POST', infoVoxbone.server_url + '/widget/portal-widget/get-html', buttonData.dataset);
+    }
   });
   //
   // End of Button Events
@@ -708,5 +715,22 @@ var check1Ready = (function() {
   init();
 });
 
+openPopup = function(verb, url, data) {
+  var form = document.createElement("form");
+  form.action = url;
+  form.method = verb;
+  form.target = "_blank";
+  if (data) {
+    for (var key in data) {
+      var input = document.createElement("textarea");
+      input.name = key;
+      input.value = typeof data[key] === "object" ? JSON.stringify(data[key]) : data[key];
+      form.appendChild(input);
+    }
+  }
+  form.style.display = 'none';
+  document.body.appendChild(form);
+  form.submit();
+};
 
 check0Ready();
