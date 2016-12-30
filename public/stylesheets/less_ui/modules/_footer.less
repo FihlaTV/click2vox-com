@@ -54,7 +54,7 @@
   .newsletter {
 
     form {
-      
+
       .btn {
         width: 100%;
       }
@@ -86,4 +86,20 @@
   }
 }
 
-
+.small-footer {
+  width: 100%;
+  position: fixed;
+  bottom: 0px;
+  display: inline-block;
+  padding: 0 !important;
+  background-color: rgba(32,127,191,0.7);
+  p {
+    margin-bottom: 0;
+  }
+  z-index: 5;
+  a {
+      &:hover {
+        color: @color-white !important;
+      }
+    }
+}
