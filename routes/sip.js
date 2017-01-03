@@ -9,6 +9,7 @@ var router = express.Router();
 
 var Account = require('../models/account');
 var Widget = require('../models/widget');
+var Did = require('../models/dids');
 var utils = require('./utils');
 
 // GET to add a new SIP URI
@@ -72,7 +73,6 @@ router.post('/new', utils.isLoggedIn, function (req, res) {
 router.post('/edit', utils.isLoggedIn, function (req, res) {
   var result = {};
   var user = req.user;
-
   var sipUri = req.body.sip_uri;
   var original = req.body.original;
 
@@ -100,27 +100,33 @@ router.post('/edit', utils.isLoggedIn, function (req, res) {
       console.log('Error while provisioning demo sip uri: ', err);
       result.message = 'An error occurred while provisioning your SIP URI. Please try again';
       return res.status(err.httpStatusCode).json(result);
-
     } else {
       user.removeSipURI(original);
-
       // check if new sip is not on of the testing ones
       if (utils.defaultSipUris().indexOf(sipUri) === -1)
         user.saveSipURI(sipUri);
-
-      Widget.update(
-        {_account: user._id, sip_uri: original},
-        {sip_uri: sipUri},
-        {multi: true},
-        function(err, numUpdated) {
-          console.log(numUpdated, 'updated documents');
-          if (err) {
-            result.message = 'Error while updating the registries.';
+      //Get the updated DID for the SIPURI
+      Did.findOne({sip_uri: sipUri})
+        .then(function(theDid, err) {
+          if (err || !theDid) {
+            result.message = 'DID not found';
             return res.status(500).json(result);
-          } else
-            return success();
-        }
-      );
+          }
+          //Update the Widget with the new SIPURI and DID
+          Widget.update(
+            {_account: user._id, sip_uri: original},
+            {sip_uri: sipUri, did: theDid.did, didId: theDid.didId},
+            {multi: true},
+            function(err, numUpdated) {
+              console.log(numUpdated, 'updated documents');
+              if (err) {
+                result.message = 'Error while updating the registries.';
+                return res.status(500).json(result);
+              } else
+                return success();
+            }
+          );
+        });
     }
   });
 });
