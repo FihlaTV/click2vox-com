@@ -8,15 +8,17 @@ block extra_head
       'jquery',
       'controllers/widget.list',
       'controllers/widget.delete',
-      'controllers/sip.edit'
+      'controllers/sip.edit',
+      'controllers/sip.delete'
     ],
-    function(domReady, angular, $, WidgetListController, DeleteWidgetController, EditSIPController) {
+    function(domReady, angular, $, WidgetListController, DeleteWidgetController, EditSIPController, DeleteSIPController) {
       //- adding a new require call to load other
       //- controllers after main one loads
       angular.module('voxboneApp', [])
         .controller('WidgetListController', WidgetListController)
         .controller('EditSIPController', EditSIPController)
-        .controller('DeleteWidgetController', DeleteWidgetController);
+        .controller('DeleteWidgetController', DeleteWidgetController)
+        .controller('DeleteSIPController', DeleteSIPController);
 
       domReady(function() {
         angular.bootstrap(document, ['voxboneApp']);
@@ -61,7 +63,11 @@ block content
                 a(data-toggle="collapse" href=`#${group.uuid}` class=`${(group.widgets.length === 0) ? 'collapsed': ''}`)
                     span #{group._id}
                     i#flip(class=`fa fa-chevron-${(group.widgets.length === 0) ? 'right': 'down'}`)
-                a.pull-right(href="#" ng-click=`editSIPURI("${group._id}")`) Edit
+                if (group._id !== 'Unassigned')
+                  .pull-right
+                    a(href="#" ng-click=`editSIPURI("${group._id}")`) Edit/
+                    a(href="#" ng-click=`openDeleteSIPURIModal("${group._id}")`) Delete
+
 
                 if group.widgets.length > 0
                   .toggle-content.sipCollapse.collapse.in(id=`${group.uuid}` style="display: block")
@@ -80,9 +86,10 @@ block content
                         .col-xs-4.text-right
                           a.clipboard(href="" widget-code=`${widget.divCode}`) Copy Code
                           a(href=`/widget/${widget._id}/edit`) View/Edit
-                          a(href="" ng-click=`openDeleteModal("${widget._id}")`) Delete
+                          a(href="" ng-click=`openDeleteWidgetModal("${widget._id}")`) Delete
                 hr
 
     include contact-voxbone
     include ../sip/edit_modal
+    include ../sip/delete_modal
     include ../widget/delete_modal

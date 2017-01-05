@@ -122,6 +122,19 @@ router.get('/widgets', utils.isLoggedIn, function (req, res) {
           });
         }
       });
+      var tempUnassigned;
+      for (var index in result) {
+
+        if (result[index]._id === '') {
+          tempUnassigned = result[index];
+          tempUnassigned._id = "Unassigned";
+          result.splice(index, 1);
+        }
+
+      }
+
+      if (tempUnassigned)
+        result.push(tempUnassigned);
 
       res.render('account/widgets', {
         title: title,

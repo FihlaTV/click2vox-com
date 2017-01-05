@@ -113,6 +113,12 @@ accountSchema.methods.getSipURIs = function() {
     Widget
       .distinct('sip_uri', { _account: this._id })
       .exec(function(err, sips) {
+        var index = array.indexOf('');
+
+        if (index > -1) {
+          sips = sips.splice(index, 1);
+        }
+
         var diff = sips.filter(function(x) {
           return defaultSips.indexOf(x) < 0;
         });

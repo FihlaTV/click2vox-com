@@ -117,7 +117,7 @@ router.post('/edit', utils.isLoggedIn, function (req, res) {
             {_account: user._id, sip_uri: original},
             {sip_uri: sipUri, did: theDid.did, didId: theDid.didId},
             {multi: true},
-            function(err, numUpdated) {
+            function (err, numUpdated) {
               console.log(numUpdated, 'updated documents');
               if (err) {
                 result.message = 'Error while updating the registries.';
@@ -129,6 +129,50 @@ router.post('/edit', utils.isLoggedIn, function (req, res) {
         });
     }
   });
+});
+
+router.delete('/:id', utils.isLoggedIn, function(req, res) {
+  var status = 200;
+  var result = {
+    msg: "SIP URI Deleted successfully",
+    errors: null
+  };
+  var sipUri = req.url.replace('/','');
+  var user = req.user;
+
+  if (utils.defaultSipUris().indexOf(sipUri) > -1) {
+    result.msg = 'SIP URI cannot be deleted';
+    status = 500;
+    return res.status(status).json(result);
+  }
+
+  user.removeSipURI(sipUri);
+  //Check if any Widgets are associated with this SIP URI.
+  Widget.find({_account: user._id, sip_uri: sipUri}).then(
+    function(theWidget,err){
+
+      if (err) {
+        result.message = 'Error while getting the Widget Data';
+        return res.status(500).json(result);
+      }
+
+      if (theWidget.length > 0) {
+        Widget.update(
+          {_account: user._id, sip_uri: sipUri},
+          {sip_uri: "", did: 0, didId: 0},
+          {multi: true},
+          function(err, numUpdated) {
+            console.log(numUpdated, 'updated documents');
+            if (err) {
+              result.message = 'Error while updating the registries.';
+              return res.status(500).json(result);
+            }
+          }
+        );
+      }
+
+    });
+  return res.status(status).json(result);
 });
 
 module.exports = router;

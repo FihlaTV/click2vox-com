@@ -1,22 +1,22 @@
 define(['jquery', 'bootstrap'], function($) {
 
-  var DeleteWidgetController = function($scope, $http, $window, $timeout, $rootScope) {
+  var DeleteSIPController = function ($scope, $http, $window, $timeout, $rootScope) {
     $scope.confirmText = 'Confirm';
     $scope.submitting = false;
 
-    $rootScope.$on('deleteWidget', function(event, widgetID) {
-      $scope.dialog = $('#deleteWidgetModal');
-      $scope.widgetID = widgetID;
+    $rootScope.$on('deleteSIPURI', function(event, sip_uri) {
+      $scope.dialog = $('#deleteSipModal');
+      $scope.sipID = sip_uri;
       $scope.dialog.modal('show');
     });
 
-    $scope.deleteWidget = function(form) {
+    $scope.deleteSip = function(form) {
       this.confirmText = 'Deleting...';
       $scope.submitting = true;
 
       var req = {
         method: 'DELETE',
-        url: '/widget/' + $scope.widgetID,
+        url: '/sip/' + $scope.sipID,
         headers: {
           'Content-Type': 'application/json; charset=utf-8'
         }
@@ -29,6 +29,7 @@ define(['jquery', 'bootstrap'], function($) {
 
           $timeout(function() {
             $scope.dialog.modal('hide');
+
             $window.location.reload();
           }, 2000);
 
@@ -43,7 +44,7 @@ define(['jquery', 'bootstrap'], function($) {
 
   };
 
-  DeleteWidgetController.$inject = ['$scope', '$http', '$window', '$timeout', '$rootScope'];
+  DeleteSIPController.$inject = ['$scope', '$http', '$window', '$timeout', '$rootScope'];
 
-  return DeleteWidgetController;
+  return DeleteSIPController;
 });

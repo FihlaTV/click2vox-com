@@ -15,8 +15,12 @@ define(['jquery', 'clipboard', 'bootstrap'], function ($, Clipboard) {
       }, 2500);
     });
 
-    $scope.openDeleteModal = function (widgetID) {
-      $rootScope.$broadcast('openDeleteModal', widgetID);
+    $scope.openDeleteSIPURIModal = function (sipUri) {
+      $rootScope.$broadcast('deleteSIPURI', sipUri);
+    };
+
+    $scope.openDeleteWidgetModal = function (widgetID) {
+      $rootScope.$broadcast('deleteWidget', widgetID);
     };
 
     $scope.openRequestUpgradeModal = function (isUpgradeAlreadyRequested) {
