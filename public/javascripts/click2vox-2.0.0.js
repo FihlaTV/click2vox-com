@@ -48,8 +48,6 @@ var check0Ready = (function() {
     loadScript("//cdn.voxbone.com/voxbone/voxbone-2.1.min.js", check1Ready);
   else
     check1Ready();
-
-  loadScript("//cdnjs.cloudflare.com/ajax/libs/interact.js/1.2.6/interact.min.js",interactStart);
 });
 
 var check1Ready = (function() {
@@ -733,34 +731,6 @@ openPopup = function(verb, url, data) {
   form.style.display = 'none';
   document.body.appendChild(form);
   form.submit();
-};
-
-//Make widget "draggable"
-interactStart = function() {
-  interact('.vox-widget-wrapper')
-    .draggable({
-      // enable autoScroll
-      autoScroll: true,
-
-      // call this function on every dragmove event
-      onmove: dragMoveListener
-    });
-};
-
-var dragMoveListener = function(event) {
-  var target = event.target,
-    // keep the dragged position in the data-x/data-y attributes
-    x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-    y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-  // translate the element
-  target.style.webkitTransform =
-    target.style.transform =
-    'translate(' + x + 'px, ' + y + 'px)';
-
-  // update the posiion attributes
-  target.setAttribute('data-x', x);
-  target.setAttribute('data-y', y);
 };
 
 check0Ready();
