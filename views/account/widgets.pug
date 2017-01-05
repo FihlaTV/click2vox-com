@@ -63,7 +63,7 @@ block content
                 a(data-toggle="collapse" href=`#${group.uuid}` class=`${(group.widgets.length === 0) ? 'collapsed': ''}`)
                     span #{group._id}
                     i#flip(class=`fa fa-chevron-${(group.widgets.length === 0) ? 'right': 'down'}`)
-                if (group._id !== 'Unassigned')
+                if group._id !== 'Unassigned' && defaultSipUris.indexOf(group._id) < 0
                   .pull-right
                     a(href="#" ng-click=`editSIPURI("${group._id}")`) Edit/
                     a(href="#" ng-click=`openDeleteSIPURIModal("${group._id}")`) Delete

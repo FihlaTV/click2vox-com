@@ -140,6 +140,7 @@ router.get('/widgets', utils.isLoggedIn, function (req, res) {
         title: title,
         widgetsData: result,
         defaultBtnLabel: utils.defaultBtnLabel,
+        defaultSipUris: utils.defaultSipUris(),
         messages: req.flash('messages') || []
       });
     });

@@ -81,13 +81,11 @@ router.post('/edit', utils.isLoggedIn, function (req, res) {
     return res.status(404).json(result);
   }
 
-  // if user is trying to edit the testing sips, check if has space or is paid
-  // or if the user is renaming the sip with one already in sip_uris field
-  // if (utils.defaultSipUris().indexOf(original) > -1 && (user.sip_uris.length > 0) &&
-  //   user.sip_uris.indexOf(sipUri) === -1) {
-  //   result.message = 'You are not allowed to execute this action';
-  //   return res.status(403).json(result); // should we change to 402: "Payment Required" ??
-  // }
+  if (utils.defaultSipUris().indexOf(original) > -1 && (user.sip_uris.length > 0) &&
+    user.sip_uris.indexOf(sipUri) === -1) {
+    result.message = 'You are not allowed to execute this action';
+    return res.status(403).json(result);
+  }
 
   var success = function () {
     result.message = 'Updated successfully!';
