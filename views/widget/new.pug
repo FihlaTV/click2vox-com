@@ -69,7 +69,7 @@ block content
                       button.btn-style-b(ng-cloak ng-click="setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
                       div(ng-cloak) Purple Theme
                     .button-text
-                      button.btn-style-c(ng-cloak ng-click="setCustomTheme()" colorpicker colorpicker-position="right" ng-model="widget.button_color" ng-style="{'background': widget.button_color ? widget.button_color : tempButtonColor }") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
+                      button.btn-style-c(ng-cloak ng-click="setCustomTheme()" colorpicker colorpicker-position="right" colorpicker-with-input="true" type="text" ng-model="widget.button_color" ng-style="{'background': widget.button_color ? widget.button_color : tempButtonColor }") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
                       div(ng-cloak) Custom Theme
 
                 .panel.panel-default
@@ -83,7 +83,7 @@ block content
                           span.radio-name Show frame
                           span.badge(data-toggle='tooltip' data-placement="right" title="Shows/Hides the background and border of the button") ?
                         div(style="display:inline-block;")
-                          span(style="margin-left:20px" ng-show='widget.show_frame') Pick frame color #[i.fa.fa-tint(aria-hidden='true' colorpicker colorpicker-position="right" ng-model="widget.frame_color" style="cursor: pointer" ng-style="{'color': widget.frame_color || 'black'}")]
+                          span(style="margin-left:20px" ng-show='widget.show_frame') Pick frame color #[i.fa.fa-tint(aria-hidden='true' colorpicker colorpicker-position="right" colorpicker-with-input="true" type="text" ng-model="widget.frame_color" style="cursor: pointer" ng-style="{'color': widget.frame_color || 'black'}")]
 
                       .form-group
                         label
