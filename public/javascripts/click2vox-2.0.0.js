@@ -60,7 +60,7 @@ var check1Ready = (function() {
 
   var voxPopup = ' \
     <audio id="audio-ringback-tone" preload="auto" loop> \
-      <source src="https://upload.wikimedia.org/wikipedia/commons/c/cd/US_ringback_tone.ogg" type="audio/ogg"> \
+      <source src="https://cdn.voxbone.com/lib/US_ringback_tone.ogg" type="audio/ogg"> \
     </audio> \
     <div style="display: none;" class="vox-widget-wrapper hidden"> \
       <div class="vw-main"> \
