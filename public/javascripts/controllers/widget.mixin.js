@@ -12,6 +12,17 @@ define([
         return;
       }
 
+      //adding widget Id to call logs
+      now = new Date($.now());
+      var call = {
+        call: {
+            'click2vox_widgetId': $scope.widget._id,
+            'click2vox_callTime': now
+        }
+      };
+
+      voxbone.WebRTC.webrtcLogs = voxbone.WebRTC.webrtcLogs.concat('\n'+JSON.stringify(call));
+
       var voxButtonElement = document.getElementById('voxButtonPreview');
 
       var didToCall = (typeof did === 'undefined') ? $scope.did : did;
