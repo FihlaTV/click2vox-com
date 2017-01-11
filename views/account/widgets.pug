@@ -56,11 +56,10 @@ block content
             center
               a.btn.btn-default-custom.add-btn(href="/sip/new") Add SIP URI
               a.btn.btn-default-custom.add-btn(href="/widget/new") Add New Button
-            hr
 
             each group in widgetsData
-              .toggle-extra
-                a(data-toggle="collapse" href=`#${group.uuid}` class=`${(group.widgets.length === 0) ? 'collapsed': ''}`)
+              .toggle-extra.widget-btn-pack
+                a.pack-header(data-toggle="collapse" href=`#${group.uuid}` class=`${(group.widgets.length === 0) ? 'collapsed': ''}`)
                     span #{group._id}
                     i#flip(class=`fa fa-chevron-${(group.widgets.length === 0) ? 'right': 'down'}`)
                 if group._id !== 'Unassigned' && defaultSipUris.indexOf(group._id) < 0
@@ -71,23 +70,24 @@ block content
 
                 if group.widgets.length > 0
                   .toggle-content.sipCollapse.collapse.in(id=`${group.uuid}` style="display: block")
-                    .row.tc-header
-                      .col-xs-4 Configuration Name
-                      .col-xs-4.text-center Button Preview
-                      .col-xs-4.text-right Button Preview
-                      .col-xs-12
-                        .divider
-                    each widget in group.widgets
-                      .row
-                        .col-xs-4 #{widget.configuration_name}
-                        .col-xs-4.text-center
-                          button.btn.btn-preview(style=`border: ${widget.button_color}; background: ${widget.button_color}` class=`btn-${widget.button_style}`)
-                            span #{widget.button_label || defaultBtnLabel}
-                        .col-xs-4.text-right
-                          a.clipboard(href="" widget-code=`${widget.divCode}`) Copy Code
-                          a(href=`/widget/${widget._id}/edit`) View/Edit
-                          a(href="" ng-click=`openDeleteWidgetModal("${widget._id}")`) Delete
-                hr
+                    table
+                      thead
+                        tr
+                          th Configuration Name
+                          th.text-center Button Preview
+                          th.text-right Button Preview
+                      tbody
+                        each widget in group.widgets
+                          tr
+                            
+                            td #{widget.configuration_name}
+                            td.text-center
+                              button.btn.btn-preview(style=`border: ${widget.button_color}; background: ${widget.button_color}` class=`btn-${widget.button_style}`)
+                                span #{widget.button_label || defaultBtnLabel}
+                            td.text-right
+                              a.clipboard(href="" widget-code=`${widget.divCode}`) Copy Code
+                              a(href=`/widget/${widget._id}/edit`) View / Edit
+                              a(href="" ng-click=`openDeleteWidgetModal("${widget._id}")`) Delete
 
     include contact-voxbone
     include ../sip/edit_modal
