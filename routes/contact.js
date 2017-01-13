@@ -24,6 +24,7 @@ router.post('/contact', function (req, res, next) {
     } else {
       theContact = new Contact(
         {
+          company: formData.company,
           email: formData.email,
           name: formData.name,
           reference: formData.reference
