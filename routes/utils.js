@@ -228,6 +228,18 @@ module.exports = {
     return pug.renderFile('./views/voxbone_widget_div.pug', params);
   },
 
+  sanitizeParams: function(obj) {
+
+    Object.keys(obj).forEach(function(key) {
+      if (obj[key] === 'true')
+        obj[key] = true;
+      else if (obj[key] === 'false')
+        obj[key] = false;
+    });
+
+    return obj;
+  },
+
   widgetSecureDivHTML: function (widget, did) {
     var pug = require('pug');
     var script = process.env.APP_URL + this.click2voxJsFileName;
@@ -237,7 +249,7 @@ module.exports = {
       script: script,
       id: widget._id,
       label: escape(cleanLabel),
-      the_widget: widget
+      the_widget: this.sanitizeParams(widget)
     };
 
     return pug.renderFile('./views/voxbone_secure_widget.pug', params);
