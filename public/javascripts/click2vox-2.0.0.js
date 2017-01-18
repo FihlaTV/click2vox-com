@@ -81,7 +81,7 @@ var check1Ready = (function() {
           </div> \
           <div id="vw-in-call"> \
             <div id="vw-btn-group" class="vw-btn-group"> \
-              <a href="#"> \
+              <a href="#" id="vxb-widget-mic"> \
                 <i class="vw-icon vx-icon-mic"></i> \
                 <div id="microphone" class="int-sensor"> \
                   <em id="mic5"></em> \
@@ -607,8 +607,6 @@ var check1Ready = (function() {
       makeCall();
     } else {
       var buttonData = document.querySelector('.voxButton');
-      // console.log(buttonData.dataset);
-      console.log(infoVoxbone.server_url);
       openPopup('POST', infoVoxbone.server_url + '/widget/portal-widget/get-html', buttonData.dataset);
     }
   });
@@ -698,7 +696,7 @@ var check1Ready = (function() {
   });
 
   // Mic button event
-  handleEvent('click', '.vox-widget-wrapper i.vx-icon-mic', function (e) {
+  handleEvent('click', '.vox-widget-wrapper #vxb-widget-mic', function (e) {
     e.preventDefault();
 
     var elements = document.querySelectorAll(".vox-widget-wrapper #microphone em");
