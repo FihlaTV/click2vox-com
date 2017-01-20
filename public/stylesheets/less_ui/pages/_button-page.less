@@ -69,22 +69,57 @@
 
   .pack-header{
     position: relative;
-    display: block;
-    padding: 5px 10px;
     background: rgba(0, 0, 0, 0.3);
     
+    > a {
+      display: block;
+      padding: 5px 0 5px 10px;
+
+      i {
+        position: absolute;
+        top:50%;
+        right: 10px;
+        width: auto;
+        height: 32px;
+        padding: 0;
+        text-align: right;
+        line-height: 32px;
+        text-align: center;
+        margin-top: -16px;    
+      }
+
+
+    }
     
-    i {
+    .widget-pack-actions {
       position: absolute;
       top:50%;
-      right: 0;
-      width: 32px;
+      right: 30px;
+      width: auto;
       height: 32px;
       padding: 0;
+      text-align: right;
       line-height: 32px;
       text-align: center;
-      margin-top: -16px;
-    }
+      margin-top: -16px;    
+        
+      i,
+      span,
+      a {
+        display: inline-block;
+        height: 32px;
+        line-height: 32px;
+      }
+
+      a {
+        margin: 0 4px;
+        font-size: .9em;
+        
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }  
   }
 
   .toggle-content {

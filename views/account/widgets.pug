@@ -59,13 +59,15 @@ block content
 
             each group in widgetsData
               .toggle-extra.widget-btn-pack
-                a.pack-header(data-toggle="collapse" href=`#${group.uuid}` class=`${(group.widgets.length === 0) ? 'collapsed': ''}`)
+                .pack-header
+                  a(data-toggle="collapse" href=`#${group.uuid}` class=`${(group.widgets.length === 0) ? 'collapsed': ''}`)
                     span #{group._id}
                     i#flip(class=`fa fa-chevron-${(group.widgets.length === 0) ? 'right': 'down'}`)
-                if group._id !== 'Unassigned' && defaultSipUris.indexOf(group._id) < 0
-                  .pull-right
-                    a(href="#" ng-click=`editSIPURI("${group._id}")`) Edit/
-                    a(href="#" ng-click=`openDeleteSIPURIModal("${group._id}")`) Delete
+                  .widget-pack-actions 
+                    if group._id !== 'Unassigned' && defaultSipUris.indexOf(group._id) < 0
+                      a(href="#" ng-click=`editSIPURI("${group._id}")`) Edit
+                      | |
+                      a(href="#" ng-click=`openDeleteSIPURIModal("${group._id}")`) Delete
 
 
                 if group.widgets.length > 0
