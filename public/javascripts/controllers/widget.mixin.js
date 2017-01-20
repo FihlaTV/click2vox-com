@@ -33,6 +33,7 @@ define([
       voxButtonElement.dataset.dial_pad = $scope.widget.dial_pad ;
       voxButtonElement.dataset.send_digits = $scope.widget.send_digits;
       voxButtonElement.dataset.ringback = $scope.widget.ringback;
+      voxButtonElement.dataset.placement = $scope.widget.placement;
       var launch_call_button = document.getElementById('launch_call');
       if (launch_call_button)
         launch_call_button.click();

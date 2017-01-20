@@ -48,6 +48,10 @@ var widgetSchema = new Schema({
     type: Boolean,
     default: true
   },
+  placement: {
+    type: String,
+    default: "bottom-right"
+  },
   show_text_html: String,
   link_button_to_a_page: String,
   incompatible_browser_configuration: String,

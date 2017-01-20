@@ -51,7 +51,6 @@ var check0Ready = (function() {
 });
 
 var check1Ready = (function() {
-
   var voxBranding = '\
     <div id="vw-footer" class="vw-footer"> \
       <a href="https://voxbone.com" target="_blank">powered by:</a> \
@@ -571,6 +570,11 @@ var check1Ready = (function() {
     hideElement(".vox-widget-wrapper #vw-unable-to-acces-mic");
     hideElement(".vox-widget-wrapper #vw-rating-after-message");
     hideElement(".vox-widget-wrapper .vw-rating");
+
+    //Widget placement
+    var voxWidgetWrapper = document.querySelector('.vox-widget-wrapper');
+    voxWidgetWrapper.classList.remove("vw-top-left", "vw-top-right", "vw-bottom-right", "vw-bottom-left");
+    voxWidgetWrapper.classList.add('vw-' + infoVoxbone.placement);
 
     showAnimatedDots();
     showElement(".vox-widget-wrapper #vw-in-call");

@@ -31,7 +31,8 @@ define([
       show_branding: true,
       test_setup: true,
       rating: true,
-      ringback: true
+      ringback: true,
+      placement: "bottom-right"
     };
 
     $scope.reset = function (form) {

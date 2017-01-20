@@ -1,3 +1,4 @@
+@import "vxb-mixing.less";
 @import url(//fonts.googleapis.com/css?family=Open+Sans:400,300,700,400italic);
 @color_1: #ccc;
 @color_2: #ffc700;
@@ -17,17 +18,60 @@
   :before {
     box-sizing: inherit;
   }
+  
   .vw-main {
-    -webkit-border-top-right-radius: 6px;
-    -moz-border-radius-topleft: 6px;
-    -moz-border-radius-topright: 6px;
-    margin-right: 50px;
+    margin: 0 50px 0 0;
+   .border-radius(@topright: 6px, @bottomright: 0, @bottomleft: 0, @topleft: 6px);
+    
+    .vw-header {
+      .border-radius(@topright: 6px, @bottomright: 0, @bottomleft: 0, @topleft: 6px);
+    }
+  }
+  
+  &[class*="vw-top"] {
+    bottom: inherit;
+    top: 0;
+
+    .vw-main {
+      .border-radius(@topright: 0, @bottomright: 6px, @bottomleft: 6px, @topleft: 0);
+      
+      .vw-header {
+        .border-radius(@topright: 0, @bottomright: 0, @bottomleft: 0, @topleft: 0);
+      }
+
+      .vw-body {
+        .border-radius(@topright: 0, @bottomright: 6px, @bottomleft: 6px, @topleft: 0);
+      }
+    
+      >.hidden {
+        display: block !important;
+        min-height: 5px;        
+        max-height: 5px;   
+        padding: 0;     
+        * {
+          display: none !important;
+        }
+      }
+    }
+  }  
+  
+  &.vw-top-left {
+    right: inherit;
+    left: 0;
+    margin: 0 0 0 50px;
+  
+  }
+
+  &.vw-bottom-left {
+    right: inherit;
+    left: 0;
+    margin: 0 0 0 50px;
+  }
+  
+  .vw-main {
     -webkit-box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.35);
     -moz-box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.35);
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.35);
-    -webkit-border-top-left-radius: 6px;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
     .vw-header {
       position: relative;
       width: 315px;
@@ -36,12 +80,6 @@
       background: #eeeef0;
       text-align: left;
       border-bottom: 1px solid #d3d3d4;
-      -webkit-border-top-left-radius: 6px;
-      border-top-left-radius: 6px;
-      border-top-right-radius: 6px;
-      -webkit-border-top-right-radius: 6px;
-      -moz-border-radius-topleft: 6px;
-      -moz-border-radius-topright: 6px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -66,11 +104,12 @@
         top: 0;
         right: 0;
         height: 46px;
+        font-size: 15px !important;
         a {
           display: inline-block;
           height: 46px;
           width: 46px;
-          margin: 0 -.025em;
+          margin: 0 -.1em;
           text-align: center !important;
           color: #9b9b9b !important;
           border: 0;
