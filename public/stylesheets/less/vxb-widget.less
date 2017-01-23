@@ -18,23 +18,23 @@
   :before {
     box-sizing: inherit;
   }
-  
+
   .vw-main {
     margin: 0 50px 0 0;
    .border-radius(@topright: 6px, @bottomright: 0, @bottomleft: 0, @topleft: 6px);
-    
+
     .vw-header {
       .border-radius(@topright: 6px, @bottomright: 0, @bottomleft: 0, @topleft: 6px);
     }
   }
-  
+
   &[class*="vw-top"] {
     bottom: inherit;
     top: 0;
 
     .vw-main {
       .border-radius(@topright: 0, @bottomright: 6px, @bottomleft: 6px, @topleft: 0);
-      
+
       .vw-header {
         .border-radius(@topright: 0, @bottomright: 0, @bottomleft: 0, @topleft: 0);
       }
@@ -42,24 +42,24 @@
       .vw-body {
         .border-radius(@topright: 0, @bottomright: 6px, @bottomleft: 6px, @topleft: 0);
       }
-    
+
       >.hidden {
         display: block !important;
-        min-height: 5px;        
-        max-height: 5px;   
-        padding: 0;     
+        min-height: 5px;
+        max-height: 5px;
+        padding: 0;
         * {
           display: none !important;
         }
       }
     }
-  }  
-  
+  }
+
   &.vw-top-left {
     right: inherit;
     left: 0;
     margin: 0 0 0 50px;
-  
+
   }
 
   &.vw-bottom-left {
@@ -67,7 +67,7 @@
     left: 0;
     margin: 0 0 0 50px;
   }
-  
+
   .vw-main {
     -webkit-box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.35);
     -moz-box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.35);
@@ -159,7 +159,7 @@
       height: 46px;
     	text-decoration: none;
     	position: relative;
-    	float: left; 
+    	float: left;
     	margin: 0 !important;
     	padding: 0px 5px !important;
     	background: #9b9b9b !important;
@@ -317,14 +317,14 @@
   	color: #ffffff !important;
   	font-size: 15px !important;
   	text-align: center !important;
-  	font-weight: 700 !important; 
+  	font-weight: 700 !important;
   	line-height: 46px !important;
   	background: #e20a1f !important;
   	vertical-align: middle;
   	-webkit-border-radius: 4px;
   	-moz-border-radius: 4px;
   	border-radius: 4px;
-    
+
     span {
       display: inline-block;
       vertical-align: top;
@@ -357,6 +357,8 @@
       padding: 0;
       margin: 0;
       li {
+        padding: 0 !important;
+        background: none !important;
         float: left;
         padding: 0;
         margin: 0;
@@ -551,7 +553,7 @@
       height: 46px;
     	text-decoration: none;
     	position: relative;
-    	float: left; 
+    	float: left;
     	margin: 0 !important;
     	padding: 0px 5px !important;
     	background: #9b9b9b !important;
@@ -598,7 +600,7 @@
   	color: #ffffff !important;
   	font-size: 15px !important;
   	text-align: center !important;
-  	font-weight: 700 !important; 
+  	font-weight: 700 !important;
   	line-height: 46px !important;
   	background: #e20a1f !important;
   	vertical-align: middle;
