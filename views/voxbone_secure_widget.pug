@@ -1,3 +1,5 @@
+doctype html
+
 - var basic_auth = (the_widget.basic_auth)
 .voxButton(
   data-button_id=((the_widget._id === undefined) ? undefined : `${the_widget._id}`)
@@ -25,4 +27,4 @@
   data-ringback=((the_widget.ringback === undefined ||the_widget.ringback) ? undefined : `${the_widget.ringback}`)
   data-placement=`${the_widget.placement}`
 )
-script(src=`${script}`)
+script(async src=`${script}`)
