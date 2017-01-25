@@ -227,22 +227,24 @@
     width: 100%;
   }
   .vw-body .vw-rating .vw-stars {
-    width: 50%;
     margin: 0 auto;
     height: 46px;
+    text-align: center;
+    direction: rtl;
     &:not(:checked) {
       >input {
         position: absolute;
         top: -9999px;
       }
       >label {
-        float: right;
-        width: 1em;
+        display: inline-block;
+        width: 24px;
         overflow: hidden;
         white-space: nowrap;
         cursor: pointer;
         font-size: 24px;
         color: @color_1;
+        padding: 0;
         &:before {
           content: '★';
         }
