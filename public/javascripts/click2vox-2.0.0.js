@@ -69,6 +69,16 @@ var check1Ready = (function() {
           <span class="vw-animated-dots">.</span> \
           <span class="vw-animated-dots">.</span> \
           <div class="vw-actions"> \
+            <a href="#" class="vxb-widget-mic"> \
+              <i class="vw-icon vx-icon-mic-dark"></i> \
+              <div class="vox-mic-vumeter int-sensor-dark"> \
+                <em id="mic5"></em> \
+                <em id="mic4"></em> \
+                <em id="mic3"></em> \
+                <em id="mic2"></em> \
+                <em id="mic1"></em> \
+              </div> \
+            </a> \
             <a href="#" id="full-screen"><i class="vw-icon vx-icon-full-screen-off"></i></a> \
             <a href="#" id="close-screen"><i class="vw-icon vx-icon-close"></i></a> \
           </div> \
@@ -80,9 +90,9 @@ var check1Ready = (function() {
           </div> \
           <div id="vw-in-call"> \
             <div id="vw-btn-group" class="vw-btn-group"> \
-              <a href="#" id="vxb-widget-mic"> \
+              <a href="#" class="vxb-widget-mic minimized"> \
                 <i class="vw-icon vx-icon-mic"></i> \
-                <div id="microphone" class="int-sensor"> \
+                <div class="vox-mic-vumeter int-sensor"> \
                   <em id="mic5"></em> \
                   <em id="mic4"></em> \
                   <em id="mic3"></em> \
@@ -92,7 +102,7 @@ var check1Ready = (function() {
               </a> \
               <a href="#" class="hidden"> \
                 <i class="vw-icon vx-icon-vol"></i> \
-                <div id="volume" class="int-sensor"> \
+                <div class="vox-audio-vumeter"> \
                   <em id="vol5"></em> \
                   <em id="vol4"></em> \
                   <em id="vol3"></em> \
@@ -438,10 +448,12 @@ var check1Ready = (function() {
         setWidgetTitle("Call Ended");
         hideAnimatedDots();
         hideElement('.vox-widget-wrapper #vw-in-call');
-        if (infoVoxbone.rating !== "false") {
+
+        if (infoVoxbone.rating !== "false")
           showElement(".vox-widget-wrapper #vw-rating");
-        } else
+        else
           showElement(".vox-widget-wrapper #vw-rating-after-message");
+
         callAction('hang_up');
         break;
 
@@ -456,18 +468,21 @@ var check1Ready = (function() {
   });
 
   function clearMicDots(){
-    var micDots = document.querySelectorAll('.vox-widget-wrapper #microphone em');
+    var micDots = document.querySelectorAll('.vox-widget-wrapper .vox-mic-vumeter em');
     Array.prototype.forEach.call(micDots, function(el, i) {
       el.classList = "";
     });
   }
 
   function setMicDot(dot) {
-    var el = document.querySelector('.vox-widget-wrapper #mic' + dot);
+    var className = 'on';
     if (dot === '5')
-      el.classList.add('peak');
-    else
-      el.classList.add('on');
+      className = 'peak';
+
+    var dots = document.querySelectorAll('.vox-widget-wrapper #mic' + dot);
+    Array.prototype.forEach.call(dots, function(el, i) {
+      el.classList.add(className);
+    });
   }
 
   function showElement(selector){
@@ -563,7 +578,6 @@ var check1Ready = (function() {
   }
 
   function resetWidget() {
-    // Reset Widget
     setWidgetTitle("Waiting for User Media");
     clearMicDots();
 
@@ -598,8 +612,10 @@ var check1Ready = (function() {
   }
 
   function handleEvent (eventName, selector, callback) {
-    var element = document.querySelector(selector);
-    if (element) element.addEventListener(eventName, callback);
+    var elements = document.querySelectorAll(selector);
+    Array.prototype.forEach.call(elements, function(element, i) {
+      element.addEventListener(eventName, callback);
+    });
   }
 
   // Start of Button Events
@@ -682,11 +698,14 @@ var check1Ready = (function() {
     e.preventDefault();
 
     var widget_body_selector = ".vox-widget-wrapper #vw-body";
-    if (document.querySelector(widget_body_selector).classList.contains('hidden')) {
-      showElement(widget_body_selector);
-    } else {
-      hideElement(widget_body_selector);
-    }
+    document.querySelector(widget_body_selector).classList.toggle('hidden');
+
+    var widget_mic_header_selector = ".vox-widget-wrapper .vw-header";
+
+    if (document.querySelector(widget_body_selector + " #vw-in-call").classList.contains('hidden'))
+      document.querySelector(widget_mic_header_selector).classList.remove('minimized');
+    else
+      document.querySelector(widget_mic_header_selector).classList.toggle('minimized');
 
     this.classList.toggle('vx-icon-full-screen-on');
     this.classList.toggle('vx-icon-full-screen-off');
@@ -700,10 +719,10 @@ var check1Ready = (function() {
   });
 
   // Mic button event
-  handleEvent('click', '.vox-widget-wrapper #vxb-widget-mic', function (e) {
+  handleEvent('click', '.vox-widget-wrapper .vxb-widget-mic', function (e) {
     e.preventDefault();
 
-    var elements = document.querySelectorAll(".vox-widget-wrapper #microphone em");
+    var elements = document.querySelectorAll(".vox-widget-wrapper .vox-mic-vumeter em");
     Array.prototype.forEach.call(elements, function(el, i) {
       el.classList.add('off');
       el.classList.remove('on');

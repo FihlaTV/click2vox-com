@@ -123,6 +123,17 @@
         a:hover {
           background: #e2e2e5 !important;
         }
+        a.vxb-widget-mic {
+          display: none;
+        }
+
+      }
+      &.minimized {
+        width: auto;
+        padding-right: 160px;
+        a.vxb-widget-mic {
+          display: inline-block;
+        }
       }
     }
     .vw-body {
@@ -400,7 +411,8 @@
   .vw-body .vw-dialpad.active {
     display: inline-block;
   }
-  .int-sensor {
+  .int-sensor,
+  .int-sensor-dark {
     display: inline-block;
     vertical-align: top;
     min-width: 12px;
@@ -423,7 +435,22 @@
     em.on {
       background: #00ff2a;
     }
+
   }
+
+  .int-sensor-dark {
+    em.off,
+    em.peak {
+      background: #ff002c;
+    }
+    em {
+      background: #9b9b9b;
+    }
+    em.on {
+      background: #00ff2a;
+    }
+  }
+
   input[type=text] {
     display: block;
     width: 100%;
@@ -717,14 +744,16 @@
 .vw-icon {
   display: inline-block;
   background-image: url(../../images/icon-sprite.png);
-  background-size: 46px 322px;
+  background-size: 46px 368px;
   background-position: right center;
   background-repeat: no-repeat;
 }
 
 .vw-icon.vox-full-screen-on,
 .vw-icon.vx-icon-full-screen-on,
-.vw-icon.vx-icon-full-sreen-on {
+.vw-icon.vx-icon-full-sreen-on,
+.vw-icon.vxb-widget-mic,
+.vw-icon.vx-icon-mic-dark {
   width: 46px;
   height: 46px;
   background-position: 0 0;
@@ -747,6 +776,13 @@
   height: 46px;
   background-position: -8px -138px;
 }
+
+.vw-icon.vx-icon-mic-dark {
+  width: 24px;
+  height: 46px;
+  background-position: -8px -322px;
+}
+
 
 .vw-icon.vx-icon-vol {
   width: 24px;
