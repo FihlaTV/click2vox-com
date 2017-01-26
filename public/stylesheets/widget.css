@@ -343,12 +343,14 @@ a {
 .vw-icon{
   display: inline-block;
   background-image: url('../../images/icon-sprite.png');
-  background-size: 46px 322px;
+  background-size: 46px 368px;
   background-position: right center;
   background-repeat: no-repeat;
 }
 .vw-icon.vx-icon-full-sreen-on,
-.vw-icon.vox-full-screen-on{
+.vw-icon.vx-icon-full-screen-on,
+.vw-icon.vxb-widget-mic,
+.vw-icon.vx-icon-mic-dark {
   width: 46px;
   height: 46px;
   background-position: 0 0;
@@ -373,6 +375,13 @@ a {
   height: 40px;
   background-position: -8px -138px;
 }
+
+.vw-icon.vx-icon-mic-dark {
+  width: 24px;
+  height: 46px;
+  background-position: -8px -322px;
+}
+
 .vw-icon.vx-icon-vol{
   width: 24px;
   height: 40px;
