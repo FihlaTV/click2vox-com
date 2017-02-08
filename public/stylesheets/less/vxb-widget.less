@@ -4,6 +4,8 @@
 @color_2: #ffc700;
 @color_3: #deb217;
 @color_4: #c59b08;
+@active-call-click: #781e75;
+
 .vox-widget-wrapper {
   font-family: 'Open Sans', sans-serif;
   color: #343c3e;
@@ -386,8 +388,12 @@
         font-weight: 700 !important;
       }
       li:hover {
-        background: #f1f1f1;
+        background: #f1f1f1 !important;
       }
+      li:active {
+        background: @active-call-click !important;
+        color: #fff !important;
+      }      
       li.vw-tl {
         -webkit-border-top-left-radius: 6px;
         -moz-border-radius-topleft: 6px;
@@ -685,6 +691,10 @@
       li:hover {
         background: #f1f1f1;
       }
+      li:active {
+        background: @active-call-click;
+        color: #fff;
+      }      
       li.vw-tl {
         -webkit-border-top-left-radius: 6px;
         -moz-border-radius-topleft: 6px;
