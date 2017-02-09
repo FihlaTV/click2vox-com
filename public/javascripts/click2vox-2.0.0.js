@@ -134,16 +134,16 @@ var check1Ready = (function() {
             <form name="rating"> \
               <div id="vw-rating-question" class="vw-question">How was the quality of your call?</div> \
               <div id="vw-rating-stars" class="vw-stars"> \
-                <input type="radio" id="vxb-star1" name="vxb-rate" value="1"> \
-                <label for="vxb-star1" title="Unacceptable">1 star</label> \
-                <input type="radio" id="vxb-star2" name="vxb-rate" value="2"> \
-                <label for="vxb-star2" title="Poor">2 stars</label> \
-                <input type="radio" id="vxb-star3" name="vxb-rate" value="3"> \
-                <label for="vxb-star3" title="Good">3 stars</label> \
-                <input type="radio" id="vxb-star4" name="vxb-rate" value="4"> \
-                <label for="vxb-star4" title="Very Good">4 stars</label> \
                 <input type="radio" id="vxb-star5" name="vxb-rate" value="5"> \
                 <label for="vxb-star5" title="Excellent">5 stars</label> \
+                <input type="radio" id="vxb-star4" name="vxb-rate" value="4"> \
+                <label for="vxb-star4" title="Very Good">4 stars</label> \
+                <input type="radio" id="vxb-star3" name="vxb-rate" value="3"> \
+                <label for="vxb-star3" title="Good">3 stars</label> \
+                <input type="radio" id="vxb-star2" name="vxb-rate" value="2"> \
+                <label for="vxb-star2" title="Poor">2 stars</label> \
+                <input type="radio" id="vxb-star1" name="vxb-rate" value="1"> \
+                <label for="vxb-star1" title="Unacceptable">1 star</label> \
               </div> \
               <div id="vw-rating-message" class="vw-message">Any additional feedback? \
                 <input type="text" name="rating-message" id="rating-message" placeholder="Optional"" class="form-control"> \
