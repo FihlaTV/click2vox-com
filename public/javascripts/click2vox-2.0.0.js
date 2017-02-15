@@ -398,8 +398,10 @@ var check1Ready = (function() {
         voxbone.WebRTC.context = infoVoxbone.context;
 
       if (infoVoxbone.send_digits) {
-        console.log('Digits to be send: ' + infoVoxbone.send_digits);
-        voxbone.WebRTC.configuration.dialer_string = infoVoxbone.send_digits;
+        var sanitizedDigits = infoVoxbone.send_digits.toString().replace(/ /g, '');
+
+        console.log('Digits to be send: ' + sanitizedDigits);
+        voxbone.WebRTC.configuration.dialer_string = sanitizedDigits;
       }
 
       voxbone.WebRTC.call(infoVoxbone.did);
