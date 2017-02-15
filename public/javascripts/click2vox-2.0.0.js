@@ -574,6 +574,9 @@ var check1Ready = (function() {
       console.log("rating sending error callback");
     });
 
+    //post rating to kivana
+    voxbone.WebRTC.postCallRating(infoVoxbone.did, data.rate, data.comment, data.url);
+
     request.send(JSON.stringify(data));
   }
 
