@@ -2,6 +2,7 @@ doctype html
 
 - var basic_auth = (the_widget.basic_auth)
 .voxButton(
+  data-is_popup='true'
   data-button_id=((the_widget._id === undefined) ? undefined : `${the_widget._id}`)
   data-text=`${label}`
   data-redirect_url=the_widget.redirect_url || undefined
@@ -25,6 +26,5 @@ doctype html
   data-show_branding=`${the_widget.show_branding}`
   data-test_setup="false"
   data-ringback=((the_widget.ringback === undefined ||the_widget.ringback) ? undefined : `${the_widget.ringback}`)
-  data-placement=`${the_widget.placement}`
 )
 script(async src=`${script}`)

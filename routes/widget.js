@@ -318,7 +318,7 @@ router.post('/portal-widget/get-code', function(req, res, next) {
   }
 });
 
-router.post('/portal-widget/get-html', function(req, res, next){
+router.all('/portal-widget/get-html', function(req, res, next){
   var result = {};
   var widget = req.parameters;
 

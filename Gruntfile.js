@@ -101,7 +101,8 @@ module.exports = function (grunt) {
         globals: {
           jQuery: true
         },
-        multistr: true
+        multistr: true,
+        esversion: 6
       }
     }
   });

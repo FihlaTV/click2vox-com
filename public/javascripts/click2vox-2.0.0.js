@@ -406,6 +406,12 @@ var check1Ready = (function() {
       window.onbeforeunload = function (e) {
         voxbone.WebRTC.unloadHandler();
       };
+
+      if (isPopUp()) {
+        hideElement('.voxButton .vxb-widget-box');
+        hideElement('.vox-widget-wrapper .vw-main .vw-header .vw-actions');
+        window.resizeTo(400, 420);
+      }
     }
   }
 
@@ -621,6 +627,10 @@ var check1Ready = (function() {
     });
   }
 
+  function isPopUp() {
+    return infoVoxbone.is_popup === 'true';
+  }
+
   // Start of Button Events
   //
   // Click on Make Call button event
@@ -628,9 +638,9 @@ var check1Ready = (function() {
     e.preventDefault();
     if(!isChromeOnHttp()){
       makeCall();
-    } else {
-      var buttonData = document.querySelector('.voxButton');
-      openPopup('POST', infoVoxbone.server_url + '/widget/portal-widget/get-html', buttonData.dataset);
+    } else if (!isPopUp()){
+      openPopup();
+      return false;
     }
   });
   //
@@ -739,22 +749,18 @@ var check1Ready = (function() {
   init();
 });
 
-openPopup = function(verb, url, data) {
-  var form = document.createElement("form");
-  form.action = url;
-  form.method = verb;
-  form.target = "_blank";
-  if (data) {
-    for (var key in data) {
-      var input = document.createElement("textarea");
-      input.name = key;
-      input.value = typeof data[key] === "object" ? JSON.stringify(data[key]) : data[key];
-      form.appendChild(input);
-    }
-  }
-  form.style.display = 'none';
-  document.body.appendChild(form);
-  form.submit();
+openPopup = function() {
+  var w = 280;
+  var h = 220;
+  var left = (screen.width/2)-(w/2);
+  var top = (screen.height/2)-(h/2);
+
+  var buttonData = document.querySelector('.voxButton').dataset;
+  var params = Object.keys(buttonData).map(k => `${encodeURIComponent(k)}=${encodeURIComponent(buttonData[k])}`).join('&');
+
+  window.open(infoVoxbone.server_url + '/widget/portal-widget/get-html?' + params, '_blank', 'width='+w+',height='+h+',resizable=no,toolbar=no,menubar=no,location=no,status=no,top='+top+', left='+left);
+
+  return false;
 };
 
 check0Ready();

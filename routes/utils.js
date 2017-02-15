@@ -243,12 +243,11 @@ module.exports = {
   widgetSecureDivHTML: function (widget, did) {
     var pug = require('pug');
     var script = process.env.APP_URL + this.click2voxJsFileName;
-    var cleanLabel = widget.text.replace(/%20/g , ' '); // Sometimes label has spaces in it. When it does the spaces translate as %20 on the text. This line is to clean that.
     var params = {
       did: did,
       script: script,
       id: widget._id,
-      label: escape(cleanLabel),
+      label: unescape(widget.text),
       the_widget: this.sanitizeParams(widget)
     };
 
