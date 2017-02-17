@@ -26,7 +26,7 @@ block content
             Need to pass information from the webpage to your PBX or navigate an IVR? Click2Vox has you covered.
 
 
-  .home-setup(id="setup")
+  .home-setup(id="setup" ng-controller="HomeController")
     .container
       .row
         .col-xs-12
@@ -57,13 +57,11 @@ block content
           h3 Want to
             span  try it now?
 
-      .row.home-buttons
-        .col-sm-12.col-md-6
+      .row.home-buttons(ng-cloak)
+        .col-sm-12(ng-class="{'col-md-6' : showCallVoxboneButton()}")
           a.btn.btn-default-custom(href='/widget/demo') Create a sample call button
-        .col-sm-12.col-md-6
-          a.btn.btn-default-custom(href='#' onclick="document.getElementById('launch_call').click();") Click2vox us now
-
-
+        .col-sm-12.col-md-6(ng-show="showCallVoxboneButton()")
+          a.btn.btn-default-custom(ng-click="callVoxbone()") Click2vox us now
 
   .contact(id="contact")
     .container

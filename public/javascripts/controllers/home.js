@@ -1,5 +1,12 @@
 define(['angular', 'jquery'], function (angular, $) {
   var HomeController = function ($scope, $http, $window) {
+    $scope.callVoxbone = function () {
+      $('#launch_call').click();
+    }
+
+    $scope.showCallVoxboneButton = function () {
+      return voxbone.WebRTC.isWebRTCSupported();
+    }
   };
 
   var clearContactForm = function () {
