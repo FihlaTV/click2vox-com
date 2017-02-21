@@ -3,6 +3,7 @@
 
 var head = document.getElementsByTagName('head')[0];
 var infoVoxbone, voxButtonElement;
+var audioContext = new AudioContext();
 
 voxButtonElement = document.getElementsByClassName('voxButton')[0];
 if (voxButtonElement === undefined) {
@@ -564,9 +565,73 @@ var check1Ready = (function() {
       case '0':
       case '*':
       case '#':
+        playDTMF(message);
         voxbone.WebRTC.sendDTMF(message);
         break;
     }
+  }
+
+  function do_dtmf() {
+    setTimeout(do_dtmf2, 100);
+  }
+  function do_dtmf2() {
+    setTimeout(do_dtmf, 30);
+  }
+
+  function createOscillator(context, freq, gain) {
+    var osc = context.createOscillator();
+    osc.type = "sine";
+    osc.frequency.value = freq;
+    osc.connect(gain);
+
+    return osc;
+  }
+
+  function getFreqs(tone) {
+    var freqs;
+
+    switch(tone) {
+      case '1': freqs = [697, 1209]; break;
+      case '2': freqs = [697, 1336]; break;
+      case '3': freqs = [697, 1477]; break;
+      case 'A': freqs = [697, 1633]; break;
+      case '4': freqs = [770, 1209]; break;
+      case '5': freqs = [770, 1336]; break;
+      case '6': freqs = [770, 1477]; break;
+      case 'B': freqs = [770, 1633]; break;
+      case '7': freqs = [852, 1209]; break;
+      case '8': freqs = [852, 1336]; break;
+      case '9': freqs = [852, 1477]; break;
+      case 'C': freqs = [852, 1633]; break;
+      case '*': freqs = [941, 1209]; break;
+      case '0': freqs = [941, 1336]; break;
+      case '#': freqs = [941, 1477]; break;
+      case 'D': freqs = [941, 1633]; break;
+    }
+
+    return freqs;
+  }
+
+  function playDTMF(tone) {
+    var sound = {};
+
+    // create a gain node to control output
+    sound.gain1 = audioContext.createGain();
+    sound.gain1.gain.value = 1.0;
+    sound.gain1.connect(audioContext.destination);
+
+    // create both oscillator sources
+    var freqs = getFreqs(tone);
+    sound.osc1 = createOscillator(audioContext, freqs[0], sound.gain1);
+    sound.osc2 = createOscillator(audioContext, freqs[1], sound.gain1);
+    sound.osc1.start(0);
+    sound.osc2.start(0);
+
+    // just play 200ms long DTMF tones
+    do_dtmf();
+    setTimeout(function(){
+      sound.osc1.stop(0);sound.osc2.stop(0);
+    }, 200);
   }
 
   function sendRate(data) {
@@ -686,6 +751,16 @@ var check1Ready = (function() {
       e.preventDefault();
       callAction(this.textContent);
     });
+  });
+
+  // Get dialpad values from keyboard
+  document.body.addEventListener('keydown', function(event){
+    if (!isInCall()) return;
+
+    var c = String.fromCharCode(event.which);
+    if (c.match(/[0-9\*#]/)) {
+      callAction(c);
+    }
   });
 
   // End call button event
