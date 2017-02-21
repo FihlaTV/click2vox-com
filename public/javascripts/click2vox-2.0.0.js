@@ -413,7 +413,7 @@ var check1Ready = (function() {
       if (isPopUp()) {
         hideElement('.voxButton .vxb-widget-box');
         hideElement('.vox-widget-wrapper .vw-main .vw-header .vw-actions');
-        window.resizeTo(400, 420);
+        window.resizeTo(415, 420);
       }
     }
   }
