@@ -662,9 +662,12 @@ var check1Ready = (function() {
     hideElement(".vox-widget-wrapper .vw-rating");
 
     //Widget placement
-    var voxWidgetWrapper = document.querySelector('.vox-widget-wrapper');
-    voxWidgetWrapper.classList.remove("vw-top-left", "vw-top-right", "vw-bottom-right", "vw-bottom-left");
-    voxWidgetWrapper.classList.add('vw-' + infoVoxbone.placement);
+    var vox_widget_wrapper = document.querySelector('.vox-widget-wrapper');
+    vox_widget_wrapper.classList.remove("vw-top-left", "vw-top-right", "vw-bottom-right", "vw-bottom-left");
+    vox_widget_wrapper.classList.add('vw-' + infoVoxbone.placement);
+
+    var widget_mic_header_selector = ".vox-widget-wrapper .vw-header";
+    vox_widget_wrapper.querySelector(widget_mic_header_selector).classList.remove('minimized');
 
     showAnimatedDots();
     showElement(".vox-widget-wrapper #vw-in-call");
@@ -680,6 +683,10 @@ var check1Ready = (function() {
     // Reset Rating
     document.querySelector('.vox-widget-wrapper #send-rating').classList.add("btn-style-disabled");
     document.querySelector('.vox-widget-wrapper #rating-message').value = "";
+
+    var full_screen_icon = document.querySelector('.vox-widget-wrapper #full-screen i');
+    full_screen_icon.classList.remove('vx-icon-full-screen-on');
+    full_screen_icon.classList.add('vx-icon-full-screen-off');
 
     var starRatingButtons = document.querySelectorAll(".vox-widget-wrapper input[name=vxb-rate]");
     Array.prototype.forEach.call(starRatingButtons, function(el, i) {
