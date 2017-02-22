@@ -107,7 +107,7 @@ router.get('/:id/edit', utils.isLoggedIn, function (req, res, next) {
   },
   function (err, result) {
     if (!result.widget) return utils.error404(res);
-    result.defaultBtnLabel = utils.defaultBtnLabel;
+    result.widget.button_label = utils.defaultBtnLabel;
     result.widget_code = result.widget.generateDivHtmlCode();
     result.title = title;
     res.render('widget/edit', result);

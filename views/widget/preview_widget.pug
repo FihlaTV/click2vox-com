@@ -69,7 +69,7 @@ ul.nav.nav-tabs(ng-cloak role="tablist")
           qtip="You can click the button to make a call and test the service!<br>(save your configuration before you test)"
           qtip-disable="!isWebRTCSupported() || !preview_webrtc_compatible"
           qtip-title="Try it!"
-        ) #[span {{widget.button_label || 'Call Sales'}}]
+        ) #[span {{ widget.button_label }}]
 
         .widget-footer-left(ng-show="widget.test_setup")
           a(href="https://test.webrtc.org/" target="_blank") Test your setup

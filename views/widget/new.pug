@@ -33,7 +33,7 @@ block content
     .container
       .div#control
 
-      .main.createButton.panel-content.button-page(class=showWizard ? 'wizard' : '' ng-controller="WidgetAddController" ng-init=`widget.sip_uri='${addedSip}'`)
+      .main.createButton.panel-content.button-page(class=showWizard ? 'wizard' : '' ng-controller="WidgetAddController" ng-init=`widget.sip_uri='${addedSip}'; widget.button_label = '${defaultBtnLabel}'`)
         .panel-header
           h1.panel-title Create a WebRTC Click-to-Call Button
           p #[b Questions?] #[a(href="https://click2vox.com/faq" target="_blank") See our Frequently Asked Questions document.]
@@ -58,19 +58,19 @@ block content
                 .form-header Button Configuration
                 .form-group
                   label Button Label
-                  input.form-control(type="text", name="button_label", ng-model="widget.button_label" value=`${defaultBtnLabel}` placeholder=`i.e. ${defaultBtnLabel}`)
+                  input.form-control(type="text" name="button_label" ng-model="widget.button_label"  placeholder=`i.e. ${defaultBtnLabel}`)
                 .form-group
                   label Button Style
-                  .buttons
+                  .buttons(ng-cloak)
                     .button-text
-                      button.btn-style-a(ng-cloak ng-click="setTheme('style-a')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
-                      div(ng-cloak) Blue Theme
+                      button.btn-style-a(ng-cloak ng-click="setTheme('style-a')") #[span {{ widget.button_label }}]
+                      div Blue Theme
                     .button-text
-                      button.btn-style-b(ng-cloak ng-click="setTheme('style-b')") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
-                      div(ng-cloak) Purple Theme
+                      button.btn-style-b(ng-cloak ng-click="setTheme('style-b')") #[span {{ widget.button_label }}]
+                      div Purple Theme
                     .button-text
-                      button.btn-style-c(ng-cloak ng-click="setCustomTheme()" colorpicker colorpicker-position="right" colorpicker-with-input="true" type="text" ng-model="widget.button_color" ng-style="{'background': widget.button_color ? widget.button_color : tempButtonColor }") #[span {{ widget.button_label || '#{defaultBtnLabel}' }}]
-                      div(ng-cloak) Custom Theme
+                      button.btn-style-c(ng-cloak ng-click="setCustomTheme()" colorpicker colorpicker-position="right" colorpicker-with-input="true" type="text" ng-model="widget.button_color" ng-style="{'background': widget.button_color ? widget.button_color : tempButtonColor }") #[span {{ widget.button_label }}]
+                      div Custom Theme
 
                 .panel.panel-default
                   .panel-heading

@@ -16,7 +16,7 @@ module.exports = {
   // Keep the starting slash
   click2voxJsFileName: "/click2vox.js",
 
-  defaultBtnLabel: process.env.DEFAULT_BUTTON_LABEL || 'Call Sales',
+  defaultBtnLabel: process.env.DEFAULT_BUTTON_LABEL,
 
   defaultSipUris: function() {
     var demoSips = require('../config/demo-sips.json');
