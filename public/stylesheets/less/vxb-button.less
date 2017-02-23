@@ -21,16 +21,22 @@
   font-weight:400;
 }
 
-.btn-style-a span,.btn-style-b span,.btn-style-c span,
-.vxb-widget-box.style-a .vxb-btn-style span,
-.vxb-widget-box.style-b .vxb-btn-style span,
-.vxb-widget-box.style-c .vxb-btn-style span{
+.btn-style-a span,
+.btn-style-b span,
+.btn-style-c span,
+.vxb-widget-box.style-a 
+.vxb-btn-style span,
+.vxb-widget-box.style-b 
+.vxb-btn-style span,
+.vxb-widget-box.style-c 
+.vxb-btn-style span{
   text-shadow:0 -1px #07619e;
   font-family: 'Open Sans', sans-serif;
   font-weight: bold;
   display: block;
   word-wrap: break-word !important;
 }
+
 .btn-style-a {
   -moz-border-radius:4px;
   -moz-box-shadow:0 1px 1px rgba(0,0,0,.16);
@@ -310,3 +316,38 @@
 .btn-style-disabled {
   cursor:not-allowed !important;
 }
+
+
+//Icon
+.btn-icon span{
+  
+  position: relative;
+
+  &:after {
+    display: inline-block;
+    vertical-align: sub;
+    margin-left: 4px;
+    content: "";
+    width: 20px;
+    height: 18px;
+    background-image: url(../../images/icon-sprite.png);
+    background-position: -13px -290px;
+    background-size: 46px 368px;
+    background-repeat: no-repeat;
+  }
+}
+
+.btn-emoji span{
+  
+  position: relative;
+  
+  &:after {
+    content: attr(data-emoji);
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+
+}
+
+
