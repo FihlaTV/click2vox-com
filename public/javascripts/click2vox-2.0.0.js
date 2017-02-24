@@ -7,10 +7,10 @@ var audioContext = new AudioContext();
 
 voxButtonElement = document.getElementsByClassName('voxButton')[0];
 if (voxButtonElement === undefined) {
-    voxButtonElement = document.createElement("div");
-    voxButtonElement.className = "voxButton";
-    voxButtonElement.dataset.use_default_button_css = false;
-    // document.body.appendChild(voxButtonElement);
+  voxButtonElement = document.createElement("div");
+  voxButtonElement.className = "voxButton";
+  voxButtonElement.dataset.use_default_button_css = false;
+  // document.body.appendChild(voxButtonElement);
 }
 
 function loadScript(url, callback) {
@@ -18,7 +18,6 @@ function loadScript(url, callback) {
   var script = document.createElement('script');
   script.type = 'text/javascript';
   script.src = url;
-  console.log('Load script: '+url);
 
   // Then bind the event to the callback function.
   // There are several events for cross browser compatibility.
@@ -40,6 +39,7 @@ function loadCss(url) {
 var check0Ready = (function() {
   infoVoxbone = voxButtonElement.dataset;
   infoVoxbone.server_url = (infoVoxbone.server_url === undefined) ? 'https://click2vox.com' : infoVoxbone.server_url;
+
   loadCss(infoVoxbone.server_url + '/stylesheets/vxb-widget.css');
 
   if(infoVoxbone.use_default_button_css !== 'false')
