@@ -235,16 +235,16 @@ var check1Ready = (function() {
     </div>\
     ';
   }
-   else if (!isWebRTCSupported() && infoVoxbone.incompatible_browser_configuration === 'hide_widget')
+  else if (!isWebRTCSupported() && infoVoxbone.incompatible_browser_configuration === 'hide_widget')
     hideElement('div[data-button_id="' + infoVoxbone.button_id + '"]');
-   else {
+  else {
     voxButtonElement.innerHTML += ' \
     <div style="display: none;'+custom_frame_color+'" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
       <button id="launch_call" ' + custom_button_color + ' class="vxb-btn-style ' + (infoVoxbone.button_css_class_name) + '"><span>' +  unescape(infoVoxbone.text) + '</span></button>\
       ' + links + '\
     </div>\
     ';
-   }
+  }
 
 
   function getVoxrtcConfig(callback) {
