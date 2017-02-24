@@ -184,14 +184,14 @@ var check1Ready = (function() {
         <div class="widget-footer-left">\
           <a href="https://test.webrtc.org/" target="_blank">'+infoVoxbone.text_test_your_setup+'</a>\
         </div>\
-      ';
+        ';
         }
         else {
             links = '\
         <div class="widget-footer-left">\
           <a href="https://test.webrtc.org/" target="_blank">Test your setup</a>\
         </div>\
-      ';
+        ';
         }
     }
 
