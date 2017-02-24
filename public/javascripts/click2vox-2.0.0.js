@@ -7,10 +7,10 @@ var audioContext = new AudioContext();
 
 voxButtonElement = document.getElementsByClassName('voxButton')[0];
 if (voxButtonElement === undefined) {
-  voxButtonElement = document.createElement("div");
-  voxButtonElement.className = "voxButton";
-  voxButtonElement.dataset.use_default_button_css = false;
-  // document.body.appendChild(voxButtonElement);
+    voxButtonElement = document.createElement("div");
+    voxButtonElement.className = "voxButton";
+    voxButtonElement.dataset.use_default_button_css = false;
+    // document.body.appendChild(voxButtonElement);
 }
 
 function loadScript(url, callback) {
@@ -18,6 +18,7 @@ function loadScript(url, callback) {
   var script = document.createElement('script');
   script.type = 'text/javascript';
   script.src = url;
+  console.log('Load script: '+url);
 
   // Then bind the event to the callback function.
   // There are several events for cross browser compatibility.
@@ -39,7 +40,6 @@ function loadCss(url) {
 var check0Ready = (function() {
   infoVoxbone = voxButtonElement.dataset;
   infoVoxbone.server_url = (infoVoxbone.server_url === undefined) ? 'https://click2vox.com' : infoVoxbone.server_url;
-
   loadCss(infoVoxbone.server_url + '/stylesheets/vxb-widget.css');
 
   if(infoVoxbone.use_default_button_css !== 'false')
@@ -179,20 +179,39 @@ var check1Ready = (function() {
 
   if (show_frame) {
     if (infoVoxbone.test_setup !== 'false') {
-      links = '\
+        if (infoVoxbone.text_test_your_setup){
+            links = '\
+        <div class="widget-footer-left">\
+          <a href="https://test.webrtc.org/" target="_blank">'+infoVoxbone.text_test_your_setup+'</a>\
+        </div>\
+      ';
+        }
+        else {
+            links = '\
         <div class="widget-footer-left">\
           <a href="https://test.webrtc.org/" target="_blank">Test your setup</a>\
         </div>\
       ';
+        }
     }
 
     if (infoVoxbone.show_branding !== 'false') {
-      links += '\
-        <div class="widget-footer-right">\
+       if (infoVoxbone.text_powered_by){
+         links += '\
+         <div class="widget-footer-right">\
+          <a href="https://voxbone.com" target="_blank">'+ infoVoxbone.text_powered_by +'</a>\
+         </div> \
+         ';
+       }
+       else {
+         links += '\
+         <div class="widget-footer-right">\
           <a href="https://voxbone.com" target="_blank">powered by:</a>\
-        </div> \
-      ';
+         </div> \
+         ';
+       }
     }
+
   } else {
     infoVoxbone.div_css_class_name += ' no-frame';
     if (infoVoxbone.show_branding === 'false')
@@ -214,18 +233,19 @@ var check1Ready = (function() {
     <div style="display: none;'+custom_frame_color+'" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
       <span>' +  unescape(infoVoxbone.text_html) + '</span>\
     </div>\
-  ';
+    ';
   }
-  else if (!isWebRTCSupported() && infoVoxbone.incompatible_browser_configuration === 'hide_widget')
+   else if (!isWebRTCSupported() && infoVoxbone.incompatible_browser_configuration === 'hide_widget')
     hideElement('div[data-button_id="' + infoVoxbone.button_id + '"]');
-  else {
+   else {
     voxButtonElement.innerHTML += ' \
     <div style="display: none;'+custom_frame_color+'" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
       <button id="launch_call" ' + custom_button_color + ' class="vxb-btn-style ' + (infoVoxbone.button_css_class_name) + '"><span>' +  unescape(infoVoxbone.text) + '</span></button>\
       ' + links + '\
     </div>\
-  ';
-  }
+    ';
+   }
+
 
   function getVoxrtcConfig(callback) {
     var request = new XMLHttpRequest();
@@ -361,6 +381,8 @@ var check1Ready = (function() {
       if (isChromeOnHttp())
         console.log("WebRTC doesn't work in Chrome on HTTP -> https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins");
     }
+    //add editable text to widget
+    editText(infoVoxbone);
   }
 
   function isInCall() {
@@ -435,12 +457,20 @@ var check1Ready = (function() {
       case 'setCallCalling':
         if (infoVoxbone.ringback !== 'false')
           playRingbackTone();
-        setWidgetTitle("Calling");
+
+        if (infoVoxbone.text_calling)
+          setWidgetTitle(infoVoxbone.text_calling);
+        else
+          setWidgetTitle("Calling");
         break;
 
       case 'setCallFailed':
         pauseRingbackTone();
-        setWidgetTitle("Call Failed: " + message.value);
+        if (infoVoxbone.text_call_failed) {
+            setWidgetTitle(infoVoxbone.text_call_failed + ': ' + editErrorMessage(message.value, infoVoxbone));
+        } else {
+            setWidgetTitle("Call Failed: " + message.value);
+        }
         hideAnimatedDots();
         hideElement('.vox-widget-wrapper #vw-in-call');
         showElement(".vox-widget-wrapper #vw-rating-after-message");
@@ -448,13 +478,19 @@ var check1Ready = (function() {
 
       case 'setInCall':
         pauseRingbackTone();
-        setWidgetTitle("In Call");
+        if (infoVoxbone.text_in_call)
+            setWidgetTitle(infoVoxbone.text_in_call);
+        else
+            setWidgetTitle("In Call");
         showAnimatedDots();
         break;
 
       case 'setCallEnded':
         resetWidget();
-        setWidgetTitle("Call Ended");
+        if (infoVoxbone.text_call_ended)
+            setWidgetTitle(infoVoxbone.text_call_ended);
+        else
+            setWidgetTitle("Call Ended");
         hideAnimatedDots();
         hideElement('.vox-widget-wrapper #vw-in-call');
 
@@ -468,7 +504,10 @@ var check1Ready = (function() {
 
       case 'setCallFailedUserMedia':
         pauseRingbackTone();
-        setWidgetTitle("Call Failed");
+        if (infoVoxbone.text_call_failed)
+            setWidgetTitle(infoVoxbone.text_call_failed);
+        else
+            setWidgetTitle("Call Failed");
         hideAnimatedDots();
         hideElement('.vox-widget-wrapper #vw-in-call');
         showElement(".vox-widget-wrapper #vw-unable-to-acces-mic");
@@ -654,7 +693,10 @@ var check1Ready = (function() {
   }
 
   function resetWidget() {
-    setWidgetTitle("Waiting for User Media");
+    if (infoVoxbone.text_waiting_user_media)
+        setWidgetTitle(infoVoxbone.text_waiting_user_media);
+    else
+        setWidgetTitle("Waiting for User Media");
     clearMicDots();
 
     hideElement(".vox-widget-wrapper #vw-unable-to-acces-mic");
@@ -845,6 +887,89 @@ openPopup = function() {
   window.open(infoVoxbone.server_url + '/widget/portal-widget/get-html?' + params, '_blank', 'width='+w+',height='+h+',resizable=no,toolbar=no,menubar=no,location=no,status=no,top='+top+', left='+left);
 
   return false;
+};
+
+//customize default static text
+var editText = function editText(edited_text) {
+
+    if (edited_text.text_test_your_setup) document.getElementById("launch_call_div").getElementsByTagName("a")[0].innerHTML = edited_text.text_test_your_setup;
+
+    if (edited_text.text_powered_by) {
+        document.getElementById("launch_call_div").getElementsByTagName("a")[1].innerHTML = edited_text.text_powered_by;
+        document.getElementById("vw-footer").getElementsByTagName("a")[0].innerHTML = edited_text.text_powered_by;
+    }
+
+    if (edited_text.text_hang_up) document.getElementById("vw-end-call").innerHTML = '<i class="vw-icon vx-icon-phone"></i>' + edited_text.text_hang_up;
+
+    if (edited_text.text_rating_question) document.getElementById("vw-rating-question").innerHTML = edited_text.text_rating_question;
+
+    if (edited_text.text_rating_comment) document.getElementById("vw-rating-message").childNodes[0].nodeValue = edited_text.text_rating_comment;
+
+    if (edited_text.text_rating_send_button) document.getElementById("send-rating").getElementsByTagName("span")[0].innerHTML = edited_text.text_rating_send_button;
+
+    if (edited_text.text_rating_placeholder) document.getElementById("rating-message").placeholder = edited_text.text_rating_placeholder;
+
+    if (edited_text.text_unable_to_access_mic) document.getElementById('vw-unable-to-acces-mic').getElementsByTagName("p")[0].innerHTML = edited_text.text_unable_to_access_mic;
+
+    if (edited_text.text_unable_to_access_mic_instructions) document.getElementById('vw-unable-to-acces-mic').getElementsByTagName("p")[1].innerHTML = edited_text.text_unable_to_access_mic_instructions;
+
+    if (edited_text.text_after_rating) document.getElementById("vw-rating-after-message").getElementsByTagName("p")[0].innerHTML = edited_text.text_after_rating;
+
+};
+
+//customize default error messages in widget
+var editErrorMessage = function editErrorMessage(error, mt) {
+
+    switch(error) {
+        case "Canceled":
+            return mt.textError_canceled ? mt.textError_canceled : error;
+        case "Terminated":
+            return mt.textError_bye ? mt.textError_bye : error;
+        case "WebRTC Error":
+            return mt.textError_webrtc ? mt.textError_webrtc : error;
+        case "No Answer":
+            return mt.textError_no_answer ? mt.textError_no_answer : error;
+        case "Expires":
+            return mt.textError_expires ? mt.textError_expires : error;
+        case "No Ack":
+            return mt.textError_no_ack ? mt.textError_no_ack : error;
+        case "Dialog Error":
+            return mt.textError_dialog_error ? mt.textError_dialog_error : error;
+        case "User Denied Media Access":
+            return mt.textError_user_denied_media ? mt.textError_user_denied_media : error;
+        case "Bad Media Description":
+            return mt.textError_bad_media_description ? mt.textError_bad_media_description : error;
+        case "RTP Timeout":
+            return mt.textError_rtp_timeout ? mt.textError_rtp_timeout : error;
+        case "Connection Error":
+            return mt.textError_connection_error ? mt.textError_connection_error : error;
+        case "Request Timeout":
+            return mt.textError_request_timeout ? mt.textError_request_timeout : error;
+        case "SIP Failure":
+            return mt.textError_sip_failure ? mt.textError_sip_failure : error;
+        case "Internal Error":
+            return mt.textError_internal_error ? mt.textError_internal_error : error;
+        case "Rejected":
+            return mt.textError_sip_rejected ? mt.textError_sip_rejected : error;
+        case "Busy":
+            return mt.textError_sip_busy ? mt.textError_sip_busy : error;
+        case "Redirect":
+            return mt.textError_sip_redirected ? mt.textError_sip_redirected : error;
+        case "Unavailable":
+            return mt.textError_sip_unavailable ? mt.textError_sip_unavailable : error;
+        case "Address Incomplete":
+            return mt.textError_sip_address_incomplete ? mt.textError_sip_address_incomplete : error;
+        case "Incompatible SDP":
+            return mt.textError_sip_incompatible_sdp ? mt.textError_sip_incompatible_sdp : error;
+        case "Missing SDP":
+            return mt.textError_sip_missing_sdp ? mt.textError_sip_missing_sdp : error;
+        case "Not Found":
+            return mt.textError_sip_not_found ? mt.textError_sip_not_found : error;
+        case "Authentication Error":
+            return mt.textError_sip_authentication ? mt.textError_sip_authentication : error;
+        default:
+            return error;
+    }
 };
 
 check0Ready();
