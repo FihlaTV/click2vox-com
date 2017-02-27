@@ -764,9 +764,8 @@ var check1Ready = (function() {
   document.body.addEventListener('keydown', function(event){
     if (!isInCall()) return;
 
-    var c = String.fromCharCode(event.which);
-    if (c.match(/[0-9\*#]/)) {
-      callAction(c);
+    if (event.key.match(/[0-9\*#]/)) {
+      callAction(event.key);
     }
   });
 
