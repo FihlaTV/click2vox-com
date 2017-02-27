@@ -116,18 +116,18 @@ var check1Ready = (function() {
             <a href="#" id="vw-end-call" class="vw-end-call"><i class="vw-icon vx-icon-phone"></i>End Call</a> \
             <div id="vw-dialpad" class="vw-dialpad"> \
               <ul> \
-                <li class="vw-tl">1</li> \
-                <li>2</li> \
-                <li class="vw-tr">3</li> \
-                <li>4</li> \
-                <li>5</li> \
-                <li>6</li> \
-                <li>7</li> \
-                <li>8</li> \
-                <li>9</li> \
-                <li class="vw-bl">*</li> \
-                <li>0</li> \
-                <li class="vw-br">#</li> \
+                <li class="vw-dialpadkey-1 vw-tl">1</li> \
+                <li class="vw-dialpadkey-2">2</li> \
+                <li class="vw-dialpadkey-3 vw-tr">3</li> \
+                <li class="vw-dialpadkey-4">4</li> \
+                <li class="vw-dialpadkey-5">5</li> \
+                <li class="vw-dialpadkey-6">6</li> \
+                <li class="vw-dialpadkey-7">7</li> \
+                <li class="vw-dialpadkey-8">8</li> \
+                <li class="vw-dialpadkey-9">9</li> \
+                <li class="vw-dialpadkey-* vw-bl">*</li> \
+                <li class="vw-dialpadkey-0">0</li> \
+                <li class="vw-dialpadkey-# vw-br">#</li> \
               </ul> \
             </div> \
           </div> \
@@ -763,10 +763,22 @@ var check1Ready = (function() {
   // Get dialpad values from keyboard
   document.body.addEventListener('keydown', function(event){
     if (!isInCall()) return;
+    if (!event.key.match(/[0-9\*#]/)) return;
 
-    if (event.key.match(/[0-9\*#]/)) {
-      callAction(event.key);
+    var el = document.getElementsByClassName(`vw-dialpadkey-${event.key}`)[0];
+    if (el) {
+      el.classList.add('active');
     }
+
+    callAction(event.key);
+  });
+
+  document.body.addEventListener('keyup', function(event){
+    if (!event.key.match(/[0-9\*#]/)) return;
+
+    var el = document.getElementsByClassName(`vw-dialpadkey-${event.key}`)[0];
+    if (el)
+      el.classList.remove('active');
   });
 
   // End call button event
