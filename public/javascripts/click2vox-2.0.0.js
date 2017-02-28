@@ -619,7 +619,7 @@ var check1Ready = (function() {
   }
 
   function createOscillator(context, freq, gain) {
-    var osc = context.custom.createOscillator();
+    var osc = context.createOscillator();
     osc.type = "sine";
     osc.frequency.value = freq;
     osc.connect(gain);
@@ -656,9 +656,9 @@ var check1Ready = (function() {
     var sound = {};
 
     // create a gain node to control output
-    sound.gain1 = audioContext.custom.createGain();
+    sound.gain1 = audioContext.createGain();
     sound.gain1.gain.value = 1.0;
-    sound.gain1.connect(audioContext.custom.destination);
+    sound.gain1.connect(audioContext.destination);
 
     // create both oscillator sources
     var freqs = getFreqs(tone);
