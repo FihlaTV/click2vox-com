@@ -176,13 +176,14 @@ var check1Ready = (function() {
 
   var links = '';
   var show_frame = infoVoxbone.show_frame !== 'false';
+  var customText = JSON.parse(infoVoxbone.widget_texts).custom;
 
   if (show_frame) {
     if (infoVoxbone.test_setup !== 'false') {
-        if (infoVoxbone.text_test_your_setup){
+        if (customText.test_your_setup){
             links = '\
         <div class="widget-footer-left">\
-          <a href="https://test.webrtc.org/" target="_blank">'+infoVoxbone.text_test_your_setup+'</a>\
+          <a href="https://test.webrtc.org/" target="_blank">'+customText.test_your_setup+'</a>\
         </div>\
         ';
         }
@@ -196,10 +197,10 @@ var check1Ready = (function() {
     }
 
     if (infoVoxbone.show_branding !== 'false') {
-       if (infoVoxbone.text_powered_by){
+       if (customText.powered_by){
          links += '\
          <div class="widget-footer-right">\
-          <a href="https://voxbone.com" target="_blank">'+ infoVoxbone.text_powered_by +'</a>\
+          <a href="https://voxbone.com" target="_blank">'+ customText.powered_by +'</a>\
          </div> \
          ';
        }
@@ -382,7 +383,7 @@ var check1Ready = (function() {
         console.log("WebRTC doesn't work in Chrome on HTTP -> https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins");
     }
     //add editable text to widget
-    editText(infoVoxbone);
+    editText(customText);
   }
 
   function isInCall() {
@@ -458,16 +459,16 @@ var check1Ready = (function() {
         if (infoVoxbone.ringback !== 'false')
           playRingbackTone();
 
-        if (infoVoxbone.text_calling)
-          setWidgetTitle(infoVoxbone.text_calling);
+        if (customText.calling)
+          setWidgetTitle(customText.calling);
         else
           setWidgetTitle("Calling");
         break;
 
       case 'setCallFailed':
         pauseRingbackTone();
-        if (infoVoxbone.text_call_failed) {
-            setWidgetTitle(infoVoxbone.text_call_failed + ': ' + editErrorMessage(message.value, infoVoxbone));
+        if (customText.failed) {
+            setWidgetTitle(customText.failed + ': ' + editErrorMessage(message.value, customText));
         } else {
             setWidgetTitle("Call Failed: " + message.value);
         }
@@ -478,8 +479,8 @@ var check1Ready = (function() {
 
       case 'setInCall':
         pauseRingbackTone();
-        if (infoVoxbone.text_in_call)
-            setWidgetTitle(infoVoxbone.text_in_call);
+        if (customText.in_call)
+            setWidgetTitle(customText.in_call);
         else
             setWidgetTitle("In Call");
         showAnimatedDots();
@@ -487,8 +488,8 @@ var check1Ready = (function() {
 
       case 'setCallEnded':
         resetWidget();
-        if (infoVoxbone.text_call_ended)
-            setWidgetTitle(infoVoxbone.text_call_ended);
+        if (customText.ended)
+            setWidgetTitle(customText.ended);
         else
             setWidgetTitle("Call Ended");
         hideAnimatedDots();
@@ -504,8 +505,8 @@ var check1Ready = (function() {
 
       case 'setCallFailedUserMedia':
         pauseRingbackTone();
-        if (infoVoxbone.text_call_failed)
-            setWidgetTitle(infoVoxbone.text_call_failed);
+        if (customText.failed)
+            setWidgetTitle(customText.failed);
         else
             setWidgetTitle("Call Failed");
         hideAnimatedDots();
@@ -618,7 +619,7 @@ var check1Ready = (function() {
   }
 
   function createOscillator(context, freq, gain) {
-    var osc = context.createOscillator();
+    var osc = context.custom.createOscillator();
     osc.type = "sine";
     osc.frequency.value = freq;
     osc.connect(gain);
@@ -655,9 +656,9 @@ var check1Ready = (function() {
     var sound = {};
 
     // create a gain node to control output
-    sound.gain1 = audioContext.createGain();
+    sound.gain1 = audioContext.custom.createGain();
     sound.gain1.gain.value = 1.0;
-    sound.gain1.connect(audioContext.destination);
+    sound.gain1.connect(audioContext.custom.destination);
 
     // create both oscillator sources
     var freqs = getFreqs(tone);
@@ -693,8 +694,8 @@ var check1Ready = (function() {
   }
 
   function resetWidget() {
-    if (infoVoxbone.text_waiting_user_media)
-        setWidgetTitle(infoVoxbone.text_waiting_user_media);
+    if (customText.waiting_user_media)
+        setWidgetTitle(customText.waiting_user_media);
     else
         setWidgetTitle("Waiting for User Media");
     clearMicDots();
@@ -892,28 +893,28 @@ openPopup = function() {
 //customize default static text
 var editText = function editText(edited_text) {
 
-    if (edited_text.text_test_your_setup) document.getElementById("launch_call_div").getElementsByTagName("a")[0].innerHTML = edited_text.text_test_your_setup;
+    if (edited_text.test_your_setup) document.getElementById("launch_call_div").getElementsByTagName("a")[0].innerHTML = edited_text.test_your_setup;
 
-    if (edited_text.text_powered_by) {
-        document.getElementById("launch_call_div").getElementsByTagName("a")[1].innerHTML = edited_text.text_powered_by;
-        document.getElementById("vw-footer").getElementsByTagName("a")[0].innerHTML = edited_text.text_powered_by;
+    if (edited_text.powered_by) {
+        document.getElementById("launch_call_div").getElementsByTagName("a")[1].innerHTML = edited_text.powered_by;
+        document.getElementById("vw-footer").getElementsByTagName("a")[0].innerHTML = edited_text.powered_by;
     }
 
-    if (edited_text.text_hang_up) document.getElementById("vw-end-call").innerHTML = '<i class="vw-icon vx-icon-phone"></i>' + edited_text.text_hang_up;
+    if (edited_text.hang_up) document.getElementById("vw-end-call").innerHTML = '<i class="vw-icon vx-icon-phone"></i>' + edited_text.hang_up;
 
-    if (edited_text.text_rating_question) document.getElementById("vw-rating-question").innerHTML = edited_text.text_rating_question;
+    if (edited_text.rating_question) document.getElementById("vw-rating-question").innerHTML = edited_text.rating_question;
 
-    if (edited_text.text_rating_comment) document.getElementById("vw-rating-message").childNodes[0].nodeValue = edited_text.text_rating_comment;
+    if (edited_text.rating_comment) document.getElementById("vw-rating-message").childNodes[0].nodeValue = edited_text.rating_comment;
 
-    if (edited_text.text_rating_send_button) document.getElementById("send-rating").getElementsByTagName("span")[0].innerHTML = edited_text.text_rating_send_button;
+    if (edited_text.rating_send_button) document.getElementById("send-rating").getElementsByTagName("span")[0].innerHTML = edited_text.rating_send_button;
 
-    if (edited_text.text_rating_placeholder) document.getElementById("rating-message").placeholder = edited_text.text_rating_placeholder;
+    if (edited_text.rating_placeholder) document.getElementById("rating-message").placeholder = edited_text.rating_placeholder;
 
-    if (edited_text.text_unable_to_access_mic) document.getElementById('vw-unable-to-acces-mic').getElementsByTagName("p")[0].innerHTML = edited_text.text_unable_to_access_mic;
+    if (edited_text.unable_to_access_mic) document.getElementById('vw-unable-to-acces-mic').getElementsByTagName("p")[0].innerHTML = edited_text.unable_to_access_mic;
 
-    if (edited_text.text_unable_to_access_mic_instructions) document.getElementById('vw-unable-to-acces-mic').getElementsByTagName("p")[1].innerHTML = edited_text.text_unable_to_access_mic_instructions;
+    if (edited_text.unable_to_access_mic_instructions) document.getElementById('vw-unable-to-acces-mic').getElementsByTagName("p")[1].innerHTML = edited_text.unable_to_access_mic_instructions;
 
-    if (edited_text.text_after_rating) document.getElementById("vw-rating-after-message").getElementsByTagName("p")[0].innerHTML = edited_text.text_after_rating;
+    if (edited_text.thank_you_after_call) document.getElementById("vw-rating-after-message").getElementsByTagName("p")[0].innerHTML = edited_text.thank_you_after_call;
 
 };
 
@@ -922,51 +923,51 @@ var editErrorMessage = function editErrorMessage(error, mt) {
 
     switch(error) {
         case "Canceled":
-            return mt.textError_canceled ? mt.textError_canceled : error;
+            return mt.error_canceled ? mt.error_canceled : error;
         case "Terminated":
-            return mt.textError_bye ? mt.textError_bye : error;
+            return mt.error_bye ? mt.error_bye : error;
         case "WebRTC Error":
-            return mt.textError_webrtc ? mt.textError_webrtc : error;
+            return mt.error_webrtc ? mt.error_webrtc : error;
         case "No Answer":
-            return mt.textError_no_answer ? mt.textError_no_answer : error;
+            return mt.error_no_answer ? mt.error_no_answer : error;
         case "Expires":
-            return mt.textError_expires ? mt.textError_expires : error;
+            return mt.error_expires ? mt.error_expires : error;
         case "No Ack":
-            return mt.textError_no_ack ? mt.textError_no_ack : error;
+            return mt.error_no_ack ? mt.error_no_ack : error;
         case "Dialog Error":
-            return mt.textError_dialog_error ? mt.textError_dialog_error : error;
+            return mt.error_dialog_error ? mt.error_dialog_error : error;
         case "User Denied Media Access":
-            return mt.textError_user_denied_media ? mt.textError_user_denied_media : error;
+            return mt.error_user_denied_media ? mt.error_user_denied_media : error;
         case "Bad Media Description":
-            return mt.textError_bad_media_description ? mt.textError_bad_media_description : error;
+            return mt.error_bad_media_description ? mt.error_bad_media_description : error;
         case "RTP Timeout":
-            return mt.textError_rtp_timeout ? mt.textError_rtp_timeout : error;
+            return mt.error_rtp_timeout ? mt.error_rtp_timeout : error;
         case "Connection Error":
-            return mt.textError_connection_error ? mt.textError_connection_error : error;
+            return mt.error_connection_error ? mt.error_connection_error : error;
         case "Request Timeout":
-            return mt.textError_request_timeout ? mt.textError_request_timeout : error;
+            return mt.error_request_timeout ? mt.error_request_timeout : error;
         case "SIP Failure":
-            return mt.textError_sip_failure ? mt.textError_sip_failure : error;
+            return mt.error_sip_failure ? mt.error_sip_failure : error;
         case "Internal Error":
-            return mt.textError_internal_error ? mt.textError_internal_error : error;
+            return mt.error_internal_error ? mt.error_internal_error : error;
         case "Rejected":
-            return mt.textError_sip_rejected ? mt.textError_sip_rejected : error;
+            return mt.error_sip_rejected ? mt.error_sip_rejected : error;
         case "Busy":
-            return mt.textError_sip_busy ? mt.textError_sip_busy : error;
+            return mt.error_sip_busy ? mt.error_sip_busy : error;
         case "Redirect":
-            return mt.textError_sip_redirected ? mt.textError_sip_redirected : error;
+            return mt.error_sip_redirected ? mt.error_sip_redirected : error;
         case "Unavailable":
-            return mt.textError_sip_unavailable ? mt.textError_sip_unavailable : error;
+            return mt.error_sip_unavailable ? mt.error_sip_unavailable : error;
         case "Address Incomplete":
-            return mt.textError_sip_address_incomplete ? mt.textError_sip_address_incomplete : error;
+            return mt.error_sip_address_incomplete ? mt.error_sip_address_incomplete : error;
         case "Incompatible SDP":
-            return mt.textError_sip_incompatible_sdp ? mt.textError_sip_incompatible_sdp : error;
+            return mt.error_sip_incompatible_sdp ? mt.error_sip_incompatible_sdp : error;
         case "Missing SDP":
-            return mt.textError_sip_missing_sdp ? mt.textError_sip_missing_sdp : error;
+            return mt.error_sip_missing_sdp ? mt.error_sip_missing_sdp : error;
         case "Not Found":
-            return mt.textError_sip_not_found ? mt.textError_sip_not_found : error;
+            return mt.error_sip_not_found ? mt.error_sip_not_found : error;
         case "Authentication Error":
-            return mt.textError_sip_authentication ? mt.textError_sip_authentication : error;
+            return mt.error_sip_authentication ? mt.error_sip_authentication : error;
         default:
             return error;
     }
