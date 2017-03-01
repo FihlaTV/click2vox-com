@@ -762,8 +762,18 @@ var check1Ready = (function() {
 
   // Get dialpad values from keyboard
   document.body.addEventListener('keydown', function(event){
-    if (!isInCall()) return;
-    if (!event.key.match(/[0-9\*#]/)) return;
+
+    // Avoid capturing keys if the focus is in an element which captures keys
+    if (['input', 'select'].indexOf(event.target.nodeName.toLowerCase()) > -1)
+      return;
+
+    // Only catch 0,1,2,3,4,5,6,7,8,9,*,# keys
+    if (!event.key.match(/[0-9\*#]/))
+      return;
+
+    // Only catch keys if there is a call on going
+    if (!isInCall())
+      return;
 
     var el = document.getElementsByClassName(`vw-dialpadkey-${event.key}`)[0];
     if (el) {
