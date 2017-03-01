@@ -54,7 +54,7 @@ var check0Ready = (function() {
 var check1Ready = (function() {
   var voxBranding = '\
     <div id="vw-footer" class="vw-footer"> \
-      <a href="https://voxbone.com" target="_blank">powered by:</a> \
+      <a class="vw-footer-text" href="https://voxbone.com" target="_blank">powered by:</a> \
     </div>\
   ';
 
@@ -86,8 +86,8 @@ var check1Ready = (function() {
         </div> \
         <div id="vw-body" class="vw-body"> \
           <div id="vw-unable-to-acces-mic" class="vw-unable-to-acces-mic hidden"> \
-            <p style="color: red;">Oops. It looks like we are unable to use your microphone.</p> \
-            <p>Please enable microphone access in your browser to allow this call</p> \
+            <p class="vw-unable-to-acces-mic-text" style="color: red;">Oops. It looks like we are unable to use your microphone.</p> \
+            <p class="vw-unable-to-acces-mic-text-2" >Please enable microphone access in your browser to allow this call</p> \
           </div> \
           <div id="vw-in-call"> \
             <div id="vw-btn-group" class="vw-btn-group"> \
@@ -146,18 +146,19 @@ var check1Ready = (function() {
                 <input type="radio" id="vxb-star1" name="vxb-rate" value="1"> \
                 <label for="vxb-star1" title="Unacceptable">1 star</label> \
               </div> \
-              <div id="vw-rating-message" class="vw-message">Any additional feedback? \
+              <div id="vw-rating-message" class="vw-message">\
+                <p id="vw-rating-comment-question" class="vw-rating-question">Any additional feedback?</p> \
                 <input type="text" name="rating-message" id="rating-message" placeholder="Optional"" class="form-control"> \
               </div> \
               <div id="vw-rating-button" class="vw-button"> \
                 <button class="btn-style btn-style-disabled" id="send-rating"> \
-                  <span>Send</span> \
+                  <span class="send-rating-text">Send</span> \
                 </button> \
               </div> \
             </form> \
           </div> \
           <div id="vw-rating-after-message" class="vw-rating hidden"> \
-            <p>Thank you for using our service</p> \
+            <p class="vw-rating-after-message-text">Thank you for using our service</p> \
           </div>\
   ';
 
@@ -176,41 +177,47 @@ var check1Ready = (function() {
 
   var links = '';
   var show_frame = infoVoxbone.show_frame !== 'false';
-  var customText = JSON.parse(infoVoxbone.widget_texts).custom;
+  var customText = '';
+  try {
+      customText = JSON.parse(infoVoxbone.widget_texts).custom;
+  } catch (e) {
+      console.log(e);
+  }
+
 
   if (show_frame) {
     if (infoVoxbone.test_setup !== 'false') {
-        if (customText.test_your_setup){
-            links = '\
+      if (customText.test_your_setup){
+        links = '\
         <div class="widget-footer-left">\
-          <a href="https://test.webrtc.org/" target="_blank">'+customText.test_your_setup+'</a>\
+          <a class="widget-footer-left-text" href="https://test.webrtc.org/" target="_blank">'+customText.test_your_setup+'</a>\
         </div>\
         ';
-        }
-        else {
-            links = '\
+      }
+      else {
+        links = '\
         <div class="widget-footer-left">\
-          <a href="https://test.webrtc.org/" target="_blank">Test your setup</a>\
+          <a class="widget-footer-left-text" href="https://test.webrtc.org/" target="_blank">Test your setup</a>\
         </div>\
         ';
-        }
+      }
     }
 
     if (infoVoxbone.show_branding !== 'false') {
-       if (customText.powered_by){
-         links += '\
-         <div class="widget-footer-right">\
-          <a href="https://voxbone.com" target="_blank">'+ customText.powered_by +'</a>\
-         </div> \
-         ';
-       }
-       else {
-         links += '\
-         <div class="widget-footer-right">\
-          <a href="https://voxbone.com" target="_blank">powered by:</a>\
-         </div> \
-         ';
-       }
+      if (customText.powered_by){
+        links += '\
+        <div class="widget-footer-right">\
+         <a class="widget-footer-right-text" href="https://voxbone.com" target="_blank">'+ customText.powered_by +'</a>\
+        </div> \
+        ';
+      }
+      else {
+        links += '\
+        <div class="widget-footer-right">\
+         <a class="widget-footer-right-text" href="https://voxbone.com" target="_blank">powered by:</a>\
+        </div> \
+        ';
+      }
     }
 
   } else {
@@ -241,7 +248,7 @@ var check1Ready = (function() {
   else {
     voxButtonElement.innerHTML += ' \
     <div style="display: none;'+custom_frame_color+'" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
-      <button id="launch_call" ' + custom_button_color + ' class="vxb-btn-style ' + (infoVoxbone.button_css_class_name) + '"><span>' +  unescape(infoVoxbone.text) + '</span></button>\
+      <button id="launch_call" ' + custom_button_color + ' class="vxb-btn-style ' + (infoVoxbone.button_css_class_name) + '"><span>' +  unescape(customText.button || infoVoxbone.text) + '</span></button>\
       ' + links + '\
     </div>\
     ';
@@ -892,29 +899,31 @@ openPopup = function() {
 
 //customize default static text
 var editText = function editText(edited_text) {
+    var widgetElement = document.querySelector('.vox-widget-wrapper');
+    var widgetLaunchCallElement = document.getElementById('launch_call_div');
 
-    if (edited_text.test_your_setup) document.getElementById("launch_call_div").getElementsByTagName("a")[0].innerHTML = edited_text.test_your_setup;
+    if (edited_text.test_your_setup) widgetLaunchCallElement.querySelector('.widget-footer-left-text').innerHTML = edited_text.test_your_setup;
 
     if (edited_text.powered_by) {
-        document.getElementById("launch_call_div").getElementsByTagName("a")[1].innerHTML = edited_text.powered_by;
-        document.getElementById("vw-footer").getElementsByTagName("a")[0].innerHTML = edited_text.powered_by;
+        widgetLaunchCallElement.querySelector('.widget-footer-right-text').innerHTML = edited_text.powered_by;
+        widgetElement.querySelector('.vw-footer-text').innerHTML = edited_text.powered_by;
     }
 
-    if (edited_text.hang_up) document.getElementById("vw-end-call").innerHTML = '<i class="vw-icon vx-icon-phone"></i>' + edited_text.hang_up;
+    if (edited_text.hang_up) widgetElement.querySelector('.vw-end-call').innerHTML = '<i class="vw-icon vx-icon-phone"></i>' + edited_text.hang_up;
 
-    if (edited_text.rating_question) document.getElementById("vw-rating-question").innerHTML = edited_text.rating_question;
+    if (edited_text.rating_question) widgetElement.querySelector('#vw-rating-question').innerHTML = edited_text.rating_question;
 
-    if (edited_text.rating_comment) document.getElementById("vw-rating-message").childNodes[0].nodeValue = edited_text.rating_comment;
+    if (edited_text.rating_comment) widgetElement.querySelector('#vw-rating-comment-question').innerHTML = edited_text.rating_comment;
 
-    if (edited_text.rating_send_button) document.getElementById("send-rating").getElementsByTagName("span")[0].innerHTML = edited_text.rating_send_button;
+    if (edited_text.rating_send_button) widgetElement.querySelector('.send-rating-text').innerHTML = edited_text.rating_send_button;
 
-    if (edited_text.rating_placeholder) document.getElementById("rating-message").placeholder = edited_text.rating_placeholder;
+    if (edited_text.rating_placeholder) widgetElement.querySelector('#rating-message').placeholder = edited_text.rating_placeholder;
 
-    if (edited_text.unable_to_access_mic) document.getElementById('vw-unable-to-acces-mic').getElementsByTagName("p")[0].innerHTML = edited_text.unable_to_access_mic;
+    if (edited_text.unable_to_access_mic) widgetElement.querySelector('.vw-unable-to-acces-mic-text').innerHTML = edited_text.unable_to_access_mic;
 
-    if (edited_text.unable_to_access_mic_instructions) document.getElementById('vw-unable-to-acces-mic').getElementsByTagName("p")[1].innerHTML = edited_text.unable_to_access_mic_instructions;
+    if (edited_text.unable_to_access_mic_instructions) widgetElement.querySelector('.vw-unable-to-acces-mic-text').innerHTML = edited_text.unable_to_access_mic_instructions;
 
-    if (edited_text.thank_you_after_call) document.getElementById("vw-rating-after-message").getElementsByTagName("p")[0].innerHTML = edited_text.thank_you_after_call;
+    if (edited_text.thank_you_after_call) widgetElement.querySelector('.vw-rating-after-message-text').innerHTML = edited_text.thank_you_after_call;
 
 };
 
@@ -922,51 +931,51 @@ var editText = function editText(edited_text) {
 var editErrorMessage = function editErrorMessage(error, mt) {
 
     switch(error) {
-        case "Canceled":
+        case 'Canceled':
             return mt.error_canceled ? mt.error_canceled : error;
-        case "Terminated":
+        case 'Terminated':
             return mt.error_bye ? mt.error_bye : error;
-        case "WebRTC Error":
+        case 'WebRTC Error':
             return mt.error_webrtc ? mt.error_webrtc : error;
-        case "No Answer":
+        case 'No Answer':
             return mt.error_no_answer ? mt.error_no_answer : error;
-        case "Expires":
+        case 'Expires':
             return mt.error_expires ? mt.error_expires : error;
-        case "No Ack":
+        case 'No Ack':
             return mt.error_no_ack ? mt.error_no_ack : error;
-        case "Dialog Error":
+        case 'Dialog Error':
             return mt.error_dialog_error ? mt.error_dialog_error : error;
-        case "User Denied Media Access":
+        case 'User Denied Media Access':
             return mt.error_user_denied_media ? mt.error_user_denied_media : error;
-        case "Bad Media Description":
+        case 'Bad Media Description':
             return mt.error_bad_media_description ? mt.error_bad_media_description : error;
-        case "RTP Timeout":
+        case 'RTP Timeout':
             return mt.error_rtp_timeout ? mt.error_rtp_timeout : error;
-        case "Connection Error":
+        case 'Connection Error':
             return mt.error_connection_error ? mt.error_connection_error : error;
-        case "Request Timeout":
+        case 'Request Timeout':
             return mt.error_request_timeout ? mt.error_request_timeout : error;
-        case "SIP Failure":
+        case 'SIP Failure':
             return mt.error_sip_failure ? mt.error_sip_failure : error;
-        case "Internal Error":
+        case 'Internal Error':
             return mt.error_internal_error ? mt.error_internal_error : error;
-        case "Rejected":
+        case 'Rejected':
             return mt.error_sip_rejected ? mt.error_sip_rejected : error;
-        case "Busy":
+        case 'Busy':
             return mt.error_sip_busy ? mt.error_sip_busy : error;
-        case "Redirect":
+        case 'Redirect':
             return mt.error_sip_redirected ? mt.error_sip_redirected : error;
-        case "Unavailable":
+        case 'Unavailable':
             return mt.error_sip_unavailable ? mt.error_sip_unavailable : error;
-        case "Address Incomplete":
+        case 'Address Incomplete':
             return mt.error_sip_address_incomplete ? mt.error_sip_address_incomplete : error;
-        case "Incompatible SDP":
+        case 'Incompatible SDP':
             return mt.error_sip_incompatible_sdp ? mt.error_sip_incompatible_sdp : error;
-        case "Missing SDP":
+        case 'Missing SDP':
             return mt.error_sip_missing_sdp ? mt.error_sip_missing_sdp : error;
-        case "Not Found":
+        case 'Not Found':
             return mt.error_sip_not_found ? mt.error_sip_not_found : error;
-        case "Authentication Error":
+        case 'Authentication Error':
             return mt.error_sip_authentication ? mt.error_sip_authentication : error;
         default:
             return error;
