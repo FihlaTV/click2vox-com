@@ -178,10 +178,12 @@ var check1Ready = (function() {
   var links = '';
   var show_frame = infoVoxbone.show_frame !== 'false';
   var customText = '';
-  try {
+  if (infoVoxbone.widget_texts) {
+    try {
       customText = JSON.parse(infoVoxbone.widget_texts).custom;
-  } catch (e) {
+    } catch (e) {
       console.log(e);
+    }
   }
 
 
@@ -337,7 +339,7 @@ var check1Ready = (function() {
     if (basic && username && key) {
       voxbone.WebRTC.basicAuthInit(username, key);
     } else {
-      voxbone.WebRTC.authServerURL = infoVoxbone.auth_server_url || "https://webrtc.voxbone.com/rest/authentication/createToken";
+      voxbone.WebRTC.authServerURL = infoVoxbone.auth_server_url || voxbone.WebRTC.authServerURL;
 
       // NOTE: using `custom_auth_data` makes mandatory handling `authExpired` event separately
       if (infoVoxbone.custom_auth_data) {
