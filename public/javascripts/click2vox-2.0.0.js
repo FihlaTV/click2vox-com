@@ -944,7 +944,7 @@ var editText = function editText(edited_text) {
 
     if (edited_text.unable_to_access_mic) widgetElement.querySelector('.vw-unable-to-acces-mic-text').innerHTML = edited_text.unable_to_access_mic;
 
-    if (edited_text.unable_to_access_mic_instructions) widgetElement.querySelector('.vw-unable-to-acces-mic-text').innerHTML = edited_text.unable_to_access_mic_instructions;
+    if (edited_text.unable_to_access_mic_instructions) widgetElement.querySelector('.vw-unable-to-acces-mic-text-2').innerHTML = edited_text.unable_to_access_mic_instructions;
 
     if (edited_text.thank_you_after_call) widgetElement.querySelector('.vw-rating-after-message-text').innerHTML = edited_text.thank_you_after_call;
 
@@ -969,6 +969,8 @@ var editErrorMessage = function editErrorMessage(error, mt) {
         case 'Dialog Error':
             return mt.error_dialog_error ? mt.error_dialog_error : error;
         case 'User Denied Media Access':
+            return mt.error_user_denied_media ? mt.error_user_denied_media : error;
+        case 'User Denied':
             return mt.error_user_denied_media ? mt.error_user_denied_media : error;
         case 'Bad Media Description':
             return mt.error_bad_media_description ? mt.error_bad_media_description : error;
