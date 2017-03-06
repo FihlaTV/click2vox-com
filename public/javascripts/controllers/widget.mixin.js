@@ -4,6 +4,16 @@ define([
 
   var WidgetControllerMixin = function($scope) {
 
+    $scope.showCallVoxboneButton = false;
+    document.addEventListener('click2vox-ready', function(e) {
+      $scope.showCallVoxboneButton = e.detail.webrtcSupported;
+      $scope.$apply();
+    }, false);
+
+    $scope.isWebRTCSupported = function () {
+      return $scope.showCallVoxboneButton;
+    };
+
     $scope.makeCall = function(did) {
       var ibc_value = $scope.widget.incompatible_browser_configuration;
       if (!$scope.preview_webrtc_compatible && (ibc_value === 'link_button_to_a_page')) {

@@ -58,9 +58,9 @@ block content
             span  try it now?
 
       .row.home-buttons(ng-cloak)
-        .col-sm-12(ng-class="{'col-md-6' : showCallVoxboneButton()}")
+        .col-sm-12(ng-class="{'col-md-6' : showCallVoxboneButton}")
           a.btn.btn-default-custom(href='/widget/demo') Create a sample call button
-        .col-sm-12.col-md-6(ng-show="showCallVoxboneButton()")
+        .col-sm-12.col-md-6(ng-show="showCallVoxboneButton")
           a.btn.btn-default-custom(ng-click="callVoxbone()") Click2vox us now
 
   .contact(id="contact")

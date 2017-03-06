@@ -58,10 +58,6 @@ define([
         delete $scope.widget.new_sip_uri;
     });
 
-    $scope.isWebRTCSupported = function () {
-      return voxbone.WebRTC.isWebRTCSupported();
-    };
-
     $scope.showCallButton = function () {
       var ibc_value = $scope.widget.incompatible_browser_configuration;
       return $scope.preview_webrtc_compatible || (ibc_value === 'link_button_to_a_page');
