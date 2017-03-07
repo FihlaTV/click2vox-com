@@ -17,7 +17,7 @@ requirejs.config({
       "//unpkg.com/draggabilly@2.1/dist/draggabilly.pkgd.min",
       "//cdnjs.cloudflare.com/ajax/libs/draggabilly/2.1.1/draggabilly.pkgd.min"
     ],
-    voxbone: "//cdn.voxbone.com/voxbone/voxbone-2.2.0.min"
+    voxbone: "//cdn.voxbone.com/voxbone/voxbone-2.2.min"
   }
 });
 
@@ -622,8 +622,8 @@ var loadVoxboneWidget = (function() {
       case 'hang_up':
         voxbone.WebRTC.hangup();
         break;
-      case 'microphone_mute':
 
+      case 'microphone_mute':
         if (voxbone.WebRTC.isMuted) {
           voxbone.WebRTC.unmute();
           clearMicDots();
@@ -631,8 +631,8 @@ var loadVoxboneWidget = (function() {
           voxbone.WebRTC.mute();
           muteMicDots();
         }
-
         break;
+
       case '1':
       case '2':
       case '3':
