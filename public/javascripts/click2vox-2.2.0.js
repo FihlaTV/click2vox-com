@@ -543,10 +543,18 @@ var loadVoxboneWidget = (function() {
     }
   });
 
+  function muteMicDots(){
+    setMicDots('off');
+  }
+
   function clearMicDots(){
+    setMicDots('');
+  }
+
+  function setMicDots(className){
     var micDots = document.querySelectorAll('.vox-widget-wrapper .vox-mic-vumeter em');
     Array.prototype.forEach.call(micDots, function(el, i) {
-      el.classList = "";
+      el.classList = className || "";
     });
   }
 
@@ -615,10 +623,15 @@ var loadVoxboneWidget = (function() {
         voxbone.WebRTC.hangup();
         break;
       case 'microphone_mute':
-        if (voxbone.WebRTC.isMuted)
+
+        if (voxbone.WebRTC.isMuted) {
           voxbone.WebRTC.unmute();
-        else
+          clearMicDots();
+        } else {
           voxbone.WebRTC.mute();
+          muteMicDots();
+        }
+
         break;
       case '1':
       case '2':
@@ -909,12 +922,6 @@ var loadVoxboneWidget = (function() {
   // Mic button event
   handleEvent('click', '.vox-widget-wrapper .vxb-widget-mic', function (e) {
     e.preventDefault();
-
-    var elements = document.querySelectorAll(".vox-widget-wrapper .vox-mic-vumeter em");
-    Array.prototype.forEach.call(elements, function(el, i) {
-      el.classList.add('off');
-      el.classList.remove('on');
-    });
 
     callAction('microphone_mute');
   });
