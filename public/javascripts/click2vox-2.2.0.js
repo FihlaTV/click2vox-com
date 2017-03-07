@@ -201,7 +201,6 @@ var loadVoxboneWidget = (function() {
     }
   }
 
-
   if (show_frame) {
     if (infoVoxbone.test_setup !== 'false') {
       if (customText.test_your_setup){
@@ -270,7 +269,6 @@ var loadVoxboneWidget = (function() {
     </div>\
     ';
   }
-
 
   function getVoxrtcConfig(callback) {
     var request = new XMLHttpRequest();
@@ -344,6 +342,13 @@ var loadVoxboneWidget = (function() {
       voxbone.Logger.loginfo("local media accepted");
     },
 
+    'readyToCall': function(e) {
+      console.log('readyToCall');
+      var el = document.querySelector("#launch_call_div");
+      if (el)
+        el.style.display = "block";
+    },
+
     'authExpired': function (e){
       console.log('Auth Expired!');
       handleAuth();
@@ -394,14 +399,6 @@ var loadVoxboneWidget = (function() {
   }
 
   function init() {
-    setTimeout(function() {
-      var el = document.querySelector("#launch_call_div");
-      if (el)
-        el.style.display = "block";
-    }, 500);
-    // let's trigger an event when things are ready
-    notifyLoaded();
-
     if (isWebRTCSupported()) {
       voxbone.WebRTC.configuration.post_logs = true;
       voxbone.WebRTC.customEventHandler = Object.assign(voxbone.WebRTC.customEventHandler, eventHandlers);
@@ -411,6 +408,8 @@ var loadVoxboneWidget = (function() {
     }
     //add editable text to widget
     editText(customText);
+
+    notifyLoaded();
   }
 
   function isInCall() {
