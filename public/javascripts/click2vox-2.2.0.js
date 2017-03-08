@@ -266,7 +266,7 @@ var loadVoxboneWidget = (function() {
     </div>\
     ';
   } else {
-    custom_frame_color += (isWebRTCSupported() ? 'display: none; ' : '');
+    custom_frame_color += (isWebRTCSupported() ? '; display: none; ' : '');
 
     voxButtonElement.innerHTML += ' \
     <div style="' + custom_frame_color + '" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
