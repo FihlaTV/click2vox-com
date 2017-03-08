@@ -1,14 +1,14 @@
 define([
-    'jquery', 'clipboard'
-  ], function($, Clipboard) {
+    'jquery', 'clipboard', 'detectRTC'
+  ], function($, Clipboard, detectRTC) {
 
   var WidgetControllerMixin = function($scope) {
-
     $scope.showCallVoxboneButton = false;
-    document.addEventListener('click2vox-ready', function(e) {
-      $scope.showCallVoxboneButton = e.detail.webrtcSupported;
-      $scope.$apply();
-    }, false);
+
+    DetectRTC.load(function() {
+      $scope.showCallVoxboneButton = DetectRTC.isWebRTCSupported;
+      $scope.$evalAsync();
+    });
 
     $scope.isWebRTCSupported = function () {
       return $scope.showCallVoxboneButton;

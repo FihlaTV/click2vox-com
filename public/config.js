@@ -70,7 +70,11 @@ require.config({
     ],
     widget: '/javascripts/widget',
     domReady: '/lib/domReady/domReady',
-    requirejs: '/lib/requirejs/require'
+    requirejs: '/lib/requirejs/require',
+    detectRTC: [
+      '//cdn.voxbone.com/lib/DetectRTC',
+      '//cdn.rawgit.com/muaz-khan/DetectRTC/master/DetectRTC'
+    ]
   },
   packages: [
     "controllers",
