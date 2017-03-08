@@ -67,6 +67,13 @@ var loadAssets = (function() {
 });
 
 var loadVoxboneWidget = (function() {
+
+  // Don't load anything if we're not going to show anything
+  if (!isWebRTCSupported() && (!infoVoxbone.incompatible_browser_configuration || infoVoxbone.incompatible_browser_configuration === 'hide_widget')) {
+    console.log('Not showing the Voxbone Button/Widget');
+    return;
+  }
+
   var voxBranding = '\
     <div id="vw-footer" class="vw-footer"> \
       <a class="vw-footer-text" href="https://voxbone.com" target="_blank">powered by:</a> \
@@ -193,6 +200,7 @@ var loadVoxboneWidget = (function() {
   var links = '';
   var show_frame = infoVoxbone.show_frame !== 'false';
   var customText = '';
+
   if (infoVoxbone.widget_texts) {
     try {
       customText = JSON.parse(infoVoxbone.widget_texts).custom;
@@ -235,7 +243,6 @@ var loadVoxboneWidget = (function() {
         ';
       }
     }
-
   } else {
     infoVoxbone.div_css_class_name += ' no-frame';
     if (infoVoxbone.show_branding === 'false')
@@ -249,22 +256,21 @@ var loadVoxboneWidget = (function() {
 
   var custom_frame_color = '';
   if (infoVoxbone.custom_frame_color) {
-    custom_frame_color = "background:"+ infoVoxbone.custom_frame_color;
+    custom_frame_color = "background:" + infoVoxbone.custom_frame_color;
   }
 
   if (!isWebRTCSupported() && infoVoxbone.incompatible_browser_configuration === 'show_text_html') {
     voxButtonElement.innerHTML += ' \
-    <div style="display: none;'+custom_frame_color+'" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
-      <span>' +  unescape(infoVoxbone.text_html) + '</span>\
+    <div style="' + custom_frame_color + '" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
+      <span>' + unescape(infoVoxbone.text_html) + '</span>\
     </div>\
     ';
-  }
-  else if (!isWebRTCSupported() && infoVoxbone.incompatible_browser_configuration === 'hide_widget')
-    hideElement('div[data-button_id="' + infoVoxbone.button_id + '"]');
-  else {
+  } else {
+    custom_frame_color += (isWebRTCSupported() ? 'display: none; ' : '');
+
     voxButtonElement.innerHTML += ' \
-    <div style="display: none;'+custom_frame_color+'" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
-      <button id="launch_call" ' + custom_button_color + ' class="vxb-btn-style ' + (infoVoxbone.button_css_class_name) + '"><span>' +  unescape(customText.button || infoVoxbone.text) + '</span></button>\
+    <div style="' + custom_frame_color + '" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
+      <button id="launch_call" ' + custom_button_color + ' class="vxb-btn-style ' + (infoVoxbone.button_css_class_name) + '"><span>' + unescape(customText.button || infoVoxbone.text) + '</span></button>\
       ' + links + '\
     </div>\
     ';
