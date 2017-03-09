@@ -653,7 +653,7 @@ extend(voxbone, {
 					},
 				},
 				'extraHeaders': [],
-				'pcConfig': {},
+				'pcConfig': { rtcpMuxPolicy: "negotiate" },
 				'mediaConstraints': {'audio': true, 'video': voxbone.WebRTC.allowVideo}
 			};
 			if (this.configuration.stun_servers !== undefined || this.configuration.turn_servers !== undefined) {
