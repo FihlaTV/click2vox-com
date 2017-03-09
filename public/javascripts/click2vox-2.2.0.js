@@ -24,7 +24,11 @@ requirejs.config({
 requirejs(['draggabilly', 'voxbone'],
   function(Draggabilly) {
     loadAssets();
-    new Draggabilly('.vox-widget-wrapper .vw-main', {});
+
+    //Just let the whole widget drag when tapping on Title Bar
+    new Draggabilly('.vox-widget-wrapper .vw-main', {
+      handle: '.vw-title-bar'
+    });
   }
 );
 
@@ -87,10 +91,12 @@ var loadVoxboneWidget = (function() {
     <div style="display: none;" class="vox-widget-wrapper hidden"> \
       <div class="vw-main"> \
         <div class="vw-header"> \
-          <span class="vw-title" id="vw-title">Starting Call</span> \
-          <span class="vw-animated-dots">.</span> \
-          <span class="vw-animated-dots">.</span> \
-          <span class="vw-animated-dots">.</span> \
+          <div class="vw-title-bar"> \
+            <span class="vw-title" id="vw-title">Starting Call</span> \
+            <span class="vw-animated-dots">.</span> \
+            <span class="vw-animated-dots">.</span> \
+            <span class="vw-animated-dots">.</span> \
+          </div> \
           <div class="vw-actions"> \
             <a href="#" class="vxb-widget-mic"> \
               <i class="vw-icon vx-icon-mic-dark"></i> \
