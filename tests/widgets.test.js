@@ -1,9 +1,9 @@
 module.exports = {
   'Checks if widget creation works properly': function(browser) {
 
-    var demoEmail = process.env.DEMO_USER_EMAIL || 'demo.widget@click2vox.com';
+    var demoEmail = process.env.DEMO_USER_EMAIL;
+    var demoPassword = process.env.DEMO_USER_PASSWORD;
     var demoSipUri = 'digits@ivrs';
-    var demoPassword = 'password';
 
     browser
       .url(browser.launchUrl + '/login') // first we need to log in
