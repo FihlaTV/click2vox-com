@@ -423,9 +423,19 @@ var loadVoxboneWidget = (function() {
   }
 
   function isChromeOnHttp() {
-    var isChrome = !!window.chrome && !!window.chrome.webstore;
-    var isHttp = window.location.protocol === "http:";
-    return isChrome && isHttp;
+
+    if (window.location.protocol !== "http:")
+      return false;
+
+    // Get if browser is Chrome/Chromium flavour
+    // Based on http://stackoverflow.com/a/13348618/197376
+    var isChromium = window.chrome,
+      winNav = window.navigator,
+      vendorName = winNav.vendor.toLowerCase(),
+      isOpera = winNav.userAgent.indexOf("OPR") > -1,
+      isIEedge = winNav.userAgent.indexOf("Edge") > -1;
+
+    return (!!isChromium && vendorName === "google inc." && !isOpera && !isIEedge);
   }
 
   function isWebRTCSupported() {
