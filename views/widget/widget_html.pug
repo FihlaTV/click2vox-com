@@ -2,5 +2,17 @@ doctype html
 html(lang='en')
   head
     title Voxbone Secure Call Button
+    script.
+        var triggered = false;
+        document.addEventListener('click2vox-ready', function(e) {
+            voxbone.WebRTC.customEventHandler.readyToCall = function() {
+
+                if (!triggered) {
+                    triggered = true;
+                    document.getElementById("launch_call").click();
+                }
+
+            };
+        }, false);
   body(style='background-color: #781e75;')
      != `${widget_code}`
