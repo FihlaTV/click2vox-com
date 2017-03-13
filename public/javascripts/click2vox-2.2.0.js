@@ -215,44 +215,42 @@ var loadVoxboneWidget = (function() {
     }
   }
 
-  if (show_frame) {
-    if (infoVoxbone.test_setup !== 'false') {
-      if (customText.test_your_setup){
-        links = '\
-        <div class="widget-footer-left">\
-          <a class="widget-footer-left-text" href="https://test.webrtc.org/" target="_blank">'+customText.test_your_setup+'</a>\
-        </div>\
-        ';
-      }
-      else {
-        links = '\
-        <div class="widget-footer-left">\
-          <a class="widget-footer-left-text" href="https://test.webrtc.org/" target="_blank">Test your setup</a>\
-        </div>\
-        ';
-      }
-    }
-
-    if (infoVoxbone.show_branding !== 'false') {
-      if (customText.powered_by){
-        links += '\
-        <div class="widget-footer-right">\
-         <a class="widget-footer-right-text" href="https://voxbone.com" target="_blank">'+ customText.powered_by +'</a>\
-        </div> \
-        ';
-      }
-      else {
-        links += '\
-        <div class="widget-footer-right">\
-         <a class="widget-footer-right-text" href="https://voxbone.com" target="_blank">powered by:</a>\
-        </div> \
-        ';
-      }
-    }
-  } else {
+  if (!show_frame) {
     infoVoxbone.div_css_class_name += ' no-frame';
     if (infoVoxbone.show_branding === 'false')
       infoVoxbone.div_css_class_name += ' no-branding';
+  }
+
+  if (infoVoxbone.test_setup !== 'false') {
+    if (customText.test_your_setup) {
+      links = '\
+      <div class="widget-footer-left">\
+        <a class="widget-footer-left-text" href="https://test.webrtc.org/" target="_blank">'+customText.test_your_setup+'</a>\
+      </div>\
+      ';
+    } else {
+      links = '\
+      <div class="widget-footer-left">\
+        <a class="widget-footer-left-text" href="https://test.webrtc.org/" target="_blank">Test your setup</a>\
+      </div>\
+      ';
+    }
+  }
+
+  if (infoVoxbone.show_branding !== 'false') {
+    if (customText.powered_by){
+      links += '\
+      <div class="widget-footer-right">\
+        <a class="widget-footer-right-text" href="https://voxbone.com" target="_blank">'+ customText.powered_by +'</a>\
+      </div> \
+      ';
+    } else {
+      links += '\
+      <div class="widget-footer-right">\
+        <a class="widget-footer-right-text" href="https://voxbone.com" target="_blank">powered by:</a>\
+      </div> \
+      ';
+    }
   }
 
   var custom_button_color = '';
