@@ -72,6 +72,19 @@ block content
                       button.btn-style-c(ng-cloak ng-click="setCustomTheme()" colorpicker colorpicker-position="right" colorpicker-with-input="true" type="text" ng-model="widget.button_color" ng-style="{'background': widget.button_color ? widget.button_color : tempButtonColor }") #[span {{ widget.button_label }}]
                       div Custom Theme
 
+                  label Round Button Style
+                  .buttons(ng-cloak)
+                    .button-text-round
+                      button.btn-style-round-a #[i.fa.fa-phone]
+                      div Blue Theme
+                    .button-text-round
+                      button.btn-style-round-b #[i.fa.fa-phone]
+                      div Purple Theme
+                    .button-text-round
+                      button.btn-style-round-c #[i.fa.fa-phone]
+                      div Custom Theme
+
+
                 .panel.panel-default
                   .panel-heading
                     a.collapsed.title-toggle(data-toggle="collapse", data-target="#styleConfiguration", href="#styleConfiguration") Style Configuration
