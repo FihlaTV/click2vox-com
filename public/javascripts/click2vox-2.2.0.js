@@ -21,19 +21,18 @@ requirejs.config({
   }
 });
 
-requirejs(['draggabilly', 'voxbone'],
-  function(Draggabilly) {
-    loadAssets();
-
-    //Just let the whole widget drag when tapping on Title Bar
-    new Draggabilly('.vox-widget-wrapper .vw-main', {
-      handle: '.vw-title-bar'
-    });
-  }
-);
+/* Begin loading draggabilly and assets only if this script didnt execute before*/
+if (!voxButtonElements) {
+  requirejs(['voxbone'],
+    function() {
+      loadAssets();
+    }
+  );
+}
 
 var head = document.getElementsByTagName('head')[0];
-var infoVoxbone, voxButtonElement, audioContext;
+var infoVoxbone, voxButtonElement, voxButtonElements, audioContext;
+var customText = '';
 
 try {
   if (audioContext === undefined)
@@ -42,11 +41,12 @@ try {
   console.log("Web Audio API not supported " + e);
 }
 
-voxButtonElement = document.getElementsByClassName('voxButton')[0];
-if (voxButtonElement === undefined) {
-  voxButtonElement = document.createElement("div");
-  voxButtonElement.className = "voxButton";
-  voxButtonElement.dataset.use_default_button_css = false;
+voxButtonElements = document.getElementsByClassName('voxButton');
+if (voxButtonElements === undefined) {
+  voxButtonElements = [];
+  voxButtonElements[0] = document.createElement("div");
+  voxButtonElements[0].className = "voxButton";
+  voxButtonElements[0].dataset.use_default_button_css = false;
   // document.body.appendChild(voxButtonElement);
 }
 
@@ -59,18 +59,135 @@ function loadCss(url) {
 }
 
 var loadAssets = (function() {
+  Array.prototype.forEach.call(voxButtonElements, function(voxButtonElement) {
+    infoVoxbone = voxButtonElement.dataset;
+    infoVoxbone.server_url = (infoVoxbone.server_url === undefined) ? 'https://click2vox.com' : infoVoxbone.server_url;
+
+    if(infoVoxbone.use_default_button_css !== 'false')
+      loadCss(infoVoxbone.server_url + '/stylesheets/vxb-button.css');
+
+    renderButton(voxButtonElement);
+  });
+
+  voxButtonElement = voxButtonElements[0];
   infoVoxbone = voxButtonElement.dataset;
-  infoVoxbone.server_url = (infoVoxbone.server_url === undefined) ? 'https://click2vox.com' : infoVoxbone.server_url;
-
   loadCss(infoVoxbone.server_url + '/stylesheets/vxb-widget.css');
+  renderWidget();
 
-  if(infoVoxbone.use_default_button_css !== 'false')
-    loadCss(infoVoxbone.server_url + '/stylesheets/vxb-button.css');
+  //Bind click event to rendered buttons
+  handleEvent('click', '.vxb-widget-box #launch_call', function (e) {
+    voxButtonElement = this.parentElement.parentElement;
+    e.preventDefault();
+    infoVoxbone = voxButtonElement.dataset;
+    customText = '';
 
-  loadVoxboneWidget();
+    if (infoVoxbone.widget_texts) {
+      try {
+        customText = JSON.parse(infoVoxbone.widget_texts).custom;
+      } catch (error) {}
+    }
+
+    if(!isChromeOnHttp()){
+      makeCall();
+    } else if (!isPopUp(infoVoxbone)){
+      openPopup();
+      return false;
+    }
+
+  });
+
+  initVoxbone();
 });
 
-var loadVoxboneWidget = (function() {
+var renderButton = (function(voxButtonElement){
+  var infoVoxbone = voxButtonElement.dataset;
+  var links = '';
+  var show_frame = infoVoxbone.show_frame !== 'false';
+  var customText = '';
+
+  if (infoVoxbone.widget_texts) {
+    try {
+      customText = JSON.parse(infoVoxbone.widget_texts).custom;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  if (!show_frame) {
+    infoVoxbone.div_css_class_name += ' no-frame';
+    if (infoVoxbone.show_branding === 'false')
+      infoVoxbone.div_css_class_name += ' no-branding';
+  }
+
+  if (infoVoxbone.test_setup !== 'false') {
+    if (customText.test_your_setup) {
+      links = '\
+      <div class="widget-footer-left">\
+        <a class="widget-footer-left-text" href="https://test.webrtc.org/" target="_blank">'+customText.test_your_setup+'</a>\
+      </div>\
+      ';
+    } else {
+      links = '\
+      <div class="widget-footer-left">\
+        <a class="widget-footer-left-text" href="https://test.webrtc.org/" target="_blank">Test your setup</a>\
+      </div>\
+      ';
+    }
+  }
+
+  if (infoVoxbone.show_branding !== 'false') {
+    if (customText.powered_by){
+      links += '\
+      <div class="widget-footer-right">\
+        <a class="widget-footer-right-text" href="https://voxbone.com" target="_blank">'+ customText.powered_by +'</a>\
+      </div> \
+      ';
+    } else {
+      links += '\
+      <div class="widget-footer-right">\
+        <a class="widget-footer-right-text" href="https://voxbone.com" target="_blank">powered by:</a>\
+      </div> \
+      ';
+    }
+  }
+
+  var custom_button_color = '';
+  if (infoVoxbone.custom_button_color) {
+    custom_button_color = 'style="border: ' + infoVoxbone.custom_button_color + '; background: ' + infoVoxbone.custom_button_color + '"';
+  }
+
+  var custom_frame_color = '';
+  if (infoVoxbone.custom_frame_color) {
+    custom_frame_color = "background:" + infoVoxbone.custom_frame_color;
+  }
+
+  if (!isWebRTCSupported() && infoVoxbone.incompatible_browser_configuration === 'hide_widget') {
+    custom_frame_color += (isWebRTCSupported() ? '' : '; display: none; ');
+  } else if (!isWebRTCSupported() && infoVoxbone.incompatible_browser_configuration === 'show_text_html') {
+    voxButtonElement.innerHTML += ' \
+    <div style="' + custom_frame_color + '" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
+      <span>' + unescape(infoVoxbone.text_html) + '</span>\
+    </div>\
+    ';
+  } else {
+    voxButtonElement.innerHTML += ' \
+    <div style="' + custom_frame_color + '" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
+      <button id="launch_call" ' + custom_button_color + ' class="vxb-btn-style ' + (infoVoxbone.button_css_class_name) + '"><span>' + unescape(customText.button || infoVoxbone.text) + '</span></button>\
+      ' + links + '\
+    </div>\
+    ';
+  }
+});
+
+var renderWidget = (function(){
+  //If the widget was already rendered, remove it
+  var oldAudioTag = document.getElementById("audio-ringback-tone");
+  if (oldAudioTag)
+    oldAudioTag.parentNode.removeChild(oldAudioTag);
+  var oldWrapper = document.getElementsByClassName("vox-widget-wrapper")[0];
+  if (oldWrapper)
+    oldWrapper.parentNode.removeChild(oldWrapper);
+
 
   // Don't load anything if we're not going to show anything
   if (!isWebRTCSupported() && (!infoVoxbone.incompatible_browser_configuration || infoVoxbone.incompatible_browser_configuration === 'hide_widget')) {
@@ -201,85 +318,145 @@ var loadVoxboneWidget = (function() {
     </div> \
   ';
 
-  voxButtonElement.innerHTML += voxPopup;
+  voxButtonElement.insertAdjacentHTML('beforeend', voxPopup);
+  editText(customText);
 
-  var links = '';
-  var show_frame = infoVoxbone.show_frame !== 'false';
-  var customText = '';
+  // Start of Widget Events
+  //
+  // Click on Send Rating button event
+  handleEvent('click', '.vox-widget-wrapper #send-rating', function (e) {
+    e.preventDefault();
 
-  if (infoVoxbone.widget_texts) {
-    try {
-      customText = JSON.parse(infoVoxbone.widget_texts).custom;
-    } catch (e) {
-      console.log(e);
+    var rate = document.querySelector('.vox-widget-wrapper input[name=vxb-rate]:checked');
+    if (!rate) return;
+
+    var comment = document.querySelector('.vox-widget-wrapper #rating-message');
+    var commentValue = comment ? comment.value : "";
+
+    var data =  { rate: rate.value, comment: commentValue, url: document.URL, token: infoVoxbone.button_id };
+    var message = { action: 'rate', data: data };
+
+    sendRate(message.data);
+
+    hideElement(".vox-widget-wrapper #vw-rating");
+    showElement(".vox-widget-wrapper #vw-rating-after-message");
+  });
+
+  // Click Rating star buttons event
+  var starRatingButtons = document.querySelectorAll(".vox-widget-wrapper input[name=vxb-rate]");
+  Array.prototype.forEach.call(starRatingButtons, function(el, i) {
+    el.addEventListener('click', function (e) {
+      var element = document.querySelector(".vox-widget-wrapper #send-rating");
+      element.classList.add('btn-style');
+      element.classList.remove('btn-style-disabled');
+    });
+  });
+
+  // Click on Pad buttons event
+  var padButtons = document.querySelectorAll(".vox-widget-wrapper .vw-dialpad li");
+  Array.prototype.forEach.call(padButtons, function(el, i) {
+    el.addEventListener('click', function (e) {
+      e.preventDefault();
+      callAction(this.textContent);
+    });
+  });
+
+  // Get dialpad values from keyboard
+  document.body.addEventListener('keydown', function(event){
+
+    // Avoid capturing keys if the focus is in an element which captures keys
+    if (['input', 'select'].indexOf(event.target.nodeName.toLowerCase()) > -1)
+      return;
+
+    // Only catch 0,1,2,3,4,5,6,7,8,9,*,# keys
+    if (!event.key.match(/[0-9\*#]/))
+      return;
+
+    // Only catch keys if there is a call on going
+    if (!isInCall())
+      return;
+
+    var el = document.getElementsByClassName(`vw-dialpadkey-${event.key}`)[0];
+    if (el) {
+      el.classList.add('active');
     }
-  }
 
-  if (!show_frame) {
-    infoVoxbone.div_css_class_name += ' no-frame';
-    if (infoVoxbone.show_branding === 'false')
-      infoVoxbone.div_css_class_name += ' no-branding';
-  }
+    callAction(event.key);
+  });
 
-  if (infoVoxbone.test_setup !== 'false') {
-    if (customText.test_your_setup) {
-      links = '\
-      <div class="widget-footer-left">\
-        <a class="widget-footer-left-text" href="https://test.webrtc.org/" target="_blank">'+customText.test_your_setup+'</a>\
-      </div>\
-      ';
-    } else {
-      links = '\
-      <div class="widget-footer-left">\
-        <a class="widget-footer-left-text" href="https://test.webrtc.org/" target="_blank">Test your setup</a>\
-      </div>\
-      ';
+  document.body.addEventListener('keyup', function(event){
+    if (!event.key.match(/[0-9\*#]/)) return;
+
+    var el = document.getElementsByClassName(`vw-dialpadkey-${event.key}`)[0];
+    if (el)
+      el.classList.remove('active');
+  });
+
+  // End call button event
+  handleEvent('click', '.vox-widget-wrapper .vw-end-call', function (e) {
+    e.preventDefault();
+    resetWidget(voxButtonElement);
+    callAction('hang_up');
+  });
+
+  // Close Widget button event
+  handleEvent('click', '.vox-widget-wrapper #close-screen i', function (e) {
+    e.preventDefault();
+    hideElement(".vox-widget-wrapper");
+
+    callAction('hang_up');
+
+    // send "no rating"
+    var data =  { rate: 0, comment: 'Closed Without Rating', url: document.URL };
+    var message = { action: 'rate', data: data };
+    callAction(message);
+  });
+
+  // Open Widget button event
+  handleEvent('click', '.vox-widget-wrapper #full-screen i', function (e) {
+    e.preventDefault();
+
+    var widget_body_selector = ".vox-widget-wrapper #vw-body";
+    document.querySelector(widget_body_selector).classList.toggle('hidden');
+
+    var widget_mic_header_selector = ".vox-widget-wrapper .vw-header";
+
+    if (document.querySelector(widget_body_selector + " #vw-in-call").classList.contains('hidden'))
+      document.querySelector(widget_mic_header_selector).classList.remove('minimized');
+    else
+      document.querySelector(widget_mic_header_selector).classList.toggle('minimized');
+
+    this.classList.toggle('vx-icon-full-screen-on');
+    this.classList.toggle('vx-icon-full-screen-off');
+  });
+
+  // Pad button event
+  handleEvent('click', '.vox-widget-wrapper i.vx-icon-pad', function (e) {
+    e.preventDefault();
+    var element = document.querySelector(".vox-widget-wrapper .vw-dialpad");
+    element.classList.toggle('active');
+  });
+
+  // Mic button event
+  handleEvent('click', '.vox-widget-wrapper .vxb-widget-mic', function (e) {
+    e.preventDefault();
+
+    callAction('microphone_mute');
+  });
+
+  requirejs(['draggabilly'],
+    function(Draggabilly) {
+    //Just let the whole widget drag when tapping on Title Bar
+      new Draggabilly('.vox-widget-wrapper .vw-main', {
+        handle: '.vw-title-bar'
+      });
     }
-  }
+  );
+  //
+  // End of Widget Events
+});
 
-  if (infoVoxbone.show_branding !== 'false') {
-    if (customText.powered_by){
-      links += '\
-      <div class="widget-footer-right">\
-        <a class="widget-footer-right-text" href="https://voxbone.com" target="_blank">'+ customText.powered_by +'</a>\
-      </div> \
-      ';
-    } else {
-      links += '\
-      <div class="widget-footer-right">\
-        <a class="widget-footer-right-text" href="https://voxbone.com" target="_blank">powered by:</a>\
-      </div> \
-      ';
-    }
-  }
-
-  var custom_button_color = '';
-  if (infoVoxbone.custom_button_color) {
-    custom_button_color = 'style="border: ' + infoVoxbone.custom_button_color + '; background: ' + infoVoxbone.custom_button_color + '"';
-  }
-
-  var custom_frame_color = '';
-  if (infoVoxbone.custom_frame_color) {
-    custom_frame_color = "background:" + infoVoxbone.custom_frame_color;
-  }
-
-  if (!isWebRTCSupported() && infoVoxbone.incompatible_browser_configuration === 'show_text_html') {
-    voxButtonElement.innerHTML += ' \
-    <div style="' + custom_frame_color + '" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
-      <span>' + unescape(infoVoxbone.text_html) + '</span>\
-    </div>\
-    ';
-  } else {
-    custom_frame_color += (isWebRTCSupported() ? '; display: none; ' : '');
-
-    voxButtonElement.innerHTML += ' \
-    <div style="' + custom_frame_color + '" id="launch_call_div" class="vxb-widget-box ' + (infoVoxbone.div_css_class_name || "style-b") + '">\
-      <button id="launch_call" ' + custom_button_color + ' class="vxb-btn-style ' + (infoVoxbone.button_css_class_name) + '"><span>' + unescape(customText.button || infoVoxbone.text) + '</span></button>\
-      ' + links + '\
-    </div>\
-    ';
-  }
-
+var initVoxbone = (function() {
   function getVoxrtcConfig(callback) {
     var request = new XMLHttpRequest();
 
@@ -416,80 +593,11 @@ var loadVoxboneWidget = (function() {
     } else if (isChromeOnHttp()) {
       console.log("WebRTC doesn't work in Chrome on HTTP -> https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins");
     }
-    //add editable text to widget
-    editText(customText);
-
     notifyLoaded();
-  }
-
-  function isInCall() {
-    return (typeof voxbone.WebRTC.rtcSession.isEstablished === "function") && !voxbone.WebRTC.rtcSession.isEnded();
-  }
-
-  function isChromeOnHttp() {
-
-    if (window.location.protocol !== "http:")
-      return false;
-
-    // Get if browser is Chrome/Chromium flavour
-    // Based on http://stackoverflow.com/a/13348618/197376
-    var isChromium = window.chrome,
-      winNav = window.navigator,
-      vendorName = winNav.vendor.toLowerCase(),
-      isOpera = winNav.userAgent.indexOf("OPR") > -1,
-      isIEedge = winNav.userAgent.indexOf("Edge") > -1;
-
-    return (!!isChromium && vendorName === "google inc." && !isOpera && !isIEedge);
-  }
-
-  function isWebRTCSupported() {
-    return voxbone.WebRTC.isWebRTCSupported();
-  }
-
-  function makeCall() {
-    voxButtonElement = document.getElementsByClassName('voxButton')[0];
-    infoVoxbone = voxButtonElement.dataset;
-
-    if (isInCall()) return;
-
-    if (!isWebRTCSupported() && (infoVoxbone.incompatible_browser_configuration === 'link_button_to_a_page')) {
-      var redirect_url = infoVoxbone.redirect_url || 'https://voxbone.com';
-      window.open(redirect_url);
-      return;
-    }
-
-    if (isWebRTCSupported()) {
-      resetWidget();
-
-      var caller_id = infoVoxbone.caller_id ? infoVoxbone.caller_id : "click2vox";
-      voxbone.WebRTC.configuration.uri = (new JsSIP.URI(scheme = "sip", user = (caller_id).replace(/[^a-zA-Z0-9-_]/g, ''), "voxbone.com")).toString();
-
-      if (infoVoxbone.context)
-        voxbone.WebRTC.context = infoVoxbone.context;
-
-      if (infoVoxbone.send_digits) {
-        var sanitizedDigits = infoVoxbone.send_digits.toString().replace(/ /g, '');
-
-        console.log('Digits to be send: ' + sanitizedDigits);
-        voxbone.WebRTC.configuration.dialer_string = sanitizedDigits;
-      }
-
-      voxbone.WebRTC.call(infoVoxbone.did);
-      window.onbeforeunload = function (e) {
-        voxbone.WebRTC.unloadHandler();
-      };
-
-      if (isPopUp()) {
-        hideElement('.voxButton .vxb-widget-box');
-        hideElement('.vox-widget-wrapper .vw-main .vw-header .vw-actions');
-        window.resizeTo(415, 420);
-      }
-    }
   }
 
   window.addEventListener('message', function(event) {
     var message = event.data;
-
     switch(message.action) {
 
       case 'setMicVolume':
@@ -514,9 +622,9 @@ var loadVoxboneWidget = (function() {
       case 'setCallFailed':
         pauseRingbackTone();
         if (customText.failed) {
-            setWidgetTitle(customText.failed + ': ' + editErrorMessage(message.value, customText));
+          setWidgetTitle(customText.failed + ': ' + editErrorMessage(message.value, customText));
         } else {
-            setWidgetTitle("Call Failed: " + message.value);
+          setWidgetTitle("Call Failed: " + message.value);
         }
         hideAnimatedDots();
         hideElement('.vox-widget-wrapper #vw-in-call');
@@ -526,18 +634,18 @@ var loadVoxboneWidget = (function() {
       case 'setInCall':
         pauseRingbackTone();
         if (customText.in_call)
-            setWidgetTitle(customText.in_call);
+          setWidgetTitle(customText.in_call);
         else
-            setWidgetTitle("In Call");
+          setWidgetTitle("In Call");
         showAnimatedDots();
         break;
 
       case 'setCallEnded':
-        resetWidget();
+        resetWidget(voxButtonElement);
         if (customText.ended)
-            setWidgetTitle(customText.ended);
+          setWidgetTitle(customText.ended);
         else
-            setWidgetTitle("Call Ended");
+          setWidgetTitle("Call Ended");
         hideAnimatedDots();
         hideElement('.vox-widget-wrapper #vw-in-call');
 
@@ -552,401 +660,15 @@ var loadVoxboneWidget = (function() {
       case 'setCallFailedUserMedia':
         pauseRingbackTone();
         if (customText.failed)
-            setWidgetTitle(customText.failed);
+          setWidgetTitle(customText.failed);
         else
-            setWidgetTitle("Call Failed");
+          setWidgetTitle("Call Failed");
         hideAnimatedDots();
         hideElement('.vox-widget-wrapper #vw-in-call');
         showElement(".vox-widget-wrapper #vw-unable-to-acces-mic");
         break;
     }
   });
-
-  function muteMicDots(){
-    setMicDots('off');
-  }
-
-  function clearMicDots(){
-    setMicDots('');
-  }
-
-  function setMicDots(className){
-    var micDots = document.querySelectorAll('.vox-widget-wrapper .vox-mic-vumeter em');
-    Array.prototype.forEach.call(micDots, function(el, i) {
-      el.classList = className || "";
-    });
-  }
-
-  function setMicDot(dot) {
-    var className = 'on';
-    if (dot === '5')
-      className = 'peak';
-
-    var dots = document.querySelectorAll('.vox-widget-wrapper #mic' + dot);
-    Array.prototype.forEach.call(dots, function(el, i) {
-      el.classList.add(className);
-    });
-  }
-
-  function showElement(selector){
-    var el = document.querySelector(selector);
-    if (el)
-      el.classList.remove('hidden');
-  }
-
-  function hideElement(selector){
-    var el = document.querySelector(selector);
-    if (el)
-      el.classList.add('hidden');
-  }
-
-  function showAnimatedDots(){
-    var dots = document.querySelectorAll('.vox-widget-wrapper .vw-animated-dots');
-    Array.prototype.forEach.call(dots, function(el, i) {
-      el.classList.remove('hidden');
-    });
-  }
-
-  function hideAnimatedDots(){
-    var dots = document.querySelectorAll('.vox-widget-wrapper .vw-animated-dots');
-    Array.prototype.forEach.call(dots, function(el, i) {
-      el.classList.add('hidden');
-    });
-  }
-
-  function setWidgetTitle(title){
-    var el = document.querySelector('.vox-widget-wrapper #vw-title');
-    el.innerText = title;
-  }
-
-  function getRingbackTone(){
-    return document.querySelector('.voxButton #audio-ringback-tone');
-  }
-
-  function pauseRingbackTone(){
-    getRingbackTone().pause();
-  }
-
-  function playRingbackTone(){
-    var audioEl = getRingbackTone();
-    audioEl.currentTime = 0;
-    audioEl.play();
-  }
-
-  function callAction(message){
-    if (typeof voxbone.WebRTC.rtcSession.isEstablished !== "function" || voxbone.WebRTC.rtcSession.isEnded())
-      return;
-
-    switch(message) {
-      case 'hang_up':
-        voxbone.WebRTC.hangup();
-        break;
-
-      case 'microphone_mute':
-        if (voxbone.WebRTC.isMuted) {
-          voxbone.WebRTC.unmute();
-          clearMicDots();
-        } else {
-          voxbone.WebRTC.mute();
-          muteMicDots();
-        }
-        break;
-
-      case '1':
-      case '2':
-      case '3':
-      case '4':
-      case '5':
-      case '6':
-      case '7':
-      case '8':
-      case '9':
-      case '0':
-      case '*':
-      case '#':
-        playDTMF(message);
-        voxbone.WebRTC.sendDTMF(message);
-        break;
-    }
-  }
-
-  function do_dtmf() {
-    setTimeout(do_dtmf2, 100);
-  }
-  function do_dtmf2() {
-    setTimeout(do_dtmf, 30);
-  }
-
-  function createOscillator(context, freq, gain) {
-    var osc = context.createOscillator();
-    osc.type = "sine";
-    osc.frequency.value = freq;
-    osc.connect(gain);
-
-    return osc;
-  }
-
-  function getFreqs(tone) {
-    var freqs;
-
-    switch(tone) {
-      case '1': freqs = [697, 1209]; break;
-      case '2': freqs = [697, 1336]; break;
-      case '3': freqs = [697, 1477]; break;
-      case 'A': freqs = [697, 1633]; break;
-      case '4': freqs = [770, 1209]; break;
-      case '5': freqs = [770, 1336]; break;
-      case '6': freqs = [770, 1477]; break;
-      case 'B': freqs = [770, 1633]; break;
-      case '7': freqs = [852, 1209]; break;
-      case '8': freqs = [852, 1336]; break;
-      case '9': freqs = [852, 1477]; break;
-      case 'C': freqs = [852, 1633]; break;
-      case '*': freqs = [941, 1209]; break;
-      case '0': freqs = [941, 1336]; break;
-      case '#': freqs = [941, 1477]; break;
-      case 'D': freqs = [941, 1633]; break;
-    }
-
-    return freqs;
-  }
-
-  function playDTMF(tone) {
-    var sound = {};
-
-    // create a gain node to control output
-    sound.gain1 = audioContext.createGain();
-    sound.gain1.gain.value = 1.0;
-    sound.gain1.connect(audioContext.destination);
-
-    // create both oscillator sources
-    var freqs = getFreqs(tone);
-    sound.osc1 = createOscillator(audioContext, freqs[0], sound.gain1);
-    sound.osc2 = createOscillator(audioContext, freqs[1], sound.gain1);
-    sound.osc1.start(0);
-    sound.osc2.start(0);
-
-    // just play 200ms long DTMF tones
-    do_dtmf();
-    setTimeout(function(){
-      sound.osc1.stop(0);sound.osc2.stop(0);
-    }, 200);
-  }
-
-  function sendRate(data) {
-    var request = new XMLHttpRequest();
-    request.open('POST', infoVoxbone.server_url + "/rating", true);
-    request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-
-    request.addEventListener("load", function(responseData, status, xhr) {
-      console.log("rating sent!");
-    });
-
-    request.addEventListener("error", function(responseData, status, xhr) {
-      console.log("rating sending error callback");
-    });
-
-    //post rating to kivana
-    voxbone.WebRTC.postCallRating(infoVoxbone.did, data.rate, data.comment, data.url);
-
-    request.send(JSON.stringify(data));
-  }
-
-  function resetWidget() {
-    if (customText.waiting_user_media)
-        setWidgetTitle(customText.waiting_user_media);
-    else
-        setWidgetTitle("Waiting for User Media");
-    clearMicDots();
-
-    hideElement(".vox-widget-wrapper #vw-unable-to-acces-mic");
-    hideElement(".vox-widget-wrapper #vw-rating-after-message");
-    hideElement(".vox-widget-wrapper .vw-rating");
-
-    //Widget placement
-    var vox_widget_wrapper = document.querySelector('.vox-widget-wrapper');
-    vox_widget_wrapper.classList.remove("vw-top-left", "vw-top-right", "vw-bottom-right", "vw-bottom-left");
-    vox_widget_wrapper.classList.add('vw-' + infoVoxbone.placement);
-
-    var widget_mic_header_selector = ".vox-widget-wrapper .vw-header";
-    vox_widget_wrapper.querySelector(widget_mic_header_selector).classList.remove('minimized');
-
-    showAnimatedDots();
-    showElement(".vox-widget-wrapper #vw-in-call");
-    showElement(".vox-widget-wrapper #vw-body");
-    showElement(".vox-widget-wrapper");
-    document.querySelector(".vox-widget-wrapper").style.display = "block";
-
-    if (infoVoxbone.dial_pad !== "false")
-      showElement(".vox-widget-wrapper #dialpad");
-    else
-      hideElement(".vox-widget-wrapper #dialpad");
-
-    // Reset Rating
-    document.querySelector('.vox-widget-wrapper #send-rating').classList.add("btn-style-disabled");
-    document.querySelector('.vox-widget-wrapper #rating-message').value = "";
-
-    var full_screen_icon = document.querySelector('.vox-widget-wrapper #full-screen i');
-    full_screen_icon.classList.remove('vx-icon-full-screen-on');
-    full_screen_icon.classList.add('vx-icon-full-screen-off');
-
-    var starRatingButtons = document.querySelectorAll(".vox-widget-wrapper input[name=vxb-rate]");
-    Array.prototype.forEach.call(starRatingButtons, function(el, i) {
-      el.checked = false;
-    });
-  }
-
-  function handleEvent (eventName, selector, callback) {
-    var elements = document.querySelectorAll(selector);
-    Array.prototype.forEach.call(elements, function(element, i) {
-      element.addEventListener(eventName, callback);
-    });
-  }
-
-  function isPopUp() {
-    return infoVoxbone.is_popup === 'true';
-  }
-
-  // Start of Button Events
-  //
-  // Click on Make Call button event
-  handleEvent('click', '.vxb-widget-box #launch_call', function (e) {
-    e.preventDefault();
-    if(!isChromeOnHttp()){
-      makeCall();
-    } else if (!isPopUp()){
-      openPopup();
-      return false;
-    }
-  });
-  //
-  // End of Button Events
-
-  // Start of Widget Events
-  //
-  // Click on Send Rating button event
-  handleEvent('click', '.vox-widget-wrapper #send-rating', function (e) {
-    e.preventDefault();
-
-    var rate = document.querySelector('.vox-widget-wrapper input[name=vxb-rate]:checked');
-    if (!rate) return;
-
-    var comment = document.querySelector('.vox-widget-wrapper #rating-message');
-    var commentValue = comment ? comment.value : "";
-
-    var data =  { rate: rate.value, comment: commentValue, url: document.URL, token: infoVoxbone.button_id };
-    var message = { action: 'rate', data: data };
-
-    sendRate(message.data);
-
-    hideElement(".vox-widget-wrapper #vw-rating");
-    showElement(".vox-widget-wrapper #vw-rating-after-message");
-  });
-
-  // Click Rating star buttons event
-  var starRatingButtons = document.querySelectorAll(".vox-widget-wrapper input[name=vxb-rate]");
-  Array.prototype.forEach.call(starRatingButtons, function(el, i) {
-    el.addEventListener('click', function (e) {
-      var element = document.querySelector(".vox-widget-wrapper #send-rating");
-      element.classList.add('btn-style');
-      element.classList.remove('btn-style-disabled');
-    });
-  });
-
-  // Click on Pad buttons event
-  var padButtons = document.querySelectorAll(".vox-widget-wrapper .vw-dialpad li");
-  Array.prototype.forEach.call(padButtons, function(el, i) {
-    el.addEventListener('click', function (e) {
-      e.preventDefault();
-      callAction(this.textContent);
-    });
-  });
-
-  // Get dialpad values from keyboard
-  document.body.addEventListener('keydown', function(event){
-
-    // Avoid capturing keys if the focus is in an element which captures keys
-    if (['input', 'select'].indexOf(event.target.nodeName.toLowerCase()) > -1)
-      return;
-
-    // Only catch 0,1,2,3,4,5,6,7,8,9,*,# keys
-    if (!event.key.match(/[0-9\*#]/))
-      return;
-
-    // Only catch keys if there is a call on going
-    if (!isInCall())
-      return;
-
-    var el = document.getElementsByClassName(`vw-dialpadkey-${event.key}`)[0];
-    if (el) {
-      el.classList.add('active');
-    }
-
-    callAction(event.key);
-  });
-
-  document.body.addEventListener('keyup', function(event){
-    if (!event.key.match(/[0-9\*#]/)) return;
-
-    var el = document.getElementsByClassName(`vw-dialpadkey-${event.key}`)[0];
-    if (el)
-      el.classList.remove('active');
-  });
-
-  // End call button event
-  handleEvent('click', '.vox-widget-wrapper .vw-end-call', function (e) {
-    e.preventDefault();
-    resetWidget();
-    callAction('hang_up');
-  });
-
-  // Close Widget button event
-  handleEvent('click', '.vox-widget-wrapper #close-screen i', function (e) {
-    e.preventDefault();
-    hideElement(".vox-widget-wrapper");
-
-    callAction('hang_up');
-
-    // send "no rating"
-    var data =  { rate: 0, comment: 'Closed Without Rating', url: document.URL };
-    var message = { action: 'rate', data: data };
-    callAction(message);
-  });
-
-  // Open Widget button event
-  handleEvent('click', '.vox-widget-wrapper #full-screen i', function (e) {
-    e.preventDefault();
-
-    var widget_body_selector = ".vox-widget-wrapper #vw-body";
-    document.querySelector(widget_body_selector).classList.toggle('hidden');
-
-    var widget_mic_header_selector = ".vox-widget-wrapper .vw-header";
-
-    if (document.querySelector(widget_body_selector + " #vw-in-call").classList.contains('hidden'))
-      document.querySelector(widget_mic_header_selector).classList.remove('minimized');
-    else
-      document.querySelector(widget_mic_header_selector).classList.toggle('minimized');
-
-    this.classList.toggle('vx-icon-full-screen-on');
-    this.classList.toggle('vx-icon-full-screen-off');
-  });
-
-  // Pad button event
-  handleEvent('click', '.vox-widget-wrapper i.vx-icon-pad', function (e) {
-    e.preventDefault();
-    var element = document.querySelector(".vox-widget-wrapper .vw-dialpad");
-    element.classList.toggle('active');
-  });
-
-  // Mic button event
-  handleEvent('click', '.vox-widget-wrapper .vxb-widget-mic', function (e) {
-    e.preventDefault();
-
-    callAction('microphone_mute');
-  });
-  //
-  // End of Widget Events
-
   init();
 });
 
@@ -965,88 +687,398 @@ openPopup = function() {
 };
 
 //customize default static text
-var editText = function editText(edited_text) {
-    var widgetElement = document.querySelector('.vox-widget-wrapper');
-    var widgetLaunchCallElement = document.getElementById('launch_call_div');
+var editText = function editText (edited_text) {
+  var widgetElement = voxButtonElement.querySelector('.vox-widget-wrapper');
+  var widgetLaunchCallElement = voxButtonElement.querySelector('#launch_call_div');
 
-    if (edited_text.test_your_setup) widgetLaunchCallElement.querySelector('.widget-footer-left-text').innerHTML = edited_text.test_your_setup;
+  if (edited_text.test_your_setup && infoVoxbone.test_setup !== 'false') widgetLaunchCallElement.querySelector('.widget-footer-left-text').innerHTML = edited_text.test_your_setup;
 
-    if (edited_text.powered_by) {
-        widgetLaunchCallElement.querySelector('.widget-footer-right-text').innerHTML = edited_text.powered_by;
-        widgetElement.querySelector('.vw-footer-text').innerHTML = edited_text.powered_by;
-    }
+  if (edited_text.powered_by && infoVoxbone.show_branding !== 'false') {
+      widgetLaunchCallElement.querySelector('.widget-footer-right-text').innerHTML = edited_text.powered_by;
+      widgetElement.querySelector('.vw-footer-text').innerHTML = edited_text.powered_by;
+  }
 
-    if (edited_text.hang_up) widgetElement.querySelector('.vw-end-call').innerHTML = '<i class="vw-icon vx-icon-phone"></i>' + edited_text.hang_up;
+  if (edited_text.hang_up) widgetElement.querySelector('.vw-end-call').innerHTML = '<i class="vw-icon vx-icon-phone"></i>' + edited_text.hang_up;
 
-    if (edited_text.rating_question) widgetElement.querySelector('#vw-rating-question').innerHTML = edited_text.rating_question;
+  if (edited_text.rating_question) widgetElement.querySelector('#vw-rating-question').innerHTML = edited_text.rating_question;
 
-    if (edited_text.rating_comment) widgetElement.querySelector('#vw-rating-comment-question').innerHTML = edited_text.rating_comment;
+  if (edited_text.rating_comment) widgetElement.querySelector('#vw-rating-comment-question').innerHTML = edited_text.rating_comment;
 
-    if (edited_text.rating_send_button) widgetElement.querySelector('.send-rating-text').innerHTML = edited_text.rating_send_button;
+  if (edited_text.rating_send_button) widgetElement.querySelector('.send-rating-text').innerHTML = edited_text.rating_send_button;
 
-    if (edited_text.rating_placeholder) widgetElement.querySelector('#rating-message').placeholder = edited_text.rating_placeholder;
+  if (edited_text.rating_placeholder) widgetElement.querySelector('#rating-message').placeholder = edited_text.rating_placeholder;
 
-    if (edited_text.unable_to_access_mic) widgetElement.querySelector('.vw-unable-to-acces-mic-text').innerHTML = edited_text.unable_to_access_mic;
+  if (edited_text.unable_to_access_mic) widgetElement.querySelector('.vw-unable-to-acces-mic-text').innerHTML = edited_text.unable_to_access_mic;
 
-    if (edited_text.unable_to_access_mic_instructions) widgetElement.querySelector('.vw-unable-to-acces-mic-text-2').innerHTML = edited_text.unable_to_access_mic_instructions;
+  if (edited_text.unable_to_access_mic_instructions) widgetElement.querySelector('.vw-unable-to-acces-mic-text-2').innerHTML = edited_text.unable_to_access_mic_instructions;
 
-    if (edited_text.thank_you_after_call) widgetElement.querySelector('.vw-rating-after-message-text').innerHTML = edited_text.thank_you_after_call;
+  if (edited_text.thank_you_after_call) widgetElement.querySelector('.vw-rating-after-message-text').innerHTML = edited_text.thank_you_after_call;
 
 };
 
+function handleEvent (eventName, selector, callback) {
+  var elements = document.querySelectorAll(selector);
+  Array.prototype.forEach.call(elements, function(element, i) {
+    element.addEventListener(eventName, callback);
+  });
+}
+
+function isChromeOnHttp() {
+
+  if (window.location.protocol !== "http:")
+    return false;
+
+  // Get if browser is Chrome/Chromium flavour
+  // Based on http://stackoverflow.com/a/13348618/197376
+  var isChromium = window.chrome,
+    winNav = window.navigator,
+    vendorName = winNav.vendor.toLowerCase(),
+    isOpera = winNav.userAgent.indexOf("OPR") > -1,
+    isIEedge = winNav.userAgent.indexOf("Edge") > -1;
+
+  return (!!isChromium && vendorName === "google inc." && !isOpera && !isIEedge);
+  }
+
+function setWidgetTitle(title){
+  var el = document.querySelector('.vox-widget-wrapper #vw-title');
+  el.innerText = title;
+}
+
+function makeCall() {
+  if (isInCall()) return;
+
+  if (!isWebRTCSupported() && (infoVoxbone.incompatible_browser_configuration === 'link_button_to_a_page')) {
+    var redirect_url = infoVoxbone.redirect_url || 'https://voxbone.com';
+    window.open(redirect_url);
+    return;
+  }
+
+  if (isWebRTCSupported()) {
+    renderWidget();
+    resetWidget();
+
+    var caller_id = infoVoxbone.caller_id ? infoVoxbone.caller_id : "click2vox";
+    voxbone.WebRTC.configuration.uri = (new JsSIP.URI(scheme = "sip", user = (caller_id).replace(/[^a-zA-Z0-9-_]/g, ''), "voxbone.com")).toString();
+
+    if (infoVoxbone.context)
+      voxbone.WebRTC.context = infoVoxbone.context;
+
+    if (infoVoxbone.send_digits) {
+      var sanitizedDigits = infoVoxbone.send_digits.toString().replace(/ /g, '');
+
+      console.log('Digits to be send: ' + sanitizedDigits);
+      voxbone.WebRTC.configuration.dialer_string = sanitizedDigits;
+    }
+
+    voxbone.WebRTC.call(infoVoxbone.did);
+    window.onbeforeunload = function (e) {
+      voxbone.WebRTC.unloadHandler();
+    };
+
+    if (isPopUp(infoVoxbone)) {
+      hideElement('.voxButton .vxb-widget-box');
+      hideElement('.vox-widget-wrapper .vw-main .vw-header .vw-actions');
+      window.resizeTo(415, 420);
+    }
+  }
+}
+
+function resetWidget() {
+
+  if (customText.waiting_user_media)
+      setWidgetTitle(customText.waiting_user_media);
+  else
+      setWidgetTitle("Waiting for User Media");
+
+  clearMicDots();
+
+  hideElement(".vox-widget-wrapper #vw-unable-to-acces-mic");
+  hideElement(".vox-widget-wrapper #vw-rating-after-message");
+  hideElement(".vox-widget-wrapper .vw-rating");
+
+  //Widget placement
+  var vox_widget_wrapper = document.querySelector('.vox-widget-wrapper');
+  vox_widget_wrapper.classList.remove("vw-top-left", "vw-top-right", "vw-bottom-right", "vw-bottom-left");
+  vox_widget_wrapper.classList.add('vw-' + infoVoxbone.placement);
+
+  var widget_mic_header_selector = ".vox-widget-wrapper .vw-header";
+  vox_widget_wrapper.querySelector(widget_mic_header_selector).classList.remove('minimized');
+
+  showAnimatedDots();
+  showElement(".vox-widget-wrapper #vw-in-call");
+  showElement(".vox-widget-wrapper #vw-body");
+  showElement(".vox-widget-wrapper");
+  document.querySelector(".vox-widget-wrapper").style.display = "block";
+
+  if (infoVoxbone.dial_pad !== "false")
+    showElement(".vox-widget-wrapper #dialpad");
+  else
+    hideElement(".vox-widget-wrapper #dialpad");
+
+  // Reset Rating
+  document.querySelector('.vox-widget-wrapper #send-rating').classList.add("btn-style-disabled");
+  document.querySelector('.vox-widget-wrapper #rating-message').value = "";
+
+  var full_screen_icon = document.querySelector('.vox-widget-wrapper #full-screen i');
+  full_screen_icon.classList.remove('vx-icon-full-screen-on');
+  full_screen_icon.classList.add('vx-icon-full-screen-off');
+
+  var starRatingButtons = document.querySelectorAll(".vox-widget-wrapper input[name=vxb-rate]");
+  Array.prototype.forEach.call(starRatingButtons, function(el, i) {
+    el.checked = false;
+  });
+}
+
+function isInCall() {
+  return (typeof voxbone.WebRTC.rtcSession.isEstablished === "function") && !voxbone.WebRTC.rtcSession.isEnded();
+}
+
+function muteMicDots(){
+  setMicDots('off');
+}
+
+function clearMicDots(){
+  setMicDots('');
+}
+
+function setMicDots(className){
+  var micDots = document.querySelectorAll('.vox-widget-wrapper .vox-mic-vumeter em');
+  Array.prototype.forEach.call(micDots, function(el, i) {
+    el.classList = className || "";
+  });
+}
+
+function setMicDot(dot) {
+  var className = 'on';
+  if (dot === '5')
+    className = 'peak';
+
+  var dots = document.querySelectorAll('.vox-widget-wrapper #mic' + dot);
+  Array.prototype.forEach.call(dots, function(el, i) {
+    el.classList.add(className);
+  });
+}
+
+function do_dtmf() {
+  setTimeout(do_dtmf2, 100);
+}
+
+function do_dtmf2() {
+  setTimeout(do_dtmf, 30);
+}
+
+function createOscillator(context, freq, gain) {
+  var osc = context.createOscillator();
+  osc.type = "sine";
+  osc.frequency.value = freq;
+  osc.connect(gain);
+
+  return osc;
+}
+
+function showElement(selector){
+  var el = document.querySelector(selector);
+  if (el)
+    el.classList.remove('hidden');
+}
+
+function hideElement(selector){
+  var el = document.querySelector(selector);
+  if (el)
+    el.classList.add('hidden');
+}
+
+function showAnimatedDots(){
+  var dots = document.querySelectorAll('.vox-widget-wrapper .vw-animated-dots');
+  Array.prototype.forEach.call(dots, function(el, i) {
+    el.classList.remove('hidden');
+  });
+}
+
+function hideAnimatedDots(){
+  var dots = document.querySelectorAll('.vox-widget-wrapper .vw-animated-dots');
+  Array.prototype.forEach.call(dots, function(el, i) {
+    el.classList.add('hidden');
+  });
+}
+
+function getRingbackTone(){
+  return document.querySelector('.voxButton #audio-ringback-tone');
+}
+
+function pauseRingbackTone(){
+  getRingbackTone().pause();
+}
+
+function playRingbackTone(){
+  var audioEl = getRingbackTone();
+  audioEl.currentTime = 0;
+  audioEl.play();
+}
+
+function callAction(message){
+  if (typeof voxbone.WebRTC.rtcSession.isEstablished !== "function" || voxbone.WebRTC.rtcSession.isEnded())
+    return;
+
+  switch(message) {
+    case 'hang_up':
+      voxbone.WebRTC.hangup();
+      break;
+
+    case 'microphone_mute':
+      if (voxbone.WebRTC.isMuted) {
+        voxbone.WebRTC.unmute();
+        clearMicDots();
+      } else {
+        voxbone.WebRTC.mute();
+        muteMicDots();
+      }
+      break;
+
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+    case '0':
+    case '*':
+    case '#':
+      playDTMF(message);
+      voxbone.WebRTC.sendDTMF(message);
+      break;
+  }
+}
+
+function isPopUp(infoVoxbone) {
+  return infoVoxbone.is_popup === 'true';
+}
+
+function isWebRTCSupported() {
+  return voxbone.WebRTC.isWebRTCSupported();
+}
+
+function playDTMF(tone) {
+  var sound = {};
+
+  // create a gain node to control output
+  sound.gain1 = audioContext.createGain();
+  sound.gain1.gain.value = 1.0;
+  sound.gain1.connect(audioContext.destination);
+
+  // create both oscillator sources
+  var freqs = getFreqs(tone);
+  sound.osc1 = createOscillator(audioContext, freqs[0], sound.gain1);
+  sound.osc2 = createOscillator(audioContext, freqs[1], sound.gain1);
+  sound.osc1.start(0);
+  sound.osc2.start(0);
+
+  // just play 200ms long DTMF tones
+  do_dtmf();
+  setTimeout(function(){
+    sound.osc1.stop(0);sound.osc2.stop(0);
+  }, 200);
+}
+
+function sendRate(data) {
+  var request = new XMLHttpRequest();
+  request.open('POST', infoVoxbone.server_url + "/rating", true);
+  request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+  request.addEventListener("load", function(responseData, status, xhr) {
+    console.log("rating sent!");
+  });
+
+  request.addEventListener("error", function(responseData, status, xhr) {
+    console.log("rating sending error callback");
+  });
+
+  //post rating to kivana
+  voxbone.WebRTC.postCallRating(infoVoxbone.did, data.rate, data.comment, data.url);
+
+  request.send(JSON.stringify(data));
+}
+
+function getFreqs(tone) {
+  var freqs;
+
+  switch(tone) {
+    case '1': freqs = [697, 1209]; break;
+    case '2': freqs = [697, 1336]; break;
+    case '3': freqs = [697, 1477]; break;
+    case 'A': freqs = [697, 1633]; break;
+    case '4': freqs = [770, 1209]; break;
+    case '5': freqs = [770, 1336]; break;
+    case '6': freqs = [770, 1477]; break;
+    case 'B': freqs = [770, 1633]; break;
+    case '7': freqs = [852, 1209]; break;
+    case '8': freqs = [852, 1336]; break;
+    case '9': freqs = [852, 1477]; break;
+    case 'C': freqs = [852, 1633]; break;
+    case '*': freqs = [941, 1209]; break;
+    case '0': freqs = [941, 1336]; break;
+    case '#': freqs = [941, 1477]; break;
+    case 'D': freqs = [941, 1633]; break;
+  }
+
+  return freqs;
+}
+
 //customize default error messages in widget
 var editErrorMessage = function editErrorMessage(error, mt) {
-
-    switch(error) {
-        case 'Canceled':
-            return mt.error_canceled ? mt.error_canceled : error;
-        case 'Terminated':
-            return mt.error_bye ? mt.error_bye : error;
-        case 'WebRTC Error':
-            return mt.error_webrtc ? mt.error_webrtc : error;
-        case 'No Answer':
-            return mt.error_no_answer ? mt.error_no_answer : error;
-        case 'Expires':
-            return mt.error_expires ? mt.error_expires : error;
-        case 'No Ack':
-            return mt.error_no_ack ? mt.error_no_ack : error;
-        case 'Dialog Error':
-            return mt.error_dialog_error ? mt.error_dialog_error : error;
-        case 'User Denied Media Access':
-            return mt.error_user_denied_media ? mt.error_user_denied_media : error;
-        case 'User Denied':
-            return mt.error_user_denied_media ? mt.error_user_denied_media : error;
-        case 'Bad Media Description':
-            return mt.error_bad_media_description ? mt.error_bad_media_description : error;
-        case 'RTP Timeout':
-            return mt.error_rtp_timeout ? mt.error_rtp_timeout : error;
-        case 'Connection Error':
-            return mt.error_connection_error ? mt.error_connection_error : error;
-        case 'Request Timeout':
-            return mt.error_request_timeout ? mt.error_request_timeout : error;
-        case 'SIP Failure':
-            return mt.error_sip_failure ? mt.error_sip_failure : error;
-        case 'Internal Error':
-            return mt.error_internal_error ? mt.error_internal_error : error;
-        case 'Rejected':
-            return mt.error_sip_rejected ? mt.error_sip_rejected : error;
-        case 'Busy':
-            return mt.error_sip_busy ? mt.error_sip_busy : error;
-        case 'Redirect':
-            return mt.error_sip_redirected ? mt.error_sip_redirected : error;
-        case 'Unavailable':
-            return mt.error_sip_unavailable ? mt.error_sip_unavailable : error;
-        case 'Address Incomplete':
-            return mt.error_sip_address_incomplete ? mt.error_sip_address_incomplete : error;
-        case 'Incompatible SDP':
-            return mt.error_sip_incompatible_sdp ? mt.error_sip_incompatible_sdp : error;
-        case 'Missing SDP':
-            return mt.error_sip_missing_sdp ? mt.error_sip_missing_sdp : error;
-        case 'Not Found':
-            return mt.error_sip_not_found ? mt.error_sip_not_found : error;
-        case 'Authentication Error':
-            return mt.error_sip_authentication ? mt.error_sip_authentication : error;
-        default:
-            return error;
-    }
+  switch(error) {
+    case 'Canceled':
+      return mt.error_canceled ? mt.error_canceled : error;
+    case 'Terminated':
+      return mt.error_bye ? mt.error_bye : error;
+    case 'WebRTC Error':
+      return mt.error_webrtc ? mt.error_webrtc : error;
+    case 'No Answer':
+      return mt.error_no_answer ? mt.error_no_answer : error;
+    case 'Expires':
+      return mt.error_expires ? mt.error_expires : error;
+    case 'No Ack':
+      return mt.error_no_ack ? mt.error_no_ack : error;
+    case 'Dialog Error':
+      return mt.error_dialog_error ? mt.error_dialog_error : error;
+    case 'User Denied Media Access':
+      return mt.error_user_denied_media ? mt.error_user_denied_media : error;
+    case 'User Denied':
+      return mt.error_user_denied_media ? mt.error_user_denied_media : error;
+    case 'Bad Media Description':
+      return mt.error_bad_media_description ? mt.error_bad_media_description : error;
+    case 'RTP Timeout':
+      return mt.error_rtp_timeout ? mt.error_rtp_timeout : error;
+    case 'Connection Error':
+      return mt.error_connection_error ? mt.error_connection_error : error;
+    case 'Request Timeout':
+      return mt.error_request_timeout ? mt.error_request_timeout : error;
+    case 'SIP Failure':
+      return mt.error_sip_failure ? mt.error_sip_failure : error;
+    case 'Internal Error':
+      return mt.error_internal_error ? mt.error_internal_error : error;
+    case 'Rejected':
+      return mt.error_sip_rejected ? mt.error_sip_rejected : error;
+    case 'Busy':
+      return mt.error_sip_busy ? mt.error_sip_busy : error;
+    case 'Redirect':
+      return mt.error_sip_redirected ? mt.error_sip_redirected : error;
+    case 'Unavailable':
+      return mt.error_sip_unavailable ? mt.error_sip_unavailable : error;
+    case 'Address Incomplete':
+      return mt.error_sip_address_incomplete ? mt.error_sip_address_incomplete : error;
+    case 'Incompatible SDP':
+      return mt.error_sip_incompatible_sdp ? mt.error_sip_incompatible_sdp : error;
+    case 'Missing SDP':
+      return mt.error_sip_missing_sdp ? mt.error_sip_missing_sdp : error;
+    case 'Not Found':
+      return mt.error_sip_not_found ? mt.error_sip_not_found : error;
+    case 'Authentication Error':
+      return mt.error_sip_authentication ? mt.error_sip_authentication : error;
+    default:
+      return error;
+  }
 };
