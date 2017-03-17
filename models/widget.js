@@ -52,6 +52,10 @@ var widgetSchema = new Schema({
     type: String,
     default: "bottom-right"
   },
+  https_popup: {
+    type: Boolean,
+    default: true
+  },
   show_text_html: String,
   link_button_to_a_page: String,
   incompatible_browser_configuration: String,

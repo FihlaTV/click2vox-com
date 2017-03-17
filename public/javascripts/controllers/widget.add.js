@@ -33,7 +33,8 @@ define([
       test_setup: true,
       rating: true,
       ringback: true,
-      placement: "bottom-right"
+      placement: "bottom-right",
+      https_popup: true
     };
 
     $scope.reset = function (form) {

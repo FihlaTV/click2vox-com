@@ -15,12 +15,13 @@ var Widget = require('../models/widget');
 var utils = require('./utils');
 
 var PERMITTED_FIELDS = [
-  'configuration_name', 'button_color','frame_color', 'button_label', 'button_style',
-  'background_style', 'sip_uri', 'caller_id', 'context',
-  'dial_pad', 'send_digits', 'hide_widget', 'updated_at',
-  'link_button_to_a_page', 'show_text_html',
-  'incompatible_browser_configuration', 'new_sip_uri',
-  'show_frame', 'test_setup', 'rating', 'show_branding', 'ringback','placement'
+  'configuration_name', 'button_color','frame_color',
+  'button_label', 'button_style', 'background_style', 'sip_uri',
+  'caller_id', 'context', 'dial_pad', 'send_digits', 'hide_widget',
+  'updated_at', 'link_button_to_a_page', 'show_text_html',
+  'incompatible_browser_configuration', 'new_sip_uri', 'show_frame',
+  'test_setup', 'rating', 'show_branding', 'ringback', 'placement',
+  'https_popup'
 ];
 
 router.get('/new', utils.isLoggedIn, function (req, res, next) {

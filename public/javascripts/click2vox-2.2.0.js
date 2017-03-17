@@ -89,7 +89,7 @@ var loadAssets = (function() {
 
     if(!isChromeOnHttp()){
       makeCall();
-    } else if (!isPopUp(infoVoxbone)){
+    } else if (!isPopUp(infoVoxbone) && infoVoxbone.https_popup !== 'false'){
       openPopup();
       return false;
     }

@@ -175,6 +175,11 @@ block content
                     .panel-collapse.collapse#collapseIncompatileBrowserConfiguration
                       .options-wrap.active.incompatible
                         .form-group
+                          div(style="display:inline-block;")
+                            input(type='checkbox' name='https_popup' ng-model='widget.https_popup')
+                            span.radio-name I don't have HTTPS
+                            span.badge(data-toggle='tooltip' data-placement="right" title="Using HTTPS is strongly recommended for VoIP applications. This feature is merely a workaround since Google Chrome doesn't support WebRTC over HTTP. The widget will open a secure popup window on Google Chrome for calling if you enable this feature") ?
+                        .form-group
                           label.hide_widget
                             input(type='radio' name='incompatible_browser_configuration' ng-model='widget.incompatible_browser_configuration' value="hide_widget")
                             span.radio-name Hide the widget
