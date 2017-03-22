@@ -317,6 +317,7 @@ var renderWidget = (function(){
         </div> \
       </div> \
     </div> \
+    <div class="vox-widget-draggable" style="position: fixed; width: 100%; bottom: 0; top: 0; left: 0; z-index: -1"></div>\
   ';
 
   voxButtonElement.insertAdjacentHTML('beforeend', voxPopup);
@@ -448,8 +449,24 @@ var renderWidget = (function(){
   requirejs(['draggabilly'],
     function(Draggabilly) {
     //Just let the whole widget drag when tapping on Title Bar
-      new Draggabilly('.vox-widget-wrapper .vw-main', {
-        handle: '.vw-title-bar'
+      var draggable = new Draggabilly('.vox-widget-wrapper .vw-main', {
+        handle: '.vw-title-bar',
+        containment: '.vox-widget-draggable'
+      });
+      var draggableFixed = false;
+
+      draggable.on('dragEnd', function() {
+      //modifying the widget position to fixed for containing it inside the screen when expanded
+        if (document.querySelector('.vox-widget-wrapper[class*="vw-bottom"]') && !draggableFixed) {
+          var screen_h = window.innerHeight;
+          var widget = document.querySelector(".vox-widget-wrapper .vw-main");
+          var measures = widget.getBoundingClientRect();
+          widget.style.position = "fixed";
+          var measures_after = widget.getBoundingClientRect();
+          widget.style.transform = 'translate3D(' + (measures.left-measures_after.left) + 'px, ' + (screen_h-measures.height) + 'px, 0)';
+          draggableFixed = true;
+        }
+
       });
     }
   );
