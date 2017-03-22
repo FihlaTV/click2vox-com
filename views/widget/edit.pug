@@ -83,13 +83,13 @@ block content
 
                         .form-group
                           label
-                            input(type='checkbox' name='test_setup' ng-model='widget.test_setup' ng-disabled='!widget.show_frame' ng-checked='widget.show_frame')
+                            input(type='checkbox' name='test_setup' ng-model='widget.test_setup' ng-disabled='!widget.show_frame' ng-checked='widget.show_frame && 0')
                             span.radio-name Test user setup
                             span.badge(data-toggle='tooltip' data-placement="right" title="Place a link to test the users's WebRTC setup") ?
 
                         .form-group
                           label
-                            input(type='checkbox' name='show_branding' ng-model='widget.show_branding' ng-disabled='!widget.show_frame' ng-checked='widget.show_frame')
+                            input(type='checkbox' name='show_branding' ng-model='widget.show_branding' ng-disabled='!widget.show_frame' ng-checked='widget.show_frame && 0')
                             span.radio-name Show branding
                             span.badge(data-toggle='tooltip' data-placement="right" title="Toggles Voxbone branding from button and popup") ?
 

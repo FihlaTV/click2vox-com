@@ -82,6 +82,14 @@ define([
         e.preventDefault();
       });
 
+      $("input[name = show_frame]").click(function () {
+        var frame = $scope.widget.show_frame;
+        if (frame === true) {
+          $scope.widget.show_branding = false;
+          $scope.widget.test_setup = false;
+        }
+      });
+
       var clipboard = new Clipboard('#clipboard_copy');
       clipboard.on('success', function (e) {
         console.info('Action:', e.action);
