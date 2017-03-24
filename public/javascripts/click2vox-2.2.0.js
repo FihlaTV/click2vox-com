@@ -305,7 +305,7 @@ var renderWidget = (function(){
                 <input type="text" name="rating-message" id="rating-message" placeholder="Optional"" class="form-control"> \
               </div> \
               <div id="vw-rating-button" class="vw-button"> \
-                <button class="btn-style btn-style-disabled" id="send-rating"> \
+                <button class="vxb-btn-style vxb-btn-style-disabled" id="send-rating"> \
                   <span class="send-rating-text">Send</span> \
                 </button> \
               </div> \
@@ -357,8 +357,8 @@ var renderWidget = (function(){
   Array.prototype.forEach.call(starRatingButtons, function(el, i) {
     el.addEventListener('click', function (e) {
       var element = document.querySelector(".vox-widget-wrapper #send-rating");
-      element.classList.add('btn-style');
-      element.classList.remove('btn-style-disabled');
+      element.classList.add('vxb-btn-style');
+      element.classList.remove('vxb-btn-style-disabled');
     });
   });
 
@@ -843,7 +843,7 @@ function resetWidget() {
     hideElement(".vox-widget-wrapper #dialpad");
 
   // Reset Rating
-  document.querySelector('.vox-widget-wrapper #send-rating').classList.add("btn-style-disabled");
+  document.querySelector('.vox-widget-wrapper #send-rating').classList.add("vxb-btn-style-disabled");
   document.querySelector('.vox-widget-wrapper #rating-message').value = "";
 
   var full_screen_icon = document.querySelector('.vox-widget-wrapper #full-screen i');
