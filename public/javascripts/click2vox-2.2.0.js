@@ -105,6 +105,14 @@ var renderButton = (function(voxButtonElement){
   var show_frame = infoVoxbone.show_frame !== 'false';
   var customText = '';
 
+  /*Keep the button hidden until all assets and the call is ready
+  to be made. This avoids glitches and prohibits the user to
+  click on a non ready button. If the browser doesnt support webrtc
+  we don't want to hide the button, since the readyToCall event will
+  never fire*/
+  if (isWebRTCSupported())
+    voxButtonElement.style.display = 'none';
+
   if (infoVoxbone.widget_texts) {
     try {
       customText = JSON.parse(infoVoxbone.widget_texts).custom;
@@ -548,10 +556,11 @@ var initVoxbone = (function() {
     },
 
     'readyToCall': function(e) {
-      console.log('readyToCall');
-      var el = document.querySelector("#launch_call_div");
-      if (el)
-        el.style.display = "block";
+      // When the call is ready to be made, display all the buttons
+      var voxButtonElements = document.getElementsByClassName('voxButton');
+      Array.prototype.forEach.call(voxButtonElements, function(voxButtonElement) {
+        voxButtonElement.style.display = 'block';
+      });
     },
 
     'authExpired': function (e){
