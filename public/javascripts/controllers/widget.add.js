@@ -74,43 +74,6 @@ define([
       }
     };
 
-    $scope.wirePluginAndEvents = function () {
-      $('[data-toggle="tooltip"]').tooltip();
-
-      $(".title-toggle").click(function () {
-        $(this).parent().toggleClass("active");
-      });
-
-      $(".togle-bg a.dark").click(function () {
-        $(".prev-view").removeClass("light").removeClass("grey").addClass("dark");
-      });
-
-      $(".togle-bg a.grey").click(function () {
-        $(".prev-view").removeClass("light").removeClass("black").addClass("grey");
-      });
-
-      $(".togle-bg a.light").click(function () {
-        $(".prev-view").removeClass("black").removeClass("grey").addClass("light");
-      });
-
-      $('.codebox-actions a').click(function (e) {
-        e.preventDefault();
-      });
-
-      var clipboard = new Clipboard('#clipboard_copy');
-      clipboard.on('success', function (e) {
-        console.info('Action:', e.action);
-        console.info('Text:', e.text);
-        console.info('Trigger:', e.trigger);
-        e.clearSelection();
-      });
-
-      clipboard.on('error', function (e) {
-        console.error('Action:', e.action);
-        console.error('Trigger:', e.trigger);
-      });
-    };
-
     $scope.reset();
     $scope.init();
 

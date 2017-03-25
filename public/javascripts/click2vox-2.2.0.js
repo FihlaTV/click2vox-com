@@ -465,7 +465,7 @@ var renderWidget = (function(){
 
       draggable.on('dragEnd', function() {
       //modifying the widget position to fixed for containing it inside the screen when expanded
-        if (document.querySelector('.vox-widget-wrapper[class*="vw-bottom"]') && !draggableFixed) {
+        if (!document.querySelector('.vox-widget-wrapper[class*="vw-top"]') && !draggableFixed) {
           var screen_h = window.innerHeight;
           var widget = document.querySelector(".vox-widget-wrapper .vw-main");
           var measures = widget.getBoundingClientRect();
