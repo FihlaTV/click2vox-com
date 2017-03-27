@@ -89,7 +89,7 @@ var loadAssets = (function() {
 
     if(!isChromeOnHttp()){
       makeCall();
-    } else if (!isPopUp(infoVoxbone) && infoVoxbone.https_popup !== 'false'){
+    } else if (!isPopUp() && infoVoxbone.https_popup !== 'false'){
       openPopup();
       return false;
     }
@@ -581,11 +581,18 @@ var initVoxbone = (function() {
     var basic = (infoVoxbone.basic_auth === 'true');
     var username = infoVoxbone.voxbone_webrtc_username;
     var key = infoVoxbone.voxbone_webrtc_password;
+    var serverAuthUrl = infoVoxbone.server_auth_url;
 
     if (basic && username && key) {
       voxbone.WebRTC.basicAuthInit(username, key);
+    } else if (!basic && serverAuthUrl) {
+      requirejs([serverAuthUrl],
+        function() {
+          voxbone.WebRTC.init(voxrtc_config);
+        }
+      );
     } else {
-      voxbone.WebRTC.authServerURL = infoVoxbone.auth_server_url || voxbone.WebRTC.authServerURL;
+      voxbone.WebRTC.authServerURL = voxbone.WebRTC.authServerURL || "https://webrtc.voxbone.com/rest/authentication/createToken";
 
       // NOTE: using `custom_auth_data` makes mandatory handling `authExpired` event separately
       if (infoVoxbone.custom_auth_data) {
@@ -715,8 +722,12 @@ openPopup = function() {
 
   var buttonData = document.querySelector('.voxButton').dataset;
   var params = Object.keys(buttonData).map(k => `${encodeURIComponent(k)}=${encodeURIComponent(buttonData[k])}`).join('&');
+  var url = infoVoxbone.server_url;
 
-  window.open(infoVoxbone.server_url + '/widget/portal-widget/get-html?' + params, '_blank', 'width='+w+',height='+h+',resizable=no,toolbar=no,menubar=no,location=no,status=no,top='+top+', left='+left);
+  if (url === 'https://voxbone.com/click2vox')
+    url = 'https://www.voxbone.com/click2vox';
+
+  window.open(url + '/widget/portal-widget/get-html?' + params, '_blank', 'width='+w+',height='+h+',resizable=no,toolbar=no,menubar=no,location=no,status=no,top='+top+', left='+left);
 
   return false;
 };
@@ -810,7 +821,7 @@ function makeCall() {
       voxbone.WebRTC.unloadHandler();
     };
 
-    if (isPopUp(infoVoxbone)) {
+    if (isPopUp()) {
       hideElement('.voxButton .vxb-widget-box');
       hideElement('.vox-widget-wrapper .vw-main .vw-header .vw-actions');
       window.resizeTo(415, 420);
@@ -988,7 +999,7 @@ function callAction(message){
   }
 }
 
-function isPopUp(infoVoxbone) {
+function isPopUp() {
   return infoVoxbone.is_popup === 'true';
 }
 
