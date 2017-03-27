@@ -483,6 +483,8 @@ var renderWidget = (function(){
 });
 
 var initVoxbone = (function() {
+  var autoDialFired = false;
+
   function getVoxrtcConfig(callback) {
     var request = new XMLHttpRequest();
 
@@ -561,6 +563,12 @@ var initVoxbone = (function() {
       Array.prototype.forEach.call(voxButtonElements, function(voxButtonElement) {
         voxButtonElement.style.display = 'block';
       });
+
+      if (infoVoxbone.auto_dial === 'true' && !autoDialFired) {
+        autoDialFired = true;
+        makeCall();
+      }
+
     },
 
     'authExpired': function (e){
