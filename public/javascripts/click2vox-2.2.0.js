@@ -538,6 +538,10 @@ var initVoxbone = (function() {
     'failed': function (e){
       console.log('Failed to connect: ' + e.cause);
       sendPostMessage('setCallFailed', e.cause.substr(0,11));
+
+      if (isPopUp())
+        closePopUp();
+
     },
 
     'accepted': function (e){
