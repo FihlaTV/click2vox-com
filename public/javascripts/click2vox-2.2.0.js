@@ -110,7 +110,7 @@ var renderButton = (function(voxButtonElement){
   click on a non ready button. If the browser doesnt support webrtc
   we don't want to hide the button, since the readyToCall event will
   never fire*/
-  if (isWebRTCSupported())
+  if (isWebRTCSupported() && !isChromeOnHttp())
     voxButtonElement.style.display = 'none';
 
   if (infoVoxbone.widget_texts) {
@@ -640,12 +640,12 @@ var initVoxbone = (function() {
   }
 
   function init() {
-    if (isWebRTCSupported()) {
+    if (isWebRTCSupported() && !isChromeOnHttp()) {
       voxbone.WebRTC.configuration.post_logs = true;
       voxbone.WebRTC.customEventHandler = Object.assign(voxbone.WebRTC.customEventHandler, eventHandlers);
       handleAuth();
     } else if (isChromeOnHttp()) {
-      console.log("WebRTC doesn't work in Chrome on HTTP -> https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins");
+      console.log("The call will take place in an https popup. WebRTC doesn't work in Chrome on HTTP -> https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins");
     }
     notifyLoaded();
   }
