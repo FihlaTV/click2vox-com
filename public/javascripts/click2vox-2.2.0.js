@@ -834,9 +834,15 @@ function makeCall() {
     };
 
     if (isPopUp()) {
+      var dialPad = document.querySelector(".vox-widget-wrapper .vw-dialpad");
+      dialPad.classList.toggle('active');
+      var wrapper = document.querySelector(".vox-widget-wrapper .vw-main");
+      wrapper.style.margin = 0;
+      var header = document.querySelector(".vox-widget-wrapper .vw-main .vw-header");
+      header.style.borderRadius = 0;
       hideElement('.voxButton .vxb-widget-box');
       hideElement('.vox-widget-wrapper .vw-main .vw-header .vw-actions');
-      window.resizeTo(415, 420);
+      window.resizeTo(330, 435);
     }
   }
 }
