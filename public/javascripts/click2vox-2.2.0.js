@@ -350,6 +350,10 @@ var renderWidget = (function(){
 
     hideElement(".vox-widget-wrapper #vw-rating");
     showElement(".vox-widget-wrapper #vw-rating-after-message");
+
+    if (isPopUp())
+      closePopUp();
+
   });
 
   // Click Rating star buttons event
@@ -544,6 +548,10 @@ var initVoxbone = (function() {
     'ended': function (e){
       console.log('Call ended');
       sendPostMessage('setCallEnded');
+
+      if (isPopUp() && infoVoxbone.rating === "false")
+        closePopUp();
+
     },
 
     'getUserMediaFailed': function (e){
@@ -1027,6 +1035,12 @@ function playDTMF(tone) {
   setTimeout(function(){
     sound.osc1.stop(0);sound.osc2.stop(0);
   }, 200);
+}
+
+function closePopUp() {
+  setTimeout(function () {
+    window.close();
+  }, 5000);
 }
 
 function sendRate(data) {
