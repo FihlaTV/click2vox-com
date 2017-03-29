@@ -829,9 +829,10 @@ function makeCall() {
     }
 
     voxbone.WebRTC.call(infoVoxbone.did);
-    window.onbeforeunload = function (e) {
+
+    window.addEventListener("beforeunload", function() {
       voxbone.WebRTC.unloadHandler();
-    };
+    });
 
     if (isPopUp()) {
       var dialPad = document.querySelector(".vox-widget-wrapper .vw-dialpad");
