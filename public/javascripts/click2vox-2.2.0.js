@@ -843,7 +843,7 @@ function makeCall() {
       header.style.borderRadius = 0;
       hideElement('.voxButton .vxb-widget-box');
       hideElement('.vox-widget-wrapper .vw-main .vw-header .vw-actions');
-      window.resizeTo(330, 435);
+      window.resizeTo(330, 425);
     }
   }
 }
