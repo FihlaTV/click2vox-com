@@ -325,7 +325,6 @@ var renderWidget = (function(){
         </div> \
       </div> \
     </div> \
-    <div class="vox-widget-draggable" style="position: fixed; width: 100%; bottom: 0; top: 0; left: 0; z-index: -1"></div>\
   ';
 
   voxButtonElement.insertAdjacentHTML('beforeend', voxPopup);
@@ -463,7 +462,7 @@ var renderWidget = (function(){
     //Just let the whole widget drag when tapping on Title Bar
       var draggable = new Draggabilly('.vox-widget-wrapper .vw-main', {
         handle: '.vw-title-bar',
-        containment: '.vox-widget-draggable'
+        containment: 'html'
       });
       var draggableFixed = false;
 
