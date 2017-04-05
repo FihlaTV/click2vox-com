@@ -72,7 +72,6 @@ var loadAssets = (function() {
   voxButtonElement = voxButtonElements[0];
   infoVoxbone = voxButtonElement.dataset;
   loadCss(infoVoxbone.server_url + '/stylesheets/vxb-widget.css');
-  renderWidget();
 
   //Bind click event to rendered buttons
   handleEvent('click', '.vxb-widget-box #launch_call', function (e) {
@@ -457,30 +456,36 @@ var renderWidget = (function(){
     callAction('microphone_mute');
   });
 
-  requirejs(['draggabilly'],
-    function(Draggabilly) {
+  if (!isPopUp()) {
+    requirejs(['draggabilly'],
+      function(Draggabilly) {
+        draggableWidget(Draggabilly);
+      }
+    );
+  }
+
+  var draggableWidget = function(Draggabilly) {
     //Just let the whole widget drag when tapping on Title Bar
-      var draggable = new Draggabilly('.vox-widget-wrapper .vw-main', {
-        handle: '.vw-title-bar',
-        containment: 'html'
-      });
-      var draggableFixed = false;
+    var draggable = new Draggabilly('.vox-widget-wrapper .vw-main', {
+      handle: '.vw-title-bar',
+      containment: 'html'
+    });
+    var draggableFixed = false;
 
-      draggable.on('dragEnd', function() {
+    draggable.on('dragEnd', function () {
       //modifying the widget position to fixed for containing it inside the screen when expanded
-        if (!document.querySelector('.vox-widget-wrapper[class*="vw-top"]') && !draggableFixed) {
-          var screen_h = window.innerHeight;
-          var widget = document.querySelector(".vox-widget-wrapper .vw-main");
-          var measures = widget.getBoundingClientRect();
-          widget.style.position = "fixed";
-          var measures_after = widget.getBoundingClientRect();
-          widget.style.transform = 'translate3D(' + (measures.left-measures_after.left) + 'px, ' + (screen_h-measures.height) + 'px, 0)';
-          draggableFixed = true;
-        }
+      if (!document.querySelector('.vox-widget-wrapper[class*="vw-top"]') && !draggableFixed) {
+        var screen_h = window.innerHeight;
+        var widget = document.querySelector(".vox-widget-wrapper .vw-main");
+        var measures = widget.getBoundingClientRect();
+        widget.style.position = "fixed";
+        var measures_after = widget.getBoundingClientRect();
+        widget.style.transform = 'translate3D(' + (measures.left - measures_after.left) + 'px, ' + (screen_h - measures.height) + 'px, 0)';
+        draggableFixed = true;
+      }
 
-      });
-    }
-  );
+    });
+  };
   //
   // End of Widget Events
 });
@@ -810,7 +815,7 @@ function makeCall() {
     return;
   }
 
-  if (isWebRTCSupported()) {
+  if (isWebRTCSupported() && !isChromeOnHttp()) {
     renderWidget();
     resetWidget();
 
