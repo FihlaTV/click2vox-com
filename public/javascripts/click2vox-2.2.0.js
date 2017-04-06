@@ -456,7 +456,7 @@ var renderWidget = (function(){
     callAction('microphone_mute');
   });
 
-  if (!isPopUp()) {
+  if (!isPopUp() && infoVoxbone.draggable === 'true') {
     requirejs(['draggabilly'],
       function(Draggabilly) {
         draggableWidget(Draggabilly);
