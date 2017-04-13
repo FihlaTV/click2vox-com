@@ -830,6 +830,8 @@ function makeCall() {
 
       console.log('Digits to be send: ' + sanitizedDigits);
       voxbone.WebRTC.configuration.dialer_string = sanitizedDigits;
+    } else {
+      voxbone.WebRTC.configuration.dialer_string = '';
     }
 
     voxbone.WebRTC.call(infoVoxbone.did);
