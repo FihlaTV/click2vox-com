@@ -219,7 +219,7 @@ module.exports = function (passport) {
 
   // This is indented to get the latest version always
   router.get(utils.click2voxJsFileName, function(req, res) {
-    res.redirect('/javascripts/click2vox-2.2.0.js');
+    res.redirect('/javascripts/click2vox-2.3.0.js');
   });
 
   router.get('/voxbone_widget/v2/:id', function (req, res) {
