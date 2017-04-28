@@ -12,8 +12,9 @@ var requirejs,require,define;!function(global,setTimeout){function commentReplac
 /* jshint ignore:end */
 
 var requirejs, require, define;
+var infoVoxbone;
 (function (click2vox) {
-  var infoVoxbone, voxButtonElement, voxButtonElements, audioContext, predefinedHtmlButton;
+  var voxButtonElement, voxButtonElements, audioContext, predefinedHtmlButton;
   var button_id = document.currentScript.dataset.button_id;
   var customText = '';
 
