@@ -671,6 +671,8 @@ var infoVoxbone;
       },
 
       'readyToCall': function(e) {
+        notifyLoaded();
+
         // When the call is ready to be made, display all the buttons
         var voxButtonElements = document.getElementsByClassName('voxButton');
         Array.prototype.forEach.call(voxButtonElements, function(voxButtonElement) {
@@ -681,7 +683,6 @@ var infoVoxbone;
           autoDialFired = true;
           makeCall();
         }
-
       },
 
       'authExpired': function (e){
@@ -748,7 +749,6 @@ var infoVoxbone;
       } else if (isChromeOnHttp()) {
         console.log("The call will take place in an https popup. WebRTC doesn't work in Chrome on HTTP -> https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins");
       }
-      notifyLoaded();
     }
 
     window.addEventListener('message', function(event) {
