@@ -139,26 +139,7 @@ html(lang='en', ng-app="voxboneApp")
           });
 
           $scope.sendRate = function (data) {
-            var req = {
-              method: 'POST',
-              url: '/rating',
-              headers: {
-                'Content-Type': 'application/json; charset=utf-8'
-              },
-              data: {
-                rate: data.rate,
-                comment: data.comment,
-                url: data.url,
-                token: "#{the_widget._id}"
-              }
-            };
-
-            $http(req)
-              .then(function successCallback(response) {
-                console.log("rating sent!");
-              }, function errorCallback() {
-                console.log("rating sending error callback");
-              });
+            //deprecated for iframe version
           };
 
           $scope.isWebRTCSupported = function () {

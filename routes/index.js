@@ -7,7 +7,6 @@ var router = express.Router();
 // - Require Models
 var Account = require('../models/account');
 var Widget = require('../models/widget');
-var Rating = require('../models/rating');
 var ObjectId = require('mongoose').Types.ObjectId;
 
 var async = require('async');
@@ -22,43 +21,12 @@ var utils = require('./utils');
 var emails = require('./emails');
 
 module.exports = function (passport) {
-  router.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
-
   router.get('/signup', function (req, res) {
     res.redirect('/account/signup?email=' + (req.query.email || ""));
   });
 
   router.get('/ping', function (req, res, next) {
     res.json({ 'ping': Date.now(), 'version': pjson.version });
-  });
-
-  // Required for auto Let's Encrypt cert generation
-  // https://github.com/dmathieu/sabayon
-  router.get('/.well-known/acme-challenge/:acmeToken', function(req, res, next) {
-    var acmeToken = req.params.acmeToken;
-    var acmeKey;
-
-    if (process.env.ACME_KEY && process.env.ACME_TOKEN) {
-      if (acmeToken === process.env.ACME_TOKEN) {
-        acmeKey = process.env.ACME_KEY;
-      }
-    }
-
-    for (var key in process.env) {
-      if (key.startsWith('ACME_TOKEN_')) {
-        var num = key.split('ACME_TOKEN_')[1];
-        if (acmeToken === process.env['ACME_TOKEN_' + num]) {
-          acmeKey = process.env['ACME_KEY_' + num];
-        }
-      }
-    }
-
-    if (acmeKey) res.send(acmeKey);
-    else res.status(404).send();
   });
 
   // Redirects if not HTTPS
@@ -219,7 +187,7 @@ module.exports = function (passport) {
 
   // This is indented to get the latest version always
   router.get(utils.click2voxJsFileName, function(req, res) {
-    res.redirect('/javascripts/click2vox-2.3.0.js');
+    res.redirect('/javascripts/click2vox-2.4.0.js');
   });
 
   router.get('/voxbone_widget/v2/:id', function (req, res) {
@@ -297,41 +265,6 @@ module.exports = function (passport) {
       result.widget_code = a_widget.generateDivHtmlCode();
       result.widget_id = a_widget.id;
       res.status(200).json(result);
-    });
-  });
-
-  router.post('/rating', function (req, res, next) {
-    var formData = req.body;
-    var result = { message: "", errors: null };
-
-    if (!ObjectId.isValid(req.body.token)) {
-      // 400 Bad Request
-      return res.status(400);
-    }
-
-    var searchFor = { _id: new ObjectId(req.body.token) };
-
-    Widget.findOne(searchFor, function (err, the_widget) {
-
-      if (!the_widget) {
-        return res.status(404);
-      }
-
-      var a_rating = new Rating({
-        rate: req.body.rate,
-        comment: req.body.comment,
-        url: req.body.url,
-        _widget: the_widget._id
-      });
-
-      a_rating.save(function (err) {
-        if (err) {
-          result.errors = err;
-          res.status(500).json(result);
-        } else {
-          res.status(200).json(result);
-        }
-      });
     });
   });
 

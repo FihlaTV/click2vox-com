@@ -10,4 +10,3 @@ r.on('exit', function () {
 // load the models
 r.context.Account = require('./models/account');
 r.context.Widget = require('./models/widget');
-r.context.Rating = require('./models/rating');
