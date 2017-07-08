@@ -85,6 +85,9 @@ module.exports = function (passport) {
   });
 
   router.get('/token_config', function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
     var voxbone = new Voxbone({
       voxrtcUsername: req.query.username || process.env.VOXBONE_WEBRTC_USERNAME,
       voxrtcSecret: req.query.secret || process.env.VOXBONE_WEBRTC_PASSWORD,
