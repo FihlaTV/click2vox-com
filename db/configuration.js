@@ -1,8 +1,12 @@
 var mongoose = require('mongoose');
 var Account = require('../models/account');
-var dbURI = process.env.MONGOLAB_URI || 'mongodb://localhost/voxboneDB';
+var dbURI = process.env.MONGOLAB_URI || 'mongodb://localhost/click2voxDB';
 
-mongoose.connect(dbURI);
+mongoose.Promise = global.Promise;
+
+var promise = mongoose.connect(dbURI, {
+  useMongoClient: true
+});
 
 //Check for demo user for testing purposes
 Account.findOne({email: "demo.widget@click2vox.com"}, function (err, demoAccount) {
@@ -23,7 +27,7 @@ Account.findOne({email: "demo.widget@click2vox.com"}, function (err, demoAccount
     demoAccount.password = demoAccount.generateHash("password");
     demoAccount.save(function (err) {
       if(err)
-          console.log("Demo user couldnt be generated");
+        console.log("Demo user couldnt be generated");
     });
   }
 });

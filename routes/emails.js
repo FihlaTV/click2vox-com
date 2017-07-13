@@ -15,7 +15,7 @@ module.exports = {
         });
       },
       function (token, done) {
-        Account.findOne({ email: email }, function (err, account) {
+        Account.findOne({ email: email.toLowerCase() }, function (err, account) {
           if (!account) {
             var result = { message: "No account with that email address exists.", errors: err };
             return res.status(404).json(result);

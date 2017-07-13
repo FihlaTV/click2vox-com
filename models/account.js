@@ -103,30 +103,7 @@ accountSchema.methods.getFullName = function() {
 };
 
 accountSchema.methods.getSipURIs = function() {
-  var Widget = require('./widget');
   var defaultSips = require('../routes/utils').defaultSipUris();
-  var account = this;
-
-  // if user has no sip_uris, check for old version generated widgets
-  // and get the sips that are store on those widgets
-  if (this.sip_uris.length === 0) {
-    Widget
-      .distinct('sip_uri', { _account: this._id })
-      .exec(function(err, sips) {
-        var index = array.indexOf('');
-
-        if (index > -1) {
-          sips = sips.splice(index, 1);
-        }
-
-        var diff = sips.filter(function(x) {
-          return defaultSips.indexOf(x) < 0;
-        });
-        account.sip_uris = diff;
-        account.save();
-      });
-  }
-
   return defaultSips.concat(this.sip_uris);
 };
 

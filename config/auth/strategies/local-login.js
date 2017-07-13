@@ -7,7 +7,7 @@ module.exports = function(Account, passport) {
       passReqToCallback : true
     },
     function(req, email, password, done) {
-      Account.findOne({ 'email' : email, 'temporary': false }, function(err, account) {
+      Account.findOne({ 'email' : email.toLowerCase(), 'temporary': false }, function(err, account) {
         var errorMessage;
         if (err){
           errorMessage = { error: 'generic-error', type: 'danger', message: err };

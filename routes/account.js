@@ -165,6 +165,7 @@ router.post('/signup', recaptcha.middleware.verify, function (req, res, next) {
   var req_parameters = req.parameters;
   var formData = req_parameters.permit(PERMITTED_FIELDS);
   var result = { message: "", errors: true, redirect: "", email: formData.email };
+  var new_email = formData.email.toLowerCase();
 
   // making some validations no matter if account exists or not
   if (formData.password !== formData.confirmation) {
@@ -183,19 +184,14 @@ router.post('/signup', recaptcha.middleware.verify, function (req, res, next) {
     return res.status(400).json(result);
   }
 
-  Account.findOne({ email: formData.email }, function (err, theAccount) {
-    // if account has password, it means was already registered. If not,
-    // it was created while invite functionality was working.
+  Account.findOne({ email: new_email }, function (err, theAccount) {
     if (theAccount) {
-      if (theAccount.password) {
-        result.message = "Account already registered";
-        return res.status(400).json(result);
-      }
-      theAccount.verified = true;
+      result.message = "Account already registered. Try to sign in";
+      return res.status(400).json(result);
     } else {
       theAccount = new Account(
         {
-          email: formData.email,
+          email: new_email,
           verified: false
         }
       );
@@ -214,7 +210,7 @@ router.post('/signup', recaptcha.middleware.verify, function (req, res, next) {
     theAccount.save(function (err) {
       if (err) {
         // throw err;
-        result.message = "err.message";
+        result.message = err.message;
         return res.status(400).json(result);
       }
 
