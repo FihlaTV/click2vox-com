@@ -10,7 +10,7 @@ Create a click to call button from a widget generator
 
 * [SendGrid](sendgrid.com)
 
-### Environment Variables
+### Environment Variables (:warning: load them before running the app)
 
 * `APP_URL`
 * `CDN_URL`
@@ -67,9 +67,9 @@ npm install
 bower install
 ```
 
-#### To start the server
+#### To start the server (:warning: remember to fill & load the ENV settings prior to this step)
 ```
-npm start
+npm start 
 ```
 
 #### Extra dev commands
