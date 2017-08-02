@@ -9,6 +9,9 @@ var async = require('async');
 var Contact = require('../models/contact');
 
 router.post('/contact', function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
   var formData = req.body;
   var result = { message: "", errors: null };
 
