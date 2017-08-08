@@ -120,13 +120,16 @@ module.exports = {
 
           var responseBody = JSON.parse(body);
           var voiceUris = responseBody.voiceUris;
-          var voiceUri = voiceUris.filter(function(vu) {
-            return vu.uri == sipUri;
-          });
-
           var voiceUriId;
-          if (voiceUri[0])
-            voiceUriId = voiceUri[0].voiceUriId;
+
+          if (voiceUris && voiceUris.length > 0) {
+            var voiceUri = voiceUris.filter(function(vu) {
+              return vu.uri === sipUri;
+            });
+
+            if (voiceUri[0])
+              voiceUriId = voiceUri[0].voiceUriId;
+          }
 
           done(err, myDid, account, voiceUriId);
         }
