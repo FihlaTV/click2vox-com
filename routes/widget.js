@@ -339,14 +339,14 @@ the widget linked to a specific sipuri in order to render its iframe*/
 router.get('/get-id', function (req, res) {
 
   if (!req.query.sipuri)
-    return res.status(400).json();
+    return res.status(404).json();
 
   Widget
     .findOne({sip_uri: req.query.sipuri})
     .exec(function (err, the_widget) {
 
       if (!the_widget)
-        return res.status(400).json();
+        return res.status(404).json();
       else
         res.send(the_widget._id);
 
