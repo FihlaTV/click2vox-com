@@ -1,6 +1,6 @@
 {
   "name": "click2vox-com",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
@@ -9,34 +9,31 @@
     "prepush": "npm test && grunt nightwatch"
   },
   "engines": {
-    "node": "^6.11.1"
+    "node": "^6.11.0"
   },
   "dependencies": {
     "async": "^1.5.0",
     "bcrypt-nodejs": "latest",
     "body-parser": "~1.13.2",
-    "bower": "^1.7.9",
+    "bower": "^1.8.2",
     "clipboard": "^1.5.3",
-    "coffee-script": "^1.10.0",
+    "coffee-script": "^1.12.7",
     "connect-flash": "~0.1.1",
     "connect-mongo": "^1.3.2",
     "connect-timeout": "^1.7.0",
     "cookie-parser": "~1.3.5",
     "express": "~4.13.1",
-    "express-recaptcha": "^2.0.0",
-    "express-session": "^1.12.1",
-    "grunt": "^1.0.1",
-    "grunt-bower-requirejs": "^2.0.0",
-    "grunt-nodemon": "^0.4.2",
+    "express-recaptcha": "^2.3.0",
+    "express-session": "^1.15.5",
     "honeybadger": "^1.1.3",
     "lodash": "^4.14.2",
     "method-override": "~1.0.0",
     "moment": "^2.14.1",
-    "mongoose": "^4.11.1",
+    "mongoose": "^4.11.11",
     "mongoose-long": "^0.1.1",
     "morgan": "~1.6.1",
     "newrelic": "^1.24.0",
-    "nodemon": "^1.9.1",
+    "nodemon": "^1.12.1",
     "passport": "^0.3.0",
     "passport-github2": "^0.1.10",
     "passport-google-oauth": "^1.0.0",
@@ -49,7 +46,6 @@
     "request": "^2.65.0",
     "requestify": "^0.2.3",
     "sendgrid": "^2.0.0",
-    "serve-favicon": "~2.3.0",
     "strong-params": "^0.6.0",
     "voxbone-webrtc": "0.0.9"
   },
@@ -66,10 +62,11 @@
     "grunt-contrib-uglify": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-nightwatch": "^0.5.3",
+    "grunt-nodemon": "^0.4.2",
     "grunt-simple-mocha": "^0.4.1",
     "husky": "^0.11.6",
     "jit-grunt": "^0.10.0",
-    "mocha": "^3.0.2",
-    "nightwatch": "^0.9.5"
+    "mocha": "^3.5.3",
+    "nightwatch": "^0.9.16"
   }
 }

@@ -18,6 +18,8 @@ html(lang='en')
     meta(property='og:type', content='website')
     title Click2Vox by Voxbone
 
+    link(rel="shortcut icon" type="image/x-icon" href=process.env.FAVICON_CDN_URL)
+
     link(href="/stylesheets/root.css", rel="stylesheet")
     link(href="//cdn.jsdelivr.net/qtip2/2.2.1/jquery.qtip.min.css", rel="stylesheet")
 
@@ -53,7 +55,7 @@ html(lang='en')
             button(class="navbar-toggler pull-right hidden-md-up" type="button" data-toggle="collapse" data-target="#bd-main-nav" aria-controls="bd-main-nav" aria-expanded="false" aria-label="Toggle navigation") ☰
 
             a.nav-brand(href=process.env.APP_URL)
-              img(alt="logo" src="../../images/LogoClick")
+              img(alt="logo" src="../../images/LogoClick.png")
 
             if authenticated
               //- Collect the nav links, forms, and other content for toggling
