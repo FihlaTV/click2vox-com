@@ -52,6 +52,8 @@ Create a click to call button from a widget generator
 * `VOXBONE_OAUTH2_PROFILE_URL`
 * `VOXBONE_OAUTH2_KEY`
 * `VOXBONE_OAUTH2_SECRET_KEY`
+* `CLICK2VOX_SDK_URL`
+* `LATEST_CLICK2VOX_SDK_URL`
 
 ### To Run locally
 

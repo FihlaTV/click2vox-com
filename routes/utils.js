@@ -16,6 +16,8 @@ module.exports = {
   // Keep the starting slash
   click2voxJsFileName: "/click2vox.js",
 
+  click2voxJsLatestFileName: "/beta/click2vox.js",
+
   defaultBtnLabel: process.env.DEFAULT_BUTTON_LABEL,
 
   defaultSipUris: function() {
