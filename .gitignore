@@ -38,6 +38,10 @@ setup_db.sh
 
 .env
 
+#idea
+
+.idea
+
 # Nightwatch Test Reports
 reports/
 tests/screenshots/
