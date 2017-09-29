@@ -211,7 +211,7 @@ module.exports = function (passport) {
           return res.status(404).json(result);
         } else if (the_widget && the_widget._account && the_widget._account.did) {
 
-          var script = process.env.APP_URL + utils.click2voxJsFileName;
+          var script = process.env.LATEST_CLICK2VOX_SDK_URL;
           var params = {
             script: script,
             id: req.params.id,

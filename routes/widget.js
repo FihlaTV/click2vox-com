@@ -217,6 +217,7 @@ router.delete('/:id', utils.isLoggedIn, function(req, res) {
 router.get('/demo', function (req, res, next) {
   var demoEmail = process.env.DEMO_USER_EMAIL || 'demo.widget@click2vox.com';
   var demoSipObject = utils.defaultDemoSipObject();
+  var script = process.env.LATEST_CLICK2VOX_SDK_URL;
 
   var renderResponse = function (account) {
     res.render('widget/demo', {
@@ -225,7 +226,8 @@ router.get('/demo', function (req, res, next) {
       demoDid: demoSipObject.demoDid,
       demoDidId: demoSipObject.demoDidId,
       demoUser: account,
-      title: title
+      title: title,
+      script: script
     });
   };
 

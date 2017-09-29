@@ -8,13 +8,14 @@ define([
   var WidgetDemoController = function ($scope, $http, $window, $controller) {
     // let's extend from the mixin first of all
     angular.extend(this, $controller(WidgetMixin, {$scope: $scope}));
+    var script = script || 'https://cdn.voxbone.com/click2vox/click2vox-3.min.js';
 
     $scope.preview_webrtc_compatible = true;
     $scope.previewButton = true;
     $scope.previewDialpad = true;
     $scope.previewFullScreen = true;
     $scope.previewMute = false;
-    $scope.widgetCode = '<div id="voxButton_574774ad1ce40fbf62562a22" data-button_id="574774ad1ce40fbf62562a22" data-text="Call Me!" data-redirect_url="https://voxbone.com" data-did="883510080361" data-dial_pad="true" data-context="context" data-send_digits="1,1200ms,2,1200ms,3,1200ms" data-caller_id="my_caller_id" data-incompatible_browser_configuration="link_button_to_a_page" data-show_frame="true" data-server_url="https://click2vox.com/" data-use_default_button_css="true" data-button_css_class_name="style-b" class="voxButton"></div><script src="https://click2vox.com/click2vox.js"></script>';
+    $scope.widgetCode = '<div id="voxButton_574774ad1ce40fbf62562a22" data-button_id="574774ad1ce40fbf62562a22" data-text="Call Me!" data-redirect_url="https://voxbone.com" data-did="883510080361" data-dial_pad="true" data-context="context" data-send_digits="1,1200ms,2,1200ms,3,1200ms" data-caller_id="my_caller_id" data-incompatible_browser_configuration="link_button_to_a_page" data-show_frame="true" data-server_url="https://click2vox.com/" data-use_default_button_css="true" data-button_css_class_name="style-b" class="voxButton"></div><script src="'+script+'"></script>';
     $scope.tempButtonColor = "";
     $scope.tempFrameColor = "";
 
