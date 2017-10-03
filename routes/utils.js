@@ -279,6 +279,36 @@ module.exports = {
     });
 
     return routes;
+  },
+
+  getUtmTags: function (query) {
+    var utm_tags = [];
+
+    if(query.utm_source)
+      utm_tags.push(`'utm_source: ${query.utm_source}'`);
+
+    if(query.utm_medium)
+      utm_tags.push(`'utm_medium: ${query.utm_medium}'`);
+
+    if(query.utm_campaign)
+      utm_tags.push(`'utm_campaign: ${query.utm_campaign}'`);
+
+    if(query.utm_content)
+      utm_tags.push(`'utm_content: ${query.utm_content}'`);
+
+    return utm_tags;
+  },
+
+  getProfileTags: function (currentUser) {
+    var tags = [];
+
+    if(currentUser.profileId)
+      tags.push(`'profileId: ${currentUser.profileId}'`);
+
+    if(currentUser.email)
+      tags.push(`'email: ${currentUser.email}'`);
+
+    return tags;
   }
 
 };

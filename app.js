@@ -104,6 +104,11 @@ app.use(function (req, res, next) {
     res.locals.currentUser.gravatar = utils.userGravatarUrl(res);
   }
 
+  // UTM tags for HotJar
+  res.locals.hotjar_tags = [];
+  res.locals.hotjar_tags = res.locals.hotjar_tags.concat(utils.getUtmTags(req.query));
+  res.locals.hotjar_tags = res.locals.hotjar_tags.concat(utils.getProfileTags(res.locals.currentUser));
+
   next();
 });
 
