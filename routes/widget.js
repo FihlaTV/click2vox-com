@@ -162,11 +162,18 @@ router.post('/:id/edit', utils.isLoggedIn, function (req, res, next) {
         updateData.did = foundDid.did;
         updateData.didId = foundDid.didId;
 
+        console.log('currentUser._id');
+        console.log(currentUser._id);
+        console.log('req.params.id');
+        console.log(req.params.id);
+        console.log('updateData');
+        console.log(updateData);
+
         Widget
           .findOneAndUpdate({
             _account: currentUser._id,
             _id: req.params.id
-          }, updateData, {new: true})
+          }, updateData, {upsert: false})
           .populate('_account')
           .exec(
             function (err, widget) {
