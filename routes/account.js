@@ -149,6 +149,9 @@ router.get('/widgets', utils.isLoggedIn, function (req, res) {
 // ---- sign up user ----
 
 router.get('/signup', recaptcha.middleware.render, function (req, res, next) {
+  if (!utils.isSignUpEnabled)
+    return res.redirect('/#register');
+
   req.logout();
   req.session.destroy();
   res.render('signup', {
@@ -162,6 +165,9 @@ router.get('/signup', recaptcha.middleware.render, function (req, res, next) {
 
 // POST /signup fetch the account with that email, set the new password and temporary to false.
 router.post('/signup', recaptcha.middleware.verify, function (req, res, next) {
+  if (!utils.isSignUpEnabled)
+    return res.redirect('/#register');
+
   var req_parameters = req.parameters;
   var formData = req_parameters.permit(PERMITTED_FIELDS);
   var result = { message: "", errors: true, redirect: "", email: formData.email };

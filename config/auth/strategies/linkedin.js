@@ -1,4 +1,5 @@
 var LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
+var utils = require('../../../routes/utils');
 
 module.exports = function(Account, passport) {
   passport.use(new LinkedInStrategy({
@@ -26,6 +27,9 @@ module.exports = function(Account, passport) {
               return done(null, account);
             });
           } else {
+
+            if (!utils.isSignUpEnabled)
+              return done(null, false, req.flash('loginMessage', 'Sign-up disabled'));
 
             var theAccount = new Account(
               {

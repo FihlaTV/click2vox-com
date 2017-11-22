@@ -6,7 +6,8 @@ block default_nav
       li.nav-item
         a.nav-item.nav-link(href="/") Home
       li.nav-item
-        a.nav-item.nav-link(href='/account/signup') Create Account
+        if process.env.DISABLE_SIGN_UPS !== 'true'
+          a.nav-item.nav-link(href='/account/signup') Create Account
 
 block extra_head
   script.

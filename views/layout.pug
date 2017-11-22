@@ -76,7 +76,8 @@ html(lang='en')
                     li.nav-item
                       a.nav-item.nav-link(href="/login") Login
                     li.nav-item
-                      a.nav-item.nav-link(href='/account/signup') Create Account
+                      if process.env.DISABLE_SIGN_UPS !== 'true'
+                        a.nav-item.nav-link(href='/account/signup') Create Account
 
       block content
 

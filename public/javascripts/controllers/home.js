@@ -1,5 +1,7 @@
 define(['angular', 'jquery'], function (angular, $) {
   var HomeController = function($scope, $http, $window) {
+    $('#eolModal').modal('show');
+
     $scope.callVoxbone = function() {
       $('#launch_call').click();
     };

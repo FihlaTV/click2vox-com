@@ -36,7 +36,8 @@ module.exports = {
   isLoggedIn: function(req, res, next) {
     if (req.isAuthenticated())
       return next();
-    res.render('home');
+
+    return res.render('home');
   },
 
   redirectToWidgetIfLoggedIn: function(req, res, next) {
@@ -309,6 +310,7 @@ module.exports = {
       tags.push(`'email: ${currentUser.email}'`);
 
     return tags;
-  }
+  },
 
+  isSignUpEnabled: process.env.DISABLE_SIGN_UPS !== 'true'
 };

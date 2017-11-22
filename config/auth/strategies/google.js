@@ -1,4 +1,5 @@
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var utils = require('../../../routes/utils');
 
 module.exports = function(Account, passport) {
   passport.use(new GoogleStrategy({
@@ -26,6 +27,10 @@ module.exports = function(Account, passport) {
               return done(null, account);
             });
           } else {
+
+            if (!utils.isSignUpEnabled)
+              return done(null, false, req.flash('loginMessage', 'Sign-up disabled'));
+
             var theAccount = new Account(
               {
                 email: profile.emails[0].value,

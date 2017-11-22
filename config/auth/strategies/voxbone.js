@@ -1,6 +1,7 @@
 var passport = require('passport');
 var OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 var requestify = require('requestify');
+var utils = require('../../../routes/utils');
 
 OAuth2Strategy.prototype.userProfile = function(accessToken, done) {
   var profile_url = process.env.VOXBONE_OAUTH2_PROFILE_URL + '?access_token=' + accessToken;
@@ -46,6 +47,10 @@ module.exports = function(Account, passport) {
               return done(null, account);
             });
           } else {
+
+            if (!utils.isSignUpEnabled)
+              return done(null, false, req.flash('loginMessage', 'Sign-up disabled'));
+
             var theAccount = new Account(
               {
                 email: profile.email,
