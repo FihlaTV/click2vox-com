@@ -49,7 +49,7 @@ module.exports = function(Account, passport) {
           } else {
 
             if (!utils.isSignUpEnabled)
-              return done(null, false, req.flash('loginMessage', 'Sign-up disabled'));
+              return done(null, null);
 
             var theAccount = new Account(
               {
